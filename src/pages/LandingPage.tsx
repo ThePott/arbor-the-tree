@@ -1,5 +1,7 @@
+import { FullScreen } from "@/packages/layouts"
+
 const LandingPage = () => {
-  return <div>ARBOR</div>
+    return <FullScreen isCentered>ARBOR</FullScreen>
 }
 
 export default LandingPage
