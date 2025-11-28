@@ -17,22 +17,26 @@
 
 @theme {
     --color-washed-white: #d3c6aa;
-    --color-washed-black: #374145;
+    --color-washed-black: #1c1c1c;
 
     --color-dark-blue-0: #374145;
     --color-dark-blue-1: #2e383c;
     --color-dark-blue-2: #272e33;
     --color-dark-blue-3: #1e2326;
-    --color-dark-blue-4: #374145;
+    --color-dark-blue-4: #1e1e1e;
 
     --color-dark-red: #493b40;
     --color-dark-blue: #384b55;
     --color-dark-yellow: #d3c6aa;
     --color-dark-green: #3c4841;
     --color-washed-red: #e57e80;
+    --color-washed-red-1: #c35f63;
+    --color-washed-red-2: #a14147;
     --color-washed-blue: #7fbbb3;
     --color-washed-yellow: #dabc7f;
     --color-washed-green: #a7c080;
+    --color-washed-green-1: #88a062;
+    --color-washed-green-2: #6b8244;
 
     --color-fg-vivid: var(--color-washed-white);
     --color-fg-muted: rgba(from var(--color-fg-vivid) r g b / 0.6);
@@ -63,10 +67,10 @@
     --sizing-my-xl: 960px;
 
     --shadow-my-sm:
-        inset 0px 1px 2px rgba(from var(--color-fg-vivid) r g b / 0.6), 0px 4px 4px -1px #00000025,
+        inset 0px 1px 2px rgba(from var(--color-fg-vivid) r g b / 0.2), 0px 4px 4px -1px #00000025,
         0px 2px 2px -2px #00000025;
     --shadow-my-md:
-        inset 0px 1px 2px rgba(from var(--color-fg-vivid) r g b / 0.6), 0px 6px 6px -2px #00000025,
+        inset 0px 1px 2px rgba(from var(--color-fg-vivid) r g b / 0.4), 0px 6px 6px -2px #00000025,
         0px 3px 3px -3px #00000025;
     --shadow-my-lg:
         inset 0px 1px 2px rgba(from var(--color-fg-vivid) r g b / 0.6), 0px 24px 24px -8px #00000025,
