@@ -31,3 +31,6 @@ export const boxColorToCn: Record<Color, string> = {
     darkBlue: "bg-dark-blue",
     darkYellow: "bg-dark-yellow",
 }
+
+export const buttonColorArray = ["green", "bg0", "bg1", "bg2"] as const
+export type ButtonColor = (typeof buttonColorArray)[number]
