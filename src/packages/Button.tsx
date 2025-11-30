@@ -1,11 +1,11 @@
 import type { ButtonProps, Color } from "@/shared/interfaces"
-import { boxColorToCn, type ButtonColor } from "@/shared/utils/styles"
+import { buttonColorToCn, type ButtonColor } from "@/shared/utils/styles"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
 
 const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm cursor-pointer transition shadow-my-sm", {
     variants: {
-        color: boxColorToCn,
+        color: buttonColorToCn,
         status: {
             enabled: "",
             disabled: "",
