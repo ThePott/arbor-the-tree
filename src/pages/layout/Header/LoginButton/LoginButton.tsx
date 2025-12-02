@@ -1,6 +1,5 @@
 import Button from "@/packages/components/Button"
 import Dropdown from "@/packages/components/Dropdown/Dropdown"
-import { checkEnvVar } from "@/shared/utils/checkEnvVar"
 import KakaoLoginButton from "./_KakaoLoginButton"
 
 const LoginButton = () => {
