@@ -3,6 +3,8 @@ import "./index.css"
 import { lazy, Suspense } from "react"
 import { createBrowserRouter, RouterProvider } from "react-router"
 import suspendedTestRouteArray from "./testRoutes/index.tsx"
+import Layout from "./pages/layout/Layout.tsx"
+import NotFoundPage from "./pages/error/NotFoundPage.tsx"
 
 const LandingPage = lazy(() => import("./pages/landing/LandingPage.tsx"))
 const SummaryPage = lazy(() => import("./pages/summary/SummaryPage.tsx"))
@@ -31,6 +33,19 @@ const suspendedRouteArray = routeArray.map((route) => ({
     element: <Suspense fallback={route.fallback}>{route.element}</Suspense>,
 }))
 
-const router = createBrowserRouter([...suspendedRouteArray, ...suspendedTestRouteArray])
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Layout />,
+        children: [
+            ...suspendedRouteArray,
+            ...suspendedTestRouteArray,
+            {
+                path: "*",
+                element: <NotFoundPage />,
+            },
+        ],
+    },
+])
 
 createRoot(document.getElementById("root")!).render(<RouterProvider router={router} />)

@@ -1,5 +1,5 @@
-import { FullScreen, Vstack } from "@/packages/layouts"
-import RoundBox from "@/packages/RoundBox"
+import { FullScreen, Vstack } from "@/packages/components/layouts"
+import RoundBox from "@/packages/components/RoundBox"
 
 const LandingPage = () => {
     return (

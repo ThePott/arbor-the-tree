@@ -1,6 +1,6 @@
 import { headlessInstance } from "@/packages/api/axiosInstances"
-import { FullScreen, Vstack } from "@/packages/layouts"
-import RoundBox from "@/packages/RoundBox"
+import { FullScreen, Vstack } from "@/packages/components/layouts"
+import RoundBox from "@/packages/components/RoundBox"
 
 const ApiTestPage = () => {
     return (

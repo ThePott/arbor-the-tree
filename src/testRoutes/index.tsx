@@ -1,10 +1,15 @@
 import { lazy, Suspense } from "react"
 const ApiTestPage = lazy(() => import("./_ApiTestPage"))
+const ButtonTestPage = lazy(() => import("./_ButtonTestPage.tsx"))
 
 const testRouteArray = [
     {
         path: "/test/api",
         element: <ApiTestPage />,
+    },
+    {
+        path: "/test/button",
+        element: <ButtonTestPage />,
     },
 ]
 

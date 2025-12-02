@@ -1,4 +1,5 @@
 import type { Color, None, XsToXl } from "../interfaces"
+import { squashObject } from "./squashObject"
 
 export const gapToCn: Record<XsToXl | None, string> = {
     none: "gap-0",
@@ -30,4 +31,27 @@ export const boxColorToCn: Record<Color, string> = {
     darkRed: "bg-dark-red",
     darkBlue: "bg-dark-blue",
     darkYellow: "bg-dark-yellow",
+}
+
+export const buttonColorArray = ["green", "bg0", "bg1", "bg2"] as const
+export type ButtonColor = (typeof buttonColorArray)[number]
+
+export const buttonStatusArray = ["enabled", "disabled", "pending"] as const
+export type ButtonStatus = (typeof buttonStatusArray)[number]
+
+const buttonColorToTextCn: Record<ButtonColor, string> = {
+    green: "text-fg-inverted",
+    bg0: "",
+    bg1: "",
+    bg2: "",
+}
+
+export const buttonColorToCn = squashObject(buttonColorArray, boxColorToCn, buttonColorToTextCn)
+
+export const widthToCn: Record<XsToXl, string> = {
+    xs: "w-[200px]",
+    sm: "w-[400px]",
+    md: "w-[600px]",
+    lg: "w-[800px]",
+    xl: "w-[1000px]",
 }

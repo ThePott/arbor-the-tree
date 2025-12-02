@@ -1,5 +1,5 @@
+import type { DivProps } from "@/shared/interfaces"
 import { cva } from "class-variance-authority"
-import type { DivProps } from "../../shared/interfaces"
 import clsx from "clsx"
 
 const fullScreenVariants = cva("flex h-screen w-screen flex-col overflow-hidden", {
