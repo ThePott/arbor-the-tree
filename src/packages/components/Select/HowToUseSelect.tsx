@@ -3,6 +3,7 @@ import Select from "./Select"
 import { useState } from "react"
 
 const HowToUseSelect = () => {
+    // TODO: CHANGE HERE TO GENERIC I GUESS????
     const [selectedOption, setSelectedOption] = useState<string | number | null>(null)
 
     return (

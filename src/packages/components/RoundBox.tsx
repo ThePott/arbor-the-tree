@@ -1,4 +1,4 @@
-import type { Color, DivProps, SmToLg, XsToXl } from "@/shared/interfaces"
+import type { Color, DivProps, None, SmToLg, XsToXl } from "@/shared/interfaces"
 import { boxColorToCn, paddingToCn } from "@/shared/utils/styles"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
@@ -42,7 +42,7 @@ const roundBoxVariants = cva("", {
 
 interface RoundBoxProps {
     radius?: SmToLg
-    padding?: XsToXl
+    padding?: XsToXl | None
     color?: Color
     isBordered?: boolean
     isShadowed?: boolean
