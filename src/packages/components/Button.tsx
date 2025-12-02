@@ -11,6 +11,10 @@ const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm cursor-pointer trans
             disabled: "",
             pending: "",
         },
+        isWide: {
+            true: "w-full",
+            false: "",
+        },
     },
     compoundVariants: [
         { status: "enabled", color: "bg0", className: "hover:bg-bg-1 active:bg-bg-2" },
@@ -23,12 +27,13 @@ const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm cursor-pointer trans
 interface WithButtonProps {
     color?: Extract<Color, ButtonColor>
     status?: "enabled" | "disabled" | "pending"
+    isWide?: boolean
 }
 
-const Button = ({ color = "bg1", status = "enabled", ...props }: ButtonProps & WithButtonProps) => {
+const Button = ({ color = "bg1", status = "enabled", isWide, ...props }: ButtonProps & WithButtonProps) => {
     const { className, children, ...rest } = props
     return (
-        <button {...rest} className={clsx(buttonVariants({ color, status }), className)}>
+        <button {...rest} className={clsx(buttonVariants({ color, status, isWide }), className)}>
             {children}
         </button>
     )

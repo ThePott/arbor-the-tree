@@ -2,9 +2,14 @@ import { useEffect, type ReactNode } from "react"
 import useDropdownContext from "./_useDropdownContext"
 import DropdownContent from "./_DropdownContent"
 import RoundBox from "../RoundBox"
+import { Vstack } from "../layouts"
 
-// TODO: 범용적으로 사용하려면 너비에 관련된 게 있어야 하는데...
-const DropdownMenu = ({ children, onChange }: { children: ReactNode; onChange: (value: string) => void }) => {
+interface DropdownMenuInterface {
+    onChange: (value: string) => void
+    children: ReactNode
+}
+
+const DropdownMenu = ({ children, onChange }: DropdownMenuInterface) => {
     const { selectedMenuValue } = useDropdownContext()
 
     useEffect(() => {
@@ -16,8 +21,8 @@ const DropdownMenu = ({ children, onChange }: { children: ReactNode; onChange: (
 
     return (
         <DropdownContent>
-            <RoundBox padding="none" radius="md" color="bg3" isShadowed className="text-my-sm p-my-md">
-                {children}
+            <RoundBox radius="md" color="bg3" padding="lg" isShadowed className="text-my-sm">
+                <Vstack>{children}</Vstack>
             </RoundBox>
         </DropdownContent>
     )
