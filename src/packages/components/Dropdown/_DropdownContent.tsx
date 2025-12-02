@@ -1,8 +1,17 @@
 import { useCallback, useEffect, useRef, type ReactNode } from "react"
 import useDropdownContext from "./_useDropdownContext"
+import { cva } from "class-variance-authority"
+import { widthToCn } from "@/shared/utils/styles"
+import clsx from "clsx"
+
+const dropdownVariants = cva("absolute z-10", {
+    variants: {
+        width: widthToCn,
+    },
+})
 
 const DropdownContent = ({ children }: { children: ReactNode }) => {
-    const { triggerRef, isOn, setIsOn } = useDropdownContext()
+    const { width, triggerRef, isOn, setIsOn } = useDropdownContext()
     const contentRef = useRef<HTMLDivElement>(null)
 
     const handleClick = useCallback(
@@ -46,7 +55,7 @@ const DropdownContent = ({ children }: { children: ReactNode }) => {
     }
 
     return (
-        <div ref={contentRef} style={style} className="absolute z-10">
+        <div ref={contentRef} style={style} className={clsx(dropdownVariants({ width }))}>
             {children}
         </div>
     )

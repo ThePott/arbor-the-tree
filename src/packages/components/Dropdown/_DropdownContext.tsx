@@ -1,6 +1,8 @@
+import type { XsToXl } from "@/shared/interfaces"
 import { createContext } from "react"
 
 interface DropdownContextProps {
+    width: XsToXl
     isOn: boolean
     setIsOn: React.Dispatch<React.SetStateAction<boolean>>
     triggerRef: React.RefObject<HTMLDivElement | null>

@@ -4,12 +4,14 @@ import DropdonwTrigger from "./_DropdownTrigger"
 import DropdownContent from "./_DropdownContent"
 import DropdownMenu from "./_DropdownMenu"
 import DropdownMenuItem from "./_DropdownMenuItem"
+import type { XsToXl } from "@/shared/interfaces"
 
 interface DropdownProps {
+    width?: XsToXl
     children: ReactNode
 }
 
-const Dropdown = ({ children }: DropdownProps) => {
+const Dropdown = ({ width = "xs", children }: DropdownProps) => {
     const [isOn, setIsOn] = useState(false)
     const [selectedMenuValue, setSelectedMenuValue] = useState<string | null>(null)
     const triggerRef = useRef<HTMLDivElement>(null)
@@ -17,6 +19,7 @@ const Dropdown = ({ children }: DropdownProps) => {
     return (
         <DropdownContext.Provider
             value={{
+                width,
                 isOn,
                 setIsOn,
                 triggerRef,

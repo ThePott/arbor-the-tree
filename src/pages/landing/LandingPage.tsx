@@ -1,5 +1,6 @@
 import { FullScreen, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
+import LoginButton from "../layout/Header/_LoginButton"
 
 const LandingPage = () => {
     return (
@@ -9,6 +10,7 @@ const LandingPage = () => {
                     <h1 className="mr-[-48px] text-[96px] font-extralight tracking-[48px]">ARBOR</h1>
                     <h2 className="text-my-xl">arbor: [Latin] tree</h2>
                     <p>이제 숲으로 성장할 차례입니다</p>
+                    <LoginButton />
                 </Vstack>
             </RoundBox>
         </FullScreen>

@@ -1,19 +1,16 @@
-import Button from "@/packages/components/Button"
-import Dropdown from "@/packages/components/Dropdown/Dropdown"
-import { Hstack, Vstack } from "@/packages/components/layouts"
-import RoundBox from "@/packages/components/RoundBox"
-import useGlobalStore from "@/shared/store/globalStore"
+import { Hstack } from "@/packages/components/layouts"
+import LoginButton from "./_LoginButton"
+import Logo from "./_LogoButton"
 
 const Header = () => {
-    const me = useGlobalStore((state) => state.me)
-    const isLoggedIn = Boolean(me)
-
-    const on
+    // const me = useGlobalStore((state) => state.me)
+    // const isLoggedIn = Boolean(me)
 
     return (
-        <div className="text-my-xl">
-            <Hstack className="justify-between">
-                <p>ARBOR</p>
+        <div className="text-my-sm border-b-border-dim border-b">
+            <Hstack className="p-my-md items-center justify-between">
+                <Logo />
+                <LoginButton />
             </Hstack>
         </div>
     )

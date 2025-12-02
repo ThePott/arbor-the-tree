@@ -16,7 +16,7 @@ const DropdownMenu = ({ children, onChange }: { children: ReactNode; onChange: (
 
     return (
         <DropdownContent>
-            <RoundBox padding="none" radius="md" isShadowed className="text-my-sm">
+            <RoundBox padding="none" radius="md" color="bg3" isShadowed className="text-my-sm p-my-md">
                 {children}
             </RoundBox>
         </DropdownContent>

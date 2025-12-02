@@ -12,7 +12,7 @@ const DropdownMenuItem = ({ children, value }: { children: ReactNode; value: str
     return (
         <Hstack
             onClick={handleClick}
-            className="py-oz-md px-oz-lg border-b border-gray-200 last:border-b-0 hover:bg-gray-50 active:bg-gray-100"
+            className="py-oz-md px-oz-lg border-b-border-dim hover:bg-bg-3 active:bg-washed-black shrink-0 border-b last:border-b-0"
         >
             {children}
         </Hstack>
