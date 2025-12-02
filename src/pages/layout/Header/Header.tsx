@@ -1,6 +1,6 @@
 import { Hstack } from "@/packages/components/layouts"
-import LoginButton from "./_LoginButton"
 import Logo from "./_LogoButton"
+import LoginButton from "./LoginButton/LoginButton"
 
 const Header = () => {
     // const me = useGlobalStore((state) => state.me)

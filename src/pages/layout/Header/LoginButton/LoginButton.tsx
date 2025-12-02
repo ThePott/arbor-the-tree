@@ -1,5 +1,7 @@
 import Button from "@/packages/components/Button"
 import Dropdown from "@/packages/components/Dropdown/Dropdown"
+import { checkEnvVar } from "@/shared/utils/checkEnvVar"
+import KakaoLoginButton from "./_KakaoLoginButton"
 
 const LoginButton = () => {
     return (
@@ -9,7 +11,7 @@ const LoginButton = () => {
             </Dropdown.Trigger>
             <Dropdown.Menu onChange={() => {}}>
                 <Dropdown.MenuItem value="_kakao">
-                    <Button isWide>카카오로 로그인</Button>
+                    <KakaoLoginButton />
                 </Dropdown.MenuItem>
                 <Dropdown.MenuItem value="_email">
                     <Button isWide>이메일로 로그인</Button>
