@@ -38,17 +38,8 @@ const SelectContent = ({ children }: { children: ReactNode }) => {
         return null
     }
 
-    if (!triggerRef.current) {
-        return null
-    }
-
     return (
-        <RoundBox
-            ref={contentRef}
-            style={{ top: triggerRef.current.offsetHeight + 4 }}
-            padding="xs"
-            className="absolute z-10 w-full"
-        >
+        <RoundBox ref={contentRef} padding="xs" className="absolute top-full z-10 w-full">
             <Vstack gap="none">{children}</Vstack>
         </RoundBox>
     )
