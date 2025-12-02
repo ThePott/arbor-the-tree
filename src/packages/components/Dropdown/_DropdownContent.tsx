@@ -4,7 +4,7 @@ import { cva } from "class-variance-authority"
 import { widthToCn } from "@/shared/utils/styles"
 import clsx from "clsx"
 
-const dropdownVariants = cva("absolute z-10", {
+const dropdownVariants = cva("absolute z-10 top-full right-0 mt-my-sm", {
     variants: {
         width: widthToCn,
     },
@@ -45,17 +45,8 @@ const DropdownContent = ({ children }: { children: ReactNode }) => {
         return null
     }
 
-    if (!triggerRef.current) {
-        return null
-    }
-
-    const style = {
-        top: triggerRef.current.offsetHeight + 4,
-        right: 0,
-    }
-
     return (
-        <div ref={contentRef} style={style} className={clsx(dropdownVariants({ width }))}>
+        <div ref={contentRef} className={clsx(dropdownVariants({ width }))}>
             {children}
         </div>
     )
