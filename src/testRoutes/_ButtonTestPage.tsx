@@ -1,6 +1,6 @@
-import Button from "@/packages/Button"
-import { Vstack } from "@/packages/layouts"
-import RoundBox from "@/packages/RoundBox"
+import Button from "@/packages/components/Button"
+import { Vstack } from "@/packages/components/layouts"
+import RoundBox from "@/packages/components/RoundBox"
 import { buttonColorArray, type ButtonColor } from "@/shared/utils/styles"
 
 const TestButton = ({ color }: { color: ButtonColor }) => {
