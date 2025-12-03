@@ -1,8 +1,5 @@
 import Button from "@/packages/components/Button"
 import { checkEnvVar } from "@/shared/utils/checkEnvVar"
-import { useEffect } from "react"
-import { useSearchParams } from "react-router"
-import kakaoLogin from "./_kakaoLoginApi"
 
 const KakaoLoginButton = () => {
     const handleClick = () => {
