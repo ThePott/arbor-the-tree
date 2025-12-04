@@ -26,7 +26,6 @@ const useOAuth = () => {
         if (isPendingKakao === isPendingLogin) {
             return
         }
-        debugger
         setIsPendingLogin(isPendingKakao)
     }, [isPendingKakao])
 }

@@ -2,10 +2,12 @@ import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown/Dropdown"
 import useGlobalStore from "@/shared/store/globalStore"
 import { useNavigate } from "react-router"
+import useLogoutMutation from "./_useLogoutMutation"
 
 const ProfileButton = () => {
     const me = useGlobalStore((state) => state.me)
     const navigate = useNavigate()
+    const { mutate: logoutMutate } = useLogoutMutation()
 
     const handleChange = (value: string) => {
         switch (value) {
@@ -13,6 +15,7 @@ const ProfileButton = () => {
                 navigate("/mypage")
                 break
             case "logout":
+                logoutMutate()
                 break
             default:
                 break
