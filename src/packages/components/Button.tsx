@@ -2,6 +2,7 @@ import type { ButtonProps, Color } from "@/shared/interfaces"
 import { buttonColorToCn, type ButtonColor } from "@/shared/utils/styles"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
+import Loader from "./Loader/Loader"
 
 const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm cursor-pointer transition shadow-my-sm", {
     variants: {
@@ -31,10 +32,14 @@ interface WithButtonProps {
     isWide?: boolean
 }
 
+const lightBgArray: ButtonColor[] = ["green"]
 const Button = ({ color = "bg1", status = "enabled", isWide, ...props }: ButtonProps & WithButtonProps) => {
     const { className, children, ...rest } = props
+
+    const isLoaderDark = lightBgArray.includes(color)
     return (
         <button {...rest} className={clsx(buttonVariants({ color, status, isWide }), className)}>
+            {status === "pending" && <Loader isDark={isLoaderDark} />}
             {children}
         </button>
     )
