@@ -5,6 +5,8 @@ import { createBrowserRouter, RouterProvider } from "react-router"
 import suspendedTestRouteArray from "./testRoutes/index.tsx"
 import Layout from "./pages/layout/Layout.tsx"
 import NotFoundPage from "./pages/error/NotFoundPage.tsx"
+import { QueryClientProvider } from "@tanstack/react-query"
+import queryClient from "./packages/api/queryClient.ts"
 const LandingPage = lazy(() => import("./pages/landing/LandingPage.tsx"))
 const SummaryPage = lazy(() => import("./pages/summary/SummaryPage.tsx"))
 const ProgressPage = lazy(() => import("./pages/progress/ProgressPage.tsx"))
@@ -49,4 +51,8 @@ const router = createBrowserRouter([
     },
 ])
 
-createRoot(document.getElementById("root")!).render(<RouterProvider router={router} />)
+createRoot(document.getElementById("root")!).render(
+    <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+    </QueryClientProvider>
+)

@@ -5,4 +5,7 @@ export interface GlobalStoreState {
     setAccessToken: (accessToken: string | null) => void
     me: Me | null
     setMe: (me: Me | null) => void
+
+    isPendingLogin: boolean
+    setIsPendingLogin: (isPendingLogin: boolean) => void
 }
