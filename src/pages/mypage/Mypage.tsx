@@ -1,4 +1,4 @@
-import Button from "@/packages/components/Button"
+import Button from "@/packages/components/Button/Button"
 import { GridContainer, Vstack } from "@/packages/components/layouts"
 import Container from "@/packages/components/layouts/_Container"
 import RoundBox from "@/packages/components/RoundBox"

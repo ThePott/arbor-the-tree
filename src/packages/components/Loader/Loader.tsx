@@ -1,6 +1,7 @@
 import type { XsToXl } from "@/shared/interfaces"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
+import styles from "./Loader.module.css"
 
 interface LoaderProps {
     size?: XsToXl
@@ -11,21 +12,21 @@ interface LoaderProps {
 const loaderVariants = cva("", {
     variants: {
         size: {
-            xs: "size-[12px]",
-            sm: "size-[14px]",
-            md: "size-[16px]",
-            lg: "size-[18px]",
-            xl: "size-[24px]",
+            xs: "size-[12px] border-2",
+            sm: "size-[14px] border-2",
+            md: "size-[16px] border-2",
+            lg: "size-[18px] border-2",
+            xl: "size-[24px] border-2",
         },
         isDark: {
-            true: "bg-fg-vivid",
-            false: "bg-washed-black",
+            true: "border-washed-black",
+            false: "border-fg-vivid",
         },
     },
 })
 
 const Loader = ({ size = "md", isDark }: LoaderProps) => {
-    return <span className={clsx(loaderVariants({ size, isDark }))} />
+    return <div className={clsx(loaderVariants({ size, isDark }), styles.loader)} />
 }
 
 export default Loader

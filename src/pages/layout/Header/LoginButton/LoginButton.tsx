@@ -1,6 +1,6 @@
-import Button from "@/packages/components/Button"
 import Dropdown from "@/packages/components/Dropdown/Dropdown"
 import KakaoLoginButton from "./_KakaoLoginButton"
+import Button from "@/packages/components/Button/Button"
 
 const LoginButton = () => {
     return (

@@ -1,4 +1,4 @@
-import Button from "@/packages/components/Button"
+import Button from "@/packages/components/Button/Button"
 import { checkEnvVar } from "@/shared/utils/checkEnvVar"
 
 const KakaoLoginButton = () => {
