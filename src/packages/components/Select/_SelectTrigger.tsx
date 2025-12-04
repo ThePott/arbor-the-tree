@@ -6,13 +6,13 @@ interface SelectTriggerProps {
 }
 
 const SelectTrigger = ({ children }: SelectTriggerProps) => {
-    const { setIsOpened, selectedLabel: selectedChildren, triggerRef, isInDanger } = useSelectContext()
+    const { setIsOpened, selectedLabel, triggerRef, isInDanger } = useSelectContext()
 
     const handleClick = () => {
         setIsOpened((prev) => !prev)
     }
 
-    const label = selectedChildren ?? children
+    const label = selectedLabel ?? children
 
     return (
         <Button
@@ -22,7 +22,7 @@ const SelectTrigger = ({ children }: SelectTriggerProps) => {
             isWide
             className="border-border-dim hover:border-border-muted border"
         >
-            {label}
+            <p className={selectedLabel ? "" : "text-fg-muted"}>{label}</p>
         </Button>
     )
 }
