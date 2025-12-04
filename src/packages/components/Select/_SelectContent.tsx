@@ -32,15 +32,22 @@ const SelectContent = ({ children }: { children: ReactNode }) => {
 
         window.addEventListener("click", handleClick)
         return () => window.removeEventListener("click", handleClick)
-    }, [isOpened, handleClick])
+    }, [isOpened])
 
     if (!isOpened) {
         return null
     }
 
     return (
-        <RoundBox ref={contentRef} padding="xs" className="absolute top-full z-10 w-full">
-            <Vstack gap="none">{children}</Vstack>
+        <RoundBox
+            ref={contentRef}
+            padding="md"
+            className="mt-my-sm absolute top-full z-10 w-full"
+            color="bg3"
+            isBordered
+            isShadowed
+        >
+            <Vstack gap="sm">{children}</Vstack>
         </RoundBox>
     )
 }

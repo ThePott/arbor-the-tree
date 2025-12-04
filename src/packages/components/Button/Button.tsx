@@ -6,7 +6,7 @@ import Loader from "../Loader/Loader"
 import { Hstack } from "../layouts"
 import { buttonColorToCn } from "@/shared/utils/styles"
 
-const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm  transition shadow-my-sm", {
+const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm transition", {
     variants: {
         color: buttonColorToCn,
         status: {
@@ -17,6 +17,14 @@ const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm  transition shadow-m
         isWide: {
             true: "w-full",
             false: "",
+        },
+        isShadowed: {
+            false: "",
+            true: "shadow-my-sm",
+        },
+        isBorderedOnHover: {
+            false: "",
+            true: "border border-transparent hover:border-border-muted",
         },
     },
     compoundVariants: [
@@ -43,16 +51,28 @@ interface WithButtonProps {
     color?: Extract<Color, ButtonColor>
     status?: "enabled" | "disabled" | "pending"
     isWide?: boolean
+    isShadowed?: boolean
+    isBorderedOnHover?: boolean
 }
 
 const lightBgArray: ButtonColor[] = ["green", "red"]
-const Button = ({ color = "bg1", status = "enabled", isWide, ...props }: ButtonProps & WithButtonProps) => {
+const Button = ({
+    color = "bg1",
+    status = "enabled",
+    isWide,
+    isShadowed = false,
+    isBorderedOnHover = false,
+    ...props
+}: ButtonProps & WithButtonProps) => {
     const { className, children, ...rest } = props
 
     const isLoaderDark = lightBgArray.includes(color)
 
     return (
-        <button {...rest} className={clsx(buttonVariants({ color, status, isWide }), className)}>
+        <button
+            {...rest}
+            className={clsx(buttonVariants({ color, status, isWide, isBorderedOnHover, isShadowed }), className)}
+        >
             <Hstack className="items-center">
                 {status === "pending" && <Loader isDark={isLoaderDark} />}
                 {children}

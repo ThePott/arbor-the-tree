@@ -3,11 +3,11 @@ import { Hstack } from "../layouts"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
 
-const inputVariants = cva("px-3 py-2 rounded-my-sm border outline outline-transparent transition", {
+const inputVariants = cva("bg-washed-black px-3 py-2 rounded-my-sm  outline outline-transparent transition", {
     variants: {
         isInDanger: {
-            false: "border-border-muted focus-within:outline-border-muted",
-            true: "border-washed-red focus-within:outline-washed-red",
+            false: "focus-within:outline-border-muted",
+            true: "focus-within:outline-washed-red",
         },
     },
 })

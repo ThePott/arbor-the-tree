@@ -1,31 +1,25 @@
-import type { JSX } from "react"
 import useSelectContext from "./_useSelectContext"
-import { Hstack } from "../layouts"
-import RoundBox from "../RoundBox"
+import Button from "../Button/Button"
 
-const SelectOption = ({ icon, value, children }: { icon?: JSX.Element; value?: string | number; children: string }) => {
-    const { onOptionSelect, setIsOpened, setSelectedValue, setSelectedChildren, setSelectedIcon } = useSelectContext()
+const SelectOption = ({ value, children }: { value: string | number; children: string }) => {
+    const {
+        onOptionSelect: onSelect,
+        setIsOpened,
+        setSelectedValue,
+        setSelectedLabel: setSelectedChildren,
+    } = useSelectContext()
 
     const handleClick = () => {
-        setSelectedIcon(icon ?? null)
         setIsOpened(false)
         setSelectedValue(value)
         setSelectedChildren(children)
-        onOptionSelect(value ?? children)
+        onSelect(value ?? children)
     }
 
-    // TODO: 나중에 p 태그는 Text로 교체
     return (
-        <RoundBox
-            isBordered={false}
-            onClick={handleClick}
-            className="cursor-pointer bg-white px-3 py-2 transition hover:bg-gray-50"
-        >
-            <Hstack>
-                <div className="text-gray-400">{icon && icon}</div>
-                <p>{children}</p>
-            </Hstack>
-        </RoundBox>
+        <Button color="black" onClick={handleClick} isShadowed={false} isBorderedOnHover>
+            {children}
+        </Button>
     )
 }
 

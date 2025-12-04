@@ -32,6 +32,7 @@ export const boxColorToCn: Record<Color, string> = {
     darkRed: "bg-dark-red",
     darkBlue: "bg-dark-blue",
     darkYellow: "bg-dark-yellow",
+    black: "bg-wahsed-black",
 }
 
 export const buttonColorToTextCn: Record<ButtonColor, string> = {
@@ -40,6 +41,7 @@ export const buttonColorToTextCn: Record<ButtonColor, string> = {
     bg0: "",
     bg1: "",
     bg2: "",
+    black: "",
 }
 
 export const buttonColorToCn = squashObject(buttonColorArray, boxColorToCn, buttonColorToTextCn)

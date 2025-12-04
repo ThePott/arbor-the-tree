@@ -1,50 +1,34 @@
-import { useEffect, useRef, useState, type JSX } from "react"
-import SelectContext from "./_SelectContext"
+import { useRef, useState } from "react"
 import SelectTrigger from "./_SelectTrigger"
 import SelectContent from "./_SelectContent"
 import SelectOption from "./_SelectOption"
 import type { DivProps } from "@/shared/interfaces"
-import { Vstack } from "../layouts"
+import { SelectContext } from "./_useSelectContext"
 
+// NOTE: onSelect는 이미 있는 이름이라 쓰면 안 됨
 interface WithSelectProps {
-    onOptionSelect: (option: string | number) => void
-    defaultChildren?: string
+    onOptionSelect: (value: string | number) => void
     isInDanger?: boolean
     value?: string | number
     label?: string
 }
 
+/**
+ * NOTE: MUST USE `value`, `label`, and as key
+ * */
 const Select = ({
     onOptionSelect,
-    defaultChildren,
     isInDanger,
     value,
     label,
     ...props
-}: DivProps & WithSelectProps) => {
-    const { className, children, ...rest } = props
+}: Omit<DivProps, "classNamee"> & WithSelectProps) => {
+    const { children, ...rest } = props
 
     const [isOpened, setIsOpened] = useState<boolean>(false)
-    const [selectedValue, setSelectedValue] = useState<string | number | undefined>(defaultChildren)
-    const [selectedChildren, setSelectedChildren] = useState<string | null>(null)
-    const [selectedIcon, setSelectedIcon] = useState<JSX.Element | null>(null)
-    const triggerRef = useRef<HTMLDivElement>(null)
-
-    useEffect(() => {
-        if (!defaultChildren) {
-            return
-        }
-        setSelectedChildren(defaultChildren)
-    }, [defaultChildren])
-
-    useEffect(() => {
-        if (value === undefined || value === selectedValue || label === undefined) {
-            return
-        }
-        setSelectedValue(value)
-        setSelectedChildren(label)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value, label])
+    const [selectedValue, setSelectedValue] = useState<string | number | null>(value ?? null)
+    const [selectedLabel, setSelectedLabel] = useState<string | null>(label ?? null)
+    const triggerRef = useRef<HTMLButtonElement>(null)
 
     return (
         <SelectContext
@@ -54,17 +38,15 @@ const Select = ({
                 setIsOpened,
                 selectedValue,
                 setSelectedValue,
-                selectedChildren,
-                setSelectedChildren,
-                selectedIcon,
-                setSelectedIcon,
+                selectedLabel,
+                setSelectedLabel,
                 triggerRef,
                 isInDanger,
             }}
         >
-            <Vstack {...rest} gap="xs" className={`${className} relative gap-0`}>
+            <div {...rest} className="relative">
                 {children}
-            </Vstack>
+            </div>
         </SelectContext>
     )
 }
