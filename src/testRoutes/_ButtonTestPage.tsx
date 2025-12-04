@@ -1,7 +1,6 @@
 import Button from "@/packages/components/Button/Button"
 import { type ButtonColor, buttonColorArray, buttonStatusArray } from "@/packages/components/Button/buttonInterfaces"
 import { Hstack, Vstack } from "@/packages/components/layouts"
-import Loader from "@/packages/components/Loader/Loader"
 import RoundBox from "@/packages/components/RoundBox"
 
 const ButtonStatusRow = ({ color }: { color: ButtonColor }) => {

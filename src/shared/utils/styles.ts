@@ -34,9 +34,9 @@ export const boxColorToCn: Record<Color, string> = {
     darkYellow: "bg-dark-yellow",
 }
 
-const buttonColorToTextCn: Record<ButtonColor, string> = {
-    green: "text-fg-inverted",
-    red: "text-fg-inverted",
+export const buttonColorToTextCn: Record<ButtonColor, string> = {
+    green: "text-fg-inverted-vivid",
+    red: "text-fg-inverted-vivid",
     bg0: "",
     bg1: "",
     bg2: "",

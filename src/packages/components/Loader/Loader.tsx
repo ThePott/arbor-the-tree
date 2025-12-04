@@ -19,7 +19,7 @@ const loaderVariants = cva("", {
             xl: "size-[24px] border-2",
         },
         isDark: {
-            true: "border-washed-black",
+            true: "border-fg-inverted-vivid",
             false: "border-fg-vivid",
         },
     },
