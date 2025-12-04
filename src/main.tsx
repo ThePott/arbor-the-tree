@@ -5,10 +5,10 @@ import { createBrowserRouter, RouterProvider } from "react-router"
 import suspendedTestRouteArray from "./testRoutes/index.tsx"
 import Layout from "./pages/layout/Layout.tsx"
 import NotFoundPage from "./pages/error/NotFoundPage.tsx"
-
 const LandingPage = lazy(() => import("./pages/landing/LandingPage.tsx"))
 const SummaryPage = lazy(() => import("./pages/summary/SummaryPage.tsx"))
 const ProgressPage = lazy(() => import("./pages/progress/ProgressPage.tsx"))
+const Mypage = lazy(() => import("./pages/mypage/Mypage.tsx"))
 
 const routeArray = [
     {
@@ -26,6 +26,7 @@ const routeArray = [
         element: <ProgressPage />,
         fallback: <p>여기에 스켈레톤을 넣어야 합니다</p>,
     },
+    { path: "/mypage", element: <Mypage />, fallback: <p>여기에 스켈레톤을 넣어야 합니다</p> },
 ]
 
 const suspendedRouteArray = routeArray.map((route) => ({

@@ -33,7 +33,7 @@ export const boxColorToCn: Record<Color, string> = {
     darkYellow: "bg-dark-yellow",
 }
 
-export const buttonColorArray = ["green", "bg0", "bg1", "bg2"] as const
+export const buttonColorArray = ["green", "bg0", "bg1", "bg2", "red"] as const
 export type ButtonColor = (typeof buttonColorArray)[number]
 
 export const buttonStatusArray = ["enabled", "disabled", "pending"] as const
@@ -41,6 +41,7 @@ export type ButtonStatus = (typeof buttonStatusArray)[number]
 
 const buttonColorToTextCn: Record<ButtonColor, string> = {
     green: "text-fg-inverted",
+    red: "text-fg-inverted",
     bg0: "",
     bg1: "",
     bg2: "",

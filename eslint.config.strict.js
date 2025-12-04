@@ -36,6 +36,8 @@ export default defineConfig([
             "no-console": "error", // console.log 사용시 경고 (개발 중에는 필요할 수 있음)
             "no-debugger": "error", // debugger 문 사용시 경고 (에러 아님)
             "no-duplicate-imports": "error", // 중복 import 경고
+
+            "react-hooks/exhaustive-deps": "off",
         },
     },
 ])

@@ -21,6 +21,7 @@ const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm cursor-pointer trans
         { status: "enabled", color: "bg1", className: "hover:bg-bg-2 active:bg-bg-3" },
         { status: "enabled", color: "bg2", className: "hover:bg-bg-3 active:bg-washed-black" },
         { status: "enabled", color: "green", className: "hover:bg-washed-green-1 active:bg-washed-green-2" },
+        { status: "enabled", color: "red", className: "hover:bg-washed-red-1 active:bg-washed-red-2" },
     ],
 })
 
