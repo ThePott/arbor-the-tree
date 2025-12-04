@@ -1,8 +1,8 @@
 import { Hstack } from "@/packages/components/layouts"
 import Logo from "./_LogoButton"
-import LoginButton from "./LoginButton/LoginButton"
 import useGlobalStore from "@/shared/store/globalStore"
 import ProfileButton from "./ProfileButton/ProfileButton"
+import KakaoLoginButton from "./_KakaoLoginButton"
 
 const Header = () => {
     const me = useGlobalStore((state) => state.me)
@@ -12,7 +12,7 @@ const Header = () => {
             <Hstack className="p-my-md items-center justify-between">
                 <Logo />
                 {me && <ProfileButton />}
-                {!me && <LoginButton />}
+                {!me && <KakaoLoginButton />}
             </Hstack>
         </div>
     )

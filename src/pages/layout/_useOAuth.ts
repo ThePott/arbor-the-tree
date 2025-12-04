@@ -1,8 +1,8 @@
 import { useEffect } from "react"
 import { useSearchParams } from "react-router"
-import kakaoLogin from "./Header/LoginButton/_kakaoLoginApi"
 import { useMutation } from "@tanstack/react-query"
 import useGlobalStore from "@/shared/store/globalStore"
+import kakaoLogin from "./_kakaoLoginApi"
 
 const useOAuth = () => {
     const isPendingLogin = useGlobalStore((state) => state.isPendingLogin)
