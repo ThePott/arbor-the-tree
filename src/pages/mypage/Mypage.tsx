@@ -16,6 +16,7 @@ const Mypage = () => {
         }
         navigate("/", { replace: true })
     }, [me])
+
     return (
         <Container isPadded>
             <RoundBox isShadowed padding="xl" color="bg2">

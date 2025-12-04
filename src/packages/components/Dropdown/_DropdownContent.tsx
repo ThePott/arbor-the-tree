@@ -39,7 +39,7 @@ const DropdownContent = ({ children }: { children: ReactNode }) => {
 
         window.addEventListener("click", handleClick)
         return () => window.removeEventListener("click", handleClick)
-    }, [isOn, handleClick])
+    }, [isOn])
 
     if (!isOn) {
         return null

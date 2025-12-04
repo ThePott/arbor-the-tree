@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query"
 import useGlobalStore from "@/shared/store/globalStore"
 
 const useOAuth = () => {
+    const isPendingLogin = useGlobalStore((state) => state.isPendingLogin)
     const setIsPendingLogin = useGlobalStore((state) => state.setIsPendingLogin)
     const [searchParams, _setSearchParams] = useSearchParams()
     const code = searchParams.get("code")
@@ -22,6 +23,10 @@ const useOAuth = () => {
     }, [code])
 
     useEffect(() => {
+        if (isPendingKakao === isPendingLogin) {
+            return
+        }
+        debugger
         setIsPendingLogin(isPendingKakao)
     }, [isPendingKakao])
 }
