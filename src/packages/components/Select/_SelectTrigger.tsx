@@ -17,6 +17,7 @@ const SelectTrigger = ({ children }: SelectTriggerProps) => {
     return (
         <Button
             ref={triggerRef}
+            type="button"
             onClick={handleClick}
             color={isInDanger ? "red" : "black"}
             isWide

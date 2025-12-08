@@ -53,6 +53,7 @@ interface WithButtonProps {
     isWide?: boolean
     isShadowed?: boolean
     isBorderedOnHover?: boolean
+    isOnLeft?: boolean
 }
 
 const lightBgArray: ButtonColor[] = ["green", "red"]
@@ -62,6 +63,7 @@ const Button = ({
     isWide,
     isShadowed = false,
     isBorderedOnHover = false,
+    isOnLeft = false,
     ...props
 }: ButtonProps & WithButtonProps) => {
     const { className, children, ...rest } = props
@@ -73,7 +75,7 @@ const Button = ({
             {...rest}
             className={clsx(buttonVariants({ color, status, isWide, isBorderedOnHover, isShadowed }), className)}
         >
-            <Hstack className="items-center">
+            <Hstack className={clsx("items-center", isOnLeft ? "" : "justify-center")}>
                 {status === "pending" && <Loader isDark={isLoaderDark} />}
                 {children}
             </Hstack>

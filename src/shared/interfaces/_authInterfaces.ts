@@ -1,4 +1,4 @@
-export type Role = "maintainer" | "principal" | "student" | "parent" | "helper"
+export type Role = "MAINTAINER" | "PRINCIPAL" | "STUDENT" | "PARENT" | "HELPER"
 
 export interface Me {
     id: number

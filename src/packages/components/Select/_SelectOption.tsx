@@ -17,7 +17,7 @@ const SelectOption = ({ value, children }: { value: string | number; children: s
     }
 
     return (
-        <Button color="black" onClick={handleClick} isShadowed={false} isBorderedOnHover>
+        <Button color="black" onClick={handleClick} isShadowed={false} isBorderedOnHover type="button">
             {children}
         </Button>
     )
