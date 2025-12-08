@@ -4,7 +4,7 @@ import RoundBox from "@/packages/components/RoundBox"
 const LandingPage = () => {
     return (
         <FullScreen isCentered>
-            <RoundBox color="bg2" className="px-[96px] py-[48px]" isShadowed radius="lg">
+            <RoundBox color="bg2" className="blur-drop px-24 py-[48px]" isShadowed radius="lg">
                 <Vstack className="gap-my-lg items-center">
                     <h1 className="mr-[-48px] text-[96px] font-extralight tracking-[48px]">ARBOR</h1>
                     <h2 className="text-my-xl">arbor: [Latin] tree</h2>
