@@ -1,40 +1,31 @@
-/* .vt-blur-drop { */
-/*     view-transition-name: blur-drop; */
-/* } */
-
-@keyframes slideOut {
+.vt-drop-md {
+    view-transition-name: vt-drop-md;
+}
+@keyframes drop-out-md {
     to {
         opacity: 0;
         -webkit-filter: blur(6px);
         transform: translateY(50px);
     }
 }
-/* @keyframes slideIn { */
-/*     from { */
-/*         opacity: 0; */
-/*         -webkit-filter: blur(6px); */
-/*         transform: translateY(-50px); */
-/*     } */
-/* } */
-/**/
-/* .vt-slide { */
-/*     view-transition-name: vt-slide; */
-/* } */
-/**/
-/* .vt-sidebar { */
-/*     view-transition-name: vt-sidebar; */
-/* } */
-/**/
-/* ::view-transition-new(vt-slide) { */
-/*     animation-name: slideIn; */
-/* } */
-
+@keyframes drop-in-md {
+    from {
+        opacity: 0;
+        -webkit-filter: blur(6px);
+        transform: translateY(-50px);
+    }
+}
 ::view-transition-group(*) {
     animation-duration: 0.15s;
     animation-timing-function: cubic-bezier(0.08, 0.34, 0.26, 1.11);
 }
-/* TODO: 현재 문제 - 추가, 제거, 순서 바꾸기 모두 애니메이션이 적용이 안 됨 */
-/* TODO: exit animation 지정해도 애니메이션이 추가되지 않음 */
-::view-transition-old(*) {
-    animation-name: slideOut;
+::view-transition-group(vt-drop-md) {
+    animation-duration: 0.15s;
+    animation-timing-function: cubic-bezier(0.08, 0.34, 0.26, 1.11);
+}
+::view-transition-new(vt-drop-md) {
+    animation-name: drop-in-md;
+}
+::view-transition-old(vt-drop-md) {
+    animation-name: drop-out-md;
 }
