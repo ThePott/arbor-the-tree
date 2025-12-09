@@ -1,4 +1,4 @@
-import { Hstack, Vstack } from "@/packages/components/layouts"
+import { Vstack } from "@/packages/components/layouts"
 import Container from "@/packages/components/layouts/_Container"
 import RoundBox from "@/packages/components/RoundBox"
 import type { Color, DivProps } from "@/shared/interfaces"
@@ -6,6 +6,7 @@ import { useState } from "react"
 
 const ColoredBox = ({ color, ...props }: { color: Color } & DivProps) => {
     const { children: _children, ...rest } = props
+
     return (
         <RoundBox color={color} padding="xl" {...rest}>
             this is content
@@ -13,33 +14,36 @@ const ColoredBox = ({ color, ...props }: { color: Color } & DivProps) => {
     )
 }
 
-const colorArray: Color[] = ["red", "blue", "green", "bg0"]
+const initialColorArray: Color[] = ["red", "blue", "green", "bg0"]
 
 const AnimationTestPage = () => {
-    const [selectedColor, setSelectedColor] = useState<Color>("red")
+    const [colorArray, setColorArray] = useState<Color[]>(initialColorArray)
 
     const handleClick = (color: Color) => {
-        if (color === selectedColor) {
+        if (color === colorArray[0]) {
             return
         }
+        const newColorArray = colorArray.filter((el) => el !== color)
+        newColorArray.unshift(color)
+
         document.startViewTransition(() => {
-            setSelectedColor(color)
+            setColorArray(newColorArray)
         })
     }
 
-    const filteredColorArray = colorArray.filter((color) => color !== selectedColor)
-
     return (
-        <Container width="md">
+        <Container width="md" isPadded>
             <RoundBox>
-                <Hstack>
-                    <ColoredBox color={selectedColor} className="vt-slide grow" />
-                    <Vstack>
-                        {filteredColorArray.map((color) => (
-                            <ColoredBox key={color} color={color} onClick={() => handleClick(color)} />
-                        ))}
-                    </Vstack>
-                </Hstack>
+                <Vstack>
+                    {colorArray.map((color) => (
+                        <ColoredBox
+                            key={color}
+                            color={color}
+                            onClick={() => handleClick(color)}
+                            style={{ viewTransitionName: color }}
+                        />
+                    ))}
+                </Vstack>
             </RoundBox>
         </Container>
     )

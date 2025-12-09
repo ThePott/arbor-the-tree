@@ -97,25 +97,6 @@ li {
     view-transition-name: match-element;
 }
 
-.match-element-applied li[data-item-index="0"] {
-    view-transition-name: match-element-0;
-}
-
-.match-element-applied li[data-item-index="1"] {
-    view-transition-name: match-element-1;
-}
-
-.match-element-applied li[data-item-index="2"] {
-    view-transition-name: match-element-2;
-}
-
-.match-element-applied li[data-item-index="3"] {
-    view-transition-name: match-element-3;
-}
-::view-transition-group(*) {
-    animation-duration: 0.5s;
-}
-
 html::view-transition-old(*),
 html::view-transition-new(*) {
     height: 100%;

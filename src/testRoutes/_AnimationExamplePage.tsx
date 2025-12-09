@@ -41,7 +41,7 @@ const items: ItemData[] = [
 
 const AnimationExamplePage = () => {
     const [activeItemId, setActiveItemId] = useState<string | null>(null)
-    const [isMatchElementApplied, setIsMatchElementApplied] = useState(true)
+    const [isMatchElementApplied, _setIsMatchElementApplied] = useState(true)
 
     const handleItemClick = (itemId: string) => {
         const newActiveId = activeItemId === itemId ? null : itemId
@@ -57,45 +57,27 @@ const AnimationExamplePage = () => {
     }
 
     return (
-        <>
-            <main className={isMatchElementApplied ? "match-element-applied" : ""}>
-                <ul>
-                    {items.map((item, index) => (
-                        <li
-                            key={item.id}
-                            className={activeItemId === item.id ? "active-item" : ""}
-                            data-item-index={index}
-                        >
-                            <h2>
-                                <a
-                                    href="#"
-                                    onClick={(e) => {
-                                        e.preventDefault()
-                                        handleItemClick(item.id)
-                                    }}
-                                >
-                                    {item.title}
-                                </a>
-                            </h2>
-                            <h3>{item.subtitle}</h3>
-                            <p>{item.description}</p>
-                        </li>
-                    ))}
-                </ul>
-                <article></article>
-            </main>
-            <form>
-                <label htmlFor="match-element-checkbox">
-                    Apply <code>match-element</code> to list items?
-                </label>
-                <input
-                    type="checkbox"
-                    id="match-element-checkbox"
-                    checked={isMatchElementApplied}
-                    onChange={(e) => setIsMatchElementApplied(e.target.checked)}
-                />
-            </form>
-        </>
+        <main className={isMatchElementApplied ? "match-element-applied" : ""}>
+            <ul>
+                {items.map((item) => (
+                    <li key={item.id} className={activeItemId === item.id ? "active-item" : ""}>
+                        <h2>
+                            <a
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    handleItemClick(item.id)
+                                }}
+                            >
+                                {item.title}
+                            </a>
+                        </h2>
+                        <h3>{item.subtitle}</h3>
+                        <p>{item.description}</p>
+                    </li>
+                ))}
+            </ul>
+        </main>
     )
 }
 
