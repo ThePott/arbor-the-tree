@@ -2,7 +2,7 @@ import { Vstack } from "@/packages/components/layouts"
 import Container from "@/packages/components/layouts/_Container"
 import RoundBox from "@/packages/components/RoundBox"
 import type { Color, DivProps } from "@/shared/interfaces"
-import { useState } from "react"
+import { Activity, useState } from "react"
 import "./_AnimationTestPage.css"
 
 const ColoredBox = ({ color, ...props }: { color: Color } & DivProps) => {
@@ -48,6 +48,8 @@ const JustReorderBox = () => {
     )
 }
 
+// TODO: 현재 문제 - view transition이 작동을 안 하는데 원인을 모르겠음
+// TODO: Activity는 아무 효과 없음
 const RemoveCurrentBox = () => {
     const [colorArray, setColorArray] = useState<Color[]>(initialColorArray)
 
@@ -61,13 +63,15 @@ const RemoveCurrentBox = () => {
     return (
         <RoundBox padding="xl" isBordered>
             <Vstack>
-                {colorArray.map((color) => (
-                    <ColoredBox
-                        key={`remove_${color}`}
-                        color={color}
-                        onClick={() => handleClick(color)}
-                        style={{ viewTransitionName: `remove_${color}` }}
-                    />
+                {initialColorArray.map((color) => (
+                    <Activity mode={colorArray.includes(color) ? "visible" : "hidden"}>
+                        <ColoredBox
+                            key={`remove_${color}`}
+                            color={color}
+                            onClick={() => handleClick(color)}
+                            style={{ viewTransitionName: `remove_${color}` }}
+                        />
+                    </Activity>
                 ))}
             </Vstack>
         </RoundBox>
