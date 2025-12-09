@@ -19,16 +19,19 @@ const AnimationTestPage = () => {
     const [selectedColor, setSelectedColor] = useState<Color>("red")
 
     const handleClick = (color: Color) => {
+        if (color === selectedColor) {
+            return
+        }
         document.startViewTransition(() => {
             setSelectedColor(color)
         })
     }
 
     return (
-        <Container>
+        <Container width="md">
             <RoundBox>
                 <Hstack>
-                    <ColoredBox color={selectedColor} />
+                    <ColoredBox color={selectedColor} className="vt-slide grow" />
                     <Vstack>
                         {colorArray.map((color) => (
                             <ColoredBox key={color} color={color} onClick={() => handleClick(color)} />

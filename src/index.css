@@ -128,3 +128,33 @@
         opacity: 100%;
     }
 }
+
+.vt-blur-drop {
+    view-transition-name: blur-drop;
+}
+
+@keyframes slideOut {
+    to {
+        opacity: 0;
+        -webkit-filter: blur(6px);
+        transform: translateY(50px);
+    }
+}
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        -webkit-filter: blur(6px);
+        transform: translateY(-50px);
+    }
+}
+
+.vt-slide {
+    view-transition-name: vt-slide;
+}
+
+::view-transition-old(vt-slide) {
+    animation-name: slideOut;
+}
+::view-transition-new(vt-slide) {
+    animation-name: slideIn;
+}
