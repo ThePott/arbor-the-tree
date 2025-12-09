@@ -19,7 +19,9 @@ const AnimationTestPage = () => {
     const [selectedColor, setSelectedColor] = useState<Color>("red")
 
     const handleClick = (color: Color) => {
-        setSelectedColor(color)
+        document.startViewTransition(() => {
+            setSelectedColor(color)
+        })
     }
 
     return (
