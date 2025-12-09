@@ -162,3 +162,8 @@
 /* ::view-transition-new(vt-slide) { */
 /*     animation-name: slideIn; */
 /* } */
+
+::view-transition-group(*) {
+    animation-duration: 0.15s;
+    animation-timing-function: cubic-bezier(0.08, 0.34, 0.26, 1.11);
+}

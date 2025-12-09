@@ -40,7 +40,7 @@ const AnimationTestPage = () => {
                             key={color}
                             color={color}
                             onClick={() => handleClick(color)}
-                            style={{ viewTransitionName: color }}
+                            style={{ viewTransitionName: color, animationDuration: "0.01" }}
                         />
                     ))}
                 </Vstack>
