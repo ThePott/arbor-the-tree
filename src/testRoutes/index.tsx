@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react"
 const ApiTestPage = lazy(() => import("./_ApiTestPage"))
 const ButtonTestPage = lazy(() => import("./_ButtonTestPage.tsx"))
+const AnimationTestPage = lazy(() => import("./_AnimationTestPage.tsx"))
 
 const testRouteArray = [
     {
@@ -10,6 +11,10 @@ const testRouteArray = [
     {
         path: "/test/button",
         element: <ButtonTestPage />,
+    },
+    {
+        path: "/test/animation",
+        element: <AnimationTestPage />,
     },
 ]
 

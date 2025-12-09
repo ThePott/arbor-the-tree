@@ -21,7 +21,7 @@ const DropdownMenu = ({ children, onChange }: DropdownMenuInterface) => {
 
     return (
         <DropdownContent>
-            <RoundBox radius="md" color="bg3" padding="lg" isShadowed className="text-my-sm">
+            <RoundBox radius="md" color="bg3" padding="lg" isShadowed className="text-my-sm blur-drop-sm">
                 <Vstack>{children}</Vstack>
             </RoundBox>
         </DropdownContent>
