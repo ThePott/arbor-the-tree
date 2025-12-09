@@ -8,7 +8,7 @@ const ColoredBox = ({ color, ...props }: { color: Color } & DivProps) => {
     const { children: _children, ...rest } = props
     return (
         <RoundBox color={color} padding="xl" {...rest}>
-            {color}
+            this is content
         </RoundBox>
     )
 }
@@ -27,13 +27,15 @@ const AnimationTestPage = () => {
         })
     }
 
+    const filteredColorArray = colorArray.filter((color) => color !== selectedColor)
+
     return (
         <Container width="md">
             <RoundBox>
                 <Hstack>
                     <ColoredBox color={selectedColor} className="vt-slide grow" />
                     <Vstack>
-                        {colorArray.map((color) => (
+                        {filteredColorArray.map((color) => (
                             <ColoredBox key={color} color={color} onClick={() => handleClick(color)} />
                         ))}
                     </Vstack>
