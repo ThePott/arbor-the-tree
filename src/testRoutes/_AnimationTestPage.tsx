@@ -81,7 +81,7 @@ const AnimationTestPage = () => {
     return (
         <Container width="md" isPadded>
             <Vstack gap="xl">
-                {/* <JustReorderBox /> */}
+                <JustReorderBox />
                 <RemoveCurrentBox />
             </Vstack>
         </Container>
