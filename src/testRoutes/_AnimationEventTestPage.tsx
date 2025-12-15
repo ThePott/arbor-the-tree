@@ -1,4 +1,4 @@
-import Button from "@/packages/components/Button"
+import Button from "@/packages/components/Button/Button"
 import Container from "@/packages/components/layouts/_Container"
 import RoundBox from "@/packages/components/RoundBox"
 import { AnimatePresence, motion } from "motion/react"
