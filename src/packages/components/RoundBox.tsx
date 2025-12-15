@@ -49,9 +49,12 @@ interface RoundBoxProps {
 }
 
 const RoundBox = ({ radius = "sm", padding, color, isBordered, isShadowed, ...props }: DivProps & RoundBoxProps) => {
-    const { className, children } = props
+    const { className, children, ...rest } = props
     return (
-        <div className={clsx(roundBoxVariants({ radius, padding, color, isBordered, isShadowed }), className)}>
+        <div
+            {...rest}
+            className={clsx(roundBoxVariants({ radius, padding, color, isBordered, isShadowed }), className)}
+        >
             {children}
         </div>
     )

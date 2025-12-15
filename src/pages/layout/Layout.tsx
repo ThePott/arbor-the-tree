@@ -14,7 +14,7 @@ const Layout = () => {
     return (
         <FullScreen>
             {isHeaderVisible && <Header />}
-            <FlexOneContainer>
+            <FlexOneContainer isYScrollable>
                 <Outlet />
             </FlexOneContainer>
         </FullScreen>

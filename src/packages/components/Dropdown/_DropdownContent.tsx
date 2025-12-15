@@ -3,6 +3,7 @@ import useDropdownContext from "./_useDropdownContext"
 import { cva } from "class-variance-authority"
 import { widthToCn } from "@/shared/utils/styles"
 import clsx from "clsx"
+import DropAnimation from "../motions/DropAnimation"
 
 const dropdownVariants = cva("absolute z-10 top-full right-0 mt-my-sm", {
     variants: {
@@ -41,14 +42,14 @@ const DropdownContent = ({ children }: { children: ReactNode }) => {
         return () => window.removeEventListener("click", handleClick)
     }, [isOn])
 
-    if (!isOn) {
-        return null
-    }
-
     return (
-        <div ref={contentRef} className={clsx(dropdownVariants({ width }))}>
-            {children}
-        </div>
+        <DropAnimation isOn={isOn} intensity="sm">
+            {isOn && (
+                <div ref={contentRef} className={clsx(dropdownVariants({ width }))}>
+                    {children}
+                </div>
+            )}
+        </DropAnimation>
     )
 }
 
