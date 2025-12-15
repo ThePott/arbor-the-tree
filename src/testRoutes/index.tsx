@@ -4,6 +4,7 @@ const ButtonTestPage = lazy(() => import("./_ButtonTestPage.tsx"))
 const AnimationTestPage = lazy(() => import("./_AnimationTestPage.tsx"))
 const AnimationExamplePage = lazy(() => import("./_AnimationExamplePage.tsx"))
 const AnimationEventTestPage = lazy(() => import("./_AnimationEventTestPage.tsx"))
+const AutoCompleteTestPage = lazy(() => import("./_AutoCompleteTestPage.tsx"))
 
 const testRouteArray = [
     {
@@ -25,6 +26,10 @@ const testRouteArray = [
     {
         path: "/test/animation/event",
         element: <AnimationEventTestPage />,
+    },
+    {
+        path: "/test/auto-complete",
+        element: <AutoCompleteTestPage />,
     },
 ]
 
