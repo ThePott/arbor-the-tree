@@ -1,5 +1,12 @@
-.vt-drop-md {
-    view-transition-name: vt-drop-md;
+.drop-out-md {
+    animation-name: drop-out-md;
+    animation-duration: 0.1s;
+    animation-timing-function: cubic-bezier(0.08, 0.34, 0.26, 1.11);
+}
+.drop-in-md {
+    animation-name: drop-in-md;
+    animation-duration: 0.1s;
+    animation-timing-function: cubic-bezier(0.08, 0.34, 0.26, 1.11);
 }
 @keyframes drop-out-md {
     to {
@@ -15,6 +22,10 @@
         transform: translateY(-50px);
     }
 }
+
+.vt-drop-md {
+    view-transition-name: vt-drop-md;
+}
 ::view-transition-group(*) {
     animation-duration: 0.15s;
     animation-timing-function: cubic-bezier(0.08, 0.34, 0.26, 1.11);
@@ -27,5 +38,11 @@
     animation-name: drop-in-md;
 }
 ::view-transition-old(vt-drop-md) {
+    animation-name: drop-out-md;
+}
+::view-transition-new(vt-drop-md):only-child {
+    animation-name: drop-in-md;
+}
+::view-transition-old(vt-drop-md):only-child {
     animation-name: drop-out-md;
 }

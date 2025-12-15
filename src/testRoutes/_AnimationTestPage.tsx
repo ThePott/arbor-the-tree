@@ -2,8 +2,8 @@ import { Vstack } from "@/packages/components/layouts"
 import Container from "@/packages/components/layouts/_Container"
 import RoundBox from "@/packages/components/RoundBox"
 import type { Color, DivProps } from "@/shared/interfaces"
-import { Activity, useState } from "react"
 import "./_AnimationTestPage.css"
+import { useState } from "react"
 
 const ColoredBox = ({ color, ...props }: { color: Color } & DivProps) => {
     const { children: _children, ...rest } = props
@@ -63,15 +63,14 @@ const RemoveCurrentBox = () => {
     return (
         <RoundBox padding="xl" isBordered>
             <Vstack>
-                {initialColorArray.map((color) => (
-                    <Activity mode={colorArray.includes(color) ? "visible" : "hidden"}>
-                        <ColoredBox
-                            key={`remove_${color}`}
-                            color={color}
-                            onClick={() => handleClick(color)}
-                            style={{ viewTransitionName: `remove_${color}` }}
-                        />
-                    </Activity>
+                {colorArray.map((color) => (
+                    <ColoredBox
+                        key={`remove_${color}`}
+                        color={color}
+                        onClick={() => handleClick(color)}
+                        style={{ viewTransitionName: `remove_${color}` }}
+                        className="vt-drop-md"
+                    />
                 ))}
             </Vstack>
         </RoundBox>
@@ -82,7 +81,7 @@ const AnimationTestPage = () => {
     return (
         <Container width="md" isPadded>
             <Vstack gap="xl">
-                <JustReorderBox />
+                {/* <JustReorderBox /> */}
                 <RemoveCurrentBox />
             </Vstack>
         </Container>
