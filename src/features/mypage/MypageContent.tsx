@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { profileSchema, type ProfileSchema } from "./_profileSchema"
 import useProfileMutation from "./_useProfileMutation"
 import useGlobalStore from "@/shared/store/globalStore"
+import DropAnimation from "@/packages/components/motions/DropAnimation"
 
 const MypageContent = () => {
     const [role, setRole] = useState<Role | null>(null)
@@ -38,57 +39,59 @@ const MypageContent = () => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Container width="md" isPadded>
-                <RoundBox isShadowed padding="xl" color="bg2">
-                    <Vstack gap="lg">
-                        <Labeled isRequired isInDanger={Boolean(errors.name)}>
-                            <Labeled.Header>이름</Labeled.Header>
-                            <Labeled.Input {...register("name")} />
-                            <Labeled.Footer>{errors.name?.message}</Labeled.Footer>
-                        </Labeled>
-                        <Labeled isRequired isInDanger={Boolean(errors.phone_number)}>
-                            <Labeled.Header>핸드폰 번호</Labeled.Header>
-                            <Labeled.Input {...register("phone_number")} />
-                            <Labeled.Footer>{errors.phone_number?.message}</Labeled.Footer>
-                        </Labeled>
-                        <Labeled isRequired isInDanger={Boolean(errors.role)}>
-                            <Labeled.Header>권한</Labeled.Header>
-                            <Controller
-                                control={control}
-                                name="role"
-                                render={({ field: { onChange } }) => (
-                                    <Select
-                                        onOptionSelect={(value) => {
-                                            setRole(value as Role)
-                                            onChange(value)
-                                        }}
-                                        isInDanger={Boolean(errors.role)}
-                                    >
-                                        <Select.Trigger>권한을 선택해주세요</Select.Trigger>
-                                        <Select.Content>
-                                            <Select.Option value="STUDENT">학생</Select.Option>
-                                            <Select.Option value="PARENT">학부모</Select.Option>
-                                            <Select.Option value="HELPER">실장</Select.Option>
-                                            <Select.Option value="PRINCIPAL">원장</Select.Option>
-                                        </Select.Content>
-                                    </Select>
-                                )}
-                            />
-                            <Labeled.Footer>{errors.role?.message}</Labeled.Footer>
-                        </Labeled>
-                        <Labeled isRequired isInDanger={Boolean(errors.hagwon)}>
-                            <Labeled.Header>학원</Labeled.Header>
-                            <Labeled.Input {...register("hagwon")} className="w-full" />
-                            <Labeled.Footer>{errors.hagwon?.message}</Labeled.Footer>
-                        </Labeled>
-                        {role === "PARENT" && <ParentInputMany />}
-                        <Button color="bg0" isShadowed status={isPending ? "pending" : "enabled"}>
-                            저장
-                        </Button>
-                        {/* <Button type="button" color="red"> */}
-                        {/*     회원 탈퇴 */}
-                        {/* </Button> */}
-                    </Vstack>
-                </RoundBox>
+                <DropAnimation>
+                    <RoundBox isShadowed padding="xl" color="bg0" radius="lg">
+                        <Vstack gap="lg">
+                            <Labeled isRequired isInDanger={Boolean(errors.name)}>
+                                <Labeled.Header>이름</Labeled.Header>
+                                <Labeled.Input {...register("name")} />
+                                <Labeled.Footer>{errors.name?.message}</Labeled.Footer>
+                            </Labeled>
+                            <Labeled isRequired isInDanger={Boolean(errors.phone_number)}>
+                                <Labeled.Header>핸드폰 번호</Labeled.Header>
+                                <Labeled.Input {...register("phone_number")} />
+                                <Labeled.Footer>{errors.phone_number?.message}</Labeled.Footer>
+                            </Labeled>
+                            <Labeled isRequired isInDanger={Boolean(errors.role)}>
+                                <Labeled.Header>권한</Labeled.Header>
+                                <Controller
+                                    control={control}
+                                    name="role"
+                                    render={({ field: { onChange } }) => (
+                                        <Select
+                                            onOptionSelect={(value) => {
+                                                setRole(value as Role)
+                                                onChange(value)
+                                            }}
+                                            isInDanger={Boolean(errors.role)}
+                                        >
+                                            <Select.Trigger>권한을 선택해주세요</Select.Trigger>
+                                            <Select.Content>
+                                                <Select.Option value="STUDENT">학생</Select.Option>
+                                                <Select.Option value="PARENT">학부모</Select.Option>
+                                                <Select.Option value="HELPER">실장</Select.Option>
+                                                <Select.Option value="PRINCIPAL">원장</Select.Option>
+                                            </Select.Content>
+                                        </Select>
+                                    )}
+                                />
+                                <Labeled.Footer>{errors.role?.message}</Labeled.Footer>
+                            </Labeled>
+                            <Labeled isRequired isInDanger={Boolean(errors.hagwon)}>
+                                <Labeled.Header>학원</Labeled.Header>
+                                <Labeled.Input {...register("hagwon")} className="w-full" />
+                                <Labeled.Footer>{errors.hagwon?.message}</Labeled.Footer>
+                            </Labeled>
+                            {role === "PARENT" && <ParentInputMany />}
+                            <Button color="bg1" isShadowed status={isPending ? "pending" : "enabled"}>
+                                저장
+                            </Button>
+                            {/* <Button type="button" color="red"> */}
+                            {/*     회원 탈퇴 */}
+                            {/* </Button> */}
+                        </Vstack>
+                    </RoundBox>
+                </DropAnimation>
             </Container>
         </form>
     )

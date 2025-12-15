@@ -5,7 +5,7 @@ import { cva } from "class-variance-authority"
 import Loader from "@/packages/components/Loader/Loader"
 import { checkEnvVar } from "@/shared/utils/checkEnvVar"
 
-const kakaoButtonVariants = cva("rounded-my-sm shadow-my-sm  px-3 py-2 transition", {
+const kakaoButtonVariants = cva("rounded-my-sm shadow-my-sm  px-3 py-2 my-transition", {
     variants: {
         isPendingLogin: {
             false: "cursor-pointer bg-[#FEE500] hover:bg-[#edd400] active:bg-[#ddc400] text-black/85",

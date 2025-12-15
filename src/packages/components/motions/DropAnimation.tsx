@@ -5,9 +5,9 @@ import type { ReactNode } from "react"
 type Intensity = SmToLg
 
 interface WtihDropAnimationProps {
-    intensity: Intensity
+    intensity?: Intensity
+    isOn?: boolean
     children: ReactNode
-    isOn: boolean
 }
 
 const intensityToNumber: Record<Intensity, number> = {
@@ -16,7 +16,7 @@ const intensityToNumber: Record<Intensity, number> = {
     lg: 1.5,
 }
 
-const DropAnimation = ({ isOn, intensity, children }: WtihDropAnimationProps) => {
+const DropAnimation = ({ isOn = true, intensity = "md", children }: WtihDropAnimationProps) => {
     const intensityInNumber = intensityToNumber[intensity]
     const duration = 0.3 * intensityInNumber
     const blurRadiusInPixel = 32 * intensityInNumber

@@ -6,7 +6,7 @@ import Loader from "../Loader/Loader"
 import { Hstack } from "../layouts"
 import { buttonColorToCn } from "@/shared/utils/styles"
 
-const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm transition", {
+const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm my-transition", {
     variants: {
         color: buttonColorToCn,
         status: {
