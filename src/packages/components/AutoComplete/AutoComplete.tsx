@@ -1,18 +1,16 @@
 import { type ReactNode } from "react"
-import AutoCompleteStoreProvider from "./_AutoCompleteContextProvider"
+import AutoCompleteStoreProvider, { type AutoCompleteInitialValue } from "./_AutoCompleteContextProvider"
 import AutoCompleteInput from "./_AutoCompleteInput"
 import AutoCompleteContent from "./_AutoCompleteContent"
 import AutoCompleteOption from "./_AutoCompleteItem"
 
-export interface AutoCompleteInitialValue {
-    onChange: (value: string) => void
-    isNewOptionAvailable: boolean
-}
-
-const AutoComplete = ({ children, ...initialValues }: { children: ReactNode } & AutoCompleteInitialValue) => {
+const AutoComplete = (initialValues: AutoCompleteInitialValue) => {
     return (
         <AutoCompleteStoreProvider {...initialValues}>
-            <div className="relative">{children}</div>
+            <div className="relative">
+                <AutoCompleteInput />
+                <AutoCompleteContent />
+            </div>
         </AutoCompleteStoreProvider>
     )
 }

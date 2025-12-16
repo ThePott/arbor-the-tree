@@ -1,5 +1,5 @@
 import Button from "../Button/Button"
-import { useAutoCompleteStore } from "./_useAutoCompleteStoreContext"
+import { useAutoCompleteStore } from "./_autoCompleteHooks"
 
 const AutoCompleteOption = ({ children }: { children: string }) => {
     const setSelectedOption = useAutoCompleteStore((state) => state.setSelectedOption)

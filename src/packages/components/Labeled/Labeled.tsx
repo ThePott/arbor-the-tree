@@ -43,7 +43,7 @@ const LabeledFooter = (props: PProps) => {
 
 const LabeledInput = (props: InputProps) => {
     const { isInDanger } = useLabeledContext()
-    return <Input {...props} isInDanger={isInDanger} />
+    return <Input {...props} isRed={isInDanger} />
 }
 
 interface WithLabelGroupProps {

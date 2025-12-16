@@ -1,14 +1,15 @@
 import { type ReactNode, useState } from "react"
 import { createStore, type StoreApi } from "zustand"
-import { StoreContext } from "./_useAutoCompleteStoreContext"
-import type { AutoCompleteInitialValue } from "./AutoComplete"
+import { StoreContext } from "./_autoCompleteHooks"
 
 type AutoCompleteStatus = "normal" | "danger" | "create"
 
-export interface AutoCompleteStoreState {
-    onChange: (value: string) => void
+export interface AutoCompleteInitialValue {
+    getOptionArray: (searchText: string) => void
     isNewOptionAvailable: boolean
+}
 
+interface AutoCompleteStoreStateBase {
     isFocused: boolean
     setIsFocused: (isFocused: boolean) => void
 
@@ -20,7 +21,12 @@ export interface AutoCompleteStoreState {
 
     inputValue: string
     setInputValue: (inputValue: string) => void
+
+    optionArray: string[]
+    setOptionArray: (optionArray: string[]) => void
 }
+
+export type AutoCompleteStoreState = AutoCompleteStoreStateBase & AutoCompleteInitialValue
 
 const AutoCompleteStoreProvider = ({
     children,
@@ -40,6 +46,9 @@ const AutoCompleteStoreProvider = ({
 
         inputValue: "",
         setInputValue: (inputValue: string) => set({ inputValue }),
+
+        optionArray: [],
+        setOptionArray: (schoolNameArray) => set({ optionArray: schoolNameArray }),
 
         ...initialValues,
     }))

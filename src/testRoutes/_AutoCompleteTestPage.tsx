@@ -1,54 +1,19 @@
+import { headlessInstance } from "@/packages/api/axiosInstances"
 import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
 import Container from "@/packages/components/layouts/_Container"
-import { useState } from "react"
+import type { School } from "@/shared/interfaces"
 
-const optionArray: string[] = [
-    "apple",
-    "banana",
-    "carrot",
-    "dinosaur",
-    "elephant",
-    "forest",
-    "guitar",
-    "house",
-    "igloo",
-    "jungle",
-    "keyboard",
-    "lemon",
-    "mountain",
-    "notebook",
-    "ocean",
-    "pencil",
-    "queen",
-    "rainbow",
-    "sunset",
-    "turtle",
-    "umbrella",
-    "volcano",
-    "waterfall",
-    "xylophone",
-    "yellow",
-    "zebra",
-]
+const getSchoolMany = async (name: string) => {
+    const response = await headlessInstance.get(`/school?name=${name}`)
+    const schoolArray = response.data
+    const schoolNameArray = schoolArray.map((school: School) => school.name)
+    return schoolNameArray
+}
 
 const AutoCompleteTestPage = () => {
-    const [filteredOptionArray, setFileteredOptionArray] = useState<string[]>(optionArray)
-
-    const handleChage = (value: string) => {
-        const filtered: string[] = optionArray.filter((option) => option.includes(value))
-        setFileteredOptionArray(filtered)
-    }
-
     return (
         <Container isPadded width="md">
-            <AutoComplete onChange={handleChage} isNewOptionAvailable={false}>
-                <AutoComplete.Input />
-                <AutoComplete.Content>
-                    {filteredOptionArray.map((option) => (
-                        <AutoComplete.Option>{option}</AutoComplete.Option>
-                    ))}
-                </AutoComplete.Content>
-            </AutoComplete>
+            <AutoComplete getOptionArray={getSchoolMany} isNewOptionAvailable={false} />
         </Container>
     )
 }
