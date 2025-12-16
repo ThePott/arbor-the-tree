@@ -17,6 +17,9 @@ export interface AutoCompleteStoreState {
 
     selectedOption: string | null
     setSelectedOption: (selectedOption: string) => void
+
+    inputValue: string
+    setInputValue: (inputValue: string) => void
 }
 
 const AutoCompleteStoreProvider = ({
@@ -34,6 +37,9 @@ const AutoCompleteStoreProvider = ({
 
         selectedOption: null,
         setSelectedOption: (selectedOption: string) => set({ selectedOption }),
+
+        inputValue: "",
+        setInputValue: (inputValue: string) => set({ inputValue }),
 
         ...initialValues,
     }))
