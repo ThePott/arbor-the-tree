@@ -2,12 +2,12 @@ import Button from "../Button/Button"
 import { useAutoCompleteStore } from "./_autoCompleteHooks"
 
 const AutoCompleteOption = ({ children }: { children: string }) => {
-    const setSelectedOption = useAutoCompleteStore((state) => state.setSelectedOption)
+    const setInputValue = useAutoCompleteStore((state) => state.setInputValue)
     const setIsContentOn = useAutoCompleteStore((state) => state.setIsContentOn)
 
     const handleClick = () => {
         setIsContentOn(false)
-        setSelectedOption(children)
+        setInputValue(children)
     }
 
     return (

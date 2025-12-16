@@ -1,4 +1,4 @@
-import { type ReactNode, useState } from "react"
+import { type ReactNode, type RefObject, useRef, useState } from "react"
 import { createStore, type StoreApi } from "zustand"
 import { StoreContext } from "./_autoCompleteHooks"
 
@@ -10,14 +10,13 @@ export interface AutoCompleteInitialValue {
 }
 
 interface AutoCompleteStoreStateBase {
+    inputRef: RefObject<HTMLInputElement | null>
+
     isContentOn: boolean
     setIsContentOn: (isFocused: boolean) => void
 
     status: AutoCompleteStatus
     setStatus: (status: AutoCompleteStatus) => void
-
-    selectedOption: string | null
-    setSelectedOption: (selectedOption: string) => void
 
     inputValue: string
     setInputValue: (inputValue: string) => void
@@ -34,15 +33,16 @@ const AutoCompleteStoreProvider = ({
 }: {
     children: ReactNode
 } & AutoCompleteInitialValue) => {
+    const inputRef = useRef<HTMLInputElement>(null)
+
     const autoCompleteStore = createStore<AutoCompleteStoreState>((set) => ({
+        inputRef,
+
         isContentOn: false,
         setIsContentOn: (isContentOn) => set({ isContentOn }),
 
         status: "normal",
         setStatus: (status: AutoCompleteStatus) => set({ status }),
-
-        selectedOption: null,
-        setSelectedOption: (selectedOption: string) => set({ selectedOption }),
 
         inputValue: "",
         setInputValue: (inputValue: string) => set({ inputValue }),
