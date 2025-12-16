@@ -5,11 +5,23 @@ import { useAutoCompleteStore } from "./_autoCompleteHooks"
 
 const AutoCompleteContent = () => {
     const optionArray = useAutoCompleteStore((state) => state.optionArray)
+    const isContentOn = useAutoCompleteStore((state) => state.isContentOn)
+    const inputValue = useAutoCompleteStore((state) => state.inputValue)
+
+    const filteredOptionArray = optionArray.filter((option) => option.includes(inputValue))
+
+    if (!isContentOn) {
+        return null
+    }
 
     return (
-        <RoundBox color="bg2" padding="md" className="max-h-[500px] overflow-y-scroll">
+        <RoundBox
+            color="bg2"
+            padding="md"
+            className="mt-my-sm absolute top-full max-h-[500px] w-full overflow-y-scroll"
+        >
             <Vstack>
-                {optionArray.map((option) => (
+                {filteredOptionArray.map((option) => (
                     <AutoCompleteOption key={option}>{option}</AutoCompleteOption>
                 ))}
             </Vstack>

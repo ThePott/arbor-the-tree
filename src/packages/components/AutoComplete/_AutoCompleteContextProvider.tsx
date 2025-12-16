@@ -10,8 +10,8 @@ export interface AutoCompleteInitialValue {
 }
 
 interface AutoCompleteStoreStateBase {
-    isFocused: boolean
-    setIsFocused: (isFocused: boolean) => void
+    isContentOn: boolean
+    setIsContentOn: (isFocused: boolean) => void
 
     status: AutoCompleteStatus
     setStatus: (status: AutoCompleteStatus) => void
@@ -35,8 +35,8 @@ const AutoCompleteStoreProvider = ({
     children: ReactNode
 } & AutoCompleteInitialValue) => {
     const autoCompleteStore = createStore<AutoCompleteStoreState>((set) => ({
-        isFocused: false,
-        setIsFocused: (isFocused) => set({ isFocused }),
+        isContentOn: false,
+        setIsContentOn: (isContentOn) => set({ isContentOn }),
 
         status: "normal",
         setStatus: (status: AutoCompleteStatus) => set({ status }),

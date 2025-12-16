@@ -2,9 +2,10 @@ import Input from "../Input/Input"
 import Loader from "../Loader/Loader"
 import useDebounce from "@/packages/utils/useDebounce"
 import { useAutoCompleteStore, useAutoCompleteQuery } from "./_autoCompleteHooks"
+import { useEffect } from "react"
 
 const AutoCompleteInput = () => {
-    const setIsFocused = useAutoCompleteStore((state) => state.setIsFocused)
+    const setIsContentOn = useAutoCompleteStore((state) => state.setIsContentOn)
     const selectedOption = useAutoCompleteStore((state) => state.selectedOption)
     const setInputValue = useAutoCompleteStore((state) => state.setInputValue)
     const inputValue = useAutoCompleteStore((state) => state.inputValue)
@@ -13,8 +14,14 @@ const AutoCompleteInput = () => {
 
     const { isPending, error } = useAutoCompleteQuery(debouncedValue)
 
+    useEffect(() => {
+        if (!selectedOption) return
+        if (selectedOption === inputValue) return
+
+        setInputValue(selectedOption)
+    }, [selectedOption])
+
     const handleBlur = () => {
-        setIsFocused(false)
         cancel()
     }
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -27,7 +34,7 @@ const AutoCompleteInput = () => {
     return (
         <Input
             key={selectedOption}
-            onFocus={() => setIsFocused(true)}
+            onFocus={() => setIsContentOn(true)}
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
             defaultValue={selectedOption ?? undefined}
