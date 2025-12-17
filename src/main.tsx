@@ -7,17 +7,12 @@ import Layout from "./pages/layout/Layout.tsx"
 import NotFoundPage from "./pages/error/NotFoundPage.tsx"
 import { QueryClientProvider } from "@tanstack/react-query"
 import queryClient from "./packages/api/queryClient.ts"
-const LandingPage = lazy(() => import("./pages/landing/LandingPage.tsx"))
+import LandingPage from "./pages/landing/LandingPage.tsx"
 const SummaryPage = lazy(() => import("./pages/summary/SummaryPage.tsx"))
 const ProgressPage = lazy(() => import("./pages/progress/ProgressPage.tsx"))
 const Mypage = lazy(() => import("./pages/mypage/Mypage.tsx"))
 
 const routeArray = [
-    {
-        path: "/",
-        element: <LandingPage />,
-        fallback: <p>여기에 스켈레톤을 넣어야 합니다</p>,
-    },
     {
         path: "/summary",
         element: <SummaryPage />,
@@ -43,6 +38,10 @@ const router = createBrowserRouter([
         children: [
             ...suspendedRouteArray,
             ...suspendedTestRouteArray,
+            {
+                path: "/",
+                element: <LandingPage />,
+            },
             {
                 path: "*",
                 element: <NotFoundPage />,
