@@ -2,7 +2,6 @@ import type { Color, DivProps, None, SmToLg, XsToXl } from "@/shared/interfaces"
 import { boxColorToCn, paddingToCn } from "@/shared/utils/styles"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
-import { motion } from "motion/react"
 
 const roundBoxVariants = cva("", {
     variants: {
