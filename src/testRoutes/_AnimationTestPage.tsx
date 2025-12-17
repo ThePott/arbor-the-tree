@@ -1,88 +1,109 @@
-import { Vstack } from "@/packages/components/layouts"
+import { Hstack, Vstack } from "@/packages/components/layouts"
 import Container from "@/packages/components/layouts/_Container"
 import RoundBox from "@/packages/components/RoundBox"
-import type { Color, DivProps } from "@/shared/interfaces"
 import "./_AnimationTestPage.css"
-import { useState } from "react"
+import { memo, useState } from "react"
+import Button from "@/packages/components/Button/Button"
+import { AnimatePresence, motion, MotionConfig } from "motion/react"
+import useMeasure from "react-use-measure"
 
-const ColoredBox = ({ color, ...props }: { color: Color } & DivProps) => {
-    const { children: _children, ...rest } = props
-
+const Box = memo(() => {
     return (
-        <RoundBox color={color} padding="xl" {...rest}>
-            this is content
-        </RoundBox>
+        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} inherit={false} layout>
+            <RoundBox color="red" padding="xl">
+                this is box
+            </RoundBox>
+        </motion.div>
     )
-}
+})
 
-const initialColorArray: Color[] = ["red", "blue", "green", "bg0"]
+const AnimationSelfTest = () => {
+    const [idArray, setIdArray] = useState<number[]>([])
 
-const JustReorderBox = () => {
-    const [colorArray, setColorArray] = useState<Color[]>(initialColorArray)
+    const [ref, { height }] = useMeasure()
 
-    const handleClick = (color: Color) => {
-        if (color === colorArray[0]) {
-            return
-        }
-        const newColorArray = colorArray.filter((el) => el !== color)
-        newColorArray.unshift(color)
-
-        document.startViewTransition(() => {
-            setColorArray(newColorArray)
-        })
+    const handleAdd = () => {
+        setIdArray([...idArray, Date.now()])
+    }
+    const handlePop = () => {
+        idArray.pop()
+        setIdArray([...idArray])
+    }
+    const handleShift = () => {
+        idArray.shift()
+        setIdArray([...idArray])
     }
 
     return (
-        <RoundBox isBordered padding="xl">
-            <Vstack>
-                {colorArray.map((color) => (
-                    <ColoredBox
-                        key={color}
-                        color={color}
-                        onClick={() => handleClick(color)}
-                        style={{ viewTransitionName: color, animationDuration: "0.01" }}
-                    />
-                ))}
-            </Vstack>
-        </RoundBox>
+        <MotionConfig transition={{ duration: 1 }}>
+            <Hstack>
+                <Button onClick={handleShift}>shift</Button>
+                <Button onClick={handlePop}>pop</Button>
+                <Button onClick={handleAdd}>add</Button>
+            </Hstack>
+            <motion.div animate={{ height }}>
+                <RoundBox padding="md" color="bg3" ref={ref}>
+                    <Vstack gap="xl">
+                        <AnimatePresence>
+                            {idArray.map((id) => (
+                                <Box key={id} />
+                            ))}
+                        </AnimatePresence>
+                    </Vstack>
+                </RoundBox>
+            </motion.div>
+        </MotionConfig>
     )
 }
 
-// TODO: 현재 문제 - view transition이 작동을 안 하는데 원인을 모르겠음
-// TODO: Activity는 아무 효과 없음
-const RemoveCurrentBox = () => {
-    const [colorArray, setColorArray] = useState<Color[]>(initialColorArray)
-
-    const handleClick = (color: Color) => {
-        const newColorArray = initialColorArray.filter((el) => el !== color)
-
-        document.startViewTransition(() => {
-            setColorArray(newColorArray)
-        })
-    }
+const AnimationYoutubeTutorial = () => {
+    const [isLong, setIsLong] = useState(false)
+    const [ref, { height }] = useMeasure()
     return (
-        <RoundBox padding="xl" isBordered>
-            <Vstack>
-                {colorArray.map((color) => (
-                    <ColoredBox
-                        key={`remove_${color}`}
-                        color={color}
-                        onClick={() => handleClick(color)}
-                        style={{ viewTransitionName: `remove_${color}` }}
-                        className="vt-drop-md"
-                    />
-                ))}
-            </Vstack>
-        </RoundBox>
+        <MotionConfig transition={{ duration: 1 }}>
+            <RoundBox isBordered padding="xl">
+                <Vstack>
+                    <Button onClick={() => setIsLong(!isLong)}>toggle length</Button>
+                    <RoundBox color="bg2" padding="lg" className="overflow-hidden">
+                        <motion.div animate={{ height }}>
+                            <AnimatePresence>
+                                <motion.div
+                                    initial={{ opacity: 0, translateX: "100px" }}
+                                    animate={{ opacity: 1, translateX: 0 }}
+                                    exit={{ opacity: 0, translateX: "-100px" }}
+                                    key={Number(isLong)}
+                                    className="relative"
+                                >
+                                    <div ref={ref} className="absolute">
+                                        {isLong && (
+                                            <p>
+                                                asdfkl asDFFHJK alDFHJkasldHASjkdf ASDHJKf SAHDJKf HASDJKf HASJKlf
+                                                ASHDjk ASdhf KLASJfH KJASD asdfkjlas[ "(])asdhFKJASdfhASKJdllHASJKdf
+                                                HASJKDLf HASJKDLf ASHJK ASKJLhASKJLHASKjld HASHKJLD AS"]
+                                            </p>
+                                        )}
+                                        {!isLong && <p>short message</p>}
+                                    </div>
+                                </motion.div>
+                            </AnimatePresence>
+                        </motion.div>
+                    </RoundBox>
+                </Vstack>
+            </RoundBox>
+        </MotionConfig>
     )
 }
 
 const AnimationTestPage = () => {
+    const [isMineVisible, setIsMineVisible] = useState(false)
     return (
         <Container width="md" isPadded>
             <Vstack gap="xl">
-                <JustReorderBox />
-                <RemoveCurrentBox />
+                <Hstack>
+                    <Button onClick={() => setIsMineVisible(!isMineVisible)}>isMine toggle</Button>
+                </Hstack>
+                {isMineVisible && <AnimationSelfTest />}
+                {!isMineVisible && <AnimationYoutubeTutorial />}
             </Vstack>
         </Container>
     )
