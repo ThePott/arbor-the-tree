@@ -5,8 +5,9 @@ import LabeledContext from "./LabeledContext"
 import useLabeledContext from "./useLabeledContext"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
-import { AnimatePresence, cubicBezier, motion, type Transition } from "motion/react"
+import { AnimatePresence, cubicBezier, motion, MotionConfig, type Transition } from "motion/react"
 import type { ReactNode } from "react"
+import useMeasure from "react-use-measure"
 
 const LabeledHeader = (props: PProps) => {
     const { className, children, ...rest } = props
@@ -45,7 +46,7 @@ const LabeledFooter = ({ className, children }: { className: string; children: R
         visible: { filter: "blur(0)", transform: "translateY(0)", opacity: 1 },
     }
     return (
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
             {children && (
                 <motion.p
                     className={clsx(labelFooterVariants({ isInDanger }), className)}
@@ -74,11 +75,14 @@ interface WithLabelGroupProps {
 
 const Labeled = ({ isInDanger = false, isRequired = false, ...props }: DivProps & WithLabelGroupProps) => {
     const { children, ...rest } = props
+    const [ref, { height }] = useMeasure()
 
     return (
         <LabeledContext.Provider value={{ isInDanger, isRequired }}>
             <Vstack {...rest} gap="none">
-                {children}
+                <motion.div animate={{ height }}>
+                    <div ref={ref}>{children}</div>
+                </motion.div>
             </Vstack>
         </LabeledContext.Provider>
     )
