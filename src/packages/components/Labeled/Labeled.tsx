@@ -5,6 +5,8 @@ import LabeledContext from "./LabeledContext"
 import useLabeledContext from "./useLabeledContext"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
+import { AnimatePresence, cubicBezier, motion, type Transition } from "motion/react"
+import type { ReactNode } from "react"
 
 const LabeledHeader = (props: PProps) => {
     const { className, children, ...rest } = props
@@ -30,14 +32,33 @@ const labelFooterVariants = cva("text-my-sm", {
     },
 })
 
-const LabeledFooter = (props: PProps) => {
-    const { className, children, ...rest } = props
+const LabeledFooter = ({ className, children }: { className: string; children: ReactNode }) => {
     const { isInDanger } = useLabeledContext()
 
+    const duration = 0.3
+    const blurRadiusInPixel = 32
+    const transformYInPixel = -60
+    const transition: Transition = { duration, ease: cubicBezier(0.08, 0.34, 0.26, 1.11) }
+
+    const variants = {
+        hidden: { filter: `blur(${blurRadiusInPixel}px)`, transform: `translateY(${transformYInPixel}px)`, opacity: 0 },
+        visible: { filter: "blur(0)", transform: "translateY(0)", opacity: 1 },
+    }
     return (
-        <p {...rest} className={clsx(labelFooterVariants({ isInDanger }), className)}>
-            {children}
-        </p>
+        <AnimatePresence>
+            {children && (
+                <motion.p
+                    className={clsx(labelFooterVariants({ isInDanger }), className)}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    transition={transition}
+                    variants={variants}
+                >
+                    {children}
+                </motion.p>
+            )}
+        </AnimatePresence>
     )
 }
 
