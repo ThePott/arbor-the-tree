@@ -4,25 +4,17 @@ import { cva } from "class-variance-authority"
 import clsx from "clsx"
 import type { JSX } from "react"
 
-const inputVariants = cva(
-    "bg-bg-2 px-3 py-2 rounded-my-sm border border-transparent outline outline-transparent my-transition shadow-inward-my-sm items-center",
-    {
-        variants: {
-            isRed: {
-                false: "focus-within:outline-border-muted",
-                true: "focus-within:outline-washed-red border-washed-red",
-            },
-            // isGreen: {
-            //     false: "focus-within:outline-border-muted",
-            //     true: "focus-within:outline-washed-green border-washed-green",
-            // },
+const inputVariants = cva("bg-bg-2 px-3 py-2 rounded-my-sm  outline  my-transition shadow-inward-my-sm items-center", {
+    variants: {
+        isRed: {
+            false: "focus-within:outline-border-muted outline-transparent",
+            true: "focus-within:outline-washed-red focus-within:outline-2 outline-washed-red",
         },
-    }
-)
+    },
+})
 
 interface WithInputProps {
     isRed?: boolean
-    // isGreen?: boolean
     trailingIcon?: JSX.Element
 }
 
