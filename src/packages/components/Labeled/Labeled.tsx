@@ -33,7 +33,7 @@ const labelFooterVariants = cva("text-my-sm", {
     },
 })
 
-const LabeledFooter = ({ className, children }: { className: string; children: ReactNode }) => {
+const LabeledFooter = ({ className, children }: { className?: string; children: ReactNode }) => {
     const { isInDanger } = useLabeledContext()
 
     const duration = 0.3
