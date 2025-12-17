@@ -10,7 +10,7 @@ const getSchoolMany = async (name: string) => {
 }
 
 const SchoolAutoComplete = ({ onChange }: { onChange: (value: string) => void }) => {
-    return <AutoComplete onChange={onChange} getOptionArray={getSchoolMany} available="onlyExisting" />
+    return <AutoComplete onChange={onChange} getOptionArray={getSchoolMany} available="onlyNew" />
 }
 
 export default SchoolAutoComplete

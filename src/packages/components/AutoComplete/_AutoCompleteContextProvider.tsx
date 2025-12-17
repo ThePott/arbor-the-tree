@@ -2,7 +2,7 @@ import { type ReactNode, type RefObject, useRef, useState } from "react"
 import { createStore, type StoreApi } from "zustand"
 import { StoreContext } from "./_autoCompleteHooks"
 
-type AutoCompleteStatus = "normal" | "danger" | "create"
+// type AutoCompleteStatus = "normal" | "red" | "green"
 type AutoCompleteAvailable = "onlyNew" | "onlyExisting"
 
 export interface AutoCompleteInitialValue {
@@ -17,8 +17,8 @@ interface AutoCompleteStoreStateBase {
     isContentOn: boolean
     setIsContentOn: (isFocused: boolean) => void
 
-    status: AutoCompleteStatus
-    setStatus: (status: AutoCompleteStatus) => void
+    isRed: boolean
+    setIsRed: (isRed: boolean) => void
 
     inputValue: string
     setInputValue: (inputValue: string) => void
@@ -43,8 +43,8 @@ const AutoCompleteStoreProvider = ({
         isContentOn: false,
         setIsContentOn: (isContentOn) => set({ isContentOn }),
 
-        status: "normal",
-        setStatus: (status: AutoCompleteStatus) => set({ status }),
+        isRed: false,
+        setIsRed: (isRed: boolean) => set({ isRed }),
 
         inputValue: "",
         setInputValue: (inputValue: string) => set({ inputValue }),

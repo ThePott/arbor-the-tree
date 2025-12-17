@@ -2,6 +2,7 @@ import Input from "../Input/Input"
 import Loader from "../Loader/Loader"
 import useDebounce from "@/packages/utils/useDebounce"
 import { useAutoCompleteStore, useAutoCompleteQuery } from "./_autoCompleteHooks"
+import { useEffect } from "react"
 
 const AutoCompleteInput = () => {
     const setIsContentOn = useAutoCompleteStore((state) => state.setIsContentOn)
@@ -9,10 +10,14 @@ const AutoCompleteInput = () => {
     const inputValue = useAutoCompleteStore((state) => state.inputValue)
     const inputRef = useAutoCompleteStore((state) => state.inputRef)
     const isContentOn = useAutoCompleteStore((state) => state.isContentOn)
+    const isRed = useAutoCompleteStore((state) => state.isRed)
+    const setIsRed = useAutoCompleteStore((state) => state.setIsRed)
+    const optionArray = useAutoCompleteStore((state) => state.optionArray)
+    const available = useAutoCompleteStore((state) => state.available)
 
     const { debouncedValue, cancel } = useDebounce(inputValue, 500)
 
-    const { isFetching, error } = useAutoCompleteQuery(debouncedValue)
+    const { isFetching } = useAutoCompleteQuery(debouncedValue)
 
     const handleBlur = () => {
         cancel()
@@ -24,6 +29,15 @@ const AutoCompleteInput = () => {
         cancel()
     }
 
+    useEffect(() => {
+        if (!inputValue) {
+            return
+        }
+
+        const isIncluded = optionArray.includes(inputValue)
+        setIsRed(available === "onlyNew" ? !isIncluded : isIncluded)
+    }, [inputValue, optionArray])
+
     return (
         <Input
             ref={inputRef}
@@ -33,7 +47,7 @@ const AutoCompleteInput = () => {
             value={inputValue}
             onChange={(event) => setInputValue(event.target.value)}
             trailingIcon={isFetching && isContentOn ? <Loader /> : undefined}
-            isRed={Boolean(error)}
+            isRed={isRed}
         />
     )
 }
