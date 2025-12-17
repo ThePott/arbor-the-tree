@@ -13,7 +13,7 @@ const getSchoolMany = async (name: string) => {
 const AutoCompleteTestPage = () => {
     return (
         <Container isPadded width="md">
-            <AutoComplete getOptionArray={getSchoolMany} isNewOptionAvailable={false} />
+            <AutoComplete getOptionArray={getSchoolMany} available="onlyExisting" onChange={() => {}} />
         </Container>
     )
 }
