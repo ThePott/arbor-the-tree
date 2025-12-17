@@ -1,10 +1,10 @@
-import { FullScreen, Vstack } from "@/packages/components/layouts"
+import { CenterContainer, Vstack } from "@/packages/components/layouts"
 import DropAnimation from "@/packages/components/motions/DropAnimation"
 import RoundBox from "@/packages/components/RoundBox"
 
 const LandingPage = () => {
     return (
-        <FullScreen isCentered>
+        <CenterContainer>
             <DropAnimation isOn={true} intensity="lg">
                 <RoundBox color="bg2" className="px-24 py-[48px]" isShadowed radius="lg">
                     <Vstack className="gap-my-lg items-center">
@@ -14,7 +14,7 @@ const LandingPage = () => {
                     </Vstack>
                 </RoundBox>
             </DropAnimation>
-        </FullScreen>
+        </CenterContainer>
     )
 }
 

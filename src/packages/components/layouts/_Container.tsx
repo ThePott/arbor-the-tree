@@ -18,7 +18,7 @@ interface WithContainerProps {
     isPadded?: boolean
 }
 
-const Container = ({ width = "lg", isPadded, ...props }: DivProps & WithContainerProps) => {
+export const Container = ({ width = "lg", isPadded = false, ...props }: DivProps & WithContainerProps) => {
     const { className, children, ...rest } = props
 
     return (
@@ -27,5 +27,3 @@ const Container = ({ width = "lg", isPadded, ...props }: DivProps & WithContaine
         </div>
     )
 }
-
-export default Container

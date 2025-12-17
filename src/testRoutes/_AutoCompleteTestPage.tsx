@@ -1,6 +1,6 @@
 import { headlessInstance } from "@/packages/api/axiosInstances"
 import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
-import Container from "@/packages/components/layouts/_Container"
+import { Container } from "@/packages/components/layouts"
 import type { School } from "@/shared/interfaces"
 
 const getSchoolMany = async (name: string) => {

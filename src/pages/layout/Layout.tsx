@@ -1,6 +1,5 @@
-import { FullScreen } from "@/packages/components/layouts"
+import { FlexOneContainer, FullScreen } from "@/packages/components/layouts"
 import { Outlet } from "react-router"
-import FlexOneContainer from "@/packages/components/layouts/_FlexOneContainer"
 import { useState } from "react"
 import Header from "./Header/Header"
 import useOAuth from "./_useOAuth"

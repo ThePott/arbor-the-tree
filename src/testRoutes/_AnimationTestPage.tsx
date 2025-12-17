@@ -1,5 +1,4 @@
-import { Hstack, Vstack } from "@/packages/components/layouts"
-import Container from "@/packages/components/layouts/_Container"
+import { Container, Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import "./_AnimationTestPage.css"
 import { memo, useState } from "react"

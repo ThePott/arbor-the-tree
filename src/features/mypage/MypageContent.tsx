@@ -1,7 +1,6 @@
 import Button from "@/packages/components/Button/Button"
 import Labeled from "@/packages/components/Labeled/Labeled"
-import { Vstack } from "@/packages/components/layouts"
-import Container from "@/packages/components/layouts/_Container"
+import { Container, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Select from "@/packages/components/Select/Select"
 import type { Role } from "@/shared/interfaces"
