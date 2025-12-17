@@ -5,7 +5,7 @@ import Container from "@/packages/components/layouts/_Container"
 import RoundBox from "@/packages/components/RoundBox"
 import Select from "@/packages/components/Select/Select"
 import type { Role } from "@/shared/interfaces"
-import { useState } from "react"
+import { Activity, useState } from "react"
 import ParentInputMany from "./_ParentInputMany"
 import { Controller, useForm, type FieldValues } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -13,6 +13,8 @@ import { profileSchema, type ProfileSchema } from "./_profileSchema"
 import useProfileMutation from "./_useProfileMutation"
 import useGlobalStore from "@/shared/store/globalStore"
 import DropAnimation from "@/packages/components/motions/DropAnimation"
+import ExpendableDiv from "@/packages/components/ExpandableDiv/ExpendableDiv"
+import SchoolAutoComplete from "./_SchoolAutoComplete"
 
 const MypageContent = () => {
     const [role, setRole] = useState<Role | null>(null)
@@ -82,7 +84,23 @@ const MypageContent = () => {
                                 <Labeled.Input {...register("hagwon")} className="w-full" />
                                 <Labeled.Footer>{errors.hagwon?.message}</Labeled.Footer>
                             </Labeled>
-                            {role === "PARENT" && <ParentInputMany />}
+
+                            <ExpendableDiv>
+                                <Activity mode={role === "STUDENT" ? "visible" : "hidden"}>
+                                    <Labeled isRequired isInDanger={Boolean(errors.hagwon)}>
+                                        <Labeled.Header>학교</Labeled.Header>
+                                        <Controller
+                                            control={control}
+                                            name="school"
+                                            render={({ field: { onChange } }) => (
+                                                <SchoolAutoComplete onChange={onChange} />
+                                            )}
+                                        />
+                                        <Labeled.Footer>{errors.school?.message}</Labeled.Footer>
+                                    </Labeled>
+                                </Activity>
+                            </ExpendableDiv>
+
                             <Button color="bg1" isShadowed status={isPending ? "pending" : "enabled"}>
                                 저장
                             </Button>

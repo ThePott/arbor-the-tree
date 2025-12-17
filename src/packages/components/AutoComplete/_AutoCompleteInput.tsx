@@ -8,10 +8,11 @@ const AutoCompleteInput = () => {
     const setInputValue = useAutoCompleteStore((state) => state.setInputValue)
     const inputValue = useAutoCompleteStore((state) => state.inputValue)
     const inputRef = useAutoCompleteStore((state) => state.inputRef)
+    const isContentOn = useAutoCompleteStore((state) => state.isContentOn)
 
     const { debouncedValue, cancel } = useDebounce(inputValue, 500)
 
-    const { isPending, error } = useAutoCompleteQuery(debouncedValue)
+    const { isFetching, error } = useAutoCompleteQuery(debouncedValue)
 
     const handleBlur = () => {
         cancel()
@@ -31,7 +32,7 @@ const AutoCompleteInput = () => {
             onKeyDown={handleKeyDown}
             value={inputValue}
             onChange={(event) => setInputValue(event.target.value)}
-            trailingIcon={isPending ? <Loader /> : undefined}
+            trailingIcon={isFetching && isContentOn ? <Loader /> : undefined}
             isRed={Boolean(error)}
         />
     )

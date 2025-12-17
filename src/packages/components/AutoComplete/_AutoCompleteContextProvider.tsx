@@ -3,10 +3,12 @@ import { createStore, type StoreApi } from "zustand"
 import { StoreContext } from "./_autoCompleteHooks"
 
 type AutoCompleteStatus = "normal" | "danger" | "create"
+type AutoCompleteAvailable = "onlyNew" | "onlyExisting"
 
 export interface AutoCompleteInitialValue {
+    onChange: (value: string) => void
     getOptionArray: (searchText: string) => void
-    isNewOptionAvailable: boolean
+    available: AutoCompleteAvailable
 }
 
 interface AutoCompleteStoreStateBase {
