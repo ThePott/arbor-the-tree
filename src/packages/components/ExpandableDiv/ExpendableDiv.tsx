@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "motion/react"
 import { memo, type ReactNode } from "react"
 import useMeasure from "react-use-measure"
 
-const ExpendableDiv = memo(({ children }: { children: ReactNode }) => {
+const ExpandableDiv = memo(({ children }: { children: ReactNode }) => {
     const [ref, { height }] = useMeasure()
     return (
         <motion.div animate={{ height }}>
@@ -20,4 +20,4 @@ const ExpendableDiv = memo(({ children }: { children: ReactNode }) => {
     )
 })
 
-export default ExpendableDiv
+export default ExpandableDiv
