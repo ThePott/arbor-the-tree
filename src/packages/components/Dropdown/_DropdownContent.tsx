@@ -3,7 +3,6 @@ import useDropdownContext from "./_useDropdownContext"
 import { cva } from "class-variance-authority"
 import { widthToCn } from "@/shared/utils/styles"
 import clsx from "clsx"
-import DropAnimation from "../motions/DropAnimation"
 import { cubicBezier, motion, type Transition } from "motion/react"
 
 // const dropdownVariants = cva("absolute z-10 top-full right-0 mt-my-sm", {
