@@ -73,7 +73,7 @@ const Button = ({
     isOnLeft = false,
     ...props
 }: ButtonProps & WithButtonProps) => {
-    const { className, children, disabled, ...rest } = props
+    const { className, children, ...rest } = props
 
     const isLoaderDark = lightBgArray.includes(color)
 
