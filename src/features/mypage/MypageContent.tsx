@@ -66,8 +66,12 @@ const MypageContent = () => {
                                         <Select.Trigger>권한을 선택해주세요</Select.Trigger>
                                         <Select.Content>
                                             <Select.Option value="STUDENT">학생</Select.Option>
-                                            <Select.Option value="PARENT">학부모</Select.Option>
-                                            <Select.Option value="HELPER">실장</Select.Option>
+                                            <Select.Option value="PARENT" isDisabled>
+                                                학부모
+                                            </Select.Option>
+                                            <Select.Option value="HELPER" isDisabled>
+                                                실장
+                                            </Select.Option>
                                             <Select.Option value="PRINCIPAL">원장</Select.Option>
                                         </Select.Content>
                                     </Select>

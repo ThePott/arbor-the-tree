@@ -11,8 +11,8 @@ const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm my-transition", {
         color: buttonColorToCn,
         status: {
             enabled: "cursor-pointer",
-            disabled: "",
-            pending: "",
+            disabled: "text-fg-muted",
+            pending: "text-fg-muted",
         },
         isWide: {
             true: "w-full",
@@ -24,14 +24,15 @@ const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm my-transition", {
         },
         isBorderedOnHover: {
             false: "",
-            true: "border border-transparent hover:border-border-muted",
+            true: "",
         },
     },
     compoundVariants: [
         { color: ["bg0", "bg1", "bg2"], status: "enabled", className: "text-fg-vivid" },
         { color: ["bg0", "bg1", "bg2"], status: ["disabled", "pending"], className: "text-fg-muted" },
+
         { color: ["green", "red"], status: "enabled", className: "text-fg-inverted-vivid" },
-        { color: ["green", "red"], status: ["disabled", "pending"], className: "text-fg-inverted-vivid" },
+        { color: ["green", "red"], status: ["disabled", "pending"], className: "text-fg-inverted-muted" },
 
         { color: "bg0", status: "enabled", className: "hover:bg-bg-1 active:bg-bg-2" },
         { color: "bg1", status: "enabled", className: "hover:bg-bg-2 active:bg-bg-3" },
@@ -44,6 +45,12 @@ const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm my-transition", {
         { color: "red", status: "enabled", className: "bg-washed-red hover:bg-washed-red-1 active:bg-washed-red-2" },
         { color: "red", status: "disabled", className: "bg-washed-red-neg-1" },
         { color: "red", status: "pending", className: "bg-washed-red-neg-1" },
+
+        {
+            isBorderedOnHover: true,
+            status: "enabled",
+            className: "border border-transparent hover:border-border-muted",
+        },
     ],
 })
 
@@ -66,13 +73,14 @@ const Button = ({
     isOnLeft = false,
     ...props
 }: ButtonProps & WithButtonProps) => {
-    const { className, children, ...rest } = props
+    const { className, children, disabled, ...rest } = props
 
     const isLoaderDark = lightBgArray.includes(color)
 
     return (
         <button
             {...rest}
+            disabled={status !== "enabled"}
             className={clsx(buttonVariants({ color, status, isWide, isBorderedOnHover, isShadowed }), className)}
         >
             <Hstack className={clsx("items-center", isOnLeft ? "" : "justify-center")}>
