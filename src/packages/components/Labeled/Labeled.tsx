@@ -8,6 +8,7 @@ import clsx from "clsx"
 import { AnimatePresence, cubicBezier, motion, type Transition } from "motion/react"
 import type { ReactNode } from "react"
 import useMeasure from "react-use-measure"
+import ExpandableDiv from "../ExpandableDiv/ExpendableDiv"
 
 const LabeledHeader = (props: PProps) => {
     const { className, children, ...rest } = props
@@ -36,30 +37,10 @@ const labelFooterVariants = cva("text-my-sm", {
 const LabeledFooter = ({ className, children }: { className?: string; children: ReactNode }) => {
     const { isInDanger } = useLabeledContext()
 
-    const duration = 0.3
-    const blurRadiusInPixel = 32
-    const transformYInPixel = -60
-    const transition: Transition = { duration, ease: cubicBezier(0.08, 0.34, 0.26, 1.11) }
-
-    const variants = {
-        hidden: { filter: `blur(${blurRadiusInPixel}px)`, transform: `translateY(${transformYInPixel}px)`, opacity: 0 },
-        visible: { filter: "blur(0)", transform: "translateY(0)", opacity: 1 },
-    }
     return (
-        <AnimatePresence mode="popLayout">
-            {children && (
-                <motion.p
-                    className={clsx(labelFooterVariants({ isInDanger }), className)}
-                    initial="hidden"
-                    animate="visible"
-                    exit="hidden"
-                    transition={transition}
-                    variants={variants}
-                >
-                    {children}
-                </motion.p>
-            )}
-        </AnimatePresence>
+        <ExpandableDiv>
+            {children && <p className={clsx(labelFooterVariants({ isInDanger }), className)}>{children}</p>}
+        </ExpandableDiv>
     )
 }
 
@@ -75,14 +56,11 @@ interface WithLabelGroupProps {
 
 const Labeled = ({ isInDanger = false, isRequired = false, ...props }: DivProps & WithLabelGroupProps) => {
     const { children, ...rest } = props
-    const [ref, { height }] = useMeasure()
 
     return (
         <LabeledContext.Provider value={{ isInDanger, isRequired }}>
             <Vstack {...rest} gap="none">
-                <motion.div animate={{ height }}>
-                    <div ref={ref}>{children}</div>
-                </motion.div>
+                {children}
             </Vstack>
         </LabeledContext.Provider>
     )
