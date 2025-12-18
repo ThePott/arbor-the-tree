@@ -8,6 +8,7 @@ import NotFoundPage from "./pages/error/NotFoundPage.tsx"
 import { QueryClientProvider } from "@tanstack/react-query"
 import queryClient from "./packages/api/queryClient.ts"
 import LandingPage from "./pages/landing/LandingPage.tsx"
+import MypageSkeleton from "./features/mypage/MypageSkeleton.tsx"
 const SummaryPage = lazy(() => import("./pages/summary/SummaryPage.tsx"))
 const ProgressPage = lazy(() => import("./pages/progress/ProgressPage.tsx"))
 const Mypage = lazy(() => import("./pages/mypage/Mypage.tsx"))
@@ -23,7 +24,7 @@ const routeArray = [
         element: <ProgressPage />,
         fallback: <p>여기에 스켈레톤을 넣어야 합니다</p>,
     },
-    { path: "/mypage", element: <Mypage />, fallback: <p>여기에 스켈레톤을 넣어야 합니다</p> },
+    { path: "/mypage", element: <Mypage />, fallback: <MypageSkeleton /> },
 ]
 
 const suspendedRouteArray = routeArray.map((route) => ({

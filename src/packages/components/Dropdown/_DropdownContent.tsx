@@ -3,9 +3,8 @@ import useDropdownContext from "./_useDropdownContext"
 import { cva } from "class-variance-authority"
 import { widthToCn } from "@/shared/utils/styles"
 import clsx from "clsx"
-import { cubicBezier, motion, type Transition } from "motion/react"
+import ExpandableDiv from "../ExpandableDiv/ExpendableDiv"
 
-// const dropdownVariants = cva("absolute z-10 top-full right-0 mt-my-sm", {
 const dropdownVariants = cva("absolute z-10 top-full right-0 mt-my-sm", {
     variants: {
         width: widthToCn,
@@ -43,33 +42,10 @@ const DropdownContent = ({ children }: { children: ReactNode }) => {
         return () => window.removeEventListener("click", handleClick)
     }, [isOn])
 
-    const duration = 0.3
-    const blurRadiusInPixel = 32
-    const transformYInPixel = -60
-    const transition: Transition = { duration, ease: cubicBezier(0.08, 0.34, 0.26, 1.11) }
-
-    const variants = {
-        hidden: { filter: `blur(${blurRadiusInPixel}px)`, transform: `translateY(${transformYInPixel}px)`, opacity: 0 },
-        visible: { filter: "blur(0)", transform: "translateY(0)", opacity: 1 },
-    }
-
     return (
-        <>
-            {isOn && (
-                <motion.div
-                    initial="hidden"
-                    animate="visible"
-                    exit="hidden"
-                    transition={transition}
-                    variants={variants}
-                    ref={contentRef}
-                    className={clsx(dropdownVariants({ width }))}
-                    key="box"
-                >
-                    {children}
-                </motion.div>
-            )}
-        </>
+        <ExpandableDiv className={clsx(dropdownVariants({ width }))}>
+            {isOn && <div ref={contentRef}>{children}</div>}
+        </ExpandableDiv>
     )
 }
 
