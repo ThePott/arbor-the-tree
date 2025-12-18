@@ -5,6 +5,7 @@ import { memo, useState } from "react"
 import Button from "@/packages/components/Button/Button"
 import { AnimatePresence, motion, MotionConfig } from "motion/react"
 import useMeasure from "react-use-measure"
+import ExpandableDiv from "@/packages/components/ExpandableDiv/ExpendableDiv"
 
 const Box = memo(() => {
     return (
@@ -40,14 +41,17 @@ const AnimationSelfTest = () => {
                 <Button onClick={handlePop}>pop</Button>
                 <Button onClick={handleAdd}>add</Button>
             </Hstack>
+            <RoundBox isBordered padding="md">
+                <ExpandableDiv>
+                    {idArray.map((id) => (
+                        <Box key={id} />
+                    ))}
+                </ExpandableDiv>
+            </RoundBox>
             <motion.div animate={{ height }}>
                 <RoundBox padding="md" color="bg3" ref={ref}>
                     <Vstack gap="xl">
-                        <AnimatePresence>
-                            {idArray.map((id) => (
-                                <Box key={id} />
-                            ))}
-                        </AnimatePresence>
+                        <AnimatePresence></AnimatePresence>
                     </Vstack>
                 </RoundBox>
             </motion.div>

@@ -10,6 +10,7 @@ interface ExpandableDiv {
     isDramatic?: boolean
     className?: string
     children: ReactNode
+    isInBound?: boolean
 }
 
 const makeAnimation = (animation: Animation, isDramatic: boolean) => {
@@ -28,27 +29,42 @@ const makeAnimation = (animation: Animation, isDramatic: boolean) => {
     return { transition, variants }
 }
 
-const ExpandableDiv = memo(({ animation = "drop", isDramatic = false, className, children }: ExpandableDiv) => {
-    const [ref, { height }] = useMeasure()
+const makeTopStyle = (isInBound: boolean, y: number, height: number): undefined | Record<string, string> => {
+    if (!isInBound) return undefined
 
-    const { transition, variants } = makeAnimation(animation, isDramatic)
+    const diff = window.innerHeight - y - height
 
-    return (
-        <motion.div animate={{ height }} className={clsx(className)}>
-            <AnimatePresence mode="popLayout">
-                <motion.div
-                    initial="hidden"
-                    animate="visible"
-                    exit="hidden"
-                    variants={variants}
-                    transition={transition}
-                    key={children?.toString()}
-                >
-                    <div ref={ref}>{children}</div>
-                </motion.div>
-            </AnimatePresence>
-        </motion.div>
-    )
-})
+    if (diff > 0) return
+
+    const style = { top: `calc(100% + ${diff}px - var(--spacing-my-xl))` }
+    return style
+}
+
+const ExpandableDiv = memo(
+    ({ animation = "drop", isDramatic = false, isInBound = false, className, children }: ExpandableDiv) => {
+        const [ref, { y, height }] = useMeasure()
+
+        const { transition, variants } = makeAnimation(animation, isDramatic)
+
+        const style = makeTopStyle(isInBound, y, height)
+
+        return (
+            <motion.div animate={{ height }} style={style} className={clsx(className)}>
+                <AnimatePresence mode="popLayout">
+                    <motion.div
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                        variants={variants}
+                        transition={transition}
+                        key={children?.toString()}
+                    >
+                        <div ref={ref}>{children}</div>
+                    </motion.div>
+                </AnimatePresence>
+            </motion.div>
+        )
+    }
+)
 
 export default ExpandableDiv

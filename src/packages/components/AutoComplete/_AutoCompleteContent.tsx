@@ -4,6 +4,7 @@ import { Vstack } from "../layouts"
 import AutoCompleteOption from "./_AutoCompleteItem"
 import { useAutoCompleteStore } from "./_autoCompleteHooks"
 import ExpandableDiv from "../ExpandableDiv/ExpendableDiv"
+import clsx from "clsx"
 
 const AutoCompleteContent = () => {
     const optionArray = useAutoCompleteStore((state) => state.optionArray)
@@ -19,14 +20,9 @@ const AutoCompleteContent = () => {
     const isVisible = isContentOn && optionArray.length > 0
 
     return (
-        <ExpandableDiv>
+        <ExpandableDiv isInBound className="mt-my-sm absolute top-full w-full">
             {isVisible && (
-                <RoundBox
-                    ref={contentRef}
-                    color="bg2"
-                    padding="md"
-                    className="mt-my-sm absolute top-full max-h-[500px] w-full overflow-y-scroll"
-                >
+                <RoundBox ref={contentRef} color="bg2" padding="md" className={clsx("max-h-[500px] overflow-y-scroll")}>
                     <Vstack>
                         {filteredOptionArray.map((option) => (
                             <AutoCompleteOption key={option}>{option}</AutoCompleteOption>

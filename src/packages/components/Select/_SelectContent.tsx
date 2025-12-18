@@ -37,7 +37,10 @@ const SelectContent = ({ children }: { children: ReactNode }) => {
     }, [isOpened])
 
     return (
-        <ExpandableDiv className={clsx("mt-my-sm absolute top-full z-10 w-full", !isOpened && "pointer-events-none")}>
+        <ExpandableDiv
+            isInBound
+            className={clsx("mt-my-sm absolute top-full z-10 w-full", !isOpened && "pointer-events-none")}
+        >
             {isOpened && (
                 <RoundBox ref={contentRef} padding="md" color="bg3" isBordered isShadowed>
                     <Vstack gap="sm">{children}</Vstack>
