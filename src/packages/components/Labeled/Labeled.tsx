@@ -5,9 +5,7 @@ import LabeledContext from "./LabeledContext"
 import useLabeledContext from "./useLabeledContext"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
-import { AnimatePresence, cubicBezier, motion, type Transition } from "motion/react"
 import type { ReactNode } from "react"
-import useMeasure from "react-use-measure"
 import ExpandableDiv from "../ExpandableDiv/ExpendableDiv"
 
 const LabeledHeader = (props: PProps) => {
