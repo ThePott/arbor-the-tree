@@ -1,3 +1,4 @@
+import { type ButtonColor, buttonColorArray } from "@/packages/components/Button/buttonInterfaces"
 import type { Color, None, XsToXl } from "../interfaces"
 import { squashObject } from "./squashObject"
 
@@ -31,19 +32,16 @@ export const boxColorToCn: Record<Color, string> = {
     darkRed: "bg-dark-red",
     darkBlue: "bg-dark-blue",
     darkYellow: "bg-dark-yellow",
+    black: "bg-wahsed-black",
 }
 
-export const buttonColorArray = ["green", "bg0", "bg1", "bg2"] as const
-export type ButtonColor = (typeof buttonColorArray)[number]
-
-export const buttonStatusArray = ["enabled", "disabled", "pending"] as const
-export type ButtonStatus = (typeof buttonStatusArray)[number]
-
-const buttonColorToTextCn: Record<ButtonColor, string> = {
-    green: "text-fg-inverted",
+export const buttonColorToTextCn: Record<ButtonColor, string> = {
+    green: "text-fg-inverted-vivid",
+    red: "text-fg-inverted-vivid",
     bg0: "",
     bg1: "",
     bg2: "",
+    black: "",
 }
 
 export const buttonColorToCn = squashObject(buttonColorArray, boxColorToCn, buttonColorToTextCn)

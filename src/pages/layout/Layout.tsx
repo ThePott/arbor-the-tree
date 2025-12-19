@@ -1,17 +1,19 @@
-import { FullScreen } from "@/packages/components/layouts"
+import { FlexOneContainer, FullScreen } from "@/packages/components/layouts"
 import { Outlet } from "react-router"
-import FlexOneContainer from "@/packages/components/layouts/_FlexOneContainer"
 import { useState } from "react"
 import Header from "./Header/Header"
+import useOAuth from "./_useOAuth"
 
 const Layout = () => {
     // TODO: 라우트에 따라 헤더를 보이게 하거나 안 보이게 하거나 함
     const [isHeaderVisible, _setIsHeaderVisible] = useState(true)
 
+    useOAuth()
+
     return (
         <FullScreen>
             {isHeaderVisible && <Header />}
-            <FlexOneContainer>
+            <FlexOneContainer isYScrollable>
                 <Outlet />
             </FlexOneContainer>
         </FullScreen>

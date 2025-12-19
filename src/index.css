@@ -7,7 +7,8 @@
 
     color-scheme: dark;
     color: var(--color-fg-vivid);
-    background-color: var(--color-bg-1);
+    background-color: var(--color-bg-neg-1);
+    scrollbar-color: hsl(0 0 50) transparent;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -29,11 +30,13 @@
     --color-dark-blue: #384b55;
     --color-dark-yellow: #d3c6aa;
     --color-dark-green: #3c4841;
+    --color-washed-red-neg-1: rgba(from var(--color-washed-red) r g b / 0.8);
     --color-washed-red: #e57e80;
     --color-washed-red-1: #c35f63;
     --color-washed-red-2: #a14147;
     --color-washed-blue: #7fbbb3;
     --color-washed-yellow: #dabc7f;
+    --color-washed-green-neg-1: rgba(from var(--color-washed-green) r g b / 0.8);
     --color-washed-green: #a7c080;
     --color-washed-green-1: #88a062;
     --color-washed-green-2: #6b8244;
@@ -41,7 +44,9 @@
     --color-fg-vivid: var(--color-washed-white);
     --color-fg-muted: rgba(from var(--color-fg-vivid) r g b / 0.6);
     --color-fg-dim: rgba(from var(--color-fg-vivid) r g b / 0.3);
-    --color-fg-inverted: var(--color-washed-black);
+    --color-fg-inverted-vivid: var(--color-washed-black);
+    --color-fg-inverted-muted: rgba(from var(--color-fg-vivid) r g b / 0.6);
+    --color-fg-inverted-dim: rgba(from var(--color-fg-vivid) r g b / 0.3);
 
     --color-border-vivid: var(--color-washed-white);
     --color-border-muted: rgba(from var(--color-border-vivid) r g b / 0.6);
@@ -76,6 +81,16 @@
         inset 0px 1px 2px rgba(from var(--color-fg-vivid) r g b / 0.6), 0px 24px 24px -8px #00000025,
         0px 12px 12px -12px #00000025;
 
+    --shadow-inward-my-sm:
+        inset 0px -1px 2px rgba(from var(--color-fg-vivid) r g b / 0.2), 0px -4px 4px -1px #00000025,
+        0px 2px 2px -2px #00000025;
+    --shadow-inward-my-md:
+        inset 0px -1px 2px rgba(from var(--color-fg-vivid) r g b / 0.4), 0px -6px 6px -2px #00000025,
+        0px 3px 3px -3px #00000025;
+    --shadow-inward-my-lg:
+        inset 0px -1px 2px rgba(from var(--color-fg-vivid) r g b / 0.6), 0px -24px 24px -8px #00000025,
+        0px 12px 12px -12px #00000025;
+
     --radius-my-sm: 6px;
     --radius-my-md: 12px;
     --radius-my-lg: 24px;
@@ -85,4 +100,52 @@
     --text-my-md: 16px;
     --text-my-lg: 18px;
     --text-my-xl: 24px;
+}
+
+.blur-drop {
+    animation-name: blur-drop;
+    animation-duration: 0.5s;
+    animation-timing-function: cubic-bezier(0.08, 0.34, 0.26, 1.11);
+}
+
+@keyframes blur-drop {
+    from {
+        -webkit-filter: blur(50px);
+        transform: translateY(-100px);
+        scale: 110%;
+        opacity: 0%;
+    }
+    to {
+        -webkit-filter: blur(0);
+        transform: translateY(0);
+        scale: 100%;
+        opacity: 100%;
+    }
+}
+
+.blur-drop-sm {
+    animation-name: blur-drop-sm;
+    animation-duration: 0.1s;
+    animation-timing-function: cubic-bezier(0.08, 0.34, 0.26, 1.11);
+}
+
+@keyframes blur-drop-sm {
+    from {
+        -webkit-filter: blur(6px);
+        transform: translateY(-12px);
+        scale: 110%;
+        opacity: 0%;
+    }
+    to {
+        -webkit-filter: blur(0);
+        transform: translateY(0);
+        scale: 100%;
+        opacity: 100%;
+    }
+}
+
+@utility my-transition {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.08, 0.34, 0.26, 1.11);
+    transition-duration: var(0.1);
 }

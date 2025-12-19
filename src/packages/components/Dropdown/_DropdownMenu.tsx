@@ -17,7 +17,7 @@ const DropdownMenu = ({ children, onChange }: DropdownMenuInterface) => {
             return
         }
         onChange(selectedMenuValue)
-    }, [selectedMenuValue, onChange])
+    }, [selectedMenuValue])
 
     return (
         <DropdownContent>

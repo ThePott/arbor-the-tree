@@ -9,6 +9,9 @@ const useGlobalStore = create<GlobalStoreState>()(
             setAccessToken: (accessToken) => set({ accessToken }),
             me: null,
             setMe: (me) => set({ me }),
+
+            isPendingLogin: false,
+            setIsPendingLogin: (isPendingLogin) => set({ isPendingLogin }),
         }),
         {
             name: "arbor-store",

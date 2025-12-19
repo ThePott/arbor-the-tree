@@ -20,7 +20,7 @@ interface WithFlexOneContainer {
     isXScrollable?: boolean
 }
 
-const FlexOneContainer = ({
+export const FlexOneContainer = ({
     isYScrollable = false,
     isXScrollable = false,
     ...props
@@ -33,5 +33,3 @@ const FlexOneContainer = ({
         </div>
     )
 }
-
-export default FlexOneContainer

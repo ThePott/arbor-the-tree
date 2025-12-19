@@ -3,6 +3,7 @@ import useDropdownContext from "./_useDropdownContext"
 import { cva } from "class-variance-authority"
 import { widthToCn } from "@/shared/utils/styles"
 import clsx from "clsx"
+import ExpandableDiv from "../ExpandableDiv/ExpendableDiv"
 
 const dropdownVariants = cva("absolute z-10 top-full right-0 mt-my-sm", {
     variants: {
@@ -39,16 +40,12 @@ const DropdownContent = ({ children }: { children: ReactNode }) => {
 
         window.addEventListener("click", handleClick)
         return () => window.removeEventListener("click", handleClick)
-    }, [isOn, handleClick])
-
-    if (!isOn) {
-        return null
-    }
+    }, [isOn])
 
     return (
-        <div ref={contentRef} className={clsx(dropdownVariants({ width }))}>
-            {children}
-        </div>
+        <ExpandableDiv className={clsx(dropdownVariants({ width }))}>
+            {isOn && <div ref={contentRef}>{children}</div>}
+        </ExpandableDiv>
     )
 }
 

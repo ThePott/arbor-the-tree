@@ -24,7 +24,6 @@ const useCloseSelectContent = () => {
 
         window.addEventListener("click", handleClick)
         return () => window.removeEventListener("click", handleClick)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpened])
 
     return contentRef

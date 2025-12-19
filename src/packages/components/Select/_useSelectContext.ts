@@ -1,5 +1,18 @@
-import { useContext } from "react"
-import SelectContext from "./_SelectContext"
+import { useContext, createContext } from "react"
+
+interface SelectContextProps {
+    onOptionSelect: (option: string | number) => void
+    isOpened: boolean
+    setIsOpened: React.Dispatch<React.SetStateAction<boolean>>
+    selectedLabel: string | null
+    setSelectedLabel: React.Dispatch<React.SetStateAction<string | null>>
+    selectedValue: string | number | null
+    setSelectedValue: React.Dispatch<React.SetStateAction<string | number | null>>
+    triggerRef: React.RefObject<HTMLButtonElement | null>
+    isInDanger?: boolean
+}
+
+export const SelectContext = createContext<SelectContextProps | null>(null)
 
 const useSelectContext = () => {
     const context = useContext(SelectContext)
