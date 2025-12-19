@@ -17,9 +17,10 @@ export const useAutoCompleteStore = <T>(selectorFn: (state: AutoCompleteStoreSta
 export const useAutoCompleteQuery = (debouncedValue: string) => {
     const setOptionArray = useAutoCompleteStore((state) => state.setOptionArray)
     const getOptionArray = useAutoCompleteStore((state) => state.getOptionArray)
+    const queryKey = useAutoCompleteStore((state) => state.queryKey)
 
     const { data, isFetching } = useQuery({
-        queryKey: ["auto-complete", debouncedValue],
+        queryKey: [queryKey, debouncedValue],
         queryFn: () => getOptionArray(debouncedValue),
     })
 
@@ -27,7 +28,6 @@ export const useAutoCompleteQuery = (debouncedValue: string) => {
         if (!data) {
             return
         }
-
         setOptionArray(data)
     }, [data])
 

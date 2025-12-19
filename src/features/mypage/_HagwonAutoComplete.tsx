@@ -17,6 +17,7 @@ interface HagwonAutoCompleteProps {
 const HagwonAutoComplete = ({ onChange, isForPrincipal }: HagwonAutoCompleteProps) => {
     return (
         <AutoComplete
+            queryKey="hagwon"
             onChange={onChange}
             getOptionArray={getHagwonMany}
             available={isForPrincipal ? "onlyNew" : "onlyExisting"}

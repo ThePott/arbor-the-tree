@@ -8,6 +8,7 @@ export interface AutoCompleteInitialValue {
     onChange: (value: string) => void
     getOptionArray: (searchText: string) => void
     available: AutoCompleteAvailable
+    queryKey: string
 }
 
 interface AutoCompleteStoreStateBase {
