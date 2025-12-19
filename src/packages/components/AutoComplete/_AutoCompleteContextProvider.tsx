@@ -1,8 +1,7 @@
-import { type ReactNode, type RefObject, useRef, useState } from "react"
+import { type ReactNode, type RefObject, useCallback, useRef, useState } from "react"
 import { createStore, type StoreApi } from "zustand"
 import { StoreContext } from "./_autoCompleteHooks"
 
-// type AutoCompleteStatus = "normal" | "red" | "green"
 type AutoCompleteAvailable = "onlyNew" | "onlyExisting"
 
 export interface AutoCompleteInitialValue {
@@ -37,24 +36,28 @@ const AutoCompleteStoreProvider = ({
 } & AutoCompleteInitialValue) => {
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const autoCompleteStore = createStore<AutoCompleteStoreState>((set) => ({
-        inputRef,
+    const createAutoCompleteStore = useCallback(
+        () =>
+            createStore<AutoCompleteStoreState>((set) => ({
+                inputRef,
 
-        isContentOn: false,
-        setIsContentOn: (isContentOn) => set({ isContentOn }),
+                isContentOn: false,
+                setIsContentOn: (isContentOn) => set({ isContentOn }),
 
-        isRed: false,
-        setIsRed: (isRed: boolean) => set({ isRed }),
+                isRed: false,
+                setIsRed: (isRed: boolean) => set({ isRed }),
 
-        inputValue: "",
-        setInputValue: (inputValue: string) => set({ inputValue }),
+                inputValue: "",
+                setInputValue: (inputValue: string) => set({ inputValue }),
 
-        optionArray: [],
-        setOptionArray: (schoolNameArray) => set({ optionArray: schoolNameArray }),
+                optionArray: [],
+                setOptionArray: (schoolNameArray) => set({ optionArray: schoolNameArray }),
 
-        ...initialValues,
-    }))
-    const [store, _setStore] = useState<StoreApi<AutoCompleteStoreState>>(autoCompleteStore)
+                ...initialValues,
+            })),
+        [initialValues]
+    )
+    const [store, _setStore] = useState<StoreApi<AutoCompleteStoreState>>(createAutoCompleteStore)
     return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
 }
 

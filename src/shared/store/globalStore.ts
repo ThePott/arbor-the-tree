@@ -12,6 +12,9 @@ const useGlobalStore = create<GlobalStoreState>()(
 
             isPendingLogin: false,
             setIsPendingLogin: (isPendingLogin) => set({ isPendingLogin }),
+
+            isBodyScrollable: true,
+            setIsBodyScrollable: (isBodyScrollable) => set({ isBodyScrollable }),
         }),
         {
             name: "arbor-store",

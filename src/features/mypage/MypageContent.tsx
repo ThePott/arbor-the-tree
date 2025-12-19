@@ -12,6 +12,7 @@ import useProfileMutation from "./_useProfileMutation"
 import useGlobalStore from "@/shared/store/globalStore"
 import ExpandableDiv from "@/packages/components/ExpandableDiv/ExpendableDiv"
 import SchoolAutoComplete from "./_SchoolAutoComplete"
+import HagwonAutoComplete from "./_HagwonAutoComplete"
 
 const MypageContent = () => {
     const [role, setRole] = useState<Role | null>(null)
@@ -81,7 +82,13 @@ const MypageContent = () => {
                         </Labeled>
                         <Labeled isRequired isInDanger={Boolean(errors.hagwon)}>
                             <Labeled.Header>학원</Labeled.Header>
-                            <Labeled.Input {...register("hagwon")} className="w-full" />
+                            <Controller
+                                control={control}
+                                name="hagwon"
+                                render={({ field: { onChange } }) => (
+                                    <HagwonAutoComplete isForPrincipal onChange={onChange} />
+                                )}
+                            />
                             <Labeled.Footer>{errors.hagwon?.message}</Labeled.Footer>
                         </Labeled>
 

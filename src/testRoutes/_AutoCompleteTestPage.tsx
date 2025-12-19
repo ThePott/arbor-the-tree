@@ -1,6 +1,7 @@
 import { headlessInstance } from "@/packages/api/axiosInstances"
 import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
-import { Container } from "@/packages/components/layouts"
+import Labeled from "@/packages/components/Labeled/Labeled"
+import { Container, Hstack, Vstack } from "@/packages/components/layouts"
 import type { School } from "@/shared/interfaces"
 
 const getSchoolMany = async (name: string) => {
@@ -13,7 +14,16 @@ const getSchoolMany = async (name: string) => {
 const AutoCompleteTestPage = () => {
     return (
         <Container isPadded width="md">
-            <AutoComplete getOptionArray={getSchoolMany} available="onlyExisting" onChange={() => {}} />
+            <Hstack>
+                <Labeled>
+                    <Labeled.Header>get school many</Labeled.Header>
+                    <AutoComplete getOptionArray={getSchoolMany} available="onlyExisting" onChange={() => {}} />
+                </Labeled>
+                <Labeled>
+                    <Labeled.Header>do not request</Labeled.Header>
+                    <AutoComplete getOptionArray={() => {}} available="onlyExisting" onChange={() => {}} />
+                </Labeled>
+            </Hstack>
         </Container>
     )
 }

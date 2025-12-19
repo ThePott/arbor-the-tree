@@ -8,4 +8,7 @@ export interface GlobalStoreState {
 
     isPendingLogin: boolean
     setIsPendingLogin: (isPendingLogin: boolean) => void
+
+    isBodyScrollable: boolean
+    setIsBodyScrollable: (isBodyScrollable: boolean) => void
 }
