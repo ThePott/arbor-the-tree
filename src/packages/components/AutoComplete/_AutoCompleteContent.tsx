@@ -17,7 +17,7 @@ const AutoCompleteContent = () => {
 
     const filteredOptionArray = optionArray.filter((option) => option.includes(inputValue))
 
-    const isVisible = isContentOn && optionArray.length > 0
+    const isVisible = isContentOn && filteredOptionArray.length > 0
 
     return (
         <ExpandableDiv className="my-my-sm absolute top-full w-full">
