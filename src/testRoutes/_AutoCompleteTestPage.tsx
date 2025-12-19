@@ -68,6 +68,7 @@ const AutoCompleteTestPage = () => {
                 <Labeled>
                     <Labeled.Header>get school many</Labeled.Header>
                     <AutoComplete
+                        queryKey="qwer"
                         // fieldName="school"
                         getOptionArray={getSchoolMany}
                         available="onlyExisting"
@@ -77,6 +78,7 @@ const AutoCompleteTestPage = () => {
                 <Labeled>
                     <Labeled.Header>do not request</Labeled.Header>
                     <AutoComplete
+                        queryKey="asdf"
                         // fieldName="hagwon"
                         getOptionArray={() => {}}
                         available="onlyExisting"
