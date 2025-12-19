@@ -20,9 +20,15 @@ const AutoCompleteContent = () => {
     const isVisible = isContentOn && optionArray.length > 0
 
     return (
-        <ExpandableDiv isInBound className="mt-my-sm absolute top-full w-full">
+        <ExpandableDiv className="my-my-sm absolute top-full w-full">
             {isVisible && (
-                <RoundBox ref={contentRef} color="bg2" padding="md" className={clsx("max-h-[500px] overflow-y-scroll")}>
+                <RoundBox
+                    ref={contentRef}
+                    color="bg3"
+                    padding="md"
+                    className={clsx("max-h-[200px] overflow-y-scroll")}
+                    isBordered
+                >
                     <Vstack>
                         {filteredOptionArray.map((option) => (
                             <AutoCompleteOption key={option}>{option}</AutoCompleteOption>

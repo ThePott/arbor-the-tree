@@ -5,7 +5,7 @@ import useMeasure from "react-use-measure"
 
 type Animation = "drop" | "center"
 
-interface ExpandableDiv {
+interface ExpandableDivProps {
     animation?: Animation
     isDramatic?: boolean
     className?: string
@@ -32,16 +32,16 @@ const makeAnimation = (animation: Animation, isDramatic: boolean) => {
 const makeTopStyle = (isInBound: boolean, y: number, height: number): undefined | Record<string, string> => {
     if (!isInBound) return undefined
 
-    const diff = window.innerHeight - y - height
+    const diff = window.innerHeight - y - height - 48
 
     if (diff > 0) return
 
-    const style = { top: `calc(100% + ${diff}px - var(--spacing-my-xl))` }
+    const style = { top: "unset", bottom: "100%" }
     return style
 }
 
 const ExpandableDiv = memo(
-    ({ animation = "drop", isDramatic = false, isInBound = false, className, children }: ExpandableDiv) => {
+    ({ animation = "drop", isDramatic = false, isInBound = false, className, children }: ExpandableDivProps) => {
         const [ref, { y, height }] = useMeasure()
 
         const { transition, variants } = makeAnimation(animation, isDramatic)
