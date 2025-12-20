@@ -2,7 +2,7 @@ import { type ReactNode, type RefObject, useCallback, useRef, useState } from "r
 import { createStore, type StoreApi } from "zustand"
 import { StoreContext } from "./_autoCompleteHooks"
 
-type AutoCompleteAvailable = "onlyNew" | "onlyExisting"
+type AutoCompleteAvailable = "onlyNew" | "onlyExisting" | "any"
 
 export interface AutoCompleteInitialValue {
     onChange: (value: string) => void

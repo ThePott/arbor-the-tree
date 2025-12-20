@@ -14,6 +14,7 @@ const AutoCompleteInput = () => {
     const setIsRed = useAutoCompleteStore((state) => state.setIsRed)
     const optionArray = useAutoCompleteStore((state) => state.optionArray)
     const available = useAutoCompleteStore((state) => state.available)
+    const onChange = useAutoCompleteStore((state) => state.onChange)
 
     const { debouncedValue, cancel } = useDebounce(inputValue, 500)
 
@@ -38,6 +39,12 @@ const AutoCompleteInput = () => {
         setIsRed(available === "onlyNew" ? !isIncluded : isIncluded)
     }, [inputValue, optionArray])
 
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value
+        setInputValue(value)
+        onChange(value)
+    }
+
     return (
         <Input
             ref={inputRef}
@@ -45,7 +52,7 @@ const AutoCompleteInput = () => {
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
             value={inputValue}
-            onChange={(event) => setInputValue(event.target.value)}
+            onChange={handleChange}
             trailingIcon={isFetching && isContentOn ? <Loader /> : undefined}
             isRed={isRed}
         />
