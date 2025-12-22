@@ -4,7 +4,7 @@ import { Container, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Select from "@/packages/components/Select/Select"
 import type { Role } from "@/shared/interfaces"
-import { Activity, useState } from "react"
+import { Activity, useEffect, useRef, useState } from "react"
 import { Controller, useForm, type FieldValues } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { profileSchema, type ProfileSchema } from "./_profileSchema"
@@ -93,11 +93,12 @@ const MypageContent = () => {
                                         <HagwonAutoComplete
                                             isForPrincipal={role === "PRINCIPAL"}
                                             onValueChange={onChange}
-                                            onErrorChange={(error) => {
-                                                if (error) {
-                                                    setError("hagwon", error)
+                                            onErrorChange={(innerError) => {
+                                                if (innerError) {
+                                                    setError("hagwon", innerError)
                                                     return
                                                 }
+
                                                 clearErrors("hagwon")
                                             }}
                                             error={error}
@@ -115,19 +116,19 @@ const MypageContent = () => {
                                     <Controller
                                         control={control}
                                         name="school"
-                                        render={({ field: { onChange } }) => (
+                                        render={({ field: { onChange }, fieldState: { error } }) => (
                                             <SchoolAutoComplete
                                                 onValueChange={onChange}
-                                                onErrorChange={(error) => {
-                                                    if (!error) {
+                                                onErrorChange={(innerError) => {
+                                                    if (!innerError) {
                                                         clearErrors("school")
                                                         return
                                                     }
 
                                                     // NOTE: 나중에는 학교 API를 받아와서 할 거니까 이대로 하는 게 맞다
-                                                    setError("school", error)
+                                                    setError("school", innerError)
                                                 }}
-                                                error={errors.school}
+                                                error={error}
                                             />
                                         )}
                                     />

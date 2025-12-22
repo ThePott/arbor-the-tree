@@ -23,7 +23,7 @@ const SelectTrigger = ({ children }: SelectTriggerProps) => {
             isWide
             className="border-border-dim hover:border-border-muted border"
         >
-            <p className={selectedLabel ? "" : "text-fg-muted"}>{label}</p>
+            {label}
         </Button>
     )
 }
