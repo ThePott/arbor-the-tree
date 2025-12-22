@@ -23,6 +23,8 @@ const MypageContent = () => {
     const {
         register,
         handleSubmit,
+        setError,
+        clearErrors,
         control,
         formState: { errors },
     } = useForm({ resolver: zodResolver(profileSchema) })
@@ -80,26 +82,54 @@ const MypageContent = () => {
                             />
                             <Labeled.Footer>{errors.role?.message}</Labeled.Footer>
                         </Labeled>
-                        <Labeled isRequired isInDanger={Boolean(errors.hagwon)}>
-                            <Labeled.Header>학원</Labeled.Header>
-                            <Controller
-                                control={control}
-                                name="hagwon"
-                                render={({ field: { onChange } }) => (
-                                    <HagwonAutoComplete isForPrincipal onChange={onChange} />
-                                )}
-                            />
-                            <Labeled.Footer>{errors.hagwon?.message}</Labeled.Footer>
-                        </Labeled>
+
+                        {role && (
+                            <Labeled isRequired isInDanger={Boolean(errors.hagwon)}>
+                                <Labeled.Header>학원</Labeled.Header>
+                                <Controller
+                                    control={control}
+                                    name="hagwon"
+                                    render={({ field: { onChange }, fieldState: { error } }) => (
+                                        <HagwonAutoComplete
+                                            isForPrincipal={role === "PRINCIPAL"}
+                                            onValueChange={onChange}
+                                            onErrorChange={(error) => {
+                                                if (error) {
+                                                    setError("hagwon", error)
+                                                    return
+                                                }
+                                                clearErrors("hagwon")
+                                            }}
+                                            error={error}
+                                        />
+                                    )}
+                                />
+                                <Labeled.Footer>{errors.hagwon?.message}</Labeled.Footer>
+                            </Labeled>
+                        )}
 
                         <ExpandableDiv>
                             <Activity mode={role === "STUDENT" ? "visible" : "hidden"}>
-                                <Labeled isRequired isInDanger={Boolean(errors.hagwon)}>
+                                <Labeled isRequired isInDanger={Boolean(errors.school)}>
                                     <Labeled.Header>학교</Labeled.Header>
                                     <Controller
                                         control={control}
                                         name="school"
-                                        render={({ field: { onChange } }) => <SchoolAutoComplete onChange={onChange} />}
+                                        render={({ field: { onChange } }) => (
+                                            <SchoolAutoComplete
+                                                onValueChange={onChange}
+                                                onErrorChange={(error) => {
+                                                    if (!error) {
+                                                        clearErrors("school")
+                                                        return
+                                                    }
+
+                                                    // NOTE: 나중에는 학교 API를 받아와서 할 거니까 이대로 하는 게 맞다
+                                                    setError("school", error)
+                                                }}
+                                                error={errors.school}
+                                            />
+                                        )}
                                     />
                                     <Labeled.Footer>{errors.school?.message}</Labeled.Footer>
                                 </Labeled>

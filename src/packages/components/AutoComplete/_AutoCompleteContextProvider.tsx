@@ -5,7 +5,8 @@ import { StoreContext } from "./_autoCompleteHooks"
 type AutoCompleteAvailable = "onlyNew" | "onlyExisting" | "any"
 
 export interface AutoCompleteInitialValue {
-    onChange: (value: string) => void
+    onValueChange: (value: string) => void
+    onErrorChange: (isError: boolean) => void
     getOptionArray: (searchText: string) => void
     available: AutoCompleteAvailable
     queryKey: string
