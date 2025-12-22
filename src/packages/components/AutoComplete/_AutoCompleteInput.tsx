@@ -4,19 +4,31 @@ import useDebounce from "@/packages/utils/useDebounce"
 import { useAutoCompleteStore, useAutoCompleteQuery } from "./_autoCompleteHooks"
 import useAutoCompleteEffect from "./autoCompleteHooks/useAutoCompleteEffect"
 import useAutoCompleteEventHandler from "./autoCompleteHooks/useAutoCompleteEventHandlers"
+import { useLayoutEffect } from "react"
 
 const AutoCompleteInput = ({ outerIsRed }: { outerIsRed: boolean }) => {
     const setIsContentOn = useAutoCompleteStore((state) => state.setIsContentOn)
     const inputValue = useAutoCompleteStore((state) => state.inputValue)
+    const setInputValue = useAutoCompleteStore((state) => state.setInputValue)
     const inputRef = useAutoCompleteStore((state) => state.inputRef)
     const isContentOn = useAutoCompleteStore((state) => state.isContentOn)
     const isRed = useAutoCompleteStore((state) => state.isRed)
+    const defaultValue = useAutoCompleteStore((state) => state.defaultValue)
 
     const { debouncedValue, cancel } = useDebounce(inputValue, 500)
 
     const { isFetching } = useAutoCompleteQuery(debouncedValue)
-    const { handleBlur, handleKeyDown } = useAutoCompleteEventHandler({ cancel })
+    const { handleBlur, handleKeyDown, handleChange } = useAutoCompleteEventHandler({ cancel })
     useAutoCompleteEffect({ outerIsRed })
+
+    useLayoutEffect(() => {
+        if (!defaultValue) {
+            return
+        }
+        setInputValue(defaultValue)
+    }, [defaultValue])
+
+    console.log({ defaultValue, inputValue })
 
     return (
         <Input
@@ -24,6 +36,7 @@ const AutoCompleteInput = ({ outerIsRed }: { outerIsRed: boolean }) => {
             onFocus={() => setIsContentOn(true)}
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
+            onChange={handleChange}
             value={inputValue}
             trailingIcon={isFetching && isContentOn ? <Loader /> : undefined}
             isRed={isRed}

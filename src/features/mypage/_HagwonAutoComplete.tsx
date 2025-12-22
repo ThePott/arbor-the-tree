@@ -16,9 +16,16 @@ interface HagwonAutoCompleteProps {
     onErrorChange: (error: ManualError | null) => void
     error: FieldError | undefined
     isForPrincipal?: boolean
+    defaultValue?: string
 }
 
-const HagwonAutoComplete = ({ onValueChange, onErrorChange, error, isForPrincipal }: HagwonAutoCompleteProps) => {
+const HagwonAutoComplete = ({
+    onValueChange,
+    onErrorChange,
+    error,
+    isForPrincipal,
+    defaultValue,
+}: HagwonAutoCompleteProps) => {
     const handleErrorChange = (isError: boolean) => {
         if (!isError) {
             onErrorChange(null)
@@ -44,8 +51,13 @@ const HagwonAutoComplete = ({ onValueChange, onErrorChange, error, isForPrincipa
             onValueChange={onValueChange}
             getOptionArray={getHagwonMany}
             available={isForPrincipal ? "onlyNew" : "onlyExisting"}
+            defaultValue={defaultValue}
         />
     )
 }
 
 export default HagwonAutoComplete
+
+// 원장 유효성 검사
+// resume 학원 없고 me 학원 없으면 -> 새 학원으로
+// resume 학원혹은 me 학원이랑 같으면 -> 문제 없음

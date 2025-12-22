@@ -6,13 +6,13 @@ interface SelectTriggerProps {
 }
 
 const SelectTrigger = ({ children }: SelectTriggerProps) => {
-    const { setIsOpened, selectedLabel, triggerRef, isInDanger } = useSelectContext()
+    const { setIsOpened, selectedLabel, triggerRef, isInDanger, defaultLabel } = useSelectContext()
 
     const handleClick = () => {
         setIsOpened((prev) => !prev)
     }
 
-    const label = selectedLabel ?? children
+    const label = selectedLabel ?? defaultLabel ?? children
 
     return (
         <Button

@@ -11,6 +11,7 @@ interface WithSelectProps {
     isInDanger?: boolean
     value?: string | number
     label?: string
+    defaultLabel?: string
 }
 
 /**
@@ -21,6 +22,7 @@ const Select = ({
     isInDanger,
     value,
     label,
+    defaultLabel,
     ...props
 }: Omit<DivProps, "classNamee"> & WithSelectProps) => {
     const { children, ...rest } = props
@@ -39,6 +41,7 @@ const Select = ({
                 selectedValue,
                 setSelectedValue,
                 selectedLabel,
+                defaultLabel,
                 setSelectedLabel,
                 triggerRef,
                 isInDanger,

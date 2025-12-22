@@ -5,6 +5,7 @@ import { useNavigate } from "react-router"
 
 const Mypage = () => {
     const me = useGlobalStore((state) => state.me)
+    const resume = useGlobalStore((state) => state.resume)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -14,7 +15,7 @@ const Mypage = () => {
         navigate("/", { replace: true })
     }, [me])
 
-    return <MypageContent />
+    return <MypageContent me={me} resume={resume} key={[me, resume].toString()} />
 }
 
 export default Mypage

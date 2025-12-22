@@ -10,6 +10,9 @@ const useGlobalStore = create<GlobalStoreState>()(
             me: null,
             setMe: (me) => set({ me }),
 
+            resume: null,
+            setResume: (resume) => set({ resume }),
+
             isPendingLogin: false,
             setIsPendingLogin: (isPendingLogin) => set({ isPendingLogin }),
 

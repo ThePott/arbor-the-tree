@@ -15,9 +15,10 @@ interface SchoolAutoCompleteProps {
     onValueChange: (value: string) => void
     onErrorChange: (error: ManualError | null) => void
     error: FieldError | undefined
+    defaultValue?: string
 }
 
-const SchoolAutoComplete = ({ onValueChange, onErrorChange, error }: SchoolAutoCompleteProps) => {
+const SchoolAutoComplete = ({ onValueChange, onErrorChange, error, defaultValue }: SchoolAutoCompleteProps) => {
     const handleErrorChange = (isError: boolean) => {
         if (!isError) {
             onErrorChange(null)
@@ -36,6 +37,7 @@ const SchoolAutoComplete = ({ onValueChange, onErrorChange, error }: SchoolAutoC
             onErrorChange={handleErrorChange}
             getOptionArray={getSchoolMany}
             available="any"
+            defaultValue={defaultValue}
         />
     )
 }

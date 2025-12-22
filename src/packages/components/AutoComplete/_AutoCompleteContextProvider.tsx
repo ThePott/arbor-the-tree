@@ -10,6 +10,7 @@ export interface AutoCompleteInitialValue {
     getOptionArray: (searchText: string) => void
     available: AutoCompleteAvailable
     queryKey: string
+    defaultValue?: string
 }
 
 interface AutoCompleteStoreStateBase {
@@ -50,7 +51,10 @@ const AutoCompleteStoreProvider = ({
                 setIsRed: (isRed: boolean) => set({ isRed }),
 
                 inputValue: "",
-                setInputValue: (inputValue: string) => set({ inputValue }),
+                setInputValue: (inputValue: string) => {
+                    set({ inputValue })
+                    debugger
+                },
 
                 optionArray: [],
                 setOptionArray: (schoolNameArray) => set({ optionArray: schoolNameArray }),
