@@ -14,7 +14,8 @@ const useProfileQuery = () => {
     useEffect(() => {
         if (!data) return
 
-        const { result, resume } = data.data
+        // TODO: 확장된 me를 받은 다음 이걸 me에 저장해야겠지
+        const { result: _result, resume } = data.data
         setResume(resume)
     }, [data])
 }

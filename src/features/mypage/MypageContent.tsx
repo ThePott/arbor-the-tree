@@ -117,7 +117,6 @@ const MypageContent = ({ me, resume }: MypageContentProps) => {
                                                     setError("hagwon", innerError)
                                                     return
                                                 }
-                                                debugger
                                                 clearErrors("hagwon")
                                             }}
                                             error={error}

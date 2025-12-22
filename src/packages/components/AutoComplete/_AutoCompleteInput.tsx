@@ -28,8 +28,6 @@ const AutoCompleteInput = ({ outerIsRed }: { outerIsRed: boolean }) => {
         setInputValue(defaultValue)
     }, [defaultValue])
 
-    console.log({ defaultValue, inputValue })
-
     return (
         <Input
             ref={inputRef}

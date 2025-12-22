@@ -51,10 +51,7 @@ const AutoCompleteStoreProvider = ({
                 setIsRed: (isRed: boolean) => set({ isRed }),
 
                 inputValue: "",
-                setInputValue: (inputValue: string) => {
-                    set({ inputValue })
-                    debugger
-                },
+                setInputValue: (inputValue: string) => set({ inputValue }),
 
                 optionArray: [],
                 setOptionArray: (schoolNameArray) => set({ optionArray: schoolNameArray }),
