@@ -3,7 +3,6 @@ import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
 import type { Hagwon } from "@/shared/interfaces"
 import type { ManualError } from "./_mypageInterfaces"
 import type { FieldError } from "react-hook-form"
-import { useEffect } from "react"
 
 const getHagwonMany = async (name: string) => {
     const response = await headlessInstance.get(`/hagwon?name=${name}`)

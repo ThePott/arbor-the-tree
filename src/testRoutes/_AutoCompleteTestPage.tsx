@@ -72,7 +72,9 @@ const AutoCompleteTestPage = () => {
                         // fieldName="school"
                         getOptionArray={getSchoolMany}
                         available="onlyExisting"
-                        onChange={() => {}}
+                        onValueChange={() => {}}
+                        onErrorChange={() => {}}
+                        outerIsRed={true}
                     />
                 </Labeled>
                 <Labeled>
@@ -82,7 +84,9 @@ const AutoCompleteTestPage = () => {
                         // fieldName="hagwon"
                         getOptionArray={() => {}}
                         available="onlyExisting"
-                        onChange={() => {}}
+                        onValueChange={() => {}}
+                        onErrorChange={() => {}}
+                        outerIsRed={true}
                     />
                 </Labeled>
             </Hstack>
