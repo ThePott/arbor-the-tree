@@ -26,7 +26,6 @@ const MypageContent = () => {
         setError,
         clearErrors,
         control,
-        watch,
         formState: { errors },
     } = useForm({ resolver: zodResolver(profileSchema) })
 
@@ -36,13 +35,8 @@ const MypageContent = () => {
 
     const onSubmit = (data: FieldValues) => {
         const body = { ...data, id: me.id } as ProfileSchema & { id: number }
-        console.log({ body, errors })
-        debugger
         mutate(body)
     }
-
-    const formValues = watch()
-    console.log({ errors, formValues })
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -103,7 +97,6 @@ const MypageContent = () => {
                                                 if (innerError && error) return
                                                 if (!innerError && !error) return
 
-                                                console.log({ error, innerError })
                                                 if (innerError) {
                                                     setError("hagwon", innerError)
                                                     return

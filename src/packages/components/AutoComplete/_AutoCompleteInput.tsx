@@ -4,7 +4,6 @@ import useDebounce from "@/packages/utils/useDebounce"
 import { useAutoCompleteStore, useAutoCompleteQuery } from "./_autoCompleteHooks"
 import useAutoCompleteEffect from "./autoCompleteHooks/useAutoCompleteEffect"
 import useAutoCompleteEventHandler from "./autoCompleteHooks/useAutoCompleteEventHandlers"
-import { useEffect } from "react"
 
 const AutoCompleteInput = ({ outerIsRed }: { outerIsRed: boolean }) => {
     const setIsContentOn = useAutoCompleteStore((state) => state.setIsContentOn)
@@ -12,17 +11,12 @@ const AutoCompleteInput = ({ outerIsRed }: { outerIsRed: boolean }) => {
     const inputRef = useAutoCompleteStore((state) => state.inputRef)
     const isContentOn = useAutoCompleteStore((state) => state.isContentOn)
     const isRed = useAutoCompleteStore((state) => state.isRed)
-    const setIsRed = useAutoCompleteStore((state) => state.setIsRed)
 
     const { debouncedValue, cancel } = useDebounce(inputValue, 500)
 
     const { isFetching } = useAutoCompleteQuery(debouncedValue)
-    const { handleBlur, handleChange, handleKeyDown } = useAutoCompleteEventHandler({ cancel })
-    useAutoCompleteEffect()
-
-    useEffect(() => {
-        setIsRed(outerIsRed)
-    }, [outerIsRed])
+    const { handleBlur, handleKeyDown } = useAutoCompleteEventHandler({ cancel })
+    useAutoCompleteEffect({ outerIsRed })
 
     return (
         <Input
@@ -31,7 +25,6 @@ const AutoCompleteInput = ({ outerIsRed }: { outerIsRed: boolean }) => {
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
             value={inputValue}
-            onChange={handleChange}
             trailingIcon={isFetching && isContentOn ? <Loader /> : undefined}
             isRed={isRed}
         />
