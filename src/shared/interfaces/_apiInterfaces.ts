@@ -7,6 +7,8 @@ export interface Me {
     email?: string
     phone_number?: string
     role?: Role
+    school_name?: string
+    hagwon_name?: string
 }
 
 export interface School {
