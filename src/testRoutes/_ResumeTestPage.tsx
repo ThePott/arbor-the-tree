@@ -6,7 +6,7 @@ import RoundBox from "@/packages/components/RoundBox"
 import useGlobalStore from "@/shared/store/globalStore"
 
 const acceptResume = async () => {
-    await withHeadInstance.post("/auth/resume/accept")
+    await withHeadInstance.post("/auth/resume/user/9/accept")
 }
 
 const ResumeTestPage = () => {
