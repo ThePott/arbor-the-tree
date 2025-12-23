@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react"
+import TabTestPage from "./_TabTestPage.tsx"
 const ResumeTestPage = lazy(() => import("./_ResumeTestPage.tsx"))
 const ApiTestPage = lazy(() => import("./_ApiTestPage"))
 const ButtonTestPage = lazy(() => import("./_ButtonTestPage.tsx"))
@@ -17,6 +18,7 @@ const testRouteArray = [
     { path: "/test/auto-complete", element: <AutoCompleteTestPage /> },
     { path: "/test/dropdown", element: <DropdownTestPage /> },
     { path: "/test/resume", element: <ResumeTestPage /> },
+    { path: "/test/tab", element: <TabTestPage /> },
 ]
 
 const suspendedTestRouteArray = testRouteArray.map((route) => ({
