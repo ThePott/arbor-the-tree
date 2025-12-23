@@ -3,6 +3,13 @@ import { useState } from "react"
 import { Hstack } from "../layouts"
 import { makeTransition } from "@/shared/utils/animation"
 
+export interface Tab {
+    label: string
+    value: string
+}
+
+type TabVariant = "underline" | "pill"
+
 const TabBackgroundPill = () => {
     return (
         <motion.div
@@ -26,11 +33,9 @@ const TabBackgroundUnderline = () => {
     )
 }
 
-type TabVariant = "underline" | "pill"
-
 interface TabItemProps {
     variant: TabVariant
-    tab: string
+    tab: Tab
     isSelected: boolean
     onClick: () => void
 }
@@ -43,30 +48,30 @@ const TabItem = ({ variant, tab, isSelected, onClick }: TabItemProps) => {
                     {variant === "pill" && <TabBackgroundPill />}
                 </>
             )}
-            <p className="relative z-10">{tab}</p>
+            <p className="relative z-10">{tab.label}</p>
         </div>
     )
 }
 
 interface TabBar {
-    variant: "underline" | "pill"
-    tabArray: string[]
-    onSelect: (tab: string) => void
+    variant: TabVariant
+    tabArray: Tab[]
+    onSelect: (tab: Tab) => void
 }
-
 const TabBar = ({ variant, tabArray, onSelect }: TabBar) => {
-    const [selectedTab, setSelectedTab] = useState(tabArray[0])
-    const handleTabClick = (tab: string) => {
-        setSelectedTab(tab)
+    const [selectedTabValue, setSelectedTabValue] = useState(tabArray[0].value)
+    const handleTabClick = (tab: Tab) => {
+        setSelectedTabValue(tab.value)
         onSelect(tab)
     }
     return (
         <Hstack>
             {tabArray.map((tab) => (
                 <TabItem
+                    key={tab.value}
                     variant={variant}
                     tab={tab}
-                    isSelected={selectedTab === tab}
+                    isSelected={selectedTabValue === tab.value}
                     onClick={() => handleTabClick(tab)}
                 />
             ))}

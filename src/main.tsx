@@ -9,8 +9,8 @@ import { QueryClientProvider } from "@tanstack/react-query"
 import queryClient from "./packages/api/queryClient.ts"
 import LandingPage from "./pages/landing/LandingPage.tsx"
 import MypageSkeleton from "./features/mypage/MypageSkeleton.tsx"
-import BookListPage from "./pages/book/BookListPage.tsx"
-import BookWritePage from "./pages/book/write/BookCreatePage.tsx"
+const BookListPage = lazy(() => import("./pages/book/BookListPage.tsx"))
+const BookWritePage = lazy(() => import("./pages/book/write/BookWritePage.tsx"))
 const SummaryPage = lazy(() => import("./pages/summary/SummaryPage.tsx"))
 const ProgressPage = lazy(() => import("./pages/progress/ProgressPage.tsx"))
 const Mypage = lazy(() => import("./pages/mypage/Mypage.tsx"))
