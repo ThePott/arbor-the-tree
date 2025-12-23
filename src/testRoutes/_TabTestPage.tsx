@@ -1,6 +1,6 @@
 import { Container } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
-import TabBar from "@/packages/components/Tab/Tab"
+import TabBar from "@/packages/components/TabBar/TabBar"
 import { useState } from "react"
 
 const tabArray = ["something", "st", "something very long"]

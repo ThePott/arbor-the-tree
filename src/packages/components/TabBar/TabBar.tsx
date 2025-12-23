@@ -1,6 +1,7 @@
 import { motion } from "motion/react"
 import { useState } from "react"
 import { Hstack } from "../layouts"
+import { makeTransition } from "@/shared/utils/animation"
 
 const TabBackgroundPill = () => {
     return (
@@ -9,13 +10,19 @@ const TabBackgroundPill = () => {
             layoutId="selected-pill"
             style={{ borderRadius: 9999 }}
             className="bg-bg-3 absolute inset-0"
+            transition={makeTransition()}
         />
     )
 }
 
 const TabBackgroundUnderline = () => {
     return (
-        <motion.div layout layoutId="tab-background" className="bg-fg-vivid absolute right-0 bottom-0 left-0 h-0.5" />
+        <motion.div
+            layout
+            layoutId="tab-background"
+            className="bg-fg-vivid absolute right-0 bottom-0 left-0 h-0.5"
+            transition={makeTransition()}
+        />
     )
 }
 
