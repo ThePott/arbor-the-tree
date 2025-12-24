@@ -1,10 +1,9 @@
 import Input from "@/packages/components/Input/Input"
-import { FlexOneContainer, Hstack, Vstack } from "@/packages/components/layouts"
-import RoundBox from "@/packages/components/RoundBox"
+import { Hstack, Vstack } from "@/packages/components/layouts"
 import useBookWriteStore from "./_bookWriteStore"
-import Title from "@/packages/components/Title/Title"
-import Textarea from "@/packages/components/Textarea/Textarea"
-import TabBar from "@/packages/components/TabBar/TabBar"
+import BWTopicStepSection from "./BWTopicStepSection/BWTopicStepSection"
+import BWSubBookSection from "./BWSubBookSection/BWSubBookSection"
+import BWTable from "./BWTable/BWTable"
 
 const BookWriteContent = () => {
     const title = useBookWriteStore((state) => state.title)
@@ -20,35 +19,10 @@ const BookWriteContent = () => {
                     className="text-my-xl"
                     placeholder="문제집 제목을 입력하세요"
                 />
-                <RoundBox className="flex-1">
-                    <Vstack className="h-full">
-                        <Title as="h2" isMuted>
-                            단원 정보 기입
-                        </Title>
-                        <TabBar
-                            tabArray={[
-                                { value: "topic", label: "중단원" },
-                                { value: "step", label: "소단원" },
-                            ]}
-                            variant="underline"
-                            onSelect={() => {}}
-                        />
-                        <Textarea className="flex-1" />
-                    </Vstack>
-                </RoundBox>
-                <RoundBox className="flex-1">
-                    <Title as="h2" isMuted>
-                        하위 문제집
-                    </Title>
-                </RoundBox>
+                <BWTopicStepSection />
+                <BWSubBookSection />
             </Vstack>
-
-            <FlexOneContainer isYScrollable>
-                <Title as="h2" isMuted>
-                    문제 정보 기입
-                </Title>
-                <div className="bg-bg-3 h-[1000px] w-full" />
-            </FlexOneContainer>
+            <BWTable />
         </Hstack>
     )
 }
