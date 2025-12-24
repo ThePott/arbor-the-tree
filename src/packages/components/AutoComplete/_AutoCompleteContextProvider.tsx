@@ -9,7 +9,7 @@ export interface AutoCompleteInitialValue {
     onErrorChange: (isError: boolean) => void
     getOptionArray: (searchText: string) => void
     available: AutoCompleteAvailable
-    queryKey: string
+    queryKey: string[]
     defaultValue?: string
 }
 

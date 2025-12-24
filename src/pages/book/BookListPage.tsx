@@ -9,9 +9,9 @@ const BookListPage = () => {
     const selectedTab = useBookListStore((state) => state.selectedTab)
     const bookArray = useBookListStore((state) => state.bookArray)
     const setBookArray = useBookListStore((state) => state.setBookArray)
-    const params = { activity: selectedTab.value }
     const setIsPending = useBookListStore((state) => state.setIsPending)
 
+    const params = { activity: selectedTab.value }
     const { data, isPending } = useQuery({
         queryKey: ["book", selectedTab.value],
         queryFn: async () => (await withHeadInstance.get("/book", { params })).data,

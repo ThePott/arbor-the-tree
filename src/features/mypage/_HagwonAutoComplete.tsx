@@ -47,7 +47,7 @@ const HagwonAutoComplete = ({
             onErrorChange={(isError) => {
                 handleErrorChange(isError)
             }}
-            queryKey="hagwon"
+            queryKey={["hagwon"]}
             onValueChange={onValueChange}
             getOptionArray={getHagwonMany}
             available={isForPrincipal ? "onlyNew" : "onlyExisting"}

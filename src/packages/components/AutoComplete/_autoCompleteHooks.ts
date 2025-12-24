@@ -20,7 +20,7 @@ export const useAutoCompleteQuery = (debouncedValue: string) => {
     const queryKey = useAutoCompleteStore((state) => state.queryKey)
 
     const { data, isFetching } = useQuery({
-        queryKey: [queryKey, debouncedValue],
+        queryKey: [...queryKey, debouncedValue],
         queryFn: () => getOptionArray(debouncedValue),
     })
 

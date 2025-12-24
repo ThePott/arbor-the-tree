@@ -32,7 +32,7 @@ const SchoolAutoComplete = ({ onValueChange, onErrorChange, error, defaultValue 
     return (
         <AutoComplete
             outerIsRed={Boolean(error)}
-            queryKey="school"
+            queryKey={["school"]}
             onValueChange={onValueChange}
             onErrorChange={handleErrorChange}
             getOptionArray={getSchoolMany}
