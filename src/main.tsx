@@ -10,6 +10,7 @@ import queryClient from "./packages/api/queryClient.ts"
 import LandingPage from "./pages/landing/LandingPage.tsx"
 import MypageSkeleton from "./features/mypage/MypageSkeleton.tsx"
 import BookListSkeleton from "./features/book/BookListSkeleton.tsx"
+import BookWriteSkeleton from "./features/book/BookListTable/write/BookWriteSkeleton.tsx"
 const BookListPage = lazy(() => import("./pages/book/BookListPage.tsx"))
 const BookWritePage = lazy(() => import("./pages/book/write/BookWritePage.tsx"))
 const SummaryPage = lazy(() => import("./pages/summary/SummaryPage.tsx"))
@@ -21,7 +22,7 @@ const routeArray = [
     { path: "/progress", element: <ProgressPage />, fallback: <p>여기에 스켈레톤을 넣어야 합니다</p> },
     { path: "/mypage", element: <Mypage />, fallback: <MypageSkeleton /> },
     { path: "/book", element: <BookListPage />, fallback: <BookListSkeleton /> },
-    { path: "/book/write", element: <BookWritePage />, fallback: <p>여기에 스켈레톤을 넣어야 합니다</p> },
+    { path: "/book/write", element: <BookWritePage />, fallback: <BookWriteSkeleton /> },
 ]
 
 const suspendedRouteArray = routeArray.map((route) => ({
