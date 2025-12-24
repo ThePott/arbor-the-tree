@@ -1,4 +1,4 @@
-import BookWriteContent from "@/features/book/BookListTable/write/BookWriteContent"
+import BookWriteContent from "@/features/book/write/BookWriteContent"
 
 const BookWritePage = () => {
     return <BookWriteContent />

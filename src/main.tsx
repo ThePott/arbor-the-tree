@@ -10,7 +10,7 @@ import queryClient from "./packages/api/queryClient.ts"
 import LandingPage from "./pages/landing/LandingPage.tsx"
 import MypageSkeleton from "./features/mypage/MypageSkeleton.tsx"
 import BookListSkeleton from "./features/book/BookListSkeleton.tsx"
-import BookWriteSkeleton from "./features/book/BookListTable/write/BookWriteSkeleton.tsx"
+import BookWriteSkeleton from "./features/book/write/BookWriteSkeleton.tsx"
 const BookListPage = lazy(() => import("./pages/book/BookListPage.tsx"))
 const BookWritePage = lazy(() => import("./pages/book/write/BookWritePage.tsx"))
 const SummaryPage = lazy(() => import("./pages/summary/SummaryPage.tsx"))
