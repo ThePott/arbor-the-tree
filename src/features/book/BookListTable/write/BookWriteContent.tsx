@@ -3,6 +3,7 @@ import { FlexOneContainer, Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import useBookWriteStore from "./_bookWriteStore"
 import Title from "@/packages/components/Title/Title"
+import Textarea from "@/packages/components/Textarea/Textarea"
 
 const BookWriteContent = () => {
     const title = useBookWriteStore((state) => state.title)
@@ -19,9 +20,12 @@ const BookWriteContent = () => {
                     placeholder="문제집 제목을 입력하세요"
                 />
                 <RoundBox className="flex-1">
-                    <Title as="h2" isMuted>
-                        단원 정보 기입
-                    </Title>
+                    <Vstack className="h-full">
+                        <Title as="h2" isMuted>
+                            단원 정보 기입
+                        </Title>
+                        <Textarea className="flex-1" />
+                    </Vstack>
                 </RoundBox>
                 <RoundBox className="flex-1">
                     <Title as="h2" isMuted>

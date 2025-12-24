@@ -7,3 +7,8 @@ export type InputProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLI
 export type PProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>
 
 export type HeadingProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>
+
+export type TextareaProps = React.DetailedHTMLProps<
+    React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+    HTMLTextAreaElement
+>

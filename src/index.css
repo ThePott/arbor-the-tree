@@ -81,15 +81,9 @@
         inset 0px 1px 2px rgba(from var(--color-fg-vivid) r g b / 0.6), 0px 24px 24px -8px #00000025,
         0px 12px 12px -12px #00000025;
 
-    --shadow-inward-my-sm:
-        inset 0px -1px 2px rgba(from var(--color-fg-vivid) r g b / 0.2), 0px -4px 4px -1px #00000025,
-        0px 2px 2px -2px #00000025;
-    --shadow-inward-my-md:
-        inset 0px -1px 2px rgba(from var(--color-fg-vivid) r g b / 0.4), 0px -6px 6px -2px #00000025,
-        0px 3px 3px -3px #00000025;
-    --shadow-inward-my-lg:
-        inset 0px -1px 2px rgba(from var(--color-fg-vivid) r g b / 0.6), 0px -24px 24px -8px #00000025,
-        0px 12px 12px -12px #00000025;
+    --shadow-inward-my-sm: inset 0px -1px 2px rgba(from var(--color-fg-vivid) r g b / 0.3);
+    --shadow-inward-my-md: inset 0px -1px 2px rgba(from var(--color-fg-vivid) r g b / 0.4);
+    --shadow-inward-my-lg: inset 0px -1px 2px rgba(from var(--color-fg-vivid) r g b / 0.6);
 
     --radius-my-sm: 6px;
     --radius-my-md: 12px;
