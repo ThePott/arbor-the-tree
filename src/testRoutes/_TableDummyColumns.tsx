@@ -21,7 +21,7 @@ export const tableDummyColumns = [
     columnHelper.display({
         id: "menu",
         cell: (_props) => (
-            <Dropdown>
+            <Dropdown className="inline-block">
                 <Dropdown.Trigger>
                     <Button>
                         <Ellipsis />
