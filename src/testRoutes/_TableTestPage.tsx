@@ -17,9 +17,12 @@ const TableTestPage = () => {
                 <table>
                     <thead>
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <tr>
+                            <tr key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
-                                    <th className="border-border-dim hover:outline-border-muted z-10 border px-3 py-2 hover:outline">
+                                    <th
+                                        key={header.id}
+                                        className="border-border-dim hover:outline-border-muted z-10 border px-3 py-2 hover:outline"
+                                    >
                                         {header.isPlaceholder
                                             ? "this is header placeholder"
                                             : flexRender(header.column.columnDef.header, header.getContext())}
@@ -30,7 +33,7 @@ const TableTestPage = () => {
                     </thead>
                     <tbody>
                         {table.getRowModel().rows.map((row) => (
-                            <tr>
+                            <tr key={row.id}>
                                 {row.getVisibleCells().map((cell) => (
                                     <td
                                         key={cell.id}

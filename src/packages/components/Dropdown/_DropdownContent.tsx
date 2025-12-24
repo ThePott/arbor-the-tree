@@ -4,14 +4,24 @@ import { cva } from "class-variance-authority"
 import { widthToCn } from "@/shared/utils/styles"
 import clsx from "clsx"
 import ExpandableDiv from "../ExpandableDiv/ExpendableDiv"
+import type { DropdownDirection } from "./_DropdownInterface"
 
-const dropdownVariants = cva("absolute z-10 top-full right-0 mt-my-sm", {
+const dropdownVariants = cva("absolute z-10 top-full mt-my-sm", {
     variants: {
         width: widthToCn,
+        direction: {
+            bottomLeft: "right-0",
+            bottomRight: "left-0",
+        },
     },
 })
 
-const DropdownContent = ({ children }: { children: ReactNode }) => {
+interface DropdownContentProps {
+    children: ReactNode
+    direction?: DropdownDirection
+}
+
+const DropdownContent = ({ children, direction = "bottomRight" }: DropdownContentProps) => {
     const { width, triggerRef, isOn, setIsOn } = useDropdownContext()
     const contentRef = useRef<HTMLDivElement>(null)
 
@@ -43,7 +53,7 @@ const DropdownContent = ({ children }: { children: ReactNode }) => {
     }, [isOn])
 
     return (
-        <ExpandableDiv className={clsx(dropdownVariants({ width }))}>
+        <ExpandableDiv className={clsx(dropdownVariants({ width, direction }))}>
             {isOn && <div ref={contentRef}>{children}</div>}
         </ExpandableDiv>
     )
