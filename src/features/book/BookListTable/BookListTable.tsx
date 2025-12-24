@@ -4,8 +4,6 @@ import bookColumns from "./_BookListTableColumns"
 import type { Book } from "@/shared/interfaces"
 
 const BookListTable = ({ bookArray }: { bookArray: Book[] }) => {
-    if (!bookArray) return <p>empty book array</p>
-
     const table = useReactTable({
         columns: bookColumns,
         data: bookArray,

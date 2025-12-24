@@ -2,7 +2,7 @@ import { createColumnHelper } from "@tanstack/react-table"
 import Button from "@/packages/components/Button/Button"
 import { Ellipsis, Trash } from "lucide-react"
 import Dropdown from "@/packages/components/Dropdown/Dropdown"
-import type { Book } from "../_bookListInterfaces"
+import type { Book } from "@/shared/interfaces"
 
 const columnHelper = createColumnHelper<Book>()
 

@@ -53,14 +53,14 @@ const TabItem = <T extends string>({ variant, tab, isSelected, onClick }: TabIte
     )
 }
 
-interface TabBar {
+interface TabBar<T extends string> {
     variant: TabVariant
-    tabArray: Tab[]
-    onSelect: (tab: Tab) => void
+    tabArray: Tab<T>[]
+    onSelect: (tab: Tab<T>) => void
 }
-const TabBar = ({ variant, tabArray, onSelect }: TabBar) => {
+const TabBar = <T extends string>({ variant, tabArray, onSelect }: TabBar<T>) => {
     const [selectedTabValue, setSelectedTabValue] = useState(tabArray[0].value)
-    const handleTabClick = (tab: Tab) => {
+    const handleTabClick = (tab: Tab<T>) => {
         setSelectedTabValue(tab.value)
         onSelect(tab)
     }
