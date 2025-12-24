@@ -1,5 +1,5 @@
 import Input from "@/packages/components/Input/Input"
-import { Hstack, Vstack } from "@/packages/components/layouts"
+import { FlexOneContainer, Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import useBookWriteStore from "./_bookWriteStore"
 import Title from "@/packages/components/Title/Title"
@@ -20,8 +20,7 @@ const BookWriteContent = () => {
                 />
                 <RoundBox className="flex-1">
                     <Title as="h2" isMuted>
-                        {" "}
-                        단원 정보 기입{" "}
+                        단원 정보 기입
                     </Title>
                 </RoundBox>
                 <RoundBox className="flex-1">
@@ -31,11 +30,12 @@ const BookWriteContent = () => {
                 </RoundBox>
             </Vstack>
 
-            <RoundBox className="h-full grow">
+            <FlexOneContainer isYScrollable>
                 <Title as="h2" isMuted>
                     문제 정보 기입
                 </Title>
-            </RoundBox>
+                <div className="bg-bg-3 h-[1000px] w-full" />
+            </FlexOneContainer>
         </Hstack>
     )
 }
