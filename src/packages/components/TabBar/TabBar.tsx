@@ -3,9 +3,9 @@ import { useState } from "react"
 import { Hstack } from "../layouts"
 import { makeTransition } from "@/shared/utils/animation"
 
-export interface Tab {
+export interface Tab<T extends string> {
     label: string
-    value: string
+    value: T
 }
 
 type TabVariant = "underline" | "pill"
@@ -33,13 +33,13 @@ const TabBackgroundUnderline = () => {
     )
 }
 
-interface TabItemProps {
+interface TabItemProps<T extends string> {
     variant: TabVariant
-    tab: Tab
+    tab: Tab<T>
     isSelected: boolean
     onClick: () => void
 }
-const TabItem = ({ variant, tab, isSelected, onClick }: TabItemProps) => {
+const TabItem = <T extends string>({ variant, tab, isSelected, onClick }: TabItemProps<T>) => {
     return (
         <div className="relative cursor-pointer px-3 py-2" onClick={onClick}>
             {isSelected && (

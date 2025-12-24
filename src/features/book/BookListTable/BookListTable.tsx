@@ -1,12 +1,14 @@
-import { tableDummyColumns } from "@/testRoutes/_TableDummyColumns"
-import { tableDummyData } from "@/testRoutes/_TableDummyData"
 import { useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table"
 import clsx from "clsx"
+import bookColumns from "./_BookListTableColumns"
+import type { Book } from "@/shared/interfaces"
 
-const BookListTable = () => {
+const BookListTable = ({ bookArray }: { bookArray: Book[] }) => {
+    if (!bookArray) return <p>empty book array</p>
+
     const table = useReactTable({
-        columns: tableDummyColumns,
-        data: tableDummyData,
+        columns: bookColumns,
+        data: bookArray,
         getCoreRowModel: getCoreRowModel(),
     })
 

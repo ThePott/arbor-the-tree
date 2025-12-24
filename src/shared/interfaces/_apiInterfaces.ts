@@ -26,3 +26,10 @@ export interface Resume {
     hagwon_name: string
     school_name: string
 }
+
+export interface Book {
+    title: string
+    publishedYear: number
+    modifiedAt: string | null
+    isActive: boolean
+}
