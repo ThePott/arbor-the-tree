@@ -2,10 +2,10 @@ import { type ReactNode, type RefObject, useCallback, useRef, useState } from "r
 import { createStore, type StoreApi } from "zustand"
 import { StoreContext } from "./_autoCompleteHooks"
 
-type AutoCompleteAvailable = "onlyNew" | "onlyExisting" | "any"
+export type AutoCompleteAvailable = "onlyNew" | "onlyExisting" | "any"
 
 export interface AutoCompleteInitialValue {
-    onValueChange: (value: string) => void
+    onValueChange: (value: string, isError: boolean) => void
     onErrorChange: (isError: boolean) => void
     getOptionArray: (searchText: string) => void
     available: AutoCompleteAvailable

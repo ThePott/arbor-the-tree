@@ -131,8 +131,8 @@
         opacity: 0%;
     }
     to {
-        -webkit-filter: blur(0);
-        transform: translateY(0);
+        -webkit-filter: blur(0px);
+        transform: translateY(0px);
         scale: 100%;
         opacity: 100%;
     }

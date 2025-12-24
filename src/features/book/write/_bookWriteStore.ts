@@ -14,10 +14,8 @@ const useBookWriteStore = create<BookWriteStoreState>()((set) => ({
     stepInfo: "",
     setStepInfo: (stepInfo) => set({ stepInfo }),
 
-    bookArray: [],
-    setBookArray: (bookArray) => set({ bookArray }),
-    isPending: true,
-    setIsPending: (isPending) => set({ isPending }),
+    subBookTitle: null,
+    setSubBookTitle: (subBookTitle) => set({ subBookTitle }),
 }))
 
 export default useBookWriteStore

@@ -1,9 +1,9 @@
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
-import useBookWriteQuery from "../_useBookWriteQuery"
 import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
 import { withHeadInstance } from "@/packages/api/axiosInstances"
 import type { Book } from "@/shared/interfaces"
+import useBookWriteStore from "../_bookWriteStore"
 
 const getBookTitleArray = async () => {
     const response = await withHeadInstance.get("/book", { params: { activity: "total" } })
@@ -12,7 +12,15 @@ const getBookTitleArray = async () => {
 }
 
 const BWSubBookSection = () => {
-    useBookWriteQuery()
+    const setSubBookTitle = useBookWriteStore((state) => state.setSubBookTitle)
+
+    const handleValueChange = (value: string, isError: boolean) => {
+        if (isError) {
+            setSubBookTitle(null)
+            return
+        }
+        setSubBookTitle(value)
+    }
 
     return (
         <RoundBox className="flex-1">
@@ -24,7 +32,7 @@ const BWSubBookSection = () => {
                 queryKey={["book", "title"]}
                 getOptionArray={getBookTitleArray}
                 onErrorChange={() => {}}
-                onValueChange={() => {}}
+                onValueChange={handleValueChange}
                 outerIsRed={false}
             />
         </RoundBox>

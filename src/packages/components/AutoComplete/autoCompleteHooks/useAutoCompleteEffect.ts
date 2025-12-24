@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import { useAutoCompleteStore } from "../_autoCompleteHooks"
+import { handleInputValueChange } from "./useAutoCompleteEventHandlers"
 
 const useAutoCompleteEffect = ({ outerIsRed }: { outerIsRed: boolean }) => {
     const inputValue = useAutoCompleteStore((state) => state.inputValue)
@@ -45,7 +46,8 @@ const useAutoCompleteEffect = ({ outerIsRed }: { outerIsRed: boolean }) => {
     useEffect(() => {
         if (!inputValue) return
         setInputValue(inputValue)
-        onValueChange(inputValue)
+
+        handleInputValueChange({ value: inputValue, available, optionArray, defaultValue, onValueChange })
     }, [inputValue])
 }
 
