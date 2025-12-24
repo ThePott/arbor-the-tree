@@ -1,22 +1,40 @@
 import Input from "@/packages/components/Input/Input"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
+import useBookWriteStore from "./_bookWriteStore"
+import Title from "@/packages/components/Title/Title"
 
 const BookWriteContent = () => {
+    const title = useBookWriteStore((state) => state.title)
+    const setTitle = useBookWriteStore((state) => state.setTitle)
+
     return (
         <Hstack gap="xl" className="p-my-xl h-full w-full">
             <Vstack className="w-[400px]">
-                <Input className="text-my-xl" placeholder="문제집 제목을 입력하세요" />
-                <RoundBox padding="xl" isBordered className="flex-1">
-                    단원 정보 기입 placeholder
+                <Input
+                    value={title}
+                    onChange={(event) => setTitle(event.target.value)}
+                    variant="ghost"
+                    className="text-my-xl"
+                    placeholder="문제집 제목을 입력하세요"
+                />
+                <RoundBox className="flex-1">
+                    <Title as="h2" isMuted>
+                        {" "}
+                        단원 정보 기입{" "}
+                    </Title>
                 </RoundBox>
-                <RoundBox padding="xl" isBordered className="flex-1">
-                    하위 문제집placeholder
+                <RoundBox className="flex-1">
+                    <Title as="h2" isMuted>
+                        하위 문제집
+                    </Title>
                 </RoundBox>
             </Vstack>
 
-            <RoundBox padding="xl" isBordered className="h-full grow">
-                placeholder for table
+            <RoundBox className="h-full grow">
+                <Title as="h2" isMuted>
+                    문제 정보 기입
+                </Title>
             </RoundBox>
         </Hstack>
     )
