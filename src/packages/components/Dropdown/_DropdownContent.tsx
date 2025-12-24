@@ -4,7 +4,7 @@ import { cva } from "class-variance-authority"
 import { widthToCn } from "@/shared/utils/styles"
 import clsx from "clsx"
 import ExpandableDiv from "../ExpandableDiv/ExpendableDiv"
-import type { DropdownDirection } from "./_DropdownInterface"
+import type { DropdownDirection } from "./_dropdownInterfaces"
 
 const dropdownVariants = cva("absolute z-10 top-full mt-my-sm", {
     variants: {

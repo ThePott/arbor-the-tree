@@ -12,22 +12,22 @@ export const tableDummyColumns = [
     columnHelper.accessor("modifiedAt", { header: "수정일", cell: (info) => info.getValue() }),
     columnHelper.display({
         id: "delete",
-        cell: (props) => (
-            <Button onClick={() => console.log({ props })}>
+        cell: (_props) => (
+            <Button onClick={() => {}}>
                 <Trash />
             </Button>
         ),
     }),
     columnHelper.display({
         id: "menu",
-        cell: (props) => (
+        cell: (_props) => (
             <Dropdown>
                 <Dropdown.Trigger>
                     <Button>
                         <Ellipsis />
                     </Button>
                 </Dropdown.Trigger>
-                <Dropdown.Menu onChange={() => console.log({ props })} direction="bottomRight">
+                <Dropdown.Menu onChange={() => {}} direction="bottomRight">
                     <Dropdown.MenuItem value="edit">수정하기</Dropdown.MenuItem>
                 </Dropdown.Menu>
             </Dropdown>

@@ -3,7 +3,7 @@ import useDropdownContext from "./_useDropdownContext"
 import DropdownContent from "./_DropdownContent"
 import RoundBox from "../RoundBox"
 import { Vstack } from "../layouts"
-import type { DropdownDirection } from "./_DropdownInterface"
+import type { DropdownDirection } from "./_dropdownInterfaces"
 
 interface DropdownMenuInterface {
     onChange: (value: string) => void
