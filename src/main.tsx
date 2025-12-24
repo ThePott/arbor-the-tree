@@ -9,6 +9,7 @@ import { QueryClientProvider } from "@tanstack/react-query"
 import queryClient from "./packages/api/queryClient.ts"
 import LandingPage from "./pages/landing/LandingPage.tsx"
 import MypageSkeleton from "./features/mypage/MypageSkeleton.tsx"
+import BookListSkeleton from "./features/book/BookListSkeleton.tsx"
 const BookListPage = lazy(() => import("./pages/book/BookListPage.tsx"))
 const BookWritePage = lazy(() => import("./pages/book/write/BookWritePage.tsx"))
 const SummaryPage = lazy(() => import("./pages/summary/SummaryPage.tsx"))
@@ -16,18 +17,10 @@ const ProgressPage = lazy(() => import("./pages/progress/ProgressPage.tsx"))
 const Mypage = lazy(() => import("./pages/mypage/Mypage.tsx"))
 
 const routeArray = [
-    {
-        path: "/summary",
-        element: <SummaryPage />,
-        fallback: <p>여기에 스켈레톤을 넣어야 합니다</p>,
-    },
-    {
-        path: "/progress",
-        element: <ProgressPage />,
-        fallback: <p>여기에 스켈레톤을 넣어야 합니다</p>,
-    },
+    { path: "/summary", element: <SummaryPage />, fallback: <p>여기에 스켈레톤을 넣어야 합니다</p> },
+    { path: "/progress", element: <ProgressPage />, fallback: <p>여기에 스켈레톤을 넣어야 합니다</p> },
     { path: "/mypage", element: <Mypage />, fallback: <MypageSkeleton /> },
-    { path: "/book", element: <BookListPage />, fallback: <p>여기에 스켈레톤을 넣어야 합니다</p> },
+    { path: "/book", element: <BookListPage />, fallback: <BookListSkeleton /> },
     { path: "/book/write", element: <BookWritePage />, fallback: <p>여기에 스켈레톤을 넣어야 합니다</p> },
 ]
 
