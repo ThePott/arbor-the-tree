@@ -1,5 +1,3 @@
-import type { RowData } from "@tanstack/react-table"
-
 export type BWTopicStep = "topic" | "step"
 
 export interface BookDetail {
@@ -10,10 +8,4 @@ export interface BookDetail {
     question_page: string
     solution_page: string
     session: string
-}
-
-declare module "@tanstack/react-table" {
-    interface TableMeta<TData extends RowData> {
-        updateData: (rowIndex: number, columnId: string, value: string) => void
-    }
 }

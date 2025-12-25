@@ -9,8 +9,15 @@ const BookWriteContent = () => {
     const title = useBookWriteStore((state) => state.title)
     const setTitle = useBookWriteStore((state) => state.setTitle)
 
+    const handleSubmit = () => {
+        //NOTE: uncomment to debug
+        // const body = { title, data: tableData }
+        // console.log({ body })
+        // debugger
+    }
+
     return (
-        <form className="h-full w-full">
+        <form className="h-full w-full" onSubmit={handleSubmit}>
             <Hstack gap="xl" className="p-my-xl h-full w-full">
                 <Vstack className="w-[400px]">
                     <Input

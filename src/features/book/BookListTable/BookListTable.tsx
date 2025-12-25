@@ -4,6 +4,7 @@ import bookColumns from "./_BookListTableColumns"
 import type { Book } from "@/shared/interfaces"
 
 const BookListTable = ({ bookArray }: { bookArray: Book[] }) => {
+    // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({
         columns: bookColumns,
         data: bookArray,

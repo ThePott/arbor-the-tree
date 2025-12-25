@@ -1,14 +1,12 @@
-import { FlexOneContainer } from "@/packages/components/layouts"
+import { FlexOneContainer, Hstack } from "@/packages/components/layouts"
 import { Vstack } from "@/packages/components/layouts/_Vstack"
 import Title from "@/packages/components/Title/Title"
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import clsx from "clsx"
-import { useState } from "react"
 import type { BookDetail } from "../_bookWriteInterfaces"
 import BWInputCell from "./_BWInputCell"
 import useBookWriteStore from "../_bookWriteStore"
-
-const dummyData: BookDetail[] = Array(50).fill({}) as BookDetail[]
+import Button from "@/packages/components/Button/Button"
 
 const columnHelper = createColumnHelper<BookDetail>()
 
@@ -41,6 +39,7 @@ const columns = [
 
 const BWTable = () => {
     const tableData = useBookWriteStore((state) => state.tableData)
+    // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({
         data: tableData,
         columns,
@@ -49,9 +48,12 @@ const BWTable = () => {
 
     return (
         <Vstack className="h-full grow">
-            <Title as="h2" isMuted>
-                문제 정보 기입
-            </Title>
+            <Hstack className="justify-between">
+                <Title as="h2" isMuted>
+                    문제 정보 기입
+                </Title>
+                <Button color="green">등록</Button>
+            </Hstack>
             <FlexOneContainer isYScrollable>
                 <table className="w-full">
                     <thead>
