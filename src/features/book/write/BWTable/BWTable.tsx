@@ -1,58 +1,72 @@
-import Input from "@/packages/components/Input/Input"
+import Button from "@/packages/components/Button/Button"
 import { FlexOneContainer } from "@/packages/components/layouts"
 import { Vstack } from "@/packages/components/layouts/_Vstack"
 import Title from "@/packages/components/Title/Title"
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import clsx from "clsx"
+import { useState } from "react"
+import type { BookDetail } from "../_bookWriteInterfaces"
+import BWInputCell from "./_BWInputCell"
 
-interface BookDetail {
-    topic: string
-    step: string
-    question_name: string
-    question_page: number
-    solution_page: number
-    session: number
-}
-
-const data: BookDetail[] = Array(1000).fill({}) as BookDetail[]
+const dummyData: BookDetail[] = Array(1000).fill({}) as BookDetail[]
 
 const columnHelper = createColumnHelper<BookDetail>()
 
 const columns = [
     columnHelper.accessor("topic", {
         header: "중단원",
-        cell: (info) => <Input colorChangeIn="fill" variant="ghost" defaultValue={info.getValue()} />,
+        cell: (info) => <BWInputCell {...info} />,
     }),
     columnHelper.accessor("step", {
         header: "소단원",
-        cell: (info) => <Input colorChangeIn="fill" variant="ghost" defaultValue={info.getValue()} />,
+        cell: (info) => <BWInputCell {...info} />,
     }),
     columnHelper.accessor("question_name", {
         header: "문제 번호",
-        cell: (info) => <Input colorChangeIn="fill" variant="ghost" defaultValue={info.getValue()} />,
+        cell: (info) => <BWInputCell {...info} />,
     }),
     columnHelper.accessor("question_page", {
         header: "문제 쪽 번호",
-        cell: (info) => <Input colorChangeIn="fill" variant="ghost" defaultValue={info.getValue()} />,
+        cell: (info) => <BWInputCell {...info} />,
     }),
     columnHelper.accessor("solution_page", {
         header: "정답 쪽 번호",
-        cell: (info) => <Input colorChangeIn="fill" variant="ghost" defaultValue={info.getValue()} />,
+        cell: (info) => <BWInputCell {...info} />,
     }),
     columnHelper.accessor("session", {
         header: "묶음 번호",
-        cell: (info) => <Input colorChangeIn="fill" variant="ghost" defaultValue={info.getValue()} />,
+        cell: (info) => <BWInputCell {...info} />,
     }),
 ]
 
+const DebugButton = ({ data }: { data: BookDetail[] }) => {
+    const handleClick = () => {
+        console.log({ firstData: data[0] })
+        debugger
+    }
+    return <Button onClick={handleClick}>print first data</Button>
+}
+
 const BWTable = () => {
-    const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel() })
+    const [data, setData] = useState<BookDetail[]>(dummyData)
+    const table = useReactTable({
+        data,
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+        meta: {
+            updateData: (rowIndex: number, columnId: string, value: string) => {
+                const newData = data.map((row, index) => (index === rowIndex ? { ...row, [columnId]: value } : row))
+                setData(newData)
+            },
+        },
+    })
 
     return (
         <Vstack className="h-full grow">
             <Title as="h2" isMuted>
                 문제 정보 기입
             </Title>
+            <DebugButton data={data} />
             <FlexOneContainer isYScrollable>
                 <table className="w-full">
                     <thead>
