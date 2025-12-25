@@ -1,3 +1,4 @@
+import Input from "@/packages/components/Input/Input"
 import { FlexOneContainer } from "@/packages/components/layouts"
 import { Vstack } from "@/packages/components/layouts/_Vstack"
 import Title from "@/packages/components/Title/Title"
@@ -18,7 +19,10 @@ const data: BookDetail[] = Array(1000).fill({}) as BookDetail[]
 const columnHelper = createColumnHelper<BookDetail>()
 
 const columns = [
-    columnHelper.accessor("topic", { header: "중단원", cell: (info) => info.getValue() }),
+    columnHelper.accessor("topic", {
+        header: "중단원",
+        cell: (info) => <Input colorChangeIn="fill" variant="ghost" defaultValue={info.getValue()} />,
+    }),
     columnHelper.accessor("step", { header: "소단원", cell: (info) => info.getValue() }),
     columnHelper.accessor("question_name", { header: "문제 번호", cell: (info) => info.getValue() }),
     columnHelper.accessor("question_page", { header: "문제 쪽 번호", cell: (info) => info.getValue() }),
@@ -59,7 +63,7 @@ const BWTable = () => {
                                     <td
                                         key={cell.id}
                                         className={clsx(
-                                            "border-border-dim hover:outline-border-muted z-10 border px-3 py-2 hover:outline",
+                                            "border-border-dim hover:outline-border-muted z-10 border hover:outline",
                                             cell.column.id !== "title" && "text-center"
                                         )}
                                     >
