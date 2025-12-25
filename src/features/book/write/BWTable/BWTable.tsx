@@ -6,6 +6,7 @@ import clsx from "clsx"
 import { useState } from "react"
 import type { BookDetail } from "../_bookWriteInterfaces"
 import BWInputCell from "./_BWInputCell"
+import useBookWriteStore from "../_bookWriteStore"
 
 const dummyData: BookDetail[] = Array(50).fill({}) as BookDetail[]
 
@@ -39,17 +40,11 @@ const columns = [
 ]
 
 const BWTable = () => {
-    const [data, setData] = useState<BookDetail[]>(dummyData)
+    const tableData = useBookWriteStore((state) => state.tableData)
     const table = useReactTable({
-        data,
+        data: tableData,
         columns,
         getCoreRowModel: getCoreRowModel(),
-        meta: {
-            updateData: (rowIndex: number, columnId: string, value: string) => {
-                const newData = data.map((row, index) => (index === rowIndex ? { ...row, [columnId]: value } : row))
-                setData(newData)
-            },
-        },
     })
 
     return (

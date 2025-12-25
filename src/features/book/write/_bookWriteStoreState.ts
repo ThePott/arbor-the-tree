@@ -1,5 +1,5 @@
 import type { Tab } from "@/packages/components/TabBar/TabBar"
-import type { BWTopicStep } from "./_bookWriteInterfaces"
+import type { BookDetail, BWTopicStep } from "./_bookWriteInterfaces"
 
 export interface BookWriteStoreState {
     title: string
@@ -15,4 +15,7 @@ export interface BookWriteStoreState {
 
     subBookTitle: string | null
     setSubBookTitle: (subBookTitle: string | null) => void
+
+    tableData: BookDetail[]
+    updateTableData: (rowIndex: number, columnId: keyof BookDetail, value: string) => void
 }

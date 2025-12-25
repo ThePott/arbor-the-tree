@@ -1,10 +1,12 @@
 import Input from "@/packages/components/Input/Input"
 import type { CellContext } from "@tanstack/react-table"
 import type { BookDetail } from "../_bookWriteInterfaces"
+import useBookWriteStore from "../_bookWriteStore"
 
-const BWInputCell = ({ getValue, row: { index }, column: { id }, table }: CellContext<BookDetail, string>) => {
+const BWInputCell = ({ getValue, row: { index }, column: { id } }: CellContext<BookDetail, string>) => {
+    const updateTableData = useBookWriteStore((state) => state.updateTableData)
     const handleUpdate = (event: React.FocusEvent<HTMLInputElement, Element>) =>
-        table.options.meta?.updateData(index, id, event.target.value)
+        updateTableData(index, id as keyof BookDetail, event.target.value)
 
     return <Input colorChangeIn="fill" variant="ghost" defaultValue={getValue()} onBlur={handleUpdate} />
 }
