@@ -4,7 +4,7 @@ import { cva } from "class-variance-authority"
 import clsx from "clsx"
 import type { JSX } from "react"
 
-const inputVariants = cva("px-3 py-2 rounded-my-sm my-transition items-center outline", {
+const inputVariants = cva("rounded-my-sm my-transition items-center outline", {
     variants: {
         isRed: {
             false: "focus-within:outline-border-muted outline-transparent",
@@ -47,7 +47,7 @@ const Input = ({
 
     return (
         <Hstack className={clsx(inputVariants({ isRed, variant, colorChangeIn }), className)}>
-            <input {...rest} className="w-full border-0 outline-0" />
+            <input {...rest} className="w-full border-0 px-3 py-2 outline-0" />
             {trailingIcon && trailingIcon}
         </Hstack>
     )

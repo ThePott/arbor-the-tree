@@ -4,7 +4,7 @@ import { cva } from "class-variance-authority"
 import clsx from "clsx"
 import type { JSX } from "react"
 
-const textareaVariants = cva("px-3 py-2 rounded-my-sm outline my-transition items-center", {
+const textareaVariants = cva("rounded-my-sm outline my-transition items-center", {
     variants: {
         isRed: {
             false: "focus-within:outline-border-muted outline-transparent",
@@ -33,7 +33,7 @@ const Textarea = ({
 
     return (
         <Hstack className={clsx(textareaVariants({ isRed, variant }), className)}>
-            <textarea {...rest} className="h-full w-full resize-none border-0 outline-0" />
+            <textarea {...rest} className="h-full w-full resize-none border-0 px-3 py-2 outline-0" />
             {trailingIcon && trailingIcon}
         </Hstack>
     )
