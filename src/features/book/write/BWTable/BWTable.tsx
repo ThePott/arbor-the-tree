@@ -1,4 +1,3 @@
-import Button from "@/packages/components/Button/Button"
 import { FlexOneContainer } from "@/packages/components/layouts"
 import { Vstack } from "@/packages/components/layouts/_Vstack"
 import Title from "@/packages/components/Title/Title"
@@ -8,7 +7,7 @@ import { useState } from "react"
 import type { BookDetail } from "../_bookWriteInterfaces"
 import BWInputCell from "./_BWInputCell"
 
-const dummyData: BookDetail[] = Array(1000).fill({}) as BookDetail[]
+const dummyData: BookDetail[] = Array(50).fill({}) as BookDetail[]
 
 const columnHelper = createColumnHelper<BookDetail>()
 
@@ -39,14 +38,6 @@ const columns = [
     }),
 ]
 
-const DebugButton = ({ data }: { data: BookDetail[] }) => {
-    const handleClick = () => {
-        console.log({ firstData: data[0] })
-        debugger
-    }
-    return <Button onClick={handleClick}>print first data</Button>
-}
-
 const BWTable = () => {
     const [data, setData] = useState<BookDetail[]>(dummyData)
     const table = useReactTable({
@@ -66,7 +57,6 @@ const BWTable = () => {
             <Title as="h2" isMuted>
                 문제 정보 기입
             </Title>
-            <DebugButton data={data} />
             <FlexOneContainer isYScrollable>
                 <table className="w-full">
                     <thead>

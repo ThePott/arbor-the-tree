@@ -10,20 +10,22 @@ const BookWriteContent = () => {
     const setTitle = useBookWriteStore((state) => state.setTitle)
 
     return (
-        <Hstack gap="xl" className="p-my-xl h-full w-full">
-            <Vstack className="w-[400px]">
-                <Input
-                    value={title}
-                    onChange={(event) => setTitle(event.target.value)}
-                    variant="ghost"
-                    className="text-my-xl"
-                    placeholder="문제집 제목을 입력하세요"
-                />
-                <BWTopicStepSection />
-                <BWSubBookSection />
-            </Vstack>
-            <BWTable />
-        </Hstack>
+        <form className="h-full w-full">
+            <Hstack gap="xl" className="p-my-xl h-full w-full">
+                <Vstack className="w-[400px]">
+                    <Input
+                        value={title}
+                        onChange={(event) => setTitle(event.target.value)}
+                        variant="ghost"
+                        className="text-my-xl"
+                        placeholder="문제집 제목을 입력하세요"
+                    />
+                    <BWTopicStepSection />
+                    <BWSubBookSection />
+                </Vstack>
+                <BWTable />
+            </Hstack>
+        </form>
     )
 }
 
