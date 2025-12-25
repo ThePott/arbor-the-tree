@@ -23,11 +23,26 @@ const columns = [
         header: "중단원",
         cell: (info) => <Input colorChangeIn="fill" variant="ghost" defaultValue={info.getValue()} />,
     }),
-    columnHelper.accessor("step", { header: "소단원", cell: (info) => info.getValue() }),
-    columnHelper.accessor("question_name", { header: "문제 번호", cell: (info) => info.getValue() }),
-    columnHelper.accessor("question_page", { header: "문제 쪽 번호", cell: (info) => info.getValue() }),
-    columnHelper.accessor("solution_page", { header: "정답 쪽 번호", cell: (info) => info.getValue() }),
-    columnHelper.accessor("session", { header: "묶음 번호", cell: (info) => info.getValue() }),
+    columnHelper.accessor("step", {
+        header: "소단원",
+        cell: (info) => <Input colorChangeIn="fill" variant="ghost" defaultValue={info.getValue()} />,
+    }),
+    columnHelper.accessor("question_name", {
+        header: "문제 번호",
+        cell: (info) => <Input colorChangeIn="fill" variant="ghost" defaultValue={info.getValue()} />,
+    }),
+    columnHelper.accessor("question_page", {
+        header: "문제 쪽 번호",
+        cell: (info) => <Input colorChangeIn="fill" variant="ghost" defaultValue={info.getValue()} />,
+    }),
+    columnHelper.accessor("solution_page", {
+        header: "정답 쪽 번호",
+        cell: (info) => <Input colorChangeIn="fill" variant="ghost" defaultValue={info.getValue()} />,
+    }),
+    columnHelper.accessor("session", {
+        header: "묶음 번호",
+        cell: (info) => <Input colorChangeIn="fill" variant="ghost" defaultValue={info.getValue()} />,
+    }),
 ]
 
 const BWTable = () => {
