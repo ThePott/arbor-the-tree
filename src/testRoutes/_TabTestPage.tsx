@@ -43,9 +43,12 @@ const TabTestPage = () => {
                                         <div className="relative">
                                             <Input
                                                 onBlur={(event) => {
+                                                    const value = event.target.value
                                                     const newData = [...data]
-                                                    newData[rowIndex][key] = event.target.value
+                                                    newData[rowIndex][key] = value
                                                     setData(newData)
+
+                                                    if (value !== "/") return
                                                 }}
                                                 defaultValue={el[key]}
                                             />
