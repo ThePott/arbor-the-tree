@@ -8,7 +8,12 @@ const BWInputCell = ({ getValue, row: { index }, column: { id } }: CellContext<B
     const handleUpdate = (event: React.FocusEvent<HTMLInputElement, Element>) =>
         updateTableData(index, id as keyof BookDetail, event.target.value)
 
-    return <Input colorChangeIn="fill" variant="ghost" defaultValue={getValue()} onBlur={handleUpdate} />
+    return (
+        <div className="relative">
+            <Input colorChangeIn="fill" variant="ghost" defaultValue={getValue()} onBlur={handleUpdate} />{" "}
+            <p className="text-fg-muted absolute top-1/2 left-6 -translate-y-1/2">asdfasdf</p>
+        </div>
+    )
 }
 
 export default BWInputCell
