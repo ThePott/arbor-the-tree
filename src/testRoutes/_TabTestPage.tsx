@@ -1,8 +1,24 @@
+import Button from "@/packages/components/Button/Button"
+import Input from "@/packages/components/Input/Input"
 import { Container } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import { useState } from "react"
 
+const dummyKeyArray = ["question_page", "solution_page"] as const
+type DummyKey = (typeof dummyKeyArray)[number]
+const keyToLabel: Record<DummyKey, string> = {
+    question_page: "문제 쪽 번호",
+    solution_page: "답지 쪽 번호",
+}
+type DummyInterface = Record<DummyKey, string>
+
+const dummyData: DummyInterface[] = Array(50)
+    .fill(null)
+    .map(() => ({ question_page: "", solution_page: "" }))
+
 const TabTestPage = () => {
+    const [data, setData] = useState<DummyInterface[]>(dummyData)
+    const [convertedData, setConvertedData] = useState<DummyInterface[]>(dummyData)
     const [selectedLabel, _setSelectedLabel] = useState("something")
 
     return (
@@ -10,6 +26,39 @@ const TabTestPage = () => {
             <RoundBox padding="xl" isBordered>
                 <div>Tab Test Page</div>
                 <div>{selectedLabel}</div>
+                <Button onClick={() => console.log({ data })}>print</Button>
+                <table>
+                    <thead>
+                        <tr>
+                            {dummyKeyArray.map((key) => (
+                                <th className="border">{keyToLabel[key]}</th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data.map((el, rowIndex) => (
+                            <tr>
+                                {dummyKeyArray.map((key) => (
+                                    <td className="border p-3">
+                                        <div className="relative">
+                                            <Input
+                                                onBlur={(event) => {
+                                                    const newData = [...data]
+                                                    newData[rowIndex][key] = event.target.value
+                                                    setData(newData)
+                                                }}
+                                                defaultValue={el[key]}
+                                            />
+                                            <p className="absolute top-1/2 right-4 -translate-y-1/2 text-red-400/60">
+                                                {convertedData[rowIndex][key]}
+                                            </p>
+                                        </div>
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </RoundBox>
         </Container>
     )
