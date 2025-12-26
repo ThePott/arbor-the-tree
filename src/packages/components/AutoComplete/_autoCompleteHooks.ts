@@ -3,10 +3,10 @@ import { useStore, type StoreApi } from "zustand"
 import { useQuery } from "@tanstack/react-query"
 import type { AutoCompleteStoreState } from "./_AutoCompleteContextProvider"
 
-export const StoreContext = createContext<StoreApi<AutoCompleteStoreState> | null>(null)
+export const AutoCompleteStoreContext = createContext<StoreApi<AutoCompleteStoreState> | null>(null)
 
 export const useAutoCompleteStore = <T>(selectorFn: (state: AutoCompleteStoreState) => T) => {
-    const store = useContext(StoreContext)
+    const store = useContext(AutoCompleteStoreContext)
     if (!store) {
         throw new Error("---- 콘텍스트가 없어요!")
     }

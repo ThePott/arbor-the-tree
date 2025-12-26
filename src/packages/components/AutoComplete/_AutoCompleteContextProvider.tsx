@@ -1,6 +1,6 @@
 import { type ReactNode, type RefObject, useCallback, useRef, useState } from "react"
 import { createStore, type StoreApi } from "zustand"
-import { StoreContext } from "./_autoCompleteHooks"
+import { AutoCompleteStoreContext } from "./_autoCompleteHooks"
 
 export type AutoCompleteAvailable = "onlyNew" | "onlyExisting" | "any"
 
@@ -63,7 +63,7 @@ const AutoCompleteStoreProvider = ({
         [initialValues]
     )
     const [store, _setStore] = useState<StoreApi<AutoCompleteStoreState>>(createAutoCompleteStore)
-    return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
+    return <AutoCompleteStoreContext.Provider value={store}>{children}</AutoCompleteStoreContext.Provider>
 }
 
 export default AutoCompleteStoreProvider
