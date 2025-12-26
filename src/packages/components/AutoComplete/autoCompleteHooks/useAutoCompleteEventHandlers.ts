@@ -33,9 +33,6 @@ export const handleInputValueChange = ({
         case "any":
             isError = false
             break
-        case "custom":
-            isError = false
-            break
     }
     onValueChange(value, isError)
 }

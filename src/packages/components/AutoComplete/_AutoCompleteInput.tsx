@@ -14,6 +14,8 @@ const AutoCompleteInput = ({ outerIsRed }: { outerIsRed: boolean }) => {
     const isContentOn = useAutoCompleteStore((state) => state.isContentOn)
     const isRed = useAutoCompleteStore((state) => state.isRed)
     const defaultValue = useAutoCompleteStore((state) => state.defaultValue)
+    const varaint = useAutoCompleteStore((state) => state.variant)
+    const colorChangeIn = useAutoCompleteStore((state) => state.colorChangeIn)
 
     const { debouncedValue, cancel } = useDebounce(inputValue, 500)
 
@@ -38,6 +40,8 @@ const AutoCompleteInput = ({ outerIsRed }: { outerIsRed: boolean }) => {
             value={inputValue}
             trailingIcon={isFetching && isContentOn ? <Loader /> : undefined}
             isRed={isRed}
+            variant={varaint ?? "contained"}
+            colorChangeIn={colorChangeIn ?? "line"}
         />
     )
 }

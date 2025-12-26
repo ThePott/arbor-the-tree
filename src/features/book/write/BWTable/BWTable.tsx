@@ -48,12 +48,14 @@ const columns = [
         header: "하위 문제",
         cell: (info) => (
             <AutoComplete
-                available="custom"
+                available="onlyExisting"
                 onValueChange={() => {}}
                 getOptionArray={getBookDetail}
                 queryKey={["bookDetail"]}
                 outerIsRed={false}
                 defaultValue={info.getValue()}
+                variant="ghost"
+                colorChangeIn="fill"
             />
         ),
     }),
