@@ -8,4 +8,5 @@ export interface BookDetail {
     question_page: string
     solution_page: string
     session: string
+    sub_question_name: string
 }

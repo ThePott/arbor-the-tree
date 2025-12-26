@@ -33,6 +33,8 @@ const useAutoCompleteEffect = ({ outerIsRed }: { outerIsRed: boolean }) => {
     }, [inputValue, optionArray])
 
     useEffect(() => {
+        if (!onErrorChange) return
+
         onErrorChange(isRed)
     }, [isRed])
 

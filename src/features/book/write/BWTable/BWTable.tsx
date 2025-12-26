@@ -7,8 +7,17 @@ import type { BookDetail } from "../_bookWriteInterfaces"
 import BWInputCell from "./_BWInputCell"
 import useBookWriteStore from "../_bookWriteStore"
 import Button from "@/packages/components/Button/Button"
+import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
+import { withHeadInstance } from "@/packages/api/axiosInstances"
 
 const columnHelper = createColumnHelper<BookDetail>()
+
+const getBookDetail = async (searchText: string) => {
+    const params = { query: searchText }
+    const response = await withHeadInstance.get("/book/detail", { params })
+
+    return response.data
+}
 
 const columns = [
     columnHelper.accessor("topic", {
@@ -34,6 +43,19 @@ const columns = [
     columnHelper.accessor("session", {
         header: "묶음 번호",
         cell: (info) => <BWInputCell {...info} />,
+    }),
+    columnHelper.accessor("sub_question_name", {
+        header: "하위 문제",
+        cell: (info) => (
+            <AutoComplete
+                available="custom"
+                onValueChange={() => {}}
+                getOptionArray={getBookDetail}
+                queryKey={["bookDetail"]}
+                outerIsRed={false}
+                defaultValue={info.getValue()}
+            />
+        ),
     }),
 ]
 
