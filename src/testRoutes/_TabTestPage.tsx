@@ -31,15 +31,17 @@ const TabTestPage = () => {
                     <thead>
                         <tr>
                             {dummyKeyArray.map((key) => (
-                                <th className="border">{keyToLabel[key]}</th>
+                                <th key={key} className="border">
+                                    {keyToLabel[key]}
+                                </th>
                             ))}
                         </tr>
                     </thead>
                     <tbody>
                         {data.map((el, rowIndex) => (
-                            <tr>
+                            <tr key={rowIndex}>
                                 {dummyKeyArray.map((key) => (
-                                    <td className="border p-3">
+                                    <td key={key} className="border p-3">
                                         <div className="relative">
                                             <Input
                                                 onBlur={(event) => {

@@ -1,26 +1,26 @@
 import Input from "../Input/Input"
+import { useInputTableStore, type InputTablePassedProps } from "./inputTableStore"
 
-interface InputTableProps<TKey extends string> {
-    keyArray: TKey[] // NOTE: column 역할
-    rowArray: Record<TKey, string>[] // NOTE: data 역할
-    keyToLabel: Record<TKey, string> // NOTE: thead 용
-}
+const InputTableContent = <TKey extends string>({ keyArray, rowArray, keyToLabel }: InputTablePassedProps<TKey>) => {
+    const thing = useInputTableStore((state) => state.dummyDefault)
+    console.log({ thing })
 
-const InputTable = <TKey extends string>({ keyArray, rowArray, keyToLabel }: InputTableProps<TKey>) => {
     return (
         <table>
             <thead>
                 <tr>
                     {keyArray.map((key) => (
-                        <th className="border">{keyToLabel[key]}</th>
+                        <th key={key} className="border">
+                            {keyToLabel[key]}
+                        </th>
                     ))}
                 </tr>
             </thead>
             <tbody>
-                {rowArray.map((row, _rowIndex) => (
-                    <tr>
+                {rowArray.map((row, rowIndex) => (
+                    <tr key={rowIndex}>
                         {keyArray.map((key) => (
-                            <td className="border p-3">
+                            <td key={key} className="border p-3">
                                 <div className="relative">
                                     <Input
                                         variant="ghost"
@@ -49,4 +49,4 @@ const InputTable = <TKey extends string>({ keyArray, rowArray, keyToLabel }: Inp
     )
 }
 
-export default InputTable
+export default InputTableContent
