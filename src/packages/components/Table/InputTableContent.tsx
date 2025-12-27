@@ -1,10 +1,7 @@
 import Input from "../Input/Input"
-import { useInputTableStore, type InputTablePassedProps } from "./inputTableStore"
+import { type InputTablePassedProps } from "./inputTableStore"
 
 const InputTableContent = <TKey extends string>({ keyArray, rowArray, keyToLabel }: InputTablePassedProps<TKey>) => {
-    const thing = useInputTableStore((state) => state.dummyDefault)
-    console.log({ thing })
-
     return (
         <table>
             <thead>

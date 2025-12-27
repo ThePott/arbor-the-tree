@@ -18,7 +18,7 @@ const dummyData: DummyInterface[] = Array(50)
 
 const TabTestPage = () => {
     const [data, setData] = useState<DummyInterface[]>(dummyData)
-    const [convertedData, setConvertedData] = useState<DummyInterface[]>(dummyData)
+    const [convertedData, _setConvertedData] = useState<DummyInterface[]>(dummyData)
     const [selectedLabel, _setSelectedLabel] = useState("something")
 
     return (
@@ -26,7 +26,7 @@ const TabTestPage = () => {
             <RoundBox padding="xl" isBordered>
                 <div>Tab Test Page</div>
                 <div>{selectedLabel}</div>
-                <Button onClick={() => console.log({ data })}>print</Button>
+                <Button onClick={() => {}}>print</Button>
                 <table>
                     <thead>
                         <tr>
