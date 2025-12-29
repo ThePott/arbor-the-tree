@@ -3,7 +3,11 @@ import type { BookWriteStoreState } from "./_bookWriteStoreState"
 import { BW_TOPIC_STEP_TAB_ARRAY } from "./_bookWriteConstants"
 import type { BookDetail } from "./_bookWriteInterfaces"
 import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
-import { findPreviousOverlayingValue, makeNewOverlayingValue } from "./_bookWriteStoreOperations"
+import {
+    findPreviousOverlayingValue,
+    makeNewOverlayingRowArray,
+    makeNewOverlayingValue,
+} from "./_bookWriteStoreOperations"
 
 const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
     title: "",
@@ -59,29 +63,8 @@ const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
         // NOTE: updateRowArray 안에서 실행해야 한다.
         // NOTE: 우선은 최적화 없이 진행하자
 
-        let previousOverlayingValue = findPreviousOverlayingValue(rowIndex, columnKey, state)
-
-        const overlayingRowArray = state.overlayingRowArray.map((row, index): BookDetail => {
-            if (index < rowIndex) return row
-
-            const underlyingValue = index === rowIndex ? value : state.rowArray[index][columnKey]
-
-            if (underlyingValue === "/") {
-                const newValue = makeNewOverlayingValue(previousOverlayingValue, columnKey, state)
-                previousOverlayingValue = newValue
-                row[columnKey] = newValue
-                return row
-            }
-
-            if (underlyingValue) {
-                previousOverlayingValue = underlyingValue
-                row[columnKey] = ""
-                return row
-            }
-
-            row[columnKey] = previousOverlayingValue ?? "---- wrong"
-            return row
-        })
+        const previousOverlayingValue = findPreviousOverlayingValue(rowIndex, columnKey, state)
+        const overlayingRowArray = makeNewOverlayingRowArray(previousOverlayingValue, rowIndex, columnKey, value, state)
 
         set({ overlayingRowArray })
     },

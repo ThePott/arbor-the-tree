@@ -30,3 +30,35 @@ export const makeNewOverlayingValue = (
     const newValue = lineArray[indexOfValueRightAbove + 1] ?? "단원 정보를 더 채워야 합니다"
     return newValue
 }
+
+export const makeNewOverlayingRowArray = (
+    previousOverlayingValue: string | null,
+    rowIndex: number,
+    columnKey: keyof BookDetail,
+    value: string,
+    state: BookWriteStoreState
+) => {
+    const overlayingRowArray = state.overlayingRowArray.map((row, index): BookDetail => {
+        if (index < rowIndex) return row
+
+        const underlyingValue = index === rowIndex ? value : state.rowArray[index][columnKey]
+
+        if (underlyingValue === "/") {
+            const newValue = makeNewOverlayingValue(previousOverlayingValue, columnKey, state)
+            previousOverlayingValue = newValue
+            row[columnKey] = newValue
+            return row
+        }
+
+        if (underlyingValue) {
+            previousOverlayingValue = underlyingValue
+            row[columnKey] = ""
+            return row
+        }
+
+        row[columnKey] = previousOverlayingValue ?? "---- wrong"
+        return row
+    })
+
+    return overlayingRowArray
+}
