@@ -3,11 +3,7 @@ import type { BookWriteStoreState } from "./_bookWriteStoreState"
 import { BW_TOPIC_STEP_TAB_ARRAY } from "./_bookWriteConstants"
 import type { BookDetail } from "./_bookWriteInterfaces"
 import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
-import {
-    findPreviousOverlayingValue,
-    makeNewOverlayingRowArray,
-    makeNewOverlayingValue,
-} from "./_bookWriteStoreOperations"
+import { findPreviousOverlayingValue, makeNewOverlayingRowArray } from "./_bookWriteStoreOperations"
 
 const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
     title: "",
