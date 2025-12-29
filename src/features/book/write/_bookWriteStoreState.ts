@@ -17,5 +17,5 @@ export interface BookWriteStoreState {
     setSubBookTitle: (subBookTitle: string | null) => void
 
     rowArray: BookDetail[]
-    updateActualValues: (rowIndex: number, columnId: keyof BookDetail, value: string) => void
+    updateActualValues: (rowIndex: number, columnKey: keyof BookDetail, value: string) => void
 }

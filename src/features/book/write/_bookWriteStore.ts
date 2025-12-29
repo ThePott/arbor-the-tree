@@ -22,10 +22,10 @@ const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
     rowArray: Array(50)
         .fill(null)
         .map(() => ({}) as BookDetail),
-    updateActualValues: (rowIndex, columnId, value) => {
+    updateActualValues: (rowIndex, columnKey, value) => {
         const tableData = [...get().rowArray]
         const targetRow = tableData[rowIndex]
-        targetRow[columnId] = value
+        targetRow[columnKey] = value
 
         set({ rowArray: tableData })
     },

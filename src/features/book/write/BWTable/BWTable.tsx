@@ -18,9 +18,7 @@ const getBookDetail = async (searchText: string) => {
 
 const BWTable = () => {
     const rowArray = useBookWriteStore((state) => state.rowArray)
-
-    console.log({ rowArray })
-    debugger
+    const updateActualValues = useBookWriteStore((state) => state.updateActualValues)
 
     return (
         <Vstack className="h-full grow">
@@ -59,7 +57,10 @@ const BWTable = () => {
                                             <AutoComplete
                                                 available="onlyExisting"
                                                 getOptionArray={getBookDetail}
-                                                onValueChange={() => {}}
+                                                onValueChange={(value, isError) => {
+                                                    if (isError) return
+                                                    updateActualValues(rowIndex, columnKey, value)
+                                                }}
                                                 outerIsRed={false}
                                                 queryKey={["bookDetail"]}
                                                 colorChangeIn="fill"
