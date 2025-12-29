@@ -3,7 +3,7 @@ import type { BookDetail } from "../_bookWriteInterfaces"
 import useBookWriteStore from "../_bookWriteStore"
 
 const BWInputCell = ({ value, rowIndex, columnKey }: { value: string; rowIndex: number; columnKey: string }) => {
-    const updateTableData = useBookWriteStore((state) => state.updateActualValues)
+    const updateTableData = useBookWriteStore((state) => state.updateRowArray)
     const handleUpdate = (event: React.FocusEvent<HTMLInputElement, Element>) => {
         updateTableData(rowIndex, columnKey as keyof BookDetail, event.target.value)
     }

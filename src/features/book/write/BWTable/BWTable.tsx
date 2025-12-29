@@ -18,7 +18,7 @@ const getBookDetail = async (searchText: string) => {
 
 const BWTable = () => {
     const rowArray = useBookWriteStore((state) => state.rowArray)
-    const updateActualValues = useBookWriteStore((state) => state.updateActualValues)
+    const updateActualValues = useBookWriteStore((state) => state.updateRowArray)
 
     return (
         <Vstack className="h-full grow">

@@ -22,12 +22,37 @@ const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
     rowArray: Array(50)
         .fill(null)
         .map(() => ({}) as BookDetail),
-    updateActualValues: (rowIndex, columnKey, value) => {
+    updateRowArray: (rowIndex, columnKey, value) => {
         const tableData = [...get().rowArray]
         const targetRow = tableData[rowIndex]
         targetRow[columnKey] = value
 
         set({ rowArray: tableData })
+    },
+
+    overlayingRowArray: Array(50)
+        .fill(null)
+        .map(() => ({}) as BookDetail),
+    updateOverlayingRowArray: (rowIndex, columnKey, value) => {
+        const state = get()
+
+        if (value === "/") {
+            return
+        }
+
+        const overlayingRowArray = state.overlayingRowArray.map((row, index) => {
+            const isRightHere = index === rowIndex
+            const isFollowingAbove = index > rowIndex && !state.rowArray[index][columnKey]
+            const condition = isRightHere || isFollowingAbove
+
+            if (condition) {
+                row[columnKey] = value
+            }
+
+            return row
+        })
+
+        set({ overlayingRowArray })
     },
 }))
 
