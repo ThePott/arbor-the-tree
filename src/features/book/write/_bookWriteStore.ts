@@ -53,26 +53,25 @@ const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
 
         let previousOverlayingValue = findPreviousOverlayingValue(rowIndex, columnKey, state)
 
-        const overlayingRowArray = state.overlayingRowArray.map((row, index) => {
+        const overlayingRowArray = state.overlayingRowArray.map((row, index): BookDetail => {
             if (index < rowIndex) return row
 
-            if (index === rowIndex) {
-                if (value === "/") {
-                    const newValue = makeNewOverlayingValue(previousOverlayingValue, columnKey, state)
-                    row[columnKey] = newValue
-                    previousOverlayingValue = newValue
-                }
+            const underlyingValue = index === rowIndex ? value : state.rowArray[index][columnKey]
+
+            if (underlyingValue === "/") {
+                const newValue = makeNewOverlayingValue(previousOverlayingValue, columnKey, state)
+                previousOverlayingValue = newValue
+                row[columnKey] = newValue
                 return row
             }
 
-            if (state.rowArray[index][columnKey] === "/") {
-                const newValue = makeNewOverlayingValue(previousOverlayingValue, columnKey, state)
-                row[columnKey] = newValue
-                previousOverlayingValue = newValue
-            } else {
-                row[columnKey] = previousOverlayingValue ?? "---- wrong"
+            if (underlyingValue) {
+                previousOverlayingValue = underlyingValue
+                row[columnKey] = ""
+                return row
             }
 
+            row[columnKey] = previousOverlayingValue ?? "---- wrong"
             return row
         })
 
