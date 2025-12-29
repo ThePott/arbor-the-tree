@@ -1,12 +1,7 @@
-import InputTable from "@/features/book/write/BWTable/Table/InputTable"
 import RoundBox from "@/packages/components/RoundBox"
 
 const TableTestPage = () => {
-    return (
-        <RoundBox padding="xl" isBordered>
-            <InputTable />
-        </RoundBox>
-    )
+    return <RoundBox padding="xl" isBordered></RoundBox>
 }
 
 export default TableTestPage
