@@ -32,7 +32,7 @@ const InputTableContent = <TKey extends string>({ keyArray, rowArray, keyToLabel
                                         }}
                                         defaultValue={row[key]}
                                     />
-                                    <p className="absolute top-1/2 right-4 -translate-y-1/2 text-red-400/60">
+                                    <p className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-red-400/60">
                                         placeholder for overlay
                                         {/* {convertedData[rowIndex][key]} */}
                                     </p>

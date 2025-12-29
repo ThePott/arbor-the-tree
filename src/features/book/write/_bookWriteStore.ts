@@ -19,15 +19,15 @@ const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
     setSubBookTitle: (subBookTitle) => set({ subBookTitle }),
 
     // NOTE: `fill({})`를 하면 같은 reference address를 같는 하나의 {}로 채우게 됨
-    tableData: Array(50)
+    rowArray: Array(50)
         .fill(null)
         .map(() => ({}) as BookDetail),
-    updateTableData: (rowIndex, columnId, value) => {
-        const tableData = [...get().tableData]
+    updateActualValues: (rowIndex, columnId, value) => {
+        const tableData = [...get().rowArray]
         const targetRow = tableData[rowIndex]
         targetRow[columnId] = value
 
-        set({ tableData })
+        set({ rowArray: tableData })
     },
 }))
 

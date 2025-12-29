@@ -1,16 +1,13 @@
 import { FlexOneContainer, Hstack } from "@/packages/components/layouts"
 import { Vstack } from "@/packages/components/layouts/_Vstack"
 import Title from "@/packages/components/Title/Title"
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import clsx from "clsx"
-import type { BookDetail } from "../_bookWriteInterfaces"
+import { BOOK_DETAIL_KEY_ARRAY, BOOK_DETAIL_KEY_TO_LABEL, type BookDetail } from "../_bookWriteInterfaces"
 import BWInputCell from "./_BWInputCell"
 import useBookWriteStore from "../_bookWriteStore"
 import Button from "@/packages/components/Button/Button"
-import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
 import { withHeadInstance } from "@/packages/api/axiosInstances"
-
-const columnHelper = createColumnHelper<BookDetail>()
+import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
 
 const getBookDetail = async (searchText: string) => {
     const params = { query: searchText }
@@ -19,56 +16,11 @@ const getBookDetail = async (searchText: string) => {
     return response.data
 }
 
-const columns = [
-    columnHelper.accessor("topic", {
-        header: "중단원",
-        cell: (info) => <BWInputCell {...info} />,
-    }),
-    columnHelper.accessor("step", {
-        header: "소단원",
-        cell: (info) => <BWInputCell {...info} />,
-    }),
-    columnHelper.accessor("question_name", {
-        header: "문제 번호",
-        cell: (info) => <BWInputCell {...info} />,
-    }),
-    columnHelper.accessor("question_page", {
-        header: "문제 쪽 번호",
-        cell: (info) => <BWInputCell {...info} />,
-    }),
-    columnHelper.accessor("solution_page", {
-        header: "정답 쪽 번호",
-        cell: (info) => <BWInputCell {...info} />,
-    }),
-    columnHelper.accessor("session", {
-        header: "묶음 번호",
-        cell: (info) => <BWInputCell {...info} />,
-    }),
-    columnHelper.accessor("sub_question_name", {
-        header: "하위 문제",
-        cell: (info) => (
-            <AutoComplete
-                available="onlyExisting"
-                onValueChange={() => {}}
-                getOptionArray={getBookDetail}
-                queryKey={["bookDetail"]}
-                outerIsRed={false}
-                defaultValue={info.getValue()}
-                variant="ghost"
-                colorChangeIn="fill"
-            />
-        ),
-    }),
-]
-
 const BWTable = () => {
-    const tableData = useBookWriteStore((state) => state.tableData)
-    // eslint-disable-next-line react-hooks/incompatible-library
-    const table = useReactTable({
-        data: tableData,
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-    })
+    const rowArray = useBookWriteStore((state) => state.rowArray)
+
+    console.log({ rowArray })
+    debugger
 
     return (
         <Vstack className="h-full grow">
@@ -81,33 +33,46 @@ const BWTable = () => {
             <FlexOneContainer isYScrollable>
                 <table className="w-full">
                     <thead>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <tr key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => (
-                                    <th
-                                        key={header.id}
-                                        className="border-border-dim hover:outline-border-muted z-10 border px-3 py-2 hover:outline"
-                                    >
-                                        {header.isPlaceholder
-                                            ? "this is header placeholder"
-                                            : flexRender(header.column.columnDef.header, header.getContext())}
-                                    </th>
-                                ))}
-                            </tr>
-                        ))}
+                        <tr>
+                            {BOOK_DETAIL_KEY_ARRAY.map((columnKey) => (
+                                <th
+                                    key={columnKey}
+                                    className="border-border-dim hover:outline-border-muted z-10 border px-3 py-2 hover:outline"
+                                >
+                                    {BOOK_DETAIL_KEY_TO_LABEL[columnKey]}
+                                </th>
+                            ))}
+                        </tr>
                     </thead>
                     <tbody>
-                        {table.getRowModel().rows.map((row) => (
-                            <tr key={row.id}>
-                                {row.getVisibleCells().map((cell) => (
+                        {rowArray.map((row, rowIndex) => (
+                            <tr key={rowIndex}>
+                                {BOOK_DETAIL_KEY_ARRAY.map((columnKey) => (
                                     <td
-                                        key={cell.id}
+                                        key={columnKey}
                                         className={clsx(
                                             "border-border-dim hover:outline-border-muted z-10 border hover:outline",
-                                            cell.column.id !== "title" && "text-center"
+                                            columnKey !== "topic" && "text-center"
                                         )}
                                     >
-                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        {columnKey === "sub_question_name" && (
+                                            <AutoComplete
+                                                available="onlyExisting"
+                                                getOptionArray={getBookDetail}
+                                                onValueChange={() => {}}
+                                                outerIsRed={false}
+                                                queryKey={["bookDetail"]}
+                                                colorChangeIn="fill"
+                                                variant="ghost"
+                                            />
+                                        )}
+                                        {columnKey !== "sub_question_name" && (
+                                            <BWInputCell
+                                                value={row[columnKey]}
+                                                columnKey={columnKey}
+                                                rowIndex={rowIndex}
+                                            />
+                                        )}
                                     </td>
                                 ))}
                             </tr>
