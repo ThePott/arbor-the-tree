@@ -4,8 +4,11 @@ import TabBar from "@/packages/components/TabBar/TabBar"
 import Textarea from "@/packages/components/Textarea/Textarea"
 import Title from "@/packages/components/Title/Title"
 import useBookWriteStore from "../_bookWriteStore"
+import { useEffect, useRef } from "react"
 
 const BWTopicStepSection = () => {
+    const textareaRef = useRef<HTMLTextAreaElement>(null)
+
     const selectedTab = useBookWriteStore((state) => state.selectedTab)
     const setSelectedTab = useBookWriteStore((state) => state.setSelectedTab)
     const topicInfo = useBookWriteStore((state) => state.topicInfo)
@@ -14,13 +17,22 @@ const BWTopicStepSection = () => {
     const setStepInfo = useBookWriteStore((state) => state.setStepInfo)
 
     const isTopicSelected = selectedTab.value === "topic"
-    const value = isTopicSelected ? topicInfo : stepInfo
-    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+
+    useEffect(() => {
+        if (!textareaRef.current) return
+
+        textareaRef.current.value = isTopicSelected ? topicInfo : stepInfo
+    }, [isTopicSelected])
+
+    const handleBlur = (event: React.FocusEvent<HTMLTextAreaElement, Element>) => {
+        const value = event.target.value
+
         if (isTopicSelected) {
-            setTopicInfo(event.target.value)
+            setTopicInfo(value)
             return
         }
-        setStepInfo(event.target.value)
+
+        setStepInfo(value)
     }
 
     return (
@@ -37,7 +49,7 @@ const BWTopicStepSection = () => {
                     variant="underline"
                     onSelect={setSelectedTab}
                 />
-                <Textarea className="flex-1" value={value} onChange={handleChange} />
+                <Textarea ref={textareaRef} className="flex-1" onBlur={handleBlur} />
             </Vstack>
         </RoundBox>
     )

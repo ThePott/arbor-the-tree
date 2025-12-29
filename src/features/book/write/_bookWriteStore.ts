@@ -18,11 +18,19 @@ const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
     setTopicInfo: (topicInfo) => {
         const topicArray = splitByLineBreakThenTrim(topicInfo)
         set({ topicInfo, topicArray })
+
+        const state = get()
+        const firstValue = state.rowArray[0].topic
+        state.updateOverlayingRowArray(0, "topic", firstValue)
     },
     stepInfo: "",
     setStepInfo: (stepInfo) => {
         const stepArray = splitByLineBreakThenTrim(stepInfo)
         set({ stepInfo, stepArray })
+
+        const state = get()
+        const firstValue = state.rowArray[0].step
+        state.updateOverlayingRowArray(0, "step", firstValue)
     },
 
     subBookTitle: null,
