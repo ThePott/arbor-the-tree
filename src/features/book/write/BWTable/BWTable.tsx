@@ -8,6 +8,9 @@ import useBookWriteStore from "../_bookWriteStore"
 import Button from "@/packages/components/Button/Button"
 import { withHeadInstance } from "@/packages/api/axiosInstances"
 import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
+import { useRef } from "react"
+import { useVirtualizer } from "@tanstack/react-virtual"
+import { BW_DEFAULT_ROW_COUNT } from "../_bookWriteConstants"
 
 const getBookDetail = async (searchText: string) => {
     const params = { query: searchText }
@@ -17,8 +20,17 @@ const getBookDetail = async (searchText: string) => {
 }
 
 const BWTable = () => {
+    const parentRef = useRef<HTMLDivElement>(null)
     const rowArray = useBookWriteStore((state) => state.rowArray)
     const updateActualValues = useBookWriteStore((state) => state.updateRowArray)
+
+    // eslint-disable-next-line react-hooks/incompatible-library
+    const rowVirtualizer = useVirtualizer({
+        count: BW_DEFAULT_ROW_COUNT,
+        getScrollElement: () => parentRef.current,
+        estimateSize: () => 40,
+        overscan: 5,
+    })
 
     return (
         <Vstack className="h-full grow">
@@ -28,8 +40,8 @@ const BWTable = () => {
                 </Title>
                 <Button color="green">등록</Button>
             </Hstack>
-            <FlexOneContainer isYScrollable>
-                <table className="w-full">
+            <FlexOneContainer ref={parentRef} isYScrollable>
+                <table style={{ height: `${rowVirtualizer.getTotalSize()}px` }} className="relative w-full">
                     <thead>
                         <tr>
                             {BOOK_DETAIL_KEY_ARRAY.map((columnKey) => (
@@ -43,8 +55,15 @@ const BWTable = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {rowArray.map((row, rowIndex) => (
-                            <tr key={rowIndex}>
+                        {rowVirtualizer.getVirtualItems().map((virtualRow, rowIndex) => (
+                            <tr
+                                key={rowIndex}
+                                style={{
+                                    transform: `translateY(${virtualRow.start}px)`,
+                                    height: `${virtualRow.size}px`,
+                                }}
+                                className="absolute left-0"
+                            >
                                 {BOOK_DETAIL_KEY_ARRAY.map((columnKey) => (
                                     <td
                                         key={columnKey}
@@ -69,7 +88,8 @@ const BWTable = () => {
                                         )}
                                         {columnKey !== "sub_question_name" && (
                                             <BWInputCell
-                                                value={row[columnKey]}
+                                                // value={rowArray[rowIndex][columnKey]}
+                                                value={String(rowIndex)}
                                                 columnKey={columnKey}
                                                 rowIndex={rowIndex}
                                             />
