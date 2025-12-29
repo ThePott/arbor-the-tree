@@ -34,9 +34,9 @@ const BookWriteContent = () => {
 
         //NOTE: 문제 번호에
         //NOTE: uncomment to debug
-        const body = { title, data }
-        console.log({ body })
-        debugger
+        // const body = { title, data }
+        // console.log({ body })
+        // debugger
     }
 
     return (
