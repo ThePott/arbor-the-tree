@@ -36,18 +36,19 @@ const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
     updateOverlayingRowArray: (rowIndex, columnKey, value) => {
         const state = get()
 
-        if (value === "/") {
-            return
-        }
+        const rowRightAbove = state.overlayingRowArray[rowIndex - 1]
+        const valueRightAbove = rowRightAbove ? rowRightAbove[columnKey] : "1"
 
         const overlayingRowArray = state.overlayingRowArray.map((row, index) => {
             const isRightHere = index === rowIndex
             const isFollowingAbove = index > rowIndex && !state.rowArray[index][columnKey]
 
+            const newValue = value === "/" ? String(Number(valueRightAbove) + 1) : value
+
             if (isRightHere) {
-                row[columnKey] = ""
+                row[columnKey] = value === "/" ? newValue : ""
             } else if (isFollowingAbove) {
-                row[columnKey] = value
+                row[columnKey] = newValue
             }
 
             return row
