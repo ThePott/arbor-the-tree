@@ -44,6 +44,8 @@ const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
         .fill(null)
         .map(() => ({}) as BookDetail),
     updateOverlayingRowArray: (rowIndex, columnKey, value) => {
+        if (!value) return
+
         const state = get()
 
         const newValue = makeNewOverlayingValue(rowIndex, columnKey, value, state)
