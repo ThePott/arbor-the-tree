@@ -3,6 +3,7 @@ import type { BookWriteStoreState } from "./_bookWriteStoreState"
 import { BW_TOPIC_STEP_TAB_ARRAY } from "./_bookWriteConstants"
 import type { BookDetail } from "./_bookWriteInterfaces"
 import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
+import { makeNewOverlayingValue } from "./_bookWriteStoreOperations"
 
 const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
     title: "",
@@ -45,14 +46,11 @@ const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
     updateOverlayingRowArray: (rowIndex, columnKey, value) => {
         const state = get()
 
-        const rowRightAbove = state.overlayingRowArray[rowIndex - 1]
-        const valueRightAbove = rowRightAbove ? rowRightAbove[columnKey] : "1"
+        const newValue = makeNewOverlayingValue(rowIndex, columnKey, value, state)
 
         const overlayingRowArray = state.overlayingRowArray.map((row, index) => {
             const isRightHere = index === rowIndex
             const isFollowingAbove = index > rowIndex && !state.rowArray[index][columnKey]
-
-            const newValue = value === "/" ? String(Number(valueRightAbove) + 1) : value
 
             if (isRightHere) {
                 row[columnKey] = value === "/" ? newValue : ""
