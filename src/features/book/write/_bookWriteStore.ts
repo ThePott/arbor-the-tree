@@ -2,6 +2,7 @@ import { create } from "zustand"
 import type { BookWriteStoreState } from "./_bookWriteStoreState"
 import { BW_TOPIC_STEP_TAB_ARRAY } from "./_bookWriteConstants"
 import type { BookDetail } from "./_bookWriteInterfaces"
+import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
 
 const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
     title: "",
@@ -10,10 +11,18 @@ const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
     selectedTab: BW_TOPIC_STEP_TAB_ARRAY[0],
     setSelectedTab: (selectedTab) => set({ selectedTab }),
 
+    topicArray: [],
+    stepArray: [],
     topicInfo: "",
-    setTopicInfo: (topicInfo) => set({ topicInfo }),
+    setTopicInfo: (topicInfo) => {
+        const topicArray = splitByLineBreakThenTrim(topicInfo)
+        set({ topicInfo, topicArray })
+    },
     stepInfo: "",
-    setStepInfo: (stepInfo) => set({ stepInfo }),
+    setStepInfo: (stepInfo) => {
+        const stepArray = splitByLineBreakThenTrim(stepInfo)
+        set({ stepInfo, stepArray })
+    },
 
     subBookTitle: null,
     setSubBookTitle: (subBookTitle) => set({ subBookTitle }),

@@ -8,6 +8,8 @@ export interface BookWriteStoreState {
     selectedTab: Tab<BWTopicStep>
     setSelectedTab: (selectedTab: Tab<BWTopicStep>) => void
 
+    topicArray: string[]
+    stepArray: string[]
     topicInfo: string
     setTopicInfo: (topicInfo: string) => void
     stepInfo: string
