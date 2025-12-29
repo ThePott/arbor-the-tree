@@ -5,7 +5,6 @@ import { useVirtualizer } from "@tanstack/react-virtual"
 import { Container } from "@/packages/components/layouts"
 
 const TableTestPage = () => {
-    const [value, setValue] = useState("")
     const parentRef = useRef<HTMLDivElement>(null)
 
     const ROW_COUNT = 2000
@@ -25,8 +24,7 @@ const TableTestPage = () => {
                     {rowVirtualizer.getVirtualItems().map((virtualRow) => (
                         <Input
                             key={virtualRow.index}
-                            value={value}
-                            onChange={(event) => setValue(event.target.value)}
+                            defaultValue={String(virtualRow.index)}
                             style={{ transform: `translateY(${virtualRow.start}px)`, height: `${virtualRow.size}px` }}
                             className="absolute top-0 left-0 w-full border border-amber-300"
                         />

@@ -55,9 +55,9 @@ const BWTable = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {rowVirtualizer.getVirtualItems().map((virtualRow, rowIndex) => (
+                        {rowVirtualizer.getVirtualItems().map((virtualRow) => (
                             <tr
-                                key={rowIndex}
+                                key={virtualRow.index}
                                 style={{
                                     transform: `translateY(${virtualRow.start}px)`,
                                     height: `${virtualRow.size}px`,
@@ -78,7 +78,7 @@ const BWTable = () => {
                                                 getOptionArray={getBookDetail}
                                                 onValueChange={(value, isError) => {
                                                     if (isError) return
-                                                    updateActualValues(rowIndex, columnKey, value)
+                                                    updateActualValues(virtualRow.index, columnKey, value)
                                                 }}
                                                 outerIsRed={false}
                                                 queryKey={["bookDetail"]}
@@ -88,10 +88,9 @@ const BWTable = () => {
                                         )}
                                         {columnKey !== "sub_question_name" && (
                                             <BWInputCell
-                                                // value={rowArray[rowIndex][columnKey]}
-                                                value={String(rowIndex)}
+                                                value={rowArray[virtualRow.index][columnKey]}
                                                 columnKey={columnKey}
-                                                rowIndex={rowIndex}
+                                                rowIndex={virtualRow.index}
                                             />
                                         )}
                                     </td>

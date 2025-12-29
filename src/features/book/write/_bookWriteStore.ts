@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import type { BookWriteStoreState } from "./_bookWriteStoreState"
-import { BW_TOPIC_STEP_TAB_ARRAY } from "./_bookWriteConstants"
+import { BW_DEFAULT_ROW_COUNT, BW_TOPIC_STEP_TAB_ARRAY } from "./_bookWriteConstants"
 import type { BookDetail } from "./_bookWriteInterfaces"
 import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
 import { findPreviousOverlayingValue, makeNewOverlayingRowArray } from "./_bookWriteStoreOperations"
@@ -37,7 +37,7 @@ const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
     setSubBookTitle: (subBookTitle) => set({ subBookTitle }),
 
     // NOTE: `fill({})`를 하면 같은 reference address를 같는 하나의 {}로 채우게 됨
-    rowArray: Array(50)
+    rowArray: Array(BW_DEFAULT_ROW_COUNT)
         .fill(null)
         .map(() => ({}) as BookDetail),
     updateRowArray: (rowIndex, columnKey, value) => {
@@ -48,7 +48,7 @@ const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
         set({ rowArray: tableData })
     },
 
-    overlayingRowArray: Array(50)
+    overlayingRowArray: Array(BW_DEFAULT_ROW_COUNT)
         .fill(null)
         .map(() => ({}) as BookDetail),
     updateOverlayingRowArray: (rowIndex, columnKey, value) => {
