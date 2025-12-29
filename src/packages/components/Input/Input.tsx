@@ -43,10 +43,10 @@ const Input = ({
     colorChangeIn,
     ...props
 }: InputProps & WithInputProps) => {
-    const { className, ...rest } = props
+    const { style, className, ...rest } = props
 
     return (
-        <Hstack className={clsx(inputVariants({ isRed, variant, colorChangeIn }), className)}>
+        <Hstack style={style} className={clsx(inputVariants({ isRed, variant, colorChangeIn }), className)}>
             <input {...rest} className="w-full border-0 px-3 py-2 outline-0" />
             {trailingIcon && trailingIcon}
         </Hstack>
