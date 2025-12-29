@@ -43,11 +43,11 @@ const BWTable = () => {
             <FlexOneContainer ref={parentRef} isYScrollable>
                 <table style={{ height: `${rowVirtualizer.getTotalSize()}px` }} className="relative w-full">
                     <thead>
-                        <tr>
+                        <tr className="flex">
                             {BOOK_DETAIL_KEY_ARRAY.map((columnKey) => (
                                 <th
                                     key={columnKey}
-                                    className="border-border-dim hover:outline-border-muted z-10 border px-3 py-2 hover:outline"
+                                    className="border-border-dim hover:outline-border-muted z-10 flex-1 border px-3 py-2 hover:outline"
                                 >
                                     {BOOK_DETAIL_KEY_TO_LABEL[columnKey]}
                                 </th>
