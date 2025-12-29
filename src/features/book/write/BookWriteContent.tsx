@@ -9,7 +9,8 @@ const BookWriteContent = () => {
     const title = useBookWriteStore((state) => state.title)
     const setTitle = useBookWriteStore((state) => state.setTitle)
 
-    const handleSubmit = () => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
         //NOTE: uncomment to debug
         // const body = { title, data: tableData }
         // console.log({ body })
