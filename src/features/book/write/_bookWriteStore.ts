@@ -3,7 +3,7 @@ import type { BookWriteStoreState } from "./_bookWriteStoreState"
 import { BW_TOPIC_STEP_TAB_ARRAY } from "./_bookWriteConstants"
 import type { BookDetail } from "./_bookWriteInterfaces"
 import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
-import { makeNewOverlayingValue } from "./_bookWriteStoreOperations"
+import { findPreviousOverlayingValue, makeNewOverlayingValue } from "./_bookWriteStoreOperations"
 
 const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
     title: "",
@@ -47,17 +47,27 @@ const useBookWriteStore = create<BookWriteStoreState>()((set, get) => ({
         if (!value) return
 
         const state = get()
+        // NOTE: 바뀌지 않았을 때만 이 로직 실행하기 위해서는 이 함수를 이벤트 핸들러가 아니라
+        // NOTE: updateRowArray 안에서 실행해야 한다.
+        // NOTE: 우선은 최적화 없이 진행하자
 
-        const newValue = makeNewOverlayingValue(rowIndex, columnKey, value, state)
+        let previousOverlayingValue = findPreviousOverlayingValue(rowIndex, columnKey, state)
 
         const overlayingRowArray = state.overlayingRowArray.map((row, index) => {
             const isRightHere = index === rowIndex
             const isFollowingAbove = index > rowIndex && !state.rowArray[index][columnKey]
 
             if (isRightHere) {
-                row[columnKey] = value === "/" ? newValue : ""
+                row[columnKey] = value === "/" ? makeNewOverlayingValue(previousOverlayingValue, columnKey, state) : ""
+                previousOverlayingValue = row[columnKey]
             } else if (isFollowingAbove) {
-                row[columnKey] = newValue
+                if (row[columnKey] === "/") {
+                    previousOverlayingValue = findPreviousOverlayingValue(index, columnKey, state)
+                    const newValue = makeNewOverlayingValue(previousOverlayingValue, columnKey, state)
+                    row[columnKey] = newValue
+                } else {
+                    row[columnKey] = previousOverlayingValue ?? "---- wrong"
+                }
             }
 
             return row
