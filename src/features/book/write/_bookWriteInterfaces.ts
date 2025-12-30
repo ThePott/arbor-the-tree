@@ -23,3 +23,5 @@ export const BOOK_DETAIL_KEY_TO_LABEL: Record<BookDetailKey, string> = {
 } as const
 
 export type BookDetail = Record<BookDetailKey, string>
+
+export type BookDetailPayload = BookDetail & { title: string }

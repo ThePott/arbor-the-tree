@@ -4,12 +4,12 @@ import useBookWriteStore from "./_bookWriteStore"
 import BWTopicStepSection from "./BWTopicStepSection/BWTopicStepSection"
 import BWSubBookSection from "./BWSubBookSection/BWSubBookSection"
 import BWTable from "./BWTable/BWTable"
-import useBookWriteEventHandler from "./_bookWriteEventHandlers"
+import useBookWrite from "./useBookWrite/useBookWrite"
 
 const BookWriteContent = () => {
     const title = useBookWriteStore((state) => state.title)
     const setTitle = useBookWriteStore((state) => state.setTitle)
-    const { handleSubmit } = useBookWriteEventHandler()
+    const { handleSubmit } = useBookWrite()
 
     return (
         <form className="h-full w-full" onSubmit={handleSubmit}>
