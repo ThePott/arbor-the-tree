@@ -11,6 +11,8 @@ const useBookWriteStore = create<BookWriteStoreState>()(
         (set, get) => ({
             title: "",
             setTitle: (title) => set({ title }),
+            publishedYear: undefined,
+            setPublishedYear: (publishedYear) => set({ publishedYear: publishedYear }),
 
             selectedTab: BW_TOPIC_STEP_TAB_ARRAY[0],
             setSelectedTab: (selectedTab) => set({ selectedTab }),
@@ -81,6 +83,7 @@ const useBookWriteStore = create<BookWriteStoreState>()(
             // NOTE: THIS MUST BE DELETED
             // TODO: THIS MUST BE DELETED
             partialize: (state) => ({
+                title: state.title,
                 topicInfo: state.topicInfo,
                 topicArray: state.topicArray,
                 stepInfo: state.stepInfo,

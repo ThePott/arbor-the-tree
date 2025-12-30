@@ -36,7 +36,7 @@ const BWTopicStepSection = () => {
     }
 
     return (
-        <RoundBox className="flex-1">
+        <RoundBox className="flex-1" isBordered padding="md">
             <Vstack className="h-full">
                 <Title as="h2" isMuted>
                     단원 정보 기입

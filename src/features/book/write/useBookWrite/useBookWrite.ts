@@ -17,6 +17,7 @@ interface UseBookWriteEventHandlerProps {
 
 const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => {
     const title = useBookWriteStore((state) => state.title)
+    const publishedYear = useBookWriteStore((state) => state.publishedYear)
     const rowArray = useBookWriteStore((state) => state.rowArray)
     const overlayingRowArray = useBookWriteStore((state) => state.overlayingRowArray)
 
@@ -40,7 +41,7 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
                 sub_question_name: row.sub_question_name,
             }))
 
-        const body = { title, data }
+        const body = { title, published_year: Number(publishedYear), data }
         postFn(body)
     }
 

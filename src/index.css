@@ -16,6 +16,12 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 @theme {
     --color-washed-white: #d3c6aa;
     --color-washed-black: #1c1c1c;
