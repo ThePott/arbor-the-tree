@@ -1,18 +1,19 @@
 import { withHeadInstance } from "@/packages/api/axiosInstances"
 import { useMutation } from "@tanstack/react-query"
 import useBookWriteStore from "../_bookWriteStore"
-import type { BookDetail, BookDetailPayload } from "../_bookWriteInterfaces"
+import type { BookDetail, BookWritePayload } from "../_bookWriteInterfaces"
+import useGlobalStore from "@/shared/store/globalStore"
 
 const useBookWriteMutation = () => {
     const postMutation = useMutation({
-        mutationFn: async (body: BookDetailPayload) => withHeadInstance.post("/book/write", body),
+        mutationFn: async (body: BookWritePayload) => withHeadInstance.post("/book/write", body),
     })
 
     return { postMutation }
 }
 
 interface UseBookWriteEventHandlerProps {
-    postFn: (body: BookDetailPayload) => void
+    postFn: (body: BookWritePayload) => void
 }
 
 const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => {
@@ -20,9 +21,12 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
     const publishedYear = useBookWriteStore((state) => state.publishedYear)
     const rowArray = useBookWriteStore((state) => state.rowArray)
     const overlayingRowArray = useBookWriteStore((state) => state.overlayingRowArray)
+    const me = useGlobalStore((state) => state.me)
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        if (!me) throw new Error("---- me missing")
         event.preventDefault()
+
         const data: BookDetail[] = rowArray
             .filter((row) => row.question_name)
             .map((row, rowIndex) => ({
@@ -41,7 +45,7 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
                 sub_question_name: row.sub_question_name,
             }))
 
-        const body = { title, published_year: Number(publishedYear), data }
+        const body = { title, published_year: Number(publishedYear), data, user_id: me.id }
         postFn(body)
     }
 

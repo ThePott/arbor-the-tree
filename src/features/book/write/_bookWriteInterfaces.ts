@@ -24,4 +24,4 @@ export const BOOK_DETAIL_KEY_TO_LABEL: Record<BookDetailKey, string> = {
 
 export type BookDetail = Record<BookDetailKey, string>
 
-export type BookDetailPayload = { title: string; published_year: number; data: BookDetail[] }
+export type BookWritePayload = { title: string; published_year: number; data: BookDetail[] }
