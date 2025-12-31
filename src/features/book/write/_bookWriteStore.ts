@@ -3,7 +3,7 @@ import type { BookWriteStoreState } from "./_bookWriteStoreState"
 import { BW_DEFAULT_ROW_COUNT, BW_TOPIC_STEP_TAB_ARRAY } from "./_bookWriteConstants"
 import type { BookDetail } from "./_bookWriteInterfaces"
 import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
-import { findPreviousOverlayingValue, makeNewOverlayingRowArray } from "./_bookWriteStoreOperations"
+import { updateOverlayingRowArray } from "./_bookWriteStoreOperations"
 import { createJSONStorage, persist } from "zustand/middleware"
 
 const useBookWriteStore = create<BookWriteStoreState>()(
@@ -26,7 +26,15 @@ const useBookWriteStore = create<BookWriteStoreState>()(
 
                 const state = get()
                 const firstValue = state.rowArray[0].topic
-                state.updateOverlayingRowArray(0, "topic", firstValue)
+                const overlayingRowArray = updateOverlayingRowArray({
+                    rowIndex: 0,
+                    columnKey: "topic",
+                    value: firstValue,
+                    state,
+                })
+
+                if (!overlayingRowArray) return
+                set({ overlayingRowArray })
             },
             stepInfo: "",
             setStepInfo: (stepInfo) => {
@@ -35,7 +43,15 @@ const useBookWriteStore = create<BookWriteStoreState>()(
 
                 const state = get()
                 const firstValue = state.rowArray[0].step
-                state.updateOverlayingRowArray(0, "step", firstValue)
+                const overlayingRowArray = updateOverlayingRowArray({
+                    rowIndex: 0,
+                    columnKey: "step",
+                    value: firstValue,
+                    state,
+                })
+
+                if (!overlayingRowArray) return
+                set({ overlayingRowArray })
             },
 
             subBookTitle: null,
@@ -46,35 +62,22 @@ const useBookWriteStore = create<BookWriteStoreState>()(
                 .fill(null)
                 .map(() => ({}) as BookDetail),
             updateRowArray: (rowIndex, columnKey, value) => {
+                const state = get()
+                const overlayingRowArray = updateOverlayingRowArray({ rowIndex, columnKey, value, state })
+
                 const tableData = [...get().rowArray]
                 const targetRow = tableData[rowIndex]
                 targetRow[columnKey] = value
 
                 set({ rowArray: tableData })
+                if (!overlayingRowArray) return
+                set({ overlayingRowArray })
             },
 
             overlayingRowArray: Array(BW_DEFAULT_ROW_COUNT)
                 .fill(null)
                 .map(() => ({}) as BookDetail),
-            updateOverlayingRowArray: (rowIndex, columnKey, value) => {
-                if (!value) return
-
-                const state = get()
-                // NOTE: 바뀌지 않았을 때만 이 로직 실행하기 위해서는 이 함수를 이벤트 핸들러가 아니라
-                // NOTE: updateRowArray 안에서 실행해야 한다.
-                // NOTE: 우선은 최적화 없이 진행하자
-
-                const previousOverlayingValue = findPreviousOverlayingValue(rowIndex, columnKey, state)
-                const overlayingRowArray = makeNewOverlayingRowArray(
-                    previousOverlayingValue,
-                    rowIndex,
-                    columnKey,
-                    value,
-                    state
-                )
-
-                set({ overlayingRowArray })
-            },
+            // NOTE: DO NOT CALL THIS FUNCION OUTSIDE OF STORE
         }),
         {
             name: "book-write-store",

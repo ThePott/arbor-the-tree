@@ -13,12 +13,10 @@ const BWInputCell = ({
 }) => {
     const updateTableData = useBookWriteStore((state) => state.updateRowArray)
     const overlayingRowArray = useBookWriteStore((state) => state.overlayingRowArray)
-    const updateOverlayingRowArray = useBookWriteStore((state) => state.updateOverlayingRowArray)
 
     const handleUpdate = (event: React.FocusEvent<HTMLInputElement, Element>) => {
         const newValue = event.target.value
         updateTableData(rowIndex, columnKey, newValue)
-        updateOverlayingRowArray(rowIndex, columnKey, newValue)
     }
 
     return (

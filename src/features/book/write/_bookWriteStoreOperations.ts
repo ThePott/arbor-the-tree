@@ -1,7 +1,7 @@
 import type { BookDetail } from "./_bookWriteInterfaces"
 import type { BookWriteStoreState } from "./_bookWriteStoreState"
 
-export const findPreviousOverlayingValue = (
+const findPreviousOverlayingValue = (
     rowIndex: number,
     columnKey: keyof BookDetail,
     state: BookWriteStoreState
@@ -13,7 +13,7 @@ export const findPreviousOverlayingValue = (
 }
 
 // NOTE: "/"를 받았을 때만 핸들링함
-export const makeNewOverlayingValue = (
+const makeNewOverlayingValue = (
     previousOverlayingValue: string | null,
     columnKey: keyof BookDetail,
     state: BookWriteStoreState
@@ -31,13 +31,20 @@ export const makeNewOverlayingValue = (
     return newValue
 }
 
-export const makeNewOverlayingRowArray = (
-    previousOverlayingValue: string | null,
-    rowIndex: number,
-    columnKey: keyof BookDetail,
-    value: string,
+type MakeNewOverlayingRowArrayProps = {
+    previousOverlayingValue: string | null
+    rowIndex: number
+    columnKey: keyof BookDetail
+    value: string
     state: BookWriteStoreState
-) => {
+}
+const makeNewOverlayingRowArray = ({
+    previousOverlayingValue,
+    rowIndex,
+    columnKey,
+    value,
+    state,
+}: MakeNewOverlayingRowArrayProps) => {
     const overlayingRowArray = state.overlayingRowArray.map((row, index): BookDetail => {
         if (index < rowIndex) return row
 
@@ -50,6 +57,8 @@ export const makeNewOverlayingRowArray = (
             return row
         }
 
+        // NOTE: 3을 입력했다면
+        // NOTE: 다음 행에서는 이전 오버레이 값을 3으로 설정하자
         if (underlyingValue) {
             previousOverlayingValue = underlyingValue
             row[columnKey] = ""
@@ -58,6 +67,33 @@ export const makeNewOverlayingRowArray = (
 
         row[columnKey] = previousOverlayingValue ?? "---- wrong"
         return row
+    })
+
+    return overlayingRowArray
+}
+
+type UpdateOverlayingRowArrayProps = {
+    rowIndex: number
+    columnKey: keyof BookDetail
+    value: string
+    state: BookWriteStoreState
+}
+
+export const updateOverlayingRowArray = ({
+    rowIndex,
+    columnKey,
+    value,
+    state,
+}: UpdateOverlayingRowArrayProps): BookDetail[] | null => {
+    if (!value && !state.rowArray[rowIndex][columnKey]) return null
+
+    const previousOverlayingValue = findPreviousOverlayingValue(rowIndex, columnKey, state)
+    const overlayingRowArray = makeNewOverlayingRowArray({
+        previousOverlayingValue,
+        rowIndex,
+        columnKey,
+        value,
+        state,
     })
 
     return overlayingRowArray

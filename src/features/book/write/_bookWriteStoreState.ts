@@ -23,5 +23,4 @@ export interface BookWriteStoreState {
     rowArray: BookDetail[]
     updateRowArray: (rowIndex: number, columnKey: keyof BookDetail, value: string) => void
     overlayingRowArray: BookDetail[]
-    updateOverlayingRowArray: (rowIndex: number, columnKey: keyof BookDetail, value: string) => void
 }
