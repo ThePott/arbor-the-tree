@@ -45,6 +45,8 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
                 sub_question_name: row.sub_question_name,
             }))
 
+        // NOTE: Sending user id as prop is TEMPORARY SOLUTION
+        // TODO: MUST EXCLUDE USER ID IN THE FUTURE
         const body = { title, published_year: Number(publishedYear), data, user_id: me.id }
         postFn(body)
     }
