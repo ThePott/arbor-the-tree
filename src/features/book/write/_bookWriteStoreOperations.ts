@@ -32,16 +32,12 @@ const makeNewOverlaying = ({ previousOverlaying, columnKey }: MakeNewOverlayingP
     const state = useBookWriteStore.getState()
     const isForTopic = columnKey === "topic"
     const lineArray = isForTopic ? state.topicArray : state.stepArray
-    console.log({ stepArray: state.stepArray })
     const indexOfValueRightAbove = lineArray.findIndex((line) => line === previousOverlaying)
 
     const newIndex = isForTopic ? indexOfValueRightAbove + 1 : (indexOfValueRightAbove + 1) % lineArray.length
 
     // NOTE: this is null if topic info is not enough
     const newValue = lineArray[newIndex] ?? null
-    if (!newValue) {
-        debugger
-    }
     return newValue
 }
 
