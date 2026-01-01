@@ -91,8 +91,8 @@ const useBookWriteStore = create<BookWriteStoreState>()(
                 topicArray: state.topicArray,
                 stepInfo: state.stepInfo,
                 setArray: state.stepArray,
-                rowArray: state.rowArray,
-                overlayingRowArray: state.overlayingRowArray,
+                // rowArray: state.rowArray,
+                // overlayingRowArray: state.overlayingRowArray,
             }),
         }
     )

@@ -45,10 +45,12 @@ const makeNewOverlayingRowArray = ({
     value,
     state,
 }: MakeNewOverlayingRowArrayProps) => {
-    const overlayingRowArray = state.overlayingRowArray.map((row, index): BookDetail => {
-        if (index < rowIndex) return row
+    const overlayingRowArray = state.overlayingRowArray.map((row, iteratingIndex): BookDetail => {
+        if (columnKey === "question_name") return row
+        if (iteratingIndex < rowIndex) return row
 
-        const underlyingValue = index === rowIndex ? value : state.rowArray[index][columnKey]
+        // NOTE: 인풋에 실제로 기입된 값
+        const underlyingValue = iteratingIndex === rowIndex ? value : state.rowArray[iteratingIndex][columnKey]
 
         if (underlyingValue === "/") {
             const newValue = makeNewOverlayingValue(previousOverlayingValue, columnKey, state)
@@ -65,6 +67,12 @@ const makeNewOverlayingRowArray = ({
             return row
         }
 
+        // NOTE: 입력된 실제 값이 없고 문제 번호도 안 적혀있으면 오버레이를 하지 않음
+        if (!state.rowArray[iteratingIndex].question_name) {
+            return row
+        }
+
+        // NOTE: 입력된 실제 값이 없다면 이전 오버레이 값을 따라감
         row[columnKey] = previousOverlayingValue ?? "---- wrong"
         return row
     })
