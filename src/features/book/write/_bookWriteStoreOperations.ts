@@ -69,9 +69,6 @@ export const updateOverlayingColumn = ({
             // NOTE: topic에 적힌 게 부족해지면 에러 발생
             const newOverlaying = makeNewOverlaying({ previousOverlaying, columnKey })
             iteratingCell.overlaying = newOverlaying ?? "ERROR"
-            if (!newOverlaying) {
-                debugger
-            }
             iteratingCell.isError = !newOverlaying
             previousOverlaying = newOverlaying
             return
