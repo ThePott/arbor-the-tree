@@ -90,3 +90,36 @@ export const updateOverlayingColumn = ({
         iteratingCell.overlaying = previousOverlaying ?? ""
     })
 }
+
+type ValidateValueProps = {
+    rowIndex: number
+    columnKey: keyof BookWriteRow
+    value: string
+}
+export const validateValue = ({ rowIndex, columnKey, value }: ValidateValueProps): boolean => {
+    // NOTE: invalid 하면 어떻게 할 거야 값을 허용하지 않아? 그러기보다는 붉은색으로 바로 바꾸자
+    switch (columnKey) {
+        case "topic":
+            return value === "/"
+        case "step":
+            // NOTE: 소단원 선택 기능 만들기 전까지는 우선 다 허용하자
+            // TODO: /1, /2 기능 만들고나면 직접 값 입력하는 건 불가능하게 바꿔야
+            return true
+        case "question_page":
+            return value === "/" || Boolean(Number(value))
+        case "question_name": {
+            if (rowIndex === 0) return true
+
+            // NOTE: 이전 값이 없으면 오류 띄움
+            const previousValue = useBookWriteStore.getState().rowArray[rowIndex - 1][columnKey].value
+            return Boolean(previousValue)
+        }
+        case "solution_page":
+            return value === "/" || Boolean(Number(value))
+        case "session":
+            return value === "/"
+        case "sub_question_name":
+            // NOTE: 아직은 구현하지 않을 거니까
+            return true
+    }
+}
