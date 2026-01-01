@@ -1,9 +1,9 @@
 import { create } from "zustand"
 import type { BookWriteStoreState } from "./_bookWriteStoreState"
 import { BW_DEFAULT_ROW_COUNT, BW_TOPIC_STEP_TAB_ARRAY } from "./_bookWriteConstants"
-import type { BookWriteRow, BookWriteRowFlat } from "./_bookWriteInterfaces"
+import type { BookWriteRow } from "./_bookWriteInterfaces"
 import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
-import { findPreviousOverlaying, updateOverlayingColumn, updateOverlayingRowArray } from "./_bookWriteStoreOperations"
+import { findPreviousOverlaying, updateOverlayingColumn } from "./_bookWriteStoreOperations"
 import { createJSONStorage, persist } from "zustand/middleware"
 
 const useBookWriteStore = create<BookWriteStoreState>()(
@@ -25,16 +25,8 @@ const useBookWriteStore = create<BookWriteStoreState>()(
                 set({ topicInfo, topicArray })
 
                 const state = get()
-                const firstValue = state.flatRowArray[0].topic
-                const overlayingRowArray = updateOverlayingRowArray({
-                    rowIndex: 0,
-                    columnKey: "topic",
-                    value: firstValue,
-                    state,
-                })
-
-                if (!overlayingRowArray) return
-                set({ overlayingRowArray })
+                const firstValue = state.rowArray[0].topic.value
+                state.updateRowArray(0, "topic", firstValue)
             },
             stepInfo: "",
             setStepInfo: (stepInfo) => {
@@ -42,43 +34,14 @@ const useBookWriteStore = create<BookWriteStoreState>()(
                 set({ stepInfo, stepArray })
 
                 const state = get()
-                const firstValue = state.flatRowArray[0].step
-                const overlayingRowArray = updateOverlayingRowArray({
-                    rowIndex: 0,
-                    columnKey: "step",
-                    value: firstValue,
-                    state,
-                })
-
-                if (!overlayingRowArray) return
-                set({ overlayingRowArray })
+                const firstValue = state.rowArray[0].topic.value
+                state.updateRowArray(0, "step", firstValue)
             },
 
             subBookTitle: null,
             setSubBookTitle: (subBookTitle) => set({ subBookTitle }),
 
             // NOTE: `fill({})`를 하면 같은 reference address를 같는 하나의 {}로 채우게 됨
-            flatRowArray: Array(BW_DEFAULT_ROW_COUNT)
-                .fill(null)
-                .map(() => ({}) as BookWriteRowFlat),
-            updateFlatRowArray: (rowIndex, columnKey, value) => {
-                const state = get()
-                const overlayingRowArray = updateOverlayingRowArray({ rowIndex, columnKey, value, state })
-
-                const tableData = [...get().flatRowArray]
-                const targetRow = tableData[rowIndex]
-                targetRow[columnKey] = value
-
-                set({ flatRowArray: tableData })
-                if (!overlayingRowArray) return
-                set({ overlayingRowArray })
-            },
-
-            overlayingRowArray: Array(BW_DEFAULT_ROW_COUNT)
-                .fill(null)
-                .map(() => ({}) as BookWriteRowFlat),
-            // NOTE: DO NOT CALL THIS FUNCION OUTSIDE OF STORE
-
             rowArray: Array(BW_DEFAULT_ROW_COUNT)
                 .fill(null)
                 .map(

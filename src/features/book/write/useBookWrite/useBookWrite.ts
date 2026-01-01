@@ -19,8 +19,7 @@ interface UseBookWriteEventHandlerProps {
 const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => {
     const title = useBookWriteStore((state) => state.title)
     const publishedYear = useBookWriteStore((state) => state.publishedYear)
-    const rowArray = useBookWriteStore((state) => state.flatRowArray)
-    const overlayingRowArray = useBookWriteStore((state) => state.overlayingRowArray)
+    const rowArray = useBookWriteStore((state) => state.rowArray)
     const me = useGlobalStore((state) => state.me)
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -29,20 +28,14 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
 
         const data: BookWriteRowFlat[] = rowArray
             .filter((row) => row.question_name)
-            .map((row, rowIndex) => ({
-                topic: row.topic && row.topic !== "/" ? row.topic : overlayingRowArray[rowIndex].topic,
-                step: row.step && row.step !== "/" ? row.step : overlayingRowArray[rowIndex].step,
-                question_name: row.question_name,
-                question_page:
-                    row.question_page && row.question_page !== "/"
-                        ? row.question_page
-                        : overlayingRowArray[rowIndex].question_page,
-                solution_page:
-                    row.solution_page && row.solution_page !== "/"
-                        ? row.solution_page
-                        : overlayingRowArray[rowIndex].solution_page,
-                session: row.session && row.session !== "/" ? row.session : overlayingRowArray[rowIndex].session,
-                sub_question_name: row.sub_question_name,
+            .map((row) => ({
+                topic: row.topic.overlaying || row.topic.value,
+                step: row.step.overlaying || row.step.value,
+                question_name: row.question_name.value,
+                question_page: row.question_page.overlaying || row.question_page.value,
+                solution_page: row.solution_page.overlaying || row.solution_page.value,
+                session: row.session.overlaying || row.session.value,
+                sub_question_name: row.sub_question_name.value,
             }))
 
         // NOTE: Sending user id as prop is TEMPORARY SOLUTION
