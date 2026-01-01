@@ -114,7 +114,11 @@ type FindPreviousOverlayingProps = {
     columnKey: keyof BookWriteRow
     rowArray: BookWriteRow[]
 }
-const findPreviousOverlaying = ({ rowIndex, columnKey, rowArray }: FindPreviousOverlayingProps): string | null => {
+export const findPreviousOverlaying = ({
+    rowIndex,
+    columnKey,
+    rowArray,
+}: FindPreviousOverlayingProps): string | null => {
     const previousRow = rowArray[rowIndex - 1]
     const previousOverlaying = previousRow ? previousRow[columnKey].overlaying : null
     return previousOverlaying
@@ -147,7 +151,7 @@ type UpdateOverlayingColumnProps = {
     previousOverlaying: string | null
     rowArray: BookWriteRow[]
 }
-const updateOverlayingColumn = ({
+export const updateOverlayingColumn = ({
     previousOverlaying,
     rowIndex,
     columnKey,
@@ -194,21 +198,4 @@ const updateOverlayingColumn = ({
         // NOTE: 입력된 실제 값(underlyingValue)이 없다면 이전 오버레이 값을 따라감
         iteratingCell.overlaying = previousOverlaying
     })
-}
-
-type UpdateRowArrayProps = {
-    rowIndex: number
-    columnKey: keyof BookWriteRow
-    value: string
-    rowArray: BookWriteRow[]
-}
-export const updateRowArray = ({ rowIndex, columnKey, value, rowArray }: UpdateRowArrayProps): BookWriteRow[] => {
-    // NOTE: update overlaying
-    const previousOverlaying = findPreviousOverlaying({ rowIndex, columnKey, rowArray })
-    updateOverlayingColumn({ rowIndex, columnKey, value, previousOverlaying, rowArray })
-
-    // NOTE: update underlying value by value from input
-    rowArray[rowIndex][columnKey].value = value
-
-    return rowArray
 }

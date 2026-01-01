@@ -11,19 +11,21 @@ const BWInputCell = ({
     rowIndex: number
     columnKey: keyof BookWriteRowFlat
 }) => {
-    const updateTableData = useBookWriteStore((state) => state.updateFlatRowArray)
-    const overlayingRowArray = useBookWriteStore((state) => state.overlayingRowArray)
+    const rowArray = useBookWriteStore((state) => state.rowArray)
+    const updateRowArray = useBookWriteStore((state) => state.updateRowArray)
 
-    const handleUpdate = (event: React.FocusEvent<HTMLInputElement, Element>) => {
+    const handleBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
         const newValue = event.target.value
-        updateTableData(rowIndex, columnKey, newValue)
+        updateRowArray(rowIndex, columnKey, newValue)
     }
+
+    const cell = rowArray[rowIndex][columnKey]
 
     return (
         <div className="relative">
-            <Input colorChangeIn="fill" variant="ghost" defaultValue={value} onBlur={handleUpdate} isRed />
+            <Input colorChangeIn="fill" variant="ghost" defaultValue={value} onBlur={handleBlur} isRed={cell.isError} />
             <p className="text-fg-muted pointer-events-none absolute top-1/2 left-6 -translate-y-1/2">
-                {overlayingRowArray[rowIndex][columnKey]}
+                {cell.overlaying}
             </p>
         </div>
     )

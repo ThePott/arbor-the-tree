@@ -3,7 +3,7 @@ import type { BookWriteStoreState } from "./_bookWriteStoreState"
 import { BW_DEFAULT_ROW_COUNT, BW_TOPIC_STEP_TAB_ARRAY } from "./_bookWriteConstants"
 import type { BookWriteRow, BookWriteRowFlat } from "./_bookWriteInterfaces"
 import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
-import { updateOverlayingRowArray } from "./_bookWriteStoreOperations"
+import { findPreviousOverlaying, updateOverlayingColumn, updateOverlayingRowArray } from "./_bookWriteStoreOperations"
 import { createJSONStorage, persist } from "zustand/middleware"
 
 const useBookWriteStore = create<BookWriteStoreState>()(
@@ -81,18 +81,33 @@ const useBookWriteStore = create<BookWriteStoreState>()(
 
             rowArray: Array(BW_DEFAULT_ROW_COUNT)
                 .fill(null)
-                .map(() => ({}) as BookWriteRow),
+                .map(
+                    () =>
+                        ({
+                            topic: {},
+                            step: {},
+                            question_name: {},
+                            question_page: {},
+                            solution_page: {},
+                            session: {},
+                            sub_question_name: {},
+                        }) as BookWriteRow
+                ),
             updateRowArray: (rowIndex, columnKey, value) => {
-                const state = get()
-                const overlayingRowArray = updateOverlayingRowArray({ rowIndex, columnKey, value, state })
+                const rowArray = [...get().rowArray]
 
-                const tableData = [...get().flatRowArray]
-                const targetRow = tableData[rowIndex]
-                targetRow[columnKey] = value
+                const previousOverlaying = findPreviousOverlaying({ rowIndex, columnKey, rowArray })
+                updateOverlayingColumn({ rowIndex, columnKey, value, previousOverlaying, rowArray })
 
-                set({ flatRowArray: tableData })
-                if (!overlayingRowArray) return
-                set({ overlayingRowArray })
+                // NOTE: update underlying value by value from input
+                rowArray[rowIndex][columnKey].value = value
+
+                console.log({ rowArray })
+                if (value) {
+                    debugger
+                }
+
+                set({ rowArray })
             },
         }),
         {

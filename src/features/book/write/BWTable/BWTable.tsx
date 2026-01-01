@@ -4,14 +4,15 @@ import Title from "@/packages/components/Title/Title"
 import clsx from "clsx"
 import { BOOK_DETAIL_KEY_ARRAY, BOOK_DETAIL_KEY_TO_LABEL } from "../_bookWriteInterfaces"
 import BWInputCell from "./_BWInputCell"
-import useBookWriteStore from "../_bookWriteStore"
 import Button from "@/packages/components/Button/Button"
 import { withHeadInstance } from "@/packages/api/axiosInstances"
 import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
 import { useRef } from "react"
 import { useVirtualizer } from "@tanstack/react-virtual"
 import { BW_DEFAULT_ROW_COUNT } from "../_bookWriteConstants"
+import useBookWriteStore from "../_bookWriteStore"
 
+// NOTE: for sub question auto complete
 const getBookDetail = async (searchText: string) => {
     const params = { query: searchText }
     const response = await withHeadInstance.get("/book/detail", { params })
@@ -20,10 +21,11 @@ const getBookDetail = async (searchText: string) => {
 }
 
 const BWTable = () => {
-    const parentRef = useRef<HTMLDivElement>(null)
-    const rowArray = useBookWriteStore((state) => state.flatRowArray)
-    const updateActualValues = useBookWriteStore((state) => state.updateFlatRowArray)
+    const rowArray = useBookWriteStore((state) => state.rowArray)
+    const updateRowArray = useBookWriteStore((state) => state.updateRowArray)
 
+    // NOTE: for virtual scroll
+    const parentRef = useRef<HTMLDivElement>(null)
     // eslint-disable-next-line react-hooks/incompatible-library
     const rowVirtualizer = useVirtualizer({
         count: BW_DEFAULT_ROW_COUNT,
@@ -78,7 +80,7 @@ const BWTable = () => {
                                                 getOptionArray={getBookDetail}
                                                 onValueChange={(value, isError) => {
                                                     if (isError) return
-                                                    updateActualValues(virtualRow.index, columnKey, value)
+                                                    updateRowArray(virtualRow.index, columnKey, value)
                                                 }}
                                                 outerIsRed={false}
                                                 queryKey={["bookDetail"]}
@@ -88,7 +90,7 @@ const BWTable = () => {
                                         )}
                                         {columnKey !== "sub_question_name" && (
                                             <BWInputCell
-                                                value={rowArray[virtualRow.index][columnKey]}
+                                                value={rowArray[virtualRow.index][columnKey].value}
                                                 columnKey={columnKey}
                                                 rowIndex={virtualRow.index}
                                             />
