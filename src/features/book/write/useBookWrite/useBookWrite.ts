@@ -27,7 +27,7 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
         event.preventDefault()
 
         const data: BookWriteRowFlat[] = rowArray
-            .filter((row) => row.question_name)
+            .filter((row) => row.question_name.value)
             .map((row) => ({
                 topic: row.topic.overlaying || row.topic.value,
                 step: row.step.overlaying || row.step.value,
@@ -44,7 +44,7 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
         const isError = rowArray.some((row) => Object.entries(row).some(([_, cell]) => cell.isError))
         if (isError) {
             // TODO: 모달로 교체해야 함
-            window.alert("---- 임시 경고창")
+            window.alert("올바른 형식으로 문제 정보를 기입해주세요")
             return
         }
         postFn(body)
