@@ -42,6 +42,47 @@ const makeNewOverlaying = ({ previousOverlaying, columnKey }: MakeNewOverlayingP
     return newValue
 }
 
+type UpdateOverlayingQuestionNameProps = {
+    rowIndex: number
+    columnKey: keyof BookWriteRow
+    value: string
+    rowArray: BookWriteRow[]
+}
+const updateOverlayingQuestionName = ({
+    rowIndex,
+    columnKey,
+    value,
+    rowArray,
+}: UpdateOverlayingQuestionNameProps): void => {
+    if (value !== "?") {
+        return
+    }
+
+    // NOTE: recent 다음부터 하나씩 늘려 overlay를 채워나간다
+    let recentText = "0"
+    let recentRowIndex = -1
+    for (let iteratingIndex = rowIndex; iteratingIndex >= 0; iteratingIndex--) {
+        const previousRowIndex = iteratingIndex - 1
+        const previousRow = rowArray[previousRowIndex]
+        const previousOverlaying = previousRow[columnKey].overlaying
+        const previousValue = previousRow[columnKey].value
+        const candidate = previousOverlaying || previousValue
+        if (candidate) {
+            recentText = candidate
+            recentRowIndex = previousRowIndex
+            break
+        }
+    }
+
+    const [recentBase, initialNumberAtEnd] = separateNumberAtEnd(recentText)
+    let numberAtEnd = initialNumberAtEnd
+    for (let iteratingIndex = recentRowIndex + 1; iteratingIndex <= rowIndex; iteratingIndex++) {
+        const iteratingCell = rowArray[iteratingIndex][columnKey]
+        numberAtEnd++
+        iteratingCell.overlaying = `${recentBase}${numberAtEnd}`
+    }
+}
+
 type UpdateOverlayingColumnProps = {
     rowIndex: number
     columnKey: keyof BookWriteRow
@@ -58,30 +99,7 @@ export const updateOverlayingColumn = ({
 }: UpdateOverlayingColumnProps): void => {
     // TODO: "?" 로직은 나중에 별도 함수로 분리해야 함
     if (columnKey === "question_name") {
-        if (value !== "?") return
-
-        // NOTE: recent 다음부터 하나씩 늘려 overlay를 채워나간다
-        let recentText = "0"
-        let recentRowIndex = -1
-        for (let index = rowIndex; index >= 0; index--) {
-            const previousRow = rowArray[rowIndex - 1]
-            const previousOverlaying = previousRow[columnKey].overlaying
-            const previousValue = previousRow[columnKey].value
-            const candidate = previousOverlaying || previousValue
-            if (candidate) {
-                recentText = candidate
-                recentRowIndex = index
-                break
-            }
-        }
-
-        const [recentBase, initialNumberAtEnd] = separateNumberAtEnd(recentText)
-        let numberAtEnd = initialNumberAtEnd
-        for (let iteratingIndex = recentRowIndex + 1; iteratingIndex <= rowIndex; iteratingIndex++) {
-            const iteratingCell = rowArray[iteratingIndex][columnKey]
-            numberAtEnd++
-            iteratingCell.overlaying = `${recentBase}${numberAtEnd}`
-        }
+        updateOverlayingQuestionName({ rowIndex, columnKey, value, rowArray })
         return
     }
 
