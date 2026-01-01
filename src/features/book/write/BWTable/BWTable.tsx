@@ -21,8 +21,8 @@ const getBookDetail = async (searchText: string) => {
 
 const BWTable = () => {
     const parentRef = useRef<HTMLDivElement>(null)
-    const rowArray = useBookWriteStore((state) => state.rowArray)
-    const updateActualValues = useBookWriteStore((state) => state.updateRowArray)
+    const rowArray = useBookWriteStore((state) => state.flatRowArray)
+    const updateActualValues = useBookWriteStore((state) => state.updateFlatRowArray)
 
     // eslint-disable-next-line react-hooks/incompatible-library
     const rowVirtualizer = useVirtualizer({

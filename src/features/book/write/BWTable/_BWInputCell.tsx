@@ -11,7 +11,7 @@ const BWInputCell = ({
     rowIndex: number
     columnKey: keyof BookWriteRowFlat
 }) => {
-    const updateTableData = useBookWriteStore((state) => state.updateRowArray)
+    const updateTableData = useBookWriteStore((state) => state.updateFlatRowArray)
     const overlayingRowArray = useBookWriteStore((state) => state.overlayingRowArray)
 
     const handleUpdate = (event: React.FocusEvent<HTMLInputElement, Element>) => {

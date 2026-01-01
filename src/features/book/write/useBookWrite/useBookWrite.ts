@@ -19,7 +19,7 @@ interface UseBookWriteEventHandlerProps {
 const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => {
     const title = useBookWriteStore((state) => state.title)
     const publishedYear = useBookWriteStore((state) => state.publishedYear)
-    const rowArray = useBookWriteStore((state) => state.rowArray)
+    const rowArray = useBookWriteStore((state) => state.flatRowArray)
     const overlayingRowArray = useBookWriteStore((state) => state.overlayingRowArray)
     const me = useGlobalStore((state) => state.me)
 

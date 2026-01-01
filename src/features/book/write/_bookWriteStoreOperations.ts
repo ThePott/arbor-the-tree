@@ -1,7 +1,8 @@
-import type { BookWriteRowFlat } from "./_bookWriteInterfaces"
+import type { BookWriteRow, BookWriteRowFlat } from "./_bookWriteInterfaces"
+import useBookWriteStore from "./_bookWriteStore"
 import type { BookWriteStoreState } from "./_bookWriteStoreState"
 
-const findPreviousOverlayingValue = (
+const findPreviousOverlayingValue_old = (
     rowIndex: number,
     columnKey: keyof BookWriteRowFlat,
     state: BookWriteStoreState
@@ -13,7 +14,7 @@ const findPreviousOverlayingValue = (
 }
 
 // NOTE: "/"를 받았을 때만 핸들링함
-const makeNewOverlayingValue = (
+const makeNewOverlayingValue_old = (
     previousOverlayingValue: string | null,
     columnKey: keyof BookWriteRowFlat,
     state: BookWriteStoreState
@@ -50,10 +51,10 @@ const makeNewOverlayingRowArray = ({
         if (iteratingIndex < rowIndex) return row
 
         // NOTE: 인풋에 실제로 기입된 값
-        const underlyingValue = iteratingIndex === rowIndex ? value : state.rowArray[iteratingIndex][columnKey]
+        const underlyingValue = iteratingIndex === rowIndex ? value : state.flatRowArray[iteratingIndex][columnKey]
 
         if (underlyingValue === "/") {
-            const newValue = makeNewOverlayingValue(previousOverlayingValue, columnKey, state)
+            const newValue = makeNewOverlayingValue_old(previousOverlayingValue, columnKey, state)
             previousOverlayingValue = newValue
             row[columnKey] = newValue
             return row
@@ -63,12 +64,13 @@ const makeNewOverlayingRowArray = ({
         // NOTE: 다음 행에서는 이전 오버레이 값을 3으로 설정하자
         if (underlyingValue) {
             previousOverlayingValue = underlyingValue
+            // NOTE: 3이라고 구체적으로 적었으니 오버레이로는 보여줄 필요 없음
             row[columnKey] = ""
             return row
         }
 
         // NOTE: 입력된 실제 값이 없고 문제 번호도 안 적혀있으면 오버레이를 하지 않음
-        if (!state.rowArray[iteratingIndex].question_name) {
+        if (!state.flatRowArray[iteratingIndex].question_name) {
             return row
         }
 
@@ -93,9 +95,9 @@ export const updateOverlayingRowArray = ({
     value,
     state,
 }: UpdateOverlayingRowArrayProps): BookWriteRowFlat[] | null => {
-    if (!value && !state.rowArray[rowIndex][columnKey]) return null
+    if (!value && !state.flatRowArray[rowIndex][columnKey]) return null
 
-    const previousOverlayingValue = findPreviousOverlayingValue(rowIndex, columnKey, state)
+    const previousOverlayingValue = findPreviousOverlayingValue_old(rowIndex, columnKey, state)
     const overlayingRowArray = makeNewOverlayingRowArray({
         previousOverlayingValue,
         rowIndex,
@@ -105,4 +107,108 @@ export const updateOverlayingRowArray = ({
     })
 
     return overlayingRowArray
+}
+
+type FindPreviousOverlayingProps = {
+    rowIndex: number
+    columnKey: keyof BookWriteRow
+    rowArray: BookWriteRow[]
+}
+const findPreviousOverlaying = ({ rowIndex, columnKey, rowArray }: FindPreviousOverlayingProps): string | null => {
+    const previousRow = rowArray[rowIndex - 1]
+    const previousOverlaying = previousRow ? previousRow[columnKey].overlaying : null
+    return previousOverlaying
+}
+
+type MakeNewOverlayingProps = {
+    previousOverlaying: string | null
+    columnKey: keyof BookWriteRowFlat
+}
+const makeNewOverlaying = ({ previousOverlaying, columnKey }: MakeNewOverlayingProps): string | null => {
+    // NOTE: 숫자 열의 경우
+    if (columnKey !== "topic" && columnKey !== "step") {
+        const newValue = previousOverlaying ? String(Number(previousOverlaying) + 1) : "1"
+        return newValue
+    }
+
+    // NOTE: 문자 열의 경우
+    const state = useBookWriteStore.getState()
+    const lineArray = columnKey === "topic" ? state.topicArray : state.stepArray
+    const indexOfValueRightAbove = lineArray.findIndex((line) => line === previousOverlaying)
+    // NOTE: this is null if topic(step) info is not enough
+    const newValue = lineArray[indexOfValueRightAbove + 1] ?? null
+    return newValue
+}
+
+type UpdateOverlayingColumnProps = {
+    rowIndex: number
+    columnKey: keyof BookWriteRow
+    value: string
+    previousOverlaying: string | null
+    rowArray: BookWriteRow[]
+}
+const updateOverlayingColumn = ({
+    previousOverlaying,
+    rowIndex,
+    columnKey,
+    value,
+    rowArray,
+}: UpdateOverlayingColumnProps): void => {
+    if (columnKey === "question_name") return
+    rowArray.forEach((row, iteratingIndex) => {
+        if (iteratingIndex < rowIndex) return row
+
+        // NOTE: 인풋에 실제로 기입된 값
+        const underlyingValue = iteratingIndex === rowIndex ? value : row[columnKey].value
+        const iteraingRow = rowArray[iteratingIndex]
+        const iteratingCell = iteraingRow[columnKey]
+
+        // NOTE: "/"가 밑에 있으면 오버레이 업데이트 함
+        if (underlyingValue === "/") {
+            const newOverlaying = makeNewOverlaying({ previousOverlaying, columnKey })
+            iteratingCell.overlaying = newOverlaying ?? "ERROR"
+            iteratingCell.isError = !newOverlaying
+            previousOverlaying = newOverlaying
+            return
+        }
+
+        // NOTE: 3을 입력했다면
+        // NOTE: 다음 행에서는 이전 오버레이 값을 3으로 설정하자
+        if (underlyingValue) {
+            // NOTE: 3이라고 구체적으로 입력했으니 오버레이는 필요 없음
+            iteratingCell.overlaying = ""
+            previousOverlaying = underlyingValue
+            return
+        }
+
+        // NOTE: 입력된 실제 값(underlyingValue)이 없고 문제 번호도 안 적혀있으면 오버레이를 하지 않음
+        if (!iteraingRow.question_name.value) return
+
+        // NOTE: 입력된 실제 값이 없어서 이전 오버레이를 따라가야 하는데 오버레이가 없으면 에러 띄움
+        if (!previousOverlaying) {
+            iteratingCell.isError = true
+            iteratingCell.overlaying = "ERROR"
+            return
+        }
+
+        // NOTE: 입력된 실제 값(underlyingValue)이 없다면 이전 오버레이 값을 따라감
+        iteratingCell.overlaying = previousOverlaying
+    })
+}
+
+type UpdateRowArrayProps = {
+    rowIndex: number
+    columnKey: keyof BookWriteRow
+    value: string
+    rowArray: BookWriteRow[]
+}
+export const updateRowArray = ({ rowIndex, columnKey, value, rowArray }: UpdateRowArrayProps): BookWriteRow[] => {
+    // NOTE: update overlaying
+    const previousOverlaying = findPreviousOverlaying({ rowIndex, columnKey, rowArray })
+    updateOverlayingColumn({ rowIndex, columnKey, value, previousOverlaying, rowArray })
+
+    // NOTE: update underlying value by value from input
+    rowArray[rowIndex][columnKey].value = value
+
+    return rowArray
 }
