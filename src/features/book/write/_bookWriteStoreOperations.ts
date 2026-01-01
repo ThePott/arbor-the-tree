@@ -23,16 +23,25 @@ type MakeNewOverlayingProps = {
 const makeNewOverlaying = ({ previousOverlaying, columnKey }: MakeNewOverlayingProps): string | null => {
     // NOTE: 숫자 열의 경우
     if (columnKey !== "topic" && columnKey !== "step") {
+        // NOTE: 이전 값이 없으면 1로 만든다
         const newValue = previousOverlaying ? String(Number(previousOverlaying) + 1) : "1"
         return newValue
     }
 
     // NOTE: 문자 열의 경우
     const state = useBookWriteStore.getState()
-    const lineArray = columnKey === "topic" ? state.topicArray : state.stepArray
+    const isForTopic = columnKey === "topic"
+    const lineArray = isForTopic ? state.topicArray : state.stepArray
+    console.log({ stepArray: state.stepArray })
     const indexOfValueRightAbove = lineArray.findIndex((line) => line === previousOverlaying)
-    // NOTE: this is null if topic(step) info is not enough
-    const newValue = lineArray[indexOfValueRightAbove + 1] ?? null
+
+    const newIndex = isForTopic ? indexOfValueRightAbove + 1 : (indexOfValueRightAbove + 1) % lineArray.length
+
+    // NOTE: this is null if topic info is not enough
+    const newValue = lineArray[newIndex] ?? null
+    if (!newValue) {
+        debugger
+    }
     return newValue
 }
 
@@ -61,8 +70,12 @@ export const updateOverlayingColumn = ({
 
         // NOTE: "/"가 밑에 있으면 오버레이 업데이트 함
         if (underlyingValue === "/") {
+            // NOTE: topic에 적힌 게 부족해지면 에러 발생
             const newOverlaying = makeNewOverlaying({ previousOverlaying, columnKey })
             iteratingCell.overlaying = newOverlaying ?? "ERROR"
+            if (!newOverlaying) {
+                debugger
+            }
             iteratingCell.isError = !newOverlaying
             previousOverlaying = newOverlaying
             return

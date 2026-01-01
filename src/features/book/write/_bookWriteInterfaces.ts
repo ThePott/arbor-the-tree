@@ -3,8 +3,8 @@ export type BWTopicStep = "topic" | "step"
 export const BOOK_DETAIL_KEY_ARRAY = [
     "topic",
     "step",
-    "question_name",
     "question_page",
+    "question_name",
     "solution_page",
     "session",
     "sub_question_name",
