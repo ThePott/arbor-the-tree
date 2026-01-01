@@ -1,3 +1,4 @@
+import { separateNumberAtEnd } from "@/shared/utils/parseNumberAtEnd"
 import type { BookWriteRow, BookWriteRowFlat } from "./_bookWriteInterfaces"
 import useBookWriteStore from "./_bookWriteStore"
 
@@ -59,23 +60,27 @@ export const updateOverlayingColumn = ({
     if (columnKey === "question_name") {
         if (value !== "?") return
 
-        let recent: string | null = null
+        // NOTE: recent 다음부터 하나씩 늘려 overlay를 채워나간다
+        let recentText = "0"
+        let recentRowIndex = -1
         for (let index = rowIndex; index >= 0; index--) {
             const previousRow = rowArray[rowIndex - 1]
             const previousOverlaying = previousRow[columnKey].overlaying
             const previousValue = previousRow[columnKey].value
             const candidate = previousOverlaying || previousValue
             if (candidate) {
-                recent = candidate
+                recentText = candidate
+                recentRowIndex = index
                 break
             }
         }
-        if (!recent) {
-            recent = "1"
-        }
 
-        for (let index = 0; index <= rowIndex; index++) {
-            const iteratingCell = rowArray[index][columnKey]
+        const [recentBase, initialNumberAtEnd] = separateNumberAtEnd(recentText)
+        let numberAtEnd = initialNumberAtEnd
+        for (let iteratingIndex = recentRowIndex + 1; iteratingIndex <= rowIndex; iteratingIndex++) {
+            const iteratingCell = rowArray[iteratingIndex][columnKey]
+            numberAtEnd++
+            iteratingCell.overlaying = `${recentBase}${numberAtEnd}`
         }
         return
     }
