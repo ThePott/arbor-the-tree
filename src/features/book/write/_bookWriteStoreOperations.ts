@@ -1,9 +1,9 @@
-import type { BookDetail } from "./_bookWriteInterfaces"
+import type { BookWriteRowFlat } from "./_bookWriteInterfaces"
 import type { BookWriteStoreState } from "./_bookWriteStoreState"
 
 const findPreviousOverlayingValue = (
     rowIndex: number,
-    columnKey: keyof BookDetail,
+    columnKey: keyof BookWriteRowFlat,
     state: BookWriteStoreState
 ): string | null => {
     const rowRightAbove = state.overlayingRowArray[rowIndex - 1]
@@ -15,7 +15,7 @@ const findPreviousOverlayingValue = (
 // NOTE: "/"를 받았을 때만 핸들링함
 const makeNewOverlayingValue = (
     previousOverlayingValue: string | null,
-    columnKey: keyof BookDetail,
+    columnKey: keyof BookWriteRowFlat,
     state: BookWriteStoreState
 ): string => {
     // NOTE: 숫자 열의 경우
@@ -34,7 +34,7 @@ const makeNewOverlayingValue = (
 type MakeNewOverlayingRowArrayProps = {
     previousOverlayingValue: string | null
     rowIndex: number
-    columnKey: keyof BookDetail
+    columnKey: keyof BookWriteRowFlat
     value: string
     state: BookWriteStoreState
 }
@@ -45,7 +45,7 @@ const makeNewOverlayingRowArray = ({
     value,
     state,
 }: MakeNewOverlayingRowArrayProps) => {
-    const overlayingRowArray = state.overlayingRowArray.map((row, iteratingIndex): BookDetail => {
+    const overlayingRowArray = state.overlayingRowArray.map((row, iteratingIndex): BookWriteRowFlat => {
         if (columnKey === "question_name") return row
         if (iteratingIndex < rowIndex) return row
 
@@ -82,7 +82,7 @@ const makeNewOverlayingRowArray = ({
 
 type UpdateOverlayingRowArrayProps = {
     rowIndex: number
-    columnKey: keyof BookDetail
+    columnKey: keyof BookWriteRowFlat
     value: string
     state: BookWriteStoreState
 }
@@ -92,7 +92,7 @@ export const updateOverlayingRowArray = ({
     columnKey,
     value,
     state,
-}: UpdateOverlayingRowArrayProps): BookDetail[] | null => {
+}: UpdateOverlayingRowArrayProps): BookWriteRowFlat[] | null => {
     if (!value && !state.rowArray[rowIndex][columnKey]) return null
 
     const previousOverlayingValue = findPreviousOverlayingValue(rowIndex, columnKey, state)

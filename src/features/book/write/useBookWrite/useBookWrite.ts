@@ -1,7 +1,7 @@
 import { withHeadInstance } from "@/packages/api/axiosInstances"
 import { useMutation } from "@tanstack/react-query"
 import useBookWriteStore from "../_bookWriteStore"
-import type { BookDetail, BookWritePayload } from "../_bookWriteInterfaces"
+import type { BookWriteRowFlat, BookWritePayload } from "../_bookWriteInterfaces"
 import useGlobalStore from "@/shared/store/globalStore"
 
 const useBookWriteMutation = () => {
@@ -27,7 +27,7 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
         if (!me) throw new Error("---- me missing")
         event.preventDefault()
 
-        const data: BookDetail[] = rowArray
+        const data: BookWriteRowFlat[] = rowArray
             .filter((row) => row.question_name)
             .map((row, rowIndex) => ({
                 topic: row.topic && row.topic !== "/" ? row.topic : overlayingRowArray[rowIndex].topic,

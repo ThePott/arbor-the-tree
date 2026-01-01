@@ -10,9 +10,9 @@ export const BOOK_DETAIL_KEY_ARRAY = [
     "sub_question_name",
 ] as const
 
-type BookDetailKey = (typeof BOOK_DETAIL_KEY_ARRAY)[number]
+type BookWriteColumnKey = (typeof BOOK_DETAIL_KEY_ARRAY)[number]
 
-export const BOOK_DETAIL_KEY_TO_LABEL: Record<BookDetailKey, string> = {
+export const BOOK_DETAIL_KEY_TO_LABEL: Record<BookWriteColumnKey, string> = {
     topic: "중단원",
     step: "소단원",
     question_name: "문제 번호",
@@ -22,6 +22,15 @@ export const BOOK_DETAIL_KEY_TO_LABEL: Record<BookDetailKey, string> = {
     sub_question_name: "하위 문제",
 } as const
 
-export type BookDetail = Record<BookDetailKey, string>
+// NOTE: additional state for row
+type BookWriteCell = {
+    value: string
+    overlaying: string
+    isError: boolean
+}
 
-export type BookWritePayload = { title: string; published_year: number; data: BookDetail[] }
+// NOTE: actual input data row
+export type BookWriteRow = Record<BookWriteColumnKey, BookWriteCell>
+export type BookWriteRowFlat = Record<BookWriteColumnKey, string>
+
+export type BookWritePayload = { title: string; published_year: number; data: BookWriteRowFlat[] }

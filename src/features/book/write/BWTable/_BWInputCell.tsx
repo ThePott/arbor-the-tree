@@ -1,5 +1,5 @@
 import Input from "@/packages/components/Input/Input"
-import type { BookDetail } from "../_bookWriteInterfaces"
+import type { BookWriteRowFlat } from "../_bookWriteInterfaces"
 import useBookWriteStore from "../_bookWriteStore"
 
 const BWInputCell = ({
@@ -9,7 +9,7 @@ const BWInputCell = ({
 }: {
     value: string
     rowIndex: number
-    columnKey: keyof BookDetail
+    columnKey: keyof BookWriteRowFlat
 }) => {
     const updateTableData = useBookWriteStore((state) => state.updateRowArray)
     const overlayingRowArray = useBookWriteStore((state) => state.overlayingRowArray)
@@ -21,7 +21,7 @@ const BWInputCell = ({
 
     return (
         <div className="relative">
-            <Input colorChangeIn="fill" variant="ghost" defaultValue={value} onBlur={handleUpdate} />
+            <Input colorChangeIn="fill" variant="ghost" defaultValue={value} onBlur={handleUpdate} isRed />
             <p className="text-fg-muted pointer-events-none absolute top-1/2 left-6 -translate-y-1/2">
                 {overlayingRowArray[rowIndex][columnKey]}
             </p>

@@ -1,5 +1,5 @@
 import type { Tab } from "@/packages/components/TabBar/TabBar"
-import type { BookDetail, BWTopicStep } from "./_bookWriteInterfaces"
+import type { BookWriteRowFlat, BWTopicStep } from "./_bookWriteInterfaces"
 
 export interface BookWriteStoreState {
     title: string
@@ -20,7 +20,7 @@ export interface BookWriteStoreState {
     subBookTitle: string | null
     setSubBookTitle: (subBookTitle: string | null) => void
 
-    rowArray: BookDetail[]
-    updateRowArray: (rowIndex: number, columnKey: keyof BookDetail, value: string) => void
-    overlayingRowArray: BookDetail[]
+    rowArray: BookWriteRowFlat[]
+    updateRowArray: (rowIndex: number, columnKey: keyof BookWriteRowFlat, value: string) => void
+    overlayingRowArray: BookWriteRowFlat[]
 }
