@@ -55,9 +55,33 @@ export const updateOverlayingColumn = ({
     value,
     rowArray,
 }: UpdateOverlayingColumnProps): void => {
-    if (columnKey === "question_name") return
+    // TODO: "?" 로직은 나중에 별도 함수로 분리해야 함
+    if (columnKey === "question_name") {
+        if (value !== "?") return
+
+        let recent: string | null = null
+        for (let index = rowIndex; index >= 0; index--) {
+            const previousRow = rowArray[rowIndex - 1]
+            const previousOverlaying = previousRow[columnKey].overlaying
+            const previousValue = previousRow[columnKey].value
+            const candidate = previousOverlaying || previousValue
+            if (candidate) {
+                recent = candidate
+                break
+            }
+        }
+        if (!recent) {
+            recent = "1"
+        }
+
+        for (let index = 0; index <= rowIndex; index++) {
+            const iteratingCell = rowArray[index][columnKey]
+        }
+        return
+    }
+
     rowArray.forEach((row, iteratingIndex) => {
-        if (iteratingIndex < rowIndex) return row
+        if (iteratingIndex < rowIndex) return
 
         // NOTE: 인풋에 실제로 기입된 값
         const underlyingValue = iteratingIndex === rowIndex ? value : row[columnKey].value
@@ -104,7 +128,10 @@ export const validateValue = ({ rowIndex, columnKey, value }: ValidateValueProps
     const previousRow = useBookWriteStore.getState().rowArray[rowIndex - 1]
     const previousOverlaying = previousRow ? previousRow[columnKey].overlaying : null
     const previousValue = previousRow ? previousRow[columnKey].value : null
-    if (!previousOverlaying && !previousValue && rowIndex > 0) return false
+
+    const isAboveEmpty = !previousOverlaying && !previousValue && rowIndex > 0
+    const isAutoIncrementing = columnKey === "question_name" && value === "?"
+    if (isAboveEmpty && !isAutoIncrementing) return false
 
     // NOTE: invalid 하면 어떻게 할 거야 값을 허용하지 않아? 그러기보다는 붉은색으로 바로 바꾸자
     switch (columnKey) {
@@ -119,8 +146,8 @@ export const validateValue = ({ rowIndex, columnKey, value }: ValidateValueProps
         case "question_name": {
             if (rowIndex === 0) return true
 
-            // NOTE: 이전 값이 없으면 오류 띄움
-            return Boolean(previousValue)
+            // NOTE: 이전 값이 있으면 괜찮음, "?"여도 괜찮음
+            return Boolean(previousValue || value === "?")
         }
         case "solution_page":
             return value === "/" || Boolean(Number(value))
