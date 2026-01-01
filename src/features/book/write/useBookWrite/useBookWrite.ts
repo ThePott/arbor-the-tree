@@ -26,6 +26,9 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
         if (!me) throw new Error("---- me missing")
         event.preventDefault()
 
+        const isError = rowArray.some((row) => Object.entries(row).some(([_, cell]) => cell.isError))
+        if (isError) return
+
         const data: BookWriteRowFlat[] = rowArray
             .filter((row) => row.question_name)
             .map((row) => ({
