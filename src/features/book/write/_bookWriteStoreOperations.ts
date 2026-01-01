@@ -55,6 +55,7 @@ const updateOverlayingQuestionName = ({
     rowArray,
 }: UpdateOverlayingQuestionNameProps): void => {
     if (value !== "?") {
+        rowArray[rowIndex][columnKey].overlaying = ""
         return
     }
 
@@ -64,9 +65,8 @@ const updateOverlayingQuestionName = ({
     for (let iteratingIndex = rowIndex; iteratingIndex >= 0; iteratingIndex--) {
         const previousRowIndex = iteratingIndex - 1
         const previousRow = rowArray[previousRowIndex]
-        const previousOverlaying = previousRow[columnKey].overlaying
         const previousValue = previousRow[columnKey].value
-        const candidate = previousOverlaying || previousValue
+        const candidate = previousValue
         if (candidate) {
             recentText = candidate
             recentRowIndex = previousRowIndex
