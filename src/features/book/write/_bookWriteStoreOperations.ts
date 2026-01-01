@@ -66,10 +66,11 @@ export const updateOverlayingColumn = ({
 
         // NOTE: "/"가 밑에 있으면 오버레이 업데이트 함
         if (underlyingValue === "/") {
-            // NOTE: topic에 적힌 게 부족해지면 에러 발생
             const newOverlaying = makeNewOverlaying({ previousOverlaying, columnKey })
-            iteratingCell.overlaying = newOverlaying ?? "ERROR"
-            iteratingCell.isError = !newOverlaying
+            iteratingCell.overlaying = newOverlaying ?? ""
+            // NOTE: topic에 적힌 게 부족해지면 에러 발생
+            // NOTE: 그 외에는 이게 falsy할 리 없으니 이전 값을 유지
+            iteratingCell.isError = !newOverlaying ? true : iteratingCell.isError
             previousOverlaying = newOverlaying
             return
         }
@@ -97,6 +98,14 @@ type ValidateValueProps = {
     value: string
 }
 export const validateValue = ({ rowIndex, columnKey, value }: ValidateValueProps): boolean => {
+    if (!value) return true
+
+    // NOTE: 값이 있는데 위 오버레이도 없고 값도 없는데 첫번째 줄이 아니다? 에러 표시
+    const previousRow = useBookWriteStore.getState().rowArray[rowIndex - 1]
+    const previousOverlaying = previousRow ? previousRow[columnKey].overlaying : null
+    const previousValue = previousRow ? previousRow[columnKey].value : null
+    if (!previousOverlaying && !previousValue && rowIndex > 0) return false
+
     // NOTE: invalid 하면 어떻게 할 거야 값을 허용하지 않아? 그러기보다는 붉은색으로 바로 바꾸자
     switch (columnKey) {
         case "topic":
@@ -111,7 +120,6 @@ export const validateValue = ({ rowIndex, columnKey, value }: ValidateValueProps
             if (rowIndex === 0) return true
 
             // NOTE: 이전 값이 없으면 오류 띄움
-            const previousValue = useBookWriteStore.getState().rowArray[rowIndex - 1][columnKey].value
             return Boolean(previousValue)
         }
         case "solution_page":

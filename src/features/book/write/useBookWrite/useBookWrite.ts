@@ -26,9 +26,6 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
         if (!me) throw new Error("---- me missing")
         event.preventDefault()
 
-        const isError = rowArray.some((row) => Object.entries(row).some(([_, cell]) => cell.isError))
-        if (isError) return
-
         const data: BookWriteRowFlat[] = rowArray
             .filter((row) => row.question_name)
             .map((row) => ({
@@ -44,6 +41,12 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
         // NOTE: Sending user id as prop is TEMPORARY SOLUTION
         // TODO: MUST EXCLUDE USER ID IN THE FUTURE
         const body = { title, published_year: Number(publishedYear), data, user_id: me.id }
+        const isError = rowArray.some((row) => Object.entries(row).some(([_, cell]) => cell.isError))
+        if (isError) {
+            // TODO: 모달로 교체해야 함
+            window.alert("---- 임시 경고창")
+            return
+        }
         postFn(body)
     }
 
