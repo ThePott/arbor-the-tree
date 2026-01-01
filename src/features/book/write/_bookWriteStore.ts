@@ -95,17 +95,13 @@ const useBookWriteStore = create<BookWriteStoreState>()(
                 ),
             updateRowArray: (rowIndex, columnKey, value) => {
                 const rowArray = [...get().rowArray]
+                if (!value && !rowArray[rowIndex][columnKey].value) return
 
                 const previousOverlaying = findPreviousOverlaying({ rowIndex, columnKey, rowArray })
                 updateOverlayingColumn({ rowIndex, columnKey, value, previousOverlaying, rowArray })
 
                 // NOTE: update underlying value by value from input
                 rowArray[rowIndex][columnKey].value = value
-
-                console.log({ rowArray })
-                if (value) {
-                    debugger
-                }
 
                 set({ rowArray })
             },

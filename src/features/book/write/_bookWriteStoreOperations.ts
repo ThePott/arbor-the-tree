@@ -188,14 +188,7 @@ export const updateOverlayingColumn = ({
         // NOTE: 입력된 실제 값(underlyingValue)이 없고 문제 번호도 안 적혀있으면 오버레이를 하지 않음
         if (!iteraingRow.question_name.value) return
 
-        // NOTE: 입력된 실제 값이 없어서 이전 오버레이를 따라가야 하는데 오버레이가 없으면 에러 띄움
-        if (!previousOverlaying) {
-            iteratingCell.isError = true
-            iteratingCell.overlaying = "ERROR"
-            return
-        }
-
         // NOTE: 입력된 실제 값(underlyingValue)이 없다면 이전 오버레이 값을 따라감
-        iteratingCell.overlaying = previousOverlaying
+        iteratingCell.overlaying = previousOverlaying ?? ""
     })
 }
