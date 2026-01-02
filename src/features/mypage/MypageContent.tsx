@@ -3,25 +3,40 @@ import Labeled from "@/packages/components/Labeled/Labeled"
 import { Container, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Select from "@/packages/components/Select/Select"
-import type { Role } from "@/shared/interfaces"
+import type { Me, Resume, Role } from "@/shared/interfaces"
 import { Activity, useState } from "react"
 import { Controller, useForm, type FieldValues } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { profileSchema, type ProfileSchema } from "./_profileSchema"
 import useProfileMutation from "./_useProfileMutation"
-import useGlobalStore from "@/shared/store/globalStore"
 import ExpandableDiv from "@/packages/components/ExpandableDiv/ExpendableDiv"
 import SchoolAutoComplete from "./_SchoolAutoComplete"
+import HagwonAutoComplete from "./_HagwonAutoComplete"
+import useProfileQuery from "./_useProfileQuery"
 
-const MypageContent = () => {
-    const [role, setRole] = useState<Role | null>(null)
-    const me = useGlobalStore((state) => state.me)
+const roleToText: Record<Role, string> = {
+    PRINCIPAL: "원장",
+    STUDENT: "학생",
+    HELPER: "조교",
+    PARENT: "학부모",
+    MAINTAINER: "관리자",
+}
 
+interface MypageContentProps {
+    me: Me | null
+    resume: Resume | null
+}
+
+const MypageContent = ({ me, resume }: MypageContentProps) => {
+    const [role, setRole] = useState<Role | null>(resume?.role ?? me?.role ?? null)
+
+    useProfileQuery()
     const { mutate, isPending } = useProfileMutation()
-
     const {
         register,
         handleSubmit,
+        setError,
+        clearErrors,
         control,
         formState: { errors },
     } = useForm({ resolver: zodResolver(profileSchema) })
@@ -35,6 +50,9 @@ const MypageContent = () => {
         mutate(body)
     }
 
+    const defaultRole: Role | undefined = resume?.role ?? me?.role
+    const defaultRoleInText: string | undefined = defaultRole ? roleToText[defaultRole] : undefined
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Container width="md" isPadded>
@@ -42,12 +60,12 @@ const MypageContent = () => {
                     <Vstack gap="lg">
                         <Labeled isRequired isInDanger={Boolean(errors.name)}>
                             <Labeled.Header>이름</Labeled.Header>
-                            <Labeled.Input {...register("name")} />
+                            <Labeled.Input {...register("name")} defaultValue={me.name} />
                             <Labeled.Footer>{errors.name?.message}</Labeled.Footer>
                         </Labeled>
                         <Labeled isRequired isInDanger={Boolean(errors.phone_number)}>
                             <Labeled.Header>핸드폰 번호</Labeled.Header>
-                            <Labeled.Input {...register("phone_number")} />
+                            <Labeled.Input {...register("phone_number")} defaultValue={me.phone_number} />
                             <Labeled.Footer>{errors.phone_number?.message}</Labeled.Footer>
                         </Labeled>
                         <Labeled isRequired isInDanger={Boolean(errors.role)}>
@@ -62,6 +80,7 @@ const MypageContent = () => {
                                             onChange(value)
                                         }}
                                         isInDanger={Boolean(errors.role)}
+                                        defaultLabel={defaultRoleInText}
                                     >
                                         <Select.Trigger>권한을 선택해주세요</Select.Trigger>
                                         <Select.Content>
@@ -79,20 +98,62 @@ const MypageContent = () => {
                             />
                             <Labeled.Footer>{errors.role?.message}</Labeled.Footer>
                         </Labeled>
-                        <Labeled isRequired isInDanger={Boolean(errors.hagwon)}>
-                            <Labeled.Header>학원</Labeled.Header>
-                            <Labeled.Input {...register("hagwon")} className="w-full" />
-                            <Labeled.Footer>{errors.hagwon?.message}</Labeled.Footer>
-                        </Labeled>
+
+                        {role && (
+                            <Labeled isRequired isInDanger={Boolean(errors.hagwon)}>
+                                <Labeled.Header>학원</Labeled.Header>
+                                <Controller
+                                    control={control}
+                                    name="hagwon"
+                                    render={({ field: { onChange }, fieldState: { error } }) => (
+                                        <HagwonAutoComplete
+                                            isForPrincipal={role === "PRINCIPAL"}
+                                            onValueChange={onChange}
+                                            onErrorChange={(innerError) => {
+                                                if (innerError && error) return
+                                                if (!innerError && !error) return
+
+                                                if (innerError) {
+                                                    setError("hagwon", innerError)
+                                                    return
+                                                }
+                                                clearErrors("hagwon")
+                                            }}
+                                            error={error}
+                                            defaultValue={resume?.hagwon_name}
+                                        />
+                                    )}
+                                />
+                                <Labeled.Footer>{errors.hagwon?.message}</Labeled.Footer>
+                            </Labeled>
+                        )}
 
                         <ExpandableDiv>
                             <Activity mode={role === "STUDENT" ? "visible" : "hidden"}>
-                                <Labeled isRequired isInDanger={Boolean(errors.hagwon)}>
+                                <Labeled isRequired isInDanger={Boolean(errors.school)}>
                                     <Labeled.Header>학교</Labeled.Header>
                                     <Controller
                                         control={control}
                                         name="school"
-                                        render={({ field: { onChange } }) => <SchoolAutoComplete onChange={onChange} />}
+                                        render={({ field: { onChange }, fieldState: { error } }) => (
+                                            <SchoolAutoComplete
+                                                onValueChange={onChange}
+                                                onErrorChange={(innerError) => {
+                                                    if (innerError && error) return
+                                                    if (!innerError && !error) return
+
+                                                    if (!innerError) {
+                                                        clearErrors("school")
+                                                        return
+                                                    }
+
+                                                    // NOTE: 나중에는 학교 API를 받아와서 할 거니까 이대로 하는 게 맞다
+                                                    setError("school", innerError)
+                                                }}
+                                                error={error}
+                                                defaultValue={resume?.school_name}
+                                            />
+                                        )}
                                     />
                                     <Labeled.Footer>{errors.school?.message}</Labeled.Footer>
                                 </Labeled>

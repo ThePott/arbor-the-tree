@@ -2,11 +2,15 @@ import AutoCompleteStoreProvider, { type AutoCompleteInitialValue } from "./_Aut
 import AutoCompleteInput from "./_AutoCompleteInput"
 import AutoCompleteContent from "./_AutoCompleteContent"
 
-const AutoComplete = (initialValues: AutoCompleteInitialValue) => {
+interface WithAutoCompleteProps {
+    outerIsRed: boolean
+}
+
+const AutoComplete = ({ outerIsRed, ...initialValues }: AutoCompleteInitialValue & WithAutoCompleteProps) => {
     return (
         <AutoCompleteStoreProvider {...initialValues}>
             <div className="relative">
-                <AutoCompleteInput />
+                <AutoCompleteInput outerIsRed={outerIsRed} />
                 <AutoCompleteContent />
             </div>
         </AutoCompleteStoreProvider>

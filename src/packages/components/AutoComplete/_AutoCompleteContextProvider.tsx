@@ -1,14 +1,18 @@
-import { type ReactNode, type RefObject, useRef, useState } from "react"
+import { type ReactNode, type RefObject, useCallback, useRef, useState } from "react"
 import { createStore, type StoreApi } from "zustand"
-import { StoreContext } from "./_autoCompleteHooks"
+import { AutoCompleteStoreContext } from "./_autoCompleteHooks"
 
-// type AutoCompleteStatus = "normal" | "red" | "green"
-type AutoCompleteAvailable = "onlyNew" | "onlyExisting"
+export type AutoCompleteAvailable = "onlyNew" | "onlyExisting" | "any"
 
 export interface AutoCompleteInitialValue {
-    onChange: (value: string) => void
+    onValueChange: (value: string, isError: boolean) => void
+    onErrorChange?: (isError: boolean) => void
     getOptionArray: (searchText: string) => void
     available: AutoCompleteAvailable
+    queryKey: string[]
+    defaultValue?: string
+    variant?: "contained" | "ghost"
+    colorChangeIn?: "line" | "fill"
 }
 
 interface AutoCompleteStoreStateBase {
@@ -37,25 +41,29 @@ const AutoCompleteStoreProvider = ({
 } & AutoCompleteInitialValue) => {
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const autoCompleteStore = createStore<AutoCompleteStoreState>((set) => ({
-        inputRef,
+    const createAutoCompleteStore = useCallback(
+        () =>
+            createStore<AutoCompleteStoreState>((set) => ({
+                inputRef,
 
-        isContentOn: false,
-        setIsContentOn: (isContentOn) => set({ isContentOn }),
+                isContentOn: false,
+                setIsContentOn: (isContentOn) => set({ isContentOn }),
 
-        isRed: false,
-        setIsRed: (isRed: boolean) => set({ isRed }),
+                isRed: false,
+                setIsRed: (isRed: boolean) => set({ isRed }),
 
-        inputValue: "",
-        setInputValue: (inputValue: string) => set({ inputValue }),
+                inputValue: "",
+                setInputValue: (inputValue: string) => set({ inputValue }),
 
-        optionArray: [],
-        setOptionArray: (schoolNameArray) => set({ optionArray: schoolNameArray }),
+                optionArray: [],
+                setOptionArray: (schoolNameArray) => set({ optionArray: schoolNameArray }),
 
-        ...initialValues,
-    }))
-    const [store, _setStore] = useState<StoreApi<AutoCompleteStoreState>>(autoCompleteStore)
-    return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
+                ...initialValues,
+            })),
+        [initialValues]
+    )
+    const [store, _setStore] = useState<StoreApi<AutoCompleteStoreState>>(createAutoCompleteStore)
+    return <AutoCompleteStoreContext.Provider value={store}>{children}</AutoCompleteStoreContext.Provider>
 }
 
 export default AutoCompleteStoreProvider

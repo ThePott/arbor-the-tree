@@ -5,8 +5,11 @@ import AutoCompleteOption from "./_AutoCompleteItem"
 import { useAutoCompleteStore } from "./_autoCompleteHooks"
 import ExpandableDiv from "../ExpandableDiv/ExpendableDiv"
 import clsx from "clsx"
+import { useEffect } from "react"
+import useGlobalStore from "@/shared/store/globalStore"
 
 const AutoCompleteContent = () => {
+    const setIsBodyScrollable = useGlobalStore((state) => state.setIsBodyScrollable)
     const optionArray = useAutoCompleteStore((state) => state.optionArray)
     const isContentOn = useAutoCompleteStore((state) => state.isContentOn)
     const setIsContentOn = useAutoCompleteStore((state) => state.setIsContentOn)
@@ -17,10 +20,14 @@ const AutoCompleteContent = () => {
 
     const filteredOptionArray = optionArray.filter((option) => option.includes(inputValue))
 
-    const isVisible = isContentOn && optionArray.length > 0
+    const isVisible = isContentOn && filteredOptionArray.length > 0
+
+    useEffect(() => {
+        setIsBodyScrollable(!isVisible)
+    }, [isVisible])
 
     return (
-        <ExpandableDiv className="my-my-sm absolute top-full w-full">
+        <ExpandableDiv className="my-my-sm absolute top-full z-10 w-full">
             {isVisible && (
                 <RoundBox
                     ref={contentRef}

@@ -23,7 +23,7 @@ const makeAnimation = (animation: Animation, isDramatic: boolean) => {
 
     const variants = {
         hidden: { filter: `blur(${blurRadiusInPixel}px)`, transform: `translateY(${transformYInPixel}px)`, opacity: 0 },
-        visible: { filter: "blur(0)", transform: "translateY(0)", opacity: 1 },
+        visible: { filter: "blur(0px)", transform: "translateY(0px)", opacity: 1 },
     }
 
     return { transition, variants }
