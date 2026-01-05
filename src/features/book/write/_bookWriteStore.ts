@@ -72,10 +72,11 @@ const useBookWriteStore = create<BookWriteStoreState>()(
                         return acc
                     }, 0)
 
-                    // NOTE: 문제를 지웠는데 중간을 지운 거라면 오류
                     if (rowIndex < lastQuestionIndex) {
+                        // NOTE: 중간을 지운 거라면...
                         cell.isError = true
                     } else {
+                        // NOTE: 끝을 지원 거라면...
                         const { question_name: _question_name, ...rest } = row
                         const isClearingOverlay = Object.entries(rest).every(([_key, column]) => !column.value)
                         if (isClearingOverlay) {
@@ -87,10 +88,31 @@ const useBookWriteStore = create<BookWriteStoreState>()(
                             // NOTE: 다른 값이 있으면 오류 띄우기
                             cell.isError = true
                         }
+
+                        // NOTE: 마지막 인덱스 이후의 모든 오류 초기화
+                        for (let i = lastQuestionIndex + 1; i < rowArray.length; i++) {
+                            rowArray[i].question_name.isError = false
+                        }
                     }
                 }
 
-                // NOTE: 문제 말고 다른 걸 입력했는데 문제가 없으면 -> 오류
+                // NOTE: 문제를 입력했는데...
+                if (value && columnKey === "question_name") {
+                    // NOTE: 내 위로 빈 행 필터
+                    // NOTE: 원래 index를 살려야 하기 때문에 slice가 아닌 reduce 사용
+                    const filteredArray = rowArray.reduce((acc: BookWriteRow[], row, index) => {
+                        if (index >= rowIndex) return acc
+                        if (!row.question_name.value) return [...acc, row]
+                        return acc
+                    }, [])
+
+                    // NOTE: 내 위로 빈 것이 있으면 그것들은 오류 처리
+                    filteredArray.forEach((row) => {
+                        row.question_name.isError = true
+                    })
+                }
+
+                // NOTE: 문제 말고 다른 걸 입력했는데 문제가 없으면...
                 if (value && !row.question_name.value) {
                     row.question_name.isError = true
                 }
