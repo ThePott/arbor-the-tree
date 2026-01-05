@@ -62,6 +62,10 @@ const useBookWriteStore = create<BookWriteStoreState>()(
 
                 rowArray[rowIndex][columnKey].value = value
 
+                if (value && !rowArray[rowIndex].question_name.value) {
+                    rowArray[rowIndex].question_name.isError = true
+                }
+
                 recalculateColumn({ rowArray, columnKey })
                 set({ rowArray })
             },
