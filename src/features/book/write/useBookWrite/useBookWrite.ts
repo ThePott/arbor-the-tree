@@ -15,7 +15,6 @@ const useBookWriteMutation = () => {
 interface UseBookWriteEventHandlerProps {
     postFn: (body: BookWritePayload) => void
 }
-
 const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => {
     const title = useBookWriteStore((state) => state.title)
     const publishedYear = useBookWriteStore((state) => state.publishedYear)
