@@ -3,7 +3,7 @@ import type { BookWriteStoreState } from "./_bookWriteStoreState"
 import { BW_DEFAULT_ROW_COUNT, BW_TOPIC_STEP_TAB_ARRAY } from "./_bookWriteConstants"
 import type { BookWriteRow } from "./_bookWriteInterfaces"
 import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
-import { findPreviousOverlaying, updateOverlayingColumn_old, validateValue } from "./_bookWriteStoreOperations"
+import { updateOverlayingColumn } from "./_bookWriteStoreOperations"
 import { createJSONStorage, persist } from "zustand/middleware"
 
 const useBookWriteStore = create<BookWriteStoreState>()(
@@ -60,16 +60,9 @@ const useBookWriteStore = create<BookWriteStoreState>()(
                 const rowArray = [...get().rowArray]
                 if (!value && !rowArray[rowIndex][columnKey].value) return
 
-                const cell = rowArray[rowIndex][columnKey]
+                rowArray[rowIndex][columnKey].value = value
 
-                const isValid = validateValue({ startRowIndex: rowIndex, columnKey, value })
-                cell.isError = !isValid
-
-                const previousOverlaying = findPreviousOverlaying({ rowIndex, columnKey, rowArray })
-                updateOverlayingColumn_old({ rowIndex, columnKey, value, previousOverlaying, rowArray })
-
-                // NOTE: update underlying value by value from input
-                cell.value = value
+                updateOverlayingColumn({ columnKey, rowArray })
 
                 set({ rowArray })
             },

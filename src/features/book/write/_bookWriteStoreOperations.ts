@@ -1,7 +1,6 @@
 import { separateNumberAtEnd } from "@/shared/utils/parseNumberAtEnd"
 import type { BookWriteRow, BookWriteRowFlat } from "./_bookWriteInterfaces"
 import useBookWriteStore from "./_bookWriteStore"
-import { BW_DEFAULT_ROW_COUNT } from "./_bookWriteConstants"
 
 type FindPreviousOverlayingProps = {
     rowIndex: number
@@ -252,6 +251,10 @@ export const recalculateColumn = ({
     columnKey,
     rowArray,
 }: RecalculateColumnProps): void => {
+    // TODO: 재계산 순서
+    // 1. 값 기입 -> 이건 스토어에서
+    // 2. overlay 혹은 ~ 핸들링
+    // 3. 이빨 빠진 곳 있는지 확인
     if (columnKey === "question_name") {
         console.log({ message: "need dedicated logic for thif" })
         return
