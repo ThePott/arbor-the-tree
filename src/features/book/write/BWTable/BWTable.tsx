@@ -90,6 +90,7 @@ const BWTable = () => {
                                         )}
                                         {columnKey !== "sub_question_name" && (
                                             <BWInputCell
+                                                key={`${virtualRow.index}_${columnKey}_${rowArray[virtualRow.index][columnKey].value}`}
                                                 value={rowArray[virtualRow.index][columnKey].value}
                                                 columnKey={columnKey}
                                                 rowIndex={virtualRow.index}

@@ -3,7 +3,7 @@ import type { BookWriteStoreState } from "./_bookWriteStoreState"
 import { BW_DEFAULT_ROW_COUNT, BW_TOPIC_STEP_TAB_ARRAY } from "./_bookWriteConstants"
 import type { BookWriteRow } from "./_bookWriteInterfaces"
 import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
-import { updateOverlayingColumn } from "./_bookWriteStoreOperations"
+import { recalculateColumn } from "./_bookWriteStoreOperations"
 import { createJSONStorage, persist } from "zustand/middleware"
 
 const useBookWriteStore = create<BookWriteStoreState>()(
@@ -62,8 +62,7 @@ const useBookWriteStore = create<BookWriteStoreState>()(
 
                 rowArray[rowIndex][columnKey].value = value
 
-                updateOverlayingColumn({ columnKey, rowArray })
-
+                recalculateColumn({ rowArray, columnKey })
                 set({ rowArray })
             },
         }),
