@@ -1,5 +1,5 @@
 import { separateNumberAtEnd as separateStringNumber } from "@/shared/utils/parseNumberAtEnd"
-import type { BookWriteRow, BookWriteRowFlat } from "./_bookWriteInterfaces"
+import { BOOK_DETAIL_KEY_ARRAY, type BookWriteRow, type BookWriteRowFlat } from "./_bookWriteInterfaces"
 import useBookWriteStore from "./_bookWriteStore"
 
 type MakeNewOverlayingProps = {
@@ -81,8 +81,25 @@ export const updateOverlayingColumn = ({
     })
 }
 
+type UpdateOverlayingInRowProps = {
+    startRowIndex: number
+    endRowIndex?: number
+    rowArray: BookWriteRow[]
+}
+export const updateOverlayingInRow = ({ startRowIndex, endRowIndex, rowArray }: UpdateOverlayingInRowProps) => {
+    endRowIndex = endRowIndex ? endRowIndex : startRowIndex
+    // NOTE: question_name, sub_question_name은 overlay가 없다
+    const columnKeyArray = BOOK_DETAIL_KEY_ARRAY.filter((key) => key !== "question_name" && key !== "sub_question_name")
+    columnKeyArray.forEach((columnKey) => {
+        updateOverlayingColumn({ startRowIndex, endRowIndex, columnKey, rowArray })
+    })
+}
+
+// NOTE: 여기서 신경쓸 것
+// NOTE: 입력되면 일단 row overlay 재계산
+// NOTE: "~"가 입력되면 "~" 로직 사용
 // NOTE: 여기서는 "~" 로직만 신경쓰면 된다
-export const updateQuestionNameColumn = ({ rowArray }: { rowArray: BookWriteRow[] }) => {
+export const handleTildaInQuestion = ({ rowArray }: { rowArray: BookWriteRow[] }) => {
     // NOTE: rowArray에서 ~ 들어있는 행들의 인덱스만 알아낸 다음
     // NOTE: 덮어씌울 후보 행들이 비어있는지 확인
     // NOTE: 안 비어있으면 에러 처리
@@ -96,6 +113,7 @@ export const updateQuestionNameColumn = ({ rowArray }: { rowArray: BookWriteRow[
     }, [])
 
     indexArrayIncludingTilda.map((filteredIndex) => {
+        // NOTE: 틸다 로직
         const { baseText, startNumber, endNumber } = separateStringNumber(rowArray[filteredIndex].question_name.value)
         let currentNumber: number = startNumber
 
@@ -111,12 +129,15 @@ export const updateQuestionNameColumn = ({ rowArray }: { rowArray: BookWriteRow[
         }
 
         // NOTE: 비어있으니 덮어쓰기
-        // NOTE: 지금까지의 오류 없애기
         for (let i = startIndex; i <= endIndex; i++) {
+            // NOTE: 틸다 로직에 맞춰 계산
             rowArray[i].question_name.value = `${baseText}${currentNumber}`
             currentNumber++
+            // NOTE: 지금까지의 오류 없애기
             rowArray[i].question_name.isError = false
         }
+
+        updateOverlayingInRow({ startRowIndex: startIndex, endRowIndex: endIndex, rowArray })
     })
 }
 
@@ -139,7 +160,7 @@ export const recalculateColumn = ({
     // 2. overlay 혹은 ~ 핸들링
     // 3. 이빨 빠진 곳 있는지 확인
     if (columnKey === "question_name") {
-        updateQuestionNameColumn({ rowArray })
+        handleTildaInQuestion({ rowArray })
         return
     }
 

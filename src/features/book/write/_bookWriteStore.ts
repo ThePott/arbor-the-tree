@@ -3,7 +3,7 @@ import type { BookWriteStoreState } from "./_bookWriteStoreState"
 import { BW_DEFAULT_ROW_COUNT, BW_TOPIC_STEP_TAB_ARRAY } from "./_bookWriteConstants"
 import { type BookWriteRow } from "./_bookWriteInterfaces"
 import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
-import { recalculateColumn } from "./_bookWriteStoreOperations"
+import { recalculateColumn, updateOverlayingInRow } from "./_bookWriteStoreOperations"
 import { createJSONStorage, persist } from "zustand/middleware"
 
 const useBookWriteStore = create<BookWriteStoreState>()(
@@ -73,7 +73,7 @@ const useBookWriteStore = create<BookWriteStoreState>()(
                     }, 0)
 
                     if (rowIndex < lastQuestionIndex) {
-                        // NOTE: 중간을 지운 거라면...
+                        // NOTE: 중간을 지운 거라면-> 에러
                         cell.isError = true
                     } else {
                         // NOTE: 끝을 지원 거라면...
@@ -98,6 +98,7 @@ const useBookWriteStore = create<BookWriteStoreState>()(
 
                 // NOTE: 문제를 입력했는데...
                 if (value && columnKey === "question_name") {
+                    // NOTE: 내 위로 빈 것이 있으면 그것들은 오류 처리
                     // NOTE: 내 위로 빈 행 필터
                     // NOTE: 원래 index를 살려야 하기 때문에 slice가 아닌 reduce 사용
                     const filteredArray = rowArray.reduce((acc: BookWriteRow[], row, index) => {
@@ -106,14 +107,17 @@ const useBookWriteStore = create<BookWriteStoreState>()(
                         return acc
                     }, [])
 
-                    // NOTE: 내 위로 빈 것이 있으면 그것들은 오류 처리
                     filteredArray.forEach((row) => {
                         row.question_name.isError = true
                     })
+
+                    // NOTE: 지금 행 재계산
+                    updateOverlayingInRow({ startRowIndex: rowIndex, endRowIndex: rowIndex, rowArray })
                 }
 
-                // NOTE: 문제 말고 다른 걸 입력했는데 문제가 없으면...
+                // NOTE: 문제 말고 다른 걸 입력했는데 문제 이름이 없으면...
                 if (value && !row.question_name.value) {
+                    // NOTE: 문제 비었다고 오류
                     row.question_name.isError = true
                 }
 
