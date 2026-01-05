@@ -111,9 +111,11 @@ export const updateQuestionNameColumn = ({ rowArray }: { rowArray: BookWriteRow[
         }
 
         // NOTE: 비어있으니 덮어쓰기
+        // NOTE: 지금까지의 오류 없애기
         for (let i = startIndex; i <= endIndex; i++) {
             rowArray[i].question_name.value = `${baseText}${currentNumber}`
             currentNumber++
+            rowArray[i].question_name.isError = false
         }
     })
 }
