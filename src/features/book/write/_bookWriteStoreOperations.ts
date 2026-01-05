@@ -2,11 +2,13 @@ import { separateNumberAtEnd as separateStringNumber } from "@/shared/utils/pars
 import { BOOK_DETAIL_KEY_ARRAY, type BookWriteRow, type BookWriteRowFlat } from "./_bookWriteInterfaces"
 import useBookWriteStore from "./_bookWriteStore"
 
+// TODO: other column 으로 분리
 type MakeNewOverlayingProps = {
     previousOverlaying: string | null
+    rowIndex: number
     columnKey: keyof BookWriteRowFlat
 }
-const makeNewOverlaying = ({ previousOverlaying, columnKey }: MakeNewOverlayingProps): string | null => {
+const makeNewOverlaying = ({ previousOverlaying, rowIndex, columnKey }: MakeNewOverlayingProps): string | null => {
     // NOTE: 숫자 열의 경우
     if (columnKey !== "topic" && columnKey !== "step") {
         // NOTE: 이전 값이 없으면 1로 만든다
@@ -18,9 +20,12 @@ const makeNewOverlaying = ({ previousOverlaying, columnKey }: MakeNewOverlayingP
     const state = useBookWriteStore.getState()
     const isForTopic = columnKey === "topic"
     const lineArray = isForTopic ? state.topicArray : state.stepArray
+    // NOTE: 이전 게 없으면 index = -1
     const indexOfValueRightAbove = lineArray.findIndex((line) => line === previousOverlaying)
 
-    const newIndex = isForTopic ? indexOfValueRightAbove + 1 : (indexOfValueRightAbove + 1) % lineArray.length
+    const newIndexForTopic = indexOfValueRightAbove === -1 && rowIndex > 0 ? -1 : indexOfValueRightAbove + 1
+    const newIndexForStep = (indexOfValueRightAbove + 1) % lineArray.length
+    const newIndex = isForTopic ? newIndexForTopic : newIndexForStep
 
     // NOTE: this is null if topic info is not enough
     const newValue = lineArray[newIndex] ?? null
@@ -55,7 +60,7 @@ const updateOverlayingColumn = ({
 
         // NOTE: "/"가 밑에 있으면 오버레이 업데이트 함
         if (iteratingCell.value === "/") {
-            const newOverlaying = makeNewOverlaying({ previousOverlaying, columnKey })
+            const newOverlaying = makeNewOverlaying({ previousOverlaying, rowIndex: iteratingIndex, columnKey })
             iteratingCell.overlaying = newOverlaying ?? ""
             // NOTE: topic에 적힌 게 부족해지면 에러 발생
             // NOTE: 그 외에는 이게 falsy할 리 없으니 이전 값을 유지
@@ -95,6 +100,7 @@ export const updateOverlayingInRow = ({ startRowIndex, endRowIndex, rowArray }: 
     })
 }
 
+// TODO: question_name column으로 분리
 // NOTE: 여기서 신경쓸 것
 // NOTE: 입력되면 일단 row overlay 재계산
 // NOTE: "~"가 입력되면 "~" 로직 사용
