@@ -23,6 +23,7 @@ const makeNewOverlaying = ({ previousOverlaying, rowIndex, columnKey }: MakeNewO
     // NOTE: 이전 게 없으면 index = -1
     const indexOfValueRightAbove = lineArray.findIndex((line) => line === previousOverlaying)
 
+    // NOTE: topic은 맨 위에서만 이전게 없어도 됨, 중간에서 그렇다면 topic line 초과한 것이니 오류
     const newIndexForTopic = indexOfValueRightAbove === -1 && rowIndex > 0 ? -1 : indexOfValueRightAbove + 1
     const newIndexForStep = (indexOfValueRightAbove + 1) % lineArray.length
     const newIndex = isForTopic ? newIndexForTopic : newIndexForStep
