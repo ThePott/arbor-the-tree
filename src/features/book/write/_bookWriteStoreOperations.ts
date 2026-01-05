@@ -33,7 +33,7 @@ type UpdateOverlayingColumnProps = {
     columnKey: keyof BookWriteRow
     rowArray: BookWriteRow[]
 }
-export const updateOverlayingColumn = ({
+const updateOverlayingColumn = ({
     startRowIndex,
     endRowIndex,
     columnKey,
@@ -98,8 +98,7 @@ export const updateOverlayingInRow = ({ startRowIndex, endRowIndex, rowArray }: 
 // NOTE: 여기서 신경쓸 것
 // NOTE: 입력되면 일단 row overlay 재계산
 // NOTE: "~"가 입력되면 "~" 로직 사용
-// NOTE: 여기서는 "~" 로직만 신경쓰면 된다
-export const handleTildaInQuestion = ({ rowArray }: { rowArray: BookWriteRow[] }) => {
+const handleTildaInQuestion = ({ rowArray }: { rowArray: BookWriteRow[] }) => {
     // NOTE: rowArray에서 ~ 들어있는 행들의 인덱스만 알아낸 다음
     // NOTE: 덮어씌울 후보 행들이 비어있는지 확인
     // NOTE: 안 비어있으면 에러 처리
