@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import type { BookWriteStoreState } from "./_bookWriteStoreState"
 import { BW_DEFAULT_ROW_COUNT, BW_TOPIC_STEP_TAB_ARRAY } from "./_bookWriteConstants"
-import { BOOK_DETAIL_KEY_ARRAY, type BookWriteRow } from "./_bookWriteInterfaces"
+import { type BookWriteRow } from "./_bookWriteInterfaces"
 import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
 import { recalculateColumn } from "./_bookWriteStoreOperations"
 import { createJSONStorage, persist } from "zustand/middleware"
