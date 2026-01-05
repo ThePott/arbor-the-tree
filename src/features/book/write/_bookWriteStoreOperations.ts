@@ -1,4 +1,4 @@
-import { separateNumberAtEnd } from "@/shared/utils/parseNumberAtEnd"
+import { separateNumberAtEnd as separateStringNumber } from "@/shared/utils/parseNumberAtEnd"
 import type { BookWriteRow, BookWriteRowFlat } from "./_bookWriteInterfaces"
 import useBookWriteStore from "./_bookWriteStore"
 
@@ -74,7 +74,7 @@ const updateOverlayingQuestionName = ({
         }
     }
 
-    const [recentBase, initialNumberAtEnd] = separateNumberAtEnd(recentText)
+    const [recentBase, initialNumberAtEnd] = separateStringNumber(recentText)
     let numberAtEnd = initialNumberAtEnd
     for (let iteratingIndex = recentRowIndex + 1; iteratingIndex <= rowIndex; iteratingIndex++) {
         const iteratingCell = rowArray[iteratingIndex][columnKey]
@@ -183,8 +183,8 @@ export const validateValue = ({ rowIndex, columnKey, value }: ValidateValueProps
 }
 
 type UpdateOverlayingColumnProps = {
-    startRowIndex?: number
-    endRowIndex?: number
+    startRowIndex: number
+    endRowIndex: number
     columnKey: keyof BookWriteRow
     rowArray: BookWriteRow[]
 }
@@ -195,9 +195,6 @@ export const updateOverlayingColumn = ({
     rowArray,
 }: UpdateOverlayingColumnProps): void => {
     if (columnKey === "question_name") return
-
-    startRowIndex = startRowIndex ? startRowIndex : 0
-    endRowIndex = endRowIndex ? endRowIndex : rowArray.length - 1
 
     const previousRow = rowArray[startRowIndex - 1]
     let previousOverlaying = previousRow ? previousRow[columnKey].overlaying : null
@@ -239,6 +236,40 @@ export const updateOverlayingColumn = ({
     })
 }
 
+// NOTE: 여기서는 "~" 로직만 신경쓰면 된다
+export const updateQuestionNameColumn = ({ rowArray }: { rowArray: BookWriteRow[] }) => {
+    debugger
+    // NOTE: rowArray에서 ~ 들어있는 행들의 인덱스만 알아낸 다음
+    // NOTE: 덮어씌울 후보 행들이 비어있는지 확인
+    // NOTE: 안 비어있으면 에러 처리
+    // NOTE: 비어있으면 덮어씌우기
+    const indexArrayIncludingTilda: number[] = rowArray.reduce((acc: number[], row, index) => {
+        if (row.question_name.value.includes("~")) {
+            return [...acc, index]
+        }
+        return acc
+    }, [])
+    indexArrayIncludingTilda.map((filteredIndex) => {
+        const { baseText, startNumber, endNumber } = separateStringNumber(rowArray[filteredIndex].question_name.value)
+        let currentNumber: number = startNumber
+
+        const startIndex = filteredIndex
+        const endIndex = filteredIndex + endNumber - startNumber
+        // NOTE: filteredIndex에서부터 하나라도 채워져 있으면 false
+        const isEmpty = rowArray.slice(startIndex + 1, endIndex + 1).every((row) => !row.question_name)
+        if (!isEmpty) {
+            rowArray[filteredIndex].question_name.isError = true
+            return
+        }
+
+        // NOTE: 비어있으니 덮어쓰기
+        for (let i = startIndex; i <= endIndex; i++) {
+            rowArray[i].question_name.value = `${baseText}${currentNumber}`
+            currentNumber++
+        }
+    })
+}
+
 type RecalculateColumnProps = {
     startRowIndex?: number
     endRowIndex?: number
@@ -251,12 +282,14 @@ export const recalculateColumn = ({
     columnKey,
     rowArray,
 }: RecalculateColumnProps): void => {
+    startRowIndex = startRowIndex ? startRowIndex : 0
+    endRowIndex = endRowIndex ? endRowIndex : rowArray.length - 1
     // TODO: 재계산 순서
     // 1. 값 기입 -> 이건 스토어에서
     // 2. overlay 혹은 ~ 핸들링
     // 3. 이빨 빠진 곳 있는지 확인
     if (columnKey === "question_name") {
-        console.log({ message: "need dedicated logic for thif" })
+        updateQuestionNameColumn({ rowArray })
         return
     }
 
