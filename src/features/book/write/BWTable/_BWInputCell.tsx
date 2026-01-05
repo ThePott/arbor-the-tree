@@ -1,6 +1,6 @@
 import Input from "@/packages/components/Input/Input"
 import type { BookWriteRowFlat } from "../_bookWriteInterfaces"
-import useBookWriteStore from "../_bookWriteStore"
+import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 
 const BWInputCell = ({
     value,

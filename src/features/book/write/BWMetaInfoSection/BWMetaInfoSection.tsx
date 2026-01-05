@@ -1,8 +1,8 @@
 import Input from "@/packages/components/Input/Input"
 import RoundBox from "@/packages/components/RoundBox"
-import useBookWriteStore from "../_bookWriteStore"
 import { Vstack } from "@/packages/components/layouts"
 import Title from "@/packages/components/Title/Title"
+import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 
 const BWMetaInfoSection = () => {
     const title = useBookWriteStore((state) => state.title)

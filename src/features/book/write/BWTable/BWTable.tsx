@@ -10,7 +10,7 @@ import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
 import { useRef } from "react"
 import { useVirtualizer } from "@tanstack/react-virtual"
 import { BW_DEFAULT_ROW_COUNT } from "../_bookWriteConstants"
-import useBookWriteStore from "../_bookWriteStore"
+import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 
 // NOTE: for sub question auto complete
 const getBookDetail = async (searchText: string) => {

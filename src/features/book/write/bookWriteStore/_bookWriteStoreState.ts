@@ -1,5 +1,5 @@
 import type { Tab } from "@/packages/components/TabBar/TabBar"
-import type { BookWriteRow, BWTopicStep } from "./_bookWriteInterfaces"
+import type { BookWriteRow, BWTopicStep } from "../_bookWriteInterfaces"
 
 export interface BookWriteStoreState {
     title: string

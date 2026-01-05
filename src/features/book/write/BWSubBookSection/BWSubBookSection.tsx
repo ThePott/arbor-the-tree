@@ -3,7 +3,7 @@ import Title from "@/packages/components/Title/Title"
 import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
 import { withHeadInstance } from "@/packages/api/axiosInstances"
 import type { Book } from "@/shared/interfaces"
-import useBookWriteStore from "../_bookWriteStore"
+import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 
 const getBookTitleArray = async () => {
     const response = await withHeadInstance.get("/book", { params: { activity: "total" } })

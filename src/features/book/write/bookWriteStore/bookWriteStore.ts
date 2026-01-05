@@ -1,10 +1,11 @@
 import { create } from "zustand"
 import type { BookWriteStoreState } from "./_bookWriteStoreState"
-import { BW_DEFAULT_ROW_COUNT, BW_TOPIC_STEP_TAB_ARRAY } from "./_bookWriteConstants"
-import { type BookWriteRow } from "./_bookWriteInterfaces"
 import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
-import { recalculateColumn, updateOverlayingInRow } from "./_bookWriteStoreOperations"
 import { createJSONStorage, persist } from "zustand/middleware"
+import { BW_TOPIC_STEP_TAB_ARRAY, BW_DEFAULT_ROW_COUNT } from "../_bookWriteConstants"
+import type { BookWriteRow } from "../_bookWriteInterfaces"
+import { updateOverlayingInRow } from "./bwsOperations/bwsOtherColumnsOperations"
+import { recalculateColumn } from "./bwsOperations/bwsQuestionOperations"
 
 const useBookWriteStore = create<BookWriteStoreState>()(
     persist(

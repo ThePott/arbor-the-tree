@@ -1,8 +1,8 @@
 import { withHeadInstance } from "@/packages/api/axiosInstances"
 import { useMutation } from "@tanstack/react-query"
-import useBookWriteStore from "../_bookWriteStore"
 import type { BookWriteRowFlat, BookWritePayload } from "../_bookWriteInterfaces"
 import useGlobalStore from "@/shared/store/globalStore"
+import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 
 const useBookWriteMutation = () => {
     const postMutation = useMutation({
