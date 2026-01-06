@@ -24,7 +24,6 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         if (!me) throw new Error("---- me missing")
         event.preventDefault()
-        event.stopPropagation()
 
         const data: BookWriteRowFlat[] = rowArray
             .filter((row) => row.question_name.value)
@@ -50,7 +49,12 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
         postFn(body)
     }
 
-    return { handleSubmit }
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
+        if (event.key !== "Enter") return
+        event.preventDefault()
+    }
+
+    return { handleSubmit, handleKeyDown }
 }
 
 const useBookWrite = () => {

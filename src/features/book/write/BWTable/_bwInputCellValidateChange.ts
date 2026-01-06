@@ -27,7 +27,7 @@ type ValidateChangeProps = {
     event: React.ChangeEvent<HTMLInputElement>
     columnKey: keyof BookWriteRow
 }
-export const validateChange = ({ event, columnKey }: ValidateChangeProps) => {
+const validateChange = ({ event, columnKey }: ValidateChangeProps) => {
     switch (columnKey) {
         case "topic":
             acceptOnlySlash(event)
@@ -48,3 +48,5 @@ export const validateChange = ({ event, columnKey }: ValidateChangeProps) => {
             return
     }
 }
+
+export default validateChange

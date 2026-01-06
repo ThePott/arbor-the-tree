@@ -6,11 +6,7 @@ import useBookWrite from "./useBookWrite/useBookWrite"
 import BWMetaInfoSection from "./BWMetaInfoSection/BWMetaInfoSection"
 
 const BookWriteContent = () => {
-    const { handleSubmit } = useBookWrite()
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
-        if (event.key !== "Enter") return
-        event.preventDefault()
-    }
+    const { handleSubmit, handleKeyDown } = useBookWrite()
 
     return (
         <form className="h-full w-full" onSubmit={handleSubmit} onKeyDown={handleKeyDown}>

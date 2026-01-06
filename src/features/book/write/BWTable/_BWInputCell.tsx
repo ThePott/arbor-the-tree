@@ -1,7 +1,8 @@
 import Input from "@/packages/components/Input/Input"
 import type { BookWriteRowFlat } from "../_bookWriteInterfaces"
 import useBookWriteStore from "../bookWriteStore/bookWriteStore"
-import { validateChange } from "./_bwInpuCellEventHandlers"
+import handleKeyDownNavigation from "./_bwInputCellNavigateWithKeydown"
+import validateChange from "./_bwInputCellValidateChange"
 
 const BWInputCell = ({
     value,
@@ -31,6 +32,8 @@ const BWInputCell = ({
                 onBlur={handleBlur}
                 isRed={cell.isError}
                 onChange={(event) => validateChange({ event, columnKey })}
+                data-coordinate={`${columnKey}-${rowIndex}`}
+                onKeyDown={(event) => handleKeyDownNavigation({ event, columnKey, rowIndex })}
             />
             <p className="text-fg-muted pointer-events-none absolute top-1/2 left-6 -translate-y-1/2">
                 {cell.overlaying}
