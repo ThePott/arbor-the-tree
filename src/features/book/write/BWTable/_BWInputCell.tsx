@@ -1,6 +1,7 @@
 import Input from "@/packages/components/Input/Input"
 import type { BookWriteRowFlat } from "../_bookWriteInterfaces"
 import useBookWriteStore from "../bookWriteStore/bookWriteStore"
+import { validateChange } from "./_bwInpuCellEventHandlers"
 
 const BWInputCell = ({
     value,
@@ -23,7 +24,14 @@ const BWInputCell = ({
 
     return (
         <div className="relative">
-            <Input colorChangeIn="fill" variant="ghost" defaultValue={value} onBlur={handleBlur} isRed={cell.isError} />
+            <Input
+                colorChangeIn="fill"
+                variant="ghost"
+                defaultValue={value}
+                onBlur={handleBlur}
+                isRed={cell.isError}
+                onChange={(event) => validateChange({ event, columnKey })}
+            />
             <p className="text-fg-muted pointer-events-none absolute top-1/2 left-6 -translate-y-1/2">
                 {cell.overlaying}
             </p>
