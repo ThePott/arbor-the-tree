@@ -4,8 +4,8 @@ import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
 import { createJSONStorage, persist } from "zustand/middleware"
 import { BW_TOPIC_STEP_TAB_ARRAY, BW_DEFAULT_ROW_COUNT } from "../_bookWriteConstants"
 import type { BookWriteRow } from "../_bookWriteInterfaces"
-import { updateOverlayingInRow } from "./bwsOperations/bwsOtherColumnsOperations"
-import { recalculateColumn } from "./bwsOperations/bwsQuestionOperations"
+import { handleQuestionMutation } from "./bookWriteStoreOperations/handleMutateQuestion"
+import { updateOverlayingColumn } from "./bookWriteStoreOperations/handleMutateOtherColumn/updateOverlayings"
 
 const useBookWriteStore = create<BookWriteStoreState>()(
     persist(
@@ -61,68 +61,20 @@ const useBookWriteStore = create<BookWriteStoreState>()(
                 const rowArray = [...get().rowArray]
                 const row = rowArray[rowIndex]
                 const cell = row[columnKey]
+
+                // NOTE: 빈 셀 클릭했으면 아무것도 안 함
                 if (!value && !row[columnKey].value) return
 
                 cell.value = value
                 cell.isError = false
 
                 // NOTE: 문제를 지웠는데...
-                if (!value && columnKey === "question_name") {
-                    const lastQuestionIndex = rowArray.reduce((acc, row, index) => {
-                        if (row.question_name.value) return index
-                        return acc
-                    }, 0)
-
-                    if (rowIndex < lastQuestionIndex) {
-                        // NOTE: 중간을 지운 거라면-> 에러
-                        cell.isError = true
-                    } else {
-                        // NOTE: 끝을 지원 거라면...
-                        const { question_name: _question_name, ...rest } = row
-                        const isClearingOverlay = Object.entries(rest).every(([_key, column]) => !column.value)
-                        if (isClearingOverlay) {
-                            // NOTE: 문제를 지웠는데 같은 행 다른 열에 값이 없으면 모든 오버레이 초기화
-                            Object.entries(row).forEach(([_key, column]) => {
-                                column.overlaying = ""
-                            })
-                        } else {
-                            // NOTE: 다른 값이 있으면 오류 띄우기
-                            cell.isError = true
-                        }
-
-                        // NOTE: 마지막 인덱스 이후의 모든 오류 초기화
-                        for (let i = lastQuestionIndex + 1; i < rowArray.length; i++) {
-                            rowArray[i].question_name.isError = false
-                        }
-                    }
+                if (columnKey === "question_name") {
+                    handleQuestionMutation({ rowArray, rowIndex, value })
+                } else {
+                    updateOverlayingColumn({ rowArray, columnKey })
                 }
 
-                // NOTE: 문제를 입력했는데...
-                if (value && columnKey === "question_name") {
-                    // NOTE: 내 위로 빈 것이 있으면 그것들은 오류 처리
-                    // NOTE: 내 위로 빈 행 필터
-                    // NOTE: 원래 index를 살려야 하기 때문에 slice가 아닌 reduce 사용
-                    const filteredArray = rowArray.reduce((acc: BookWriteRow[], row, index) => {
-                        if (index >= rowIndex) return acc
-                        if (!row.question_name.value) return [...acc, row]
-                        return acc
-                    }, [])
-
-                    filteredArray.forEach((row) => {
-                        row.question_name.isError = true
-                    })
-
-                    // NOTE: 지금 행 재계산
-                    updateOverlayingInRow({ startRowIndex: rowIndex, endRowIndex: rowIndex, rowArray })
-                }
-
-                // NOTE: 문제 말고 다른 걸 입력했는데 문제 이름이 없으면...
-                if (value && !row.question_name.value) {
-                    // NOTE: 문제 비었다고 오류
-                    row.question_name.isError = true
-                }
-
-                recalculateColumn({ rowArray, columnKey })
                 set({ rowArray })
             },
         }),

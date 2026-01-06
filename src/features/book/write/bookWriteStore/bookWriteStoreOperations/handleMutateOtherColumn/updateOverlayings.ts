@@ -1,7 +1,6 @@
-import { type BookWriteRowFlat, type BookWriteRow, BOOK_DETAIL_KEY_ARRAY } from "../../_bookWriteInterfaces"
-import useBookWriteStore from "../bookWriteStore"
+import { type BookWriteRowFlat, type BookWriteRow, BOOK_DETAIL_KEY_ARRAY } from "../../../_bookWriteInterfaces"
+import useBookWriteStore from "../../bookWriteStore"
 
-// TODO: other column 으로 분리
 type MakeNewOverlayingProps = {
     previousOverlaying: string | null
     rowIndex: number
@@ -33,8 +32,8 @@ const makeNewOverlaying = ({ previousOverlaying, rowIndex, columnKey }: MakeNewO
 }
 
 type UpdateOverlayingColumnProps = {
-    startRowIndex: number
-    endRowIndex: number
+    startRowIndex?: number
+    endRowIndex?: number
     columnKey: keyof BookWriteRow
     rowArray: BookWriteRow[]
 }
@@ -45,6 +44,9 @@ export const updateOverlayingColumn = ({
     rowArray,
 }: UpdateOverlayingColumnProps): void => {
     if (columnKey === "question_name") return
+
+    startRowIndex = startRowIndex ? startRowIndex : 0
+    endRowIndex = endRowIndex ? endRowIndex : rowArray.length - 1
 
     const previousRow = rowArray[startRowIndex - 1]
     let previousOverlaying = previousRow ? previousRow[columnKey].overlaying : null
