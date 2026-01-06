@@ -5,10 +5,7 @@ import { createJSONStorage, persist } from "zustand/middleware"
 import { BW_TOPIC_STEP_TAB_ARRAY, BW_DEFAULT_ROW_COUNT } from "../_bookWriteConstants"
 import type { BookWriteRow } from "../_bookWriteInterfaces"
 import { handleQuestionMutation } from "./bookWriteStoreOperations/handleMutateQuestion"
-import {
-    updateOverlayingColumn,
-    updateOverlayingInRow,
-} from "./bookWriteStoreOperations/handleMutateOtherColumn/updateOverlayings"
+import { updateOverlayingColumn } from "./bookWriteStoreOperations/handleMutateOtherColumn/updateOverlayings"
 import { calculateDash } from "./bookWriteStoreOperations/calculateDash"
 
 const useBookWriteStore = create<BookWriteStoreState>()(
