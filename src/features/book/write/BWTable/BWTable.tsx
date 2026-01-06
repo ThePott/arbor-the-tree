@@ -5,24 +5,13 @@ import clsx from "clsx"
 import { BOOK_DETAIL_KEY_ARRAY, BOOK_DETAIL_KEY_TO_LABEL } from "../_bookWriteInterfaces"
 import BWInputCell from "./_BWInputCell"
 import Button from "@/packages/components/Button/Button"
-import { withHeadInstance } from "@/packages/api/axiosInstances"
-import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
 import { useRef } from "react"
 import { useVirtualizer } from "@tanstack/react-virtual"
 import { BW_DEFAULT_ROW_COUNT } from "../_bookWriteConstants"
 import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 
-// NOTE: for sub question auto complete
-const getBookDetail = async (searchText: string) => {
-    const params = { query: searchText }
-    const response = await withHeadInstance.get("/book/detail", { params })
-
-    return response.data
-}
-
 const BWTable = () => {
     const rowArray = useBookWriteStore((state) => state.rowArray)
-    const updateRowArray = useBookWriteStore((state) => state.updateRowArray)
 
     // NOTE: for virtual scroll
     const parentRef = useRef<HTMLDivElement>(null)
@@ -74,28 +63,12 @@ const BWTable = () => {
                                             columnKey !== "topic" && "text-center"
                                         )}
                                     >
-                                        {columnKey === "sub_question_name" && (
-                                            <AutoComplete
-                                                available="onlyExisting"
-                                                getOptionArray={getBookDetail}
-                                                onValueChange={(value, isError) => {
-                                                    if (isError) return
-                                                    updateRowArray(virtualRow.index, columnKey, value)
-                                                }}
-                                                outerIsRed={false}
-                                                queryKey={["bookDetail"]}
-                                                colorChangeIn="fill"
-                                                variant="ghost"
-                                            />
-                                        )}
-                                        {columnKey !== "sub_question_name" && (
-                                            <BWInputCell
-                                                key={`${virtualRow.index}_${columnKey}_${rowArray[virtualRow.index][columnKey].value}`}
-                                                value={rowArray[virtualRow.index][columnKey].value}
-                                                columnKey={columnKey}
-                                                rowIndex={virtualRow.index}
-                                            />
-                                        )}
+                                        <BWInputCell
+                                            key={`${virtualRow.index}_${columnKey}_${rowArray[virtualRow.index][columnKey].value}`}
+                                            value={rowArray[virtualRow.index][columnKey].value}
+                                            columnKey={columnKey}
+                                            rowIndex={virtualRow.index}
+                                        />
                                     </td>
                                 ))}
                             </tr>

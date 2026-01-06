@@ -100,7 +100,7 @@ type UpdateOverlayingInRowProps = {
 export const updateOverlayingInRow = ({ startRowIndex, endRowIndex, rowArray }: UpdateOverlayingInRowProps) => {
     endRowIndex = endRowIndex ? endRowIndex : startRowIndex
     // NOTE: question_name, sub_question_name은 overlay가 없다
-    const columnKeyArray = BOOK_DETAIL_KEY_ARRAY.filter((key) => key !== "question_name" && key !== "sub_question_name")
+    const columnKeyArray = BOOK_DETAIL_KEY_ARRAY.filter((key) => key !== "question_name")
     columnKeyArray.forEach((columnKey) => {
         updateOverlayingColumn({ startRowIndex, endRowIndex, columnKey, rowArray })
     })

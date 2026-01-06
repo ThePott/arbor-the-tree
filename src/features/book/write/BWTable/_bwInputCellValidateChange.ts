@@ -38,13 +38,12 @@ const validateChange = ({ event, columnKey }: ValidateChangeProps) => {
             acceptOnlySlashOrNumber(event)
             return
         case "question_name":
+            return
         case "solution_page":
             acceptOnlySlashOrNumber(event)
             return
         case "session":
             acceptOnlySlash(event)
-            return
-        case "sub_question_name":
             return
     }
 }

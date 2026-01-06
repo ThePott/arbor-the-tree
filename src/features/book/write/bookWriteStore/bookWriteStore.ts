@@ -55,7 +55,6 @@ const useBookWriteStore = create<BookWriteStoreState>()(
                             question_page: {},
                             solution_page: {},
                             session: {},
-                            sub_question_name: {},
                         }) as BookWriteRow
                 ),
             updateRowArray: (rowIndex, columnKey, value) => {

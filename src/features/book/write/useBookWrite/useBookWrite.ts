@@ -34,7 +34,6 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
                 question_page: row.question_page.overlaying || row.question_page.value,
                 solution_page: row.solution_page.overlaying || row.solution_page.value,
                 session: row.session.overlaying || row.session.value,
-                sub_question_name: row.sub_question_name.value,
             }))
 
         // NOTE: Sending user id as prop is TEMPORARY SOLUTION
