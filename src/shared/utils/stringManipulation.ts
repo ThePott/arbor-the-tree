@@ -8,7 +8,7 @@ export const splitByLineBreakThenTrim = (text: string): string[] => {
 }
 
 export const separateStringNumber = (text: string): { baseText: string; startNumber: number; endNumber: number } => {
-    const regex = /(.+)?(\d+)~(\d+)$/
+    const regex = /^(.*?)(\d+)~(\d+)$/
     const match = text.match(regex)
 
     if (!match) return { baseText: text, startNumber: NaN, endNumber: NaN }
