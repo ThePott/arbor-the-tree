@@ -9,6 +9,8 @@ import { useRef } from "react"
 import { useVirtualizer } from "@tanstack/react-virtual"
 import { BW_DEFAULT_ROW_COUNT } from "../_bookWriteConstants"
 import useBookWriteStore from "../bookWriteStore/bookWriteStore"
+import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
+import bookWriteColumnArray from "./_BWTableColumns"
 
 const BWTable = () => {
     const rowArray = useBookWriteStore((state) => state.rowArray)
@@ -23,6 +25,13 @@ const BWTable = () => {
         overscan: 5,
     })
 
+    // eslint-disable-next-line react-hooks/incompatible-library
+    const table = useReactTable({
+        columns: bookWriteColumnArray,
+        data: rowArray,
+        getCoreRowModel: getCoreRowModel(),
+    })
+
     return (
         <Vstack className="h-full grow">
             <Hstack className="justify-between">
@@ -34,16 +43,20 @@ const BWTable = () => {
             <FlexOneContainer ref={parentRef} isYScrollable>
                 <table style={{ height: `${rowVirtualizer.getTotalSize()}px` }} className="relative w-full">
                     <thead>
-                        <tr className="flex">
-                            {BOOK_DETAIL_KEY_ARRAY.map((columnKey) => (
-                                <th
-                                    key={columnKey}
-                                    className="border-border-dim hover:outline-border-muted z-10 flex-1 border px-3 py-2 hover:outline"
-                                >
-                                    {BOOK_DETAIL_KEY_TO_LABEL[columnKey]}
-                                </th>
-                            ))}
-                        </tr>
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <tr className="flex">
+                                {headerGroup.headers.map((header) => (
+                                    <th
+                                        key={header.id}
+                                        className="border-border-dim hover:outline-border-muted z-10 border px-3 py-2 hover:outline"
+                                    >
+                                        {header.isPlaceholder
+                                            ? "this is header placeholder"
+                                            : flexRender(header.column.columnDef.header, header.getContext())}
+                                    </th>
+                                ))}
+                            </tr>
+                        ))}
                     </thead>
                     <tbody>
                         {rowVirtualizer.getVirtualItems().map((virtualRow) => (
@@ -55,22 +68,20 @@ const BWTable = () => {
                                 }}
                                 className="absolute left-0"
                             >
-                                {BOOK_DETAIL_KEY_ARRAY.map((columnKey) => (
-                                    <td
-                                        key={columnKey}
-                                        className={clsx(
-                                            "border-border-dim hover:outline-border-muted z-10 border hover:outline",
-                                            columnKey !== "topic" && "text-center"
-                                        )}
-                                    >
-                                        <BWInputCell
-                                            key={`${virtualRow.index}_${columnKey}_${rowArray[virtualRow.index][columnKey].value}`}
-                                            value={rowArray[virtualRow.index][columnKey].value}
-                                            columnKey={columnKey}
-                                            rowIndex={virtualRow.index}
-                                        />
-                                    </td>
-                                ))}
+                                {table
+                                    .getRowModel()
+                                    .rows[virtualRow.index].getVisibleCells()
+                                    .map((cell) => (
+                                        <td
+                                            key={cell.id}
+                                            className={clsx(
+                                                "border-border-dim hover:outline-border-muted z-10 border hover:outline",
+                                                cell.column.columnDef.header !== "topic" && "text-center"
+                                            )}
+                                        >
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </td>
+                                    ))}
                             </tr>
                         ))}
                     </tbody>
