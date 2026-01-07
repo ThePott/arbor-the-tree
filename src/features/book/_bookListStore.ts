@@ -11,6 +11,12 @@ const useBookListStore = create<BookListStoreState>()((set) => ({
 
     isPending: true,
     setIsPending: (isPending) => set({ isPending }),
+
+    modalKey: null,
+    setModalKey: (modalKey) => set({ modalKey }),
+
+    selectedBook: null,
+    setSelectedBook: (selectedBook) => set({ selectedBook }),
 }))
 
 export default useBookListStore

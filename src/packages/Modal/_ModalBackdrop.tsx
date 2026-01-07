@@ -3,11 +3,11 @@ import type { ReactNode } from "react"
 
 export type ModalBackdropProps = {
     additionalZIndex?: number
-    onClickBackdrop: () => void
+    onBackdropClick: () => void
     children: ReactNode
 }
 
-const ModalBackdrop = ({ additionalZIndex, onClickBackdrop, children }: ModalBackdropProps) => {
+const ModalBackdrop = ({ additionalZIndex, onBackdropClick, children }: ModalBackdropProps) => {
     const zIndex: number = 1000 + (additionalZIndex ?? 0)
 
     return (
@@ -17,7 +17,7 @@ const ModalBackdrop = ({ additionalZIndex, onClickBackdrop, children }: ModalBac
             exit={{ opacity: 0, backdropFilter: `blur(0px)` }}
             style={{ zIndex }}
             className="bg-fg-vivid/5 fixed top-0 left-0 flex h-screen w-screen items-center justify-center"
-            onClick={onClickBackdrop}
+            onClick={onBackdropClick}
         >
             {children}
         </motion.div>

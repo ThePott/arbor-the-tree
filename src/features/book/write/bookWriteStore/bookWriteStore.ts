@@ -90,12 +90,12 @@ const useBookWriteStore = create<BookWriteStoreState>()(
             // NOTE: THIS IS FOR EARLY DEVELOPMENT
             // NOTE: THIS MUST BE DELETED
             // TODO: THIS MUST BE DELETED
-            partialize: (state) => ({
-                title: state.title,
-                topicInfo: state.topicInfo,
-                topicArray: state.topicArray,
-                stepInfo: state.stepInfo,
-                stepArray: state.stepArray,
+            partialize: () => ({
+                // title: state.title,
+                // topicInfo: state.topicInfo,
+                // topicArray: state.topicArray,
+                // stepInfo: state.stepInfo,
+                // stepArray: state.stepArray,
                 // rowArray: state.rowArray,
                 // overlayingRowArray: state.overlayingRowArray,
             }),

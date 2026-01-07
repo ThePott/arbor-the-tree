@@ -32,7 +32,7 @@ const ModalTestPage = () => {
                     </Vstack>
                 </RoundBox>
             </Container>
-            <Modal isOn={isFirstModalOn} onClickBackdrop={() => setIsFirstModalOn(false)}>
+            <Modal isOn={isFirstModalOn} onBackdropClick={() => setIsFirstModalOn(false)}>
                 <Modal.Title>this is modal title</Modal.Title>
                 <Modal.Body>this is first modal content</Modal.Body>
                 <Modal.ButtonSection>
@@ -41,7 +41,7 @@ const ModalTestPage = () => {
                     </Modal.Button>
                 </Modal.ButtonSection>
             </Modal>
-            <Modal isOn={isSecondModalOn} onClickBackdrop={() => setIsSecondModalOn(false)}>
+            <Modal isOn={isSecondModalOn} onBackdropClick={() => setIsSecondModalOn(false)}>
                 this is second modal content
             </Modal>
         </>
