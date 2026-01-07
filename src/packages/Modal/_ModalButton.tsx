@@ -11,18 +11,18 @@ type ModalButtonProps = {
 }
 
 const ModalButton = ({ role, onClick, children }: ModalButtonProps) => {
-    const roleToConfig: Record<ModalButtonRole, { color: ButtonColor; isBordered: boolean }> = {
+    const roleToConfig: Record<ModalButtonRole, { color: ButtonColor; isBorderedOnHover: boolean }> = {
         cancel: {
-            color: "bg2",
-            isBordered: true,
+            color: "black",
+            isBorderedOnHover: true,
         },
         destruct: {
             color: "red",
-            isBordered: false,
+            isBorderedOnHover: false,
         },
         confirm: {
             color: "bg0",
-            isBordered: false,
+            isBorderedOnHover: false,
         },
     }
 

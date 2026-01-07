@@ -12,7 +12,7 @@ const ModalContent = ({ width, children }: ModalContentProps) => {
     return (
         <Container width={width} onClick={(event) => event.stopPropagation()}>
             <RoundBox color="bg3" padding="xl" radius="lg" isShadowed>
-                <Vstack>{children}</Vstack>
+                <Vstack gap="lg">{children}</Vstack>
             </RoundBox>
         </Container>
     )

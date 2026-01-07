@@ -33,7 +33,13 @@ const ModalTestPage = () => {
                 </RoundBox>
             </Container>
             <Modal isOn={isFirstModalOn} onClickBackdrop={() => setIsFirstModalOn(false)}>
-                this is first modal content
+                <Modal.Title>this is modal title</Modal.Title>
+                <Modal.Body>this is first modal content</Modal.Body>
+                <Modal.ButtonSection>
+                    <Modal.Button onClick={() => {}} role="destruct">
+                        destruct
+                    </Modal.Button>
+                </Modal.ButtonSection>
             </Modal>
             <Modal isOn={isSecondModalOn} onClickBackdrop={() => setIsSecondModalOn(false)}>
                 this is second modal content
