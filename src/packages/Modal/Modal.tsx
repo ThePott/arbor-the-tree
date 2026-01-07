@@ -14,7 +14,7 @@ interface ModalProps {
 // NOTE: 애니메이션이 있으면 굉장히 까다로워진다
 const Modal = ({ isOn, width = "sm", onBackgroundClick, children }: ModalProps) => {
     return (
-        <motion.div className="absolute inset-0">
+        <motion.div className="pointer-events-none absolute inset-0">
             <AnimatePresence>
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -23,9 +23,18 @@ const Modal = ({ isOn, width = "sm", onBackgroundClick, children }: ModalProps) 
                     key={String(isOn)}
                     style={{ backdropFilter: `blur(${isOn ? 4 : 0}px)` }}
                     className="size-full"
+                    onClick={() => {
+                        debugger
+                    }}
                 >
                     {isOn && (
-                        <CenterContainer className="bg-fg-vivid/50 backdrop-blur-xs" onClick={onBackgroundClick}>
+                        <CenterContainer
+                            className="bg-fg-vivid/50 backdrop-blur-xs"
+                            onClick={() => {
+                                debugger
+                                onBackgroundClick()
+                            }}
+                        >
                             <Container width={width} isPadded>
                                 {children}
                             </Container>
