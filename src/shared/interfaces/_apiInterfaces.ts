@@ -28,8 +28,7 @@ export interface Resume {
 }
 
 export interface Book {
+    id: string
+    published_year: number
     title: string
-    publishedYear: number
-    modifiedAt: string | null
-    isActive: boolean
 }
