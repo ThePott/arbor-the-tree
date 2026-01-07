@@ -1,6 +1,7 @@
 import type { SmToLg } from "@/shared/interfaces"
 import type { ReactNode } from "react"
 import { Container } from "../components/layouts"
+import RoundBox from "../components/RoundBox"
 
 export type ModalContentProps = {
     width?: SmToLg
@@ -9,8 +10,10 @@ export type ModalContentProps = {
 
 const ModalContent = ({ width, children }: ModalContentProps) => {
     return (
-        <Container width={width} isPadded onClick={(event) => event.stopPropagation()}>
-            {children}
+        <Container width={width} onClick={(event) => event.stopPropagation()}>
+            <RoundBox color="bg3" padding="xl" radius="lg" isShadowed>
+                {children}
+            </RoundBox>
         </Container>
     )
 }
