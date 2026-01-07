@@ -4,13 +4,6 @@ import type { ReactNode } from "react"
 
 type ModalButtonRole = "cancel" | "destruct" | "confirm"
 
-type ModalButtonProps = {
-    role: "cancel" | "destruct" | "confirm"
-    onClick: () => void
-    children: ReactNode
-    isPending: boolean
-}
-
 type ModalButtonConfig = {
     color: ButtonColor
     isBorderedOnHover: boolean
@@ -44,7 +37,13 @@ const makeConfig = ({ role, isPending }: MakeConfigProps): ModalButtonConfig => 
     }
 }
 
-const ModalButton = ({ role, onClick, children, isPending }: ModalButtonProps) => {
+type ModalButtonProps = {
+    role: "cancel" | "destruct" | "confirm"
+    onClick: () => void
+    children: ReactNode
+    isPending?: boolean
+}
+const ModalButton = ({ role, onClick, children, isPending = false }: ModalButtonProps) => {
     const config = makeConfig({ role, isPending })
 
     return (
