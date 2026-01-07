@@ -24,6 +24,11 @@ const gridContainerVariants = cva("grid", {
         { isAutoFill: true, minColWidth: "md", className: "grid-cols-[repeat(auto-fill,minmax(240px,1fr))]" },
         { isAutoFill: true, minColWidth: "lg", className: "grid-cols-[repeat(auto-fill,minmax(480px,1fr))]" },
         { isAutoFill: true, minColWidth: "xl", className: "grid-cols-[repeat(auto-fill,minmax(960px,1fr))]" },
+        { isAutoFill: false, minColWidth: "xs", className: "grid-cols-[repeat(auto-fit,minmax(60px,1fr))]" },
+        { isAutoFill: false, minColWidth: "sm", className: "grid-cols-[repeat(auto-fit,minmax(120px,1fr))]" },
+        { isAutoFill: false, minColWidth: "md", className: "grid-cols-[repeat(auto-fit,minmax(240px,1fr))]" },
+        { isAutoFill: false, minColWidth: "lg", className: "grid-cols-[repeat(auto-fit,minmax(480px,1fr))]" },
+        { isAutoFill: false, minColWidth: "xl", className: "grid-cols-[repeat(auto-fit,minmax(960px,1fr))]" },
     ],
 })
 
