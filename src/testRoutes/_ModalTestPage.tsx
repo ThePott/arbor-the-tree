@@ -1,21 +1,12 @@
 import Button from "@/packages/components/Button/Button"
 import { Container, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
-import Modal from "@/packages/Modal/Modal"
+import Modal from "@/packages/Modal"
 import type { DivProps } from "@/shared/interfaces"
 import { useState } from "react"
 
 const InnerBox = () => {
-    return (
-        <div
-            className="p-my-xl bg-amber-600"
-            onClick={() => {
-                debugger
-            }}
-        >
-            this is inner box
-        </div>
-    )
+    return <div className="p-my-xl bg-amber-600">this is inner box</div>
 }
 
 const OuterBox = (props: DivProps) => {
@@ -41,10 +32,10 @@ const ModalTestPage = () => {
                     </Vstack>
                 </RoundBox>
             </Container>
-            <Modal isOn={isFirstModalOn} onBackgroundClick={() => setIsFirstModalOn(false)}>
+            <Modal isOn={isFirstModalOn} onClickBackdrop={() => setIsFirstModalOn(false)}>
                 this is first modal content
             </Modal>
-            <Modal isOn={isSecondModalOn} onBackgroundClick={() => setIsSecondModalOn(false)}>
+            <Modal isOn={isSecondModalOn} onClickBackdrop={() => setIsSecondModalOn(false)}>
                 this is second modal content
             </Modal>
         </>
