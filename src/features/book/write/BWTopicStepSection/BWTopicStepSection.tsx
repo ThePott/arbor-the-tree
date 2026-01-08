@@ -5,6 +5,7 @@ import Textarea from "@/packages/components/Textarea/Textarea"
 import Title from "@/packages/components/Title/Title"
 import { useEffect, useRef } from "react"
 import useBookWriteStore from "../bookWriteStore/bookWriteStore"
+import Labeled from "@/packages/components/Labeled/Labeled"
 
 const BWTopicStepSection = () => {
     const textareaRef = useRef<HTMLTextAreaElement>(null)

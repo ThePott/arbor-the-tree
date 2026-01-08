@@ -83,6 +83,11 @@ const useBookWriteStore = create<BookWriteStoreState>()(
 
                 set({ rowArray })
             },
+
+            register: null,
+            setRegister: (register) => set({ register }),
+            errors: null,
+            setErrors: (errors) => set({ errors }),
         }),
         {
             name: "book-write-store",

@@ -3,6 +3,10 @@ import { useMutation } from "@tanstack/react-query"
 import type { BookWriteRowFlat, BookWritePayload } from "../_bookWriteInterfaces"
 import useGlobalStore from "@/shared/store/globalStore"
 import useBookWriteStore from "../bookWriteStore/bookWriteStore"
+import { useForm, type FieldValues } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { bookWriteSchema } from "../_bookWriteSchema"
+import { useEffect } from "react"
 
 const useBookWriteMutation = () => {
     const postMutation = useMutation({
@@ -16,14 +20,27 @@ interface UseBookWriteEventHandlerProps {
     postFn: (body: BookWritePayload) => void
 }
 const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => {
-    const title = useBookWriteStore((state) => state.title)
-    const publishedYear = useBookWriteStore((state) => state.publishedYear)
     const rowArray = useBookWriteStore((state) => state.rowArray)
     const me = useGlobalStore((state) => state.me)
+    const setRegister = useBookWriteStore((state) => state.setRegister)
+    const setErrors = useBookWriteStore((state) => state.setErrors)
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm({ resolver: zodResolver(bookWriteSchema) })
+
+    useEffect(() => {
+        setRegister(register)
+    }, [register])
+    useEffect(() => {
+        setErrors(errors)
+    }, [errors])
+
+    const onSubmit = (formData: FieldValues) => {
         if (!me) throw new Error("---- me missing")
-        event.preventDefault()
 
         const data: BookWriteRowFlat[] = rowArray
             .filter((row) => row.question_name.value)
@@ -38,7 +55,9 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
 
         // NOTE: Sending user id as prop is TEMPORARY SOLUTION
         // TODO: MUST EXCLUDE USER ID IN THE FUTURE
-        const body = { title, published_year: Number(publishedYear), data, user_id: me.id }
+        const body = { ...formData, data, user_id: me.id }
+        console.log({ body })
+        debugger
         const isError = rowArray.some((row) => Object.entries(row).some(([_, cell]) => cell.isError))
         if (isError) {
             // TODO: 모달로 교체해야 함
@@ -48,7 +67,14 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
         postFn(body)
     }
 
-    return { handleSubmit }
+    const wrappedHandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        handleSubmit(onSubmit)(event)
+    }
+
+    const allValues = watch()
+    console.log({ allValues, errors })
+    return { wrappedHandleSubmit, register, errors, handleSubmit, onSubmit }
 }
 
 const useBookWrite = () => {

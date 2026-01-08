@@ -5,10 +5,10 @@ import useBookWrite from "./useBookWrite/useBookWrite"
 import BWMetaInfoSection from "./BWMetaInfoSection/BWMetaInfoSection"
 
 const BookWriteContent = () => {
-    const { handleSubmit } = useBookWrite()
+    const { wrappedHandleSubmit } = useBookWrite()
 
     return (
-        <form className="h-full w-full" onSubmit={handleSubmit}>
+        <form className="h-full w-full" onSubmit={wrappedHandleSubmit}>
             <Hstack gap="xl" className="p-my-md h-full w-full">
                 <Vstack className="w-[400px]">
                     <BWMetaInfoSection />

@@ -41,7 +41,7 @@ const BWTable = () => {
                 <table style={{ height: `${rowVirtualizer.getTotalSize()}px` }} className="relative w-full">
                     <thead>
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <tr className="flex">
+                            <tr key={headerGroup.id} className="flex">
                                 {headerGroup.headers.map((header) => (
                                     <th
                                         key={header.id}
