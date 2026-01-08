@@ -12,15 +12,12 @@ const BookListTable = ({ bookArray }: { bookArray: Book[] }) => {
     })
 
     return (
-        <table>
+        <table className="rounded-my-lg outline-fg-dim overflow-hidden outline">
             <thead>
                 {table.getHeaderGroups().map((headerGroup) => (
                     <tr key={headerGroup.id}>
                         {headerGroup.headers.map((header) => (
-                            <th
-                                key={header.id}
-                                className="border-border-dim hover:outline-border-muted z-10 border px-3 py-2 hover:outline"
-                            >
+                            <th key={header.id} className="text-fg-muted z-10 px-6 py-2 text-left">
                                 {header.isPlaceholder
                                     ? "this is header placeholder"
                                     : flexRender(header.column.columnDef.header, header.getContext())}
@@ -31,13 +28,13 @@ const BookListTable = ({ bookArray }: { bookArray: Book[] }) => {
             </thead>
             <tbody>
                 {table.getRowModel().rows.map((row) => (
-                    <tr key={row.id}>
+                    <tr key={row.id} className="border-border-dim border-t">
                         {row.getVisibleCells().map((cell) => (
                             <td
                                 key={cell.id}
                                 className={clsx(
-                                    "border-border-dim hover:outline-border-muted z-10 border px-3 py-2 hover:outline",
-                                    cell.column.id !== "title" && "text-center"
+                                    "z-10 px-6 py-2",
+                                    cell.column.id !== "title" && "w-[100px] text-center"
                                 )}
                             >
                                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
