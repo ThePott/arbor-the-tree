@@ -48,12 +48,7 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
         postFn(body)
     }
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
-        if (event.key !== "Enter") return
-        event.preventDefault()
-    }
-
-    return { handleSubmit, handleKeyDown }
+    return { handleSubmit }
 }
 
 const useBookWrite = () => {
