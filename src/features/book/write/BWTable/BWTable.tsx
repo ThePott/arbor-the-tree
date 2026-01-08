@@ -32,7 +32,7 @@ const BWTable = () => {
 
     return (
         <Vstack className="h-full grow">
-            <Hstack className="justify-between">
+            <Hstack className="items-end justify-between">
                 <Title as="h2" isMuted>
                     문제 정보 기입
                 </Title>
@@ -42,7 +42,7 @@ const BWTable = () => {
             </Hstack>
             <FlexOneContainer ref={parentRef} isYScrollable>
                 <table style={{ height: `${rowVirtualizer.getTotalSize()}px` }} className="relative w-full">
-                    <thead>
+                    <thead className="bg-bg-neg-1 sticky top-0 z-10">
                         {table.getHeaderGroups().map((headerGroup) => (
                             <tr key={headerGroup.id} className="flex">
                                 {headerGroup.headers.map((header) => (
