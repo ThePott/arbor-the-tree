@@ -9,7 +9,7 @@ const BWErrorModal = () => {
     return (
         <Modal isOn={modalKey === "error"} onBackdropClick={() => setModalKey(null)}>
             <Modal.Title>등록 중에 오류가 발생했어요</Modal.Title>
-            <Modal.Body>{mutationError?.response.data.message}</Modal.Body>
+            <Modal.Body>{mutationError?.response?.data.message}</Modal.Body>
             <Modal.ButtonSection>
                 <Modal.Button role="confirm" onClick={() => setModalKey(null)}>
                     확인

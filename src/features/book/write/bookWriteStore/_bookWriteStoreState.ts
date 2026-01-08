@@ -3,6 +3,7 @@ import type { BookWriteModalKey, BookWriteRow, BWTopicStep } from "../_bookWrite
 import type { BookWriteSchemaInput } from "../_bookWriteSchema"
 import type { FieldErrors, UseFormRegister } from "react-hook-form"
 import type { AxiosError } from "axios"
+import type { AppError } from "@/shared/interfaces"
 
 export interface BookWriteStoreState {
     title: string
@@ -34,8 +35,8 @@ export interface BookWriteStoreState {
     isPending: boolean
     setIsPending: (isPending: boolean) => void
 
-    mutationError: AxiosError | null
-    setMutationError: (mutationError: AxiosError | null) => void
+    mutationError: AxiosError<AppError> | null
+    setMutationError: (mutationError: AxiosError<AppError> | null) => void
 
     modalKey: BookWriteModalKey | null
     setModalKey: (modalKey: BookWriteModalKey | null) => void

@@ -32,3 +32,9 @@ export interface Book {
     published_year: number
     title: string
 }
+
+export type AppError = {
+    code: string
+    statusCode: number
+    message: string
+}
