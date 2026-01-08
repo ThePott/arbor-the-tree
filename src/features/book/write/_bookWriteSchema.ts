@@ -11,4 +11,5 @@ export const bookWriteSchema = z.object({
     ),
 })
 
-export type BookWriteSchema = z.infer<typeof bookWriteSchema>
+export type BookWriteSchemaInput = z.input<typeof bookWriteSchema>
+export type BookWriteSchemaInfer = z.infer<typeof bookWriteSchema>

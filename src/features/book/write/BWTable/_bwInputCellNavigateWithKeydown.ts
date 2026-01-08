@@ -39,7 +39,10 @@ type HandleKeyDownNavigation = {
     rowIndex: number
 }
 const handleKeyDownNavigation = ({ event, columnKey, rowIndex }: HandleKeyDownNavigation) => {
-    event.preventDefault()
+    if (event.key === "Enter") {
+        event.preventDefault()
+    }
+
     const key = event.key
     if (!isNavigationKey(key)) return
 

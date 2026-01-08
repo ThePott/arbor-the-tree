@@ -1,6 +1,6 @@
 import type { Tab } from "@/packages/components/TabBar/TabBar"
 import type { BookWriteRow, BWTopicStep } from "../_bookWriteInterfaces"
-import type { BookWriteSchema } from "../_bookWriteSchema"
+import type { BookWriteSchemaInput } from "../_bookWriteSchema"
 import type { FieldErrors, UseFormRegister } from "react-hook-form"
 
 export interface BookWriteStoreState {
@@ -25,8 +25,8 @@ export interface BookWriteStoreState {
     rowArray: BookWriteRow[]
     updateRowArray: (rowIndex: number, columnKey: keyof BookWriteRow, value: string) => void
 
-    register: UseFormRegister<BookWriteSchema> | null
-    setRegister: (register: UseFormRegister<BookWriteSchema> | null) => void
-    errors: FieldErrors<BookWriteSchema> | null
-    setErrors: (errors: FieldErrors<BookWriteSchema> | null) => void
+    register: UseFormRegister<BookWriteSchemaInput> | null
+    setRegister: (register: UseFormRegister<BookWriteSchemaInput> | null) => void
+    errors: FieldErrors<BookWriteSchemaInput> | null
+    setErrors: (errors: FieldErrors<BookWriteSchemaInput> | null) => void
 }

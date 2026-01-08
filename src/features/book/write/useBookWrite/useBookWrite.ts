@@ -3,9 +3,9 @@ import { useMutation } from "@tanstack/react-query"
 import type { BookWriteRowFlat, BookWritePayload } from "../_bookWriteInterfaces"
 import useGlobalStore from "@/shared/store/globalStore"
 import useBookWriteStore from "../bookWriteStore/bookWriteStore"
-import { useForm, type FieldValues } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { bookWriteSchema } from "../_bookWriteSchema"
+import { bookWriteSchema, type BookWriteSchemaInfer } from "../_bookWriteSchema"
 import { useEffect } from "react"
 
 const useBookWriteMutation = () => {
@@ -28,7 +28,6 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
     const {
         register,
         handleSubmit,
-        watch,
         formState: { errors },
     } = useForm({ resolver: zodResolver(bookWriteSchema) })
 
@@ -39,7 +38,7 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
         setErrors(errors)
     }, [errors])
 
-    const onSubmit = (formData: FieldValues) => {
+    const onSubmit = (formData: BookWriteSchemaInfer) => {
         if (!me) throw new Error("---- me missing")
 
         const data: BookWriteRowFlat[] = rowArray
@@ -56,8 +55,6 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
         // NOTE: Sending user id as prop is TEMPORARY SOLUTION
         // TODO: MUST EXCLUDE USER ID IN THE FUTURE
         const body = { ...formData, data, user_id: me.id }
-        console.log({ body })
-        debugger
         const isError = rowArray.some((row) => Object.entries(row).some(([_, cell]) => cell.isError))
         if (isError) {
             // TODO: 모달로 교체해야 함
@@ -72,8 +69,6 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
         handleSubmit(onSubmit)(event)
     }
 
-    const allValues = watch()
-    console.log({ allValues, errors })
     return { wrappedHandleSubmit, register, errors, handleSubmit, onSubmit }
 }
 
