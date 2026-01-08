@@ -36,7 +36,10 @@ const BWTable = () => {
                 <Title as="h2" isMuted>
                     문제 정보 기입
                 </Title>
-                <Button color="green" status={isPending ? "pending" : "enabled"}>
+                <Button
+                    color="green"
+                    status={!rowArray[0].question_name.value ? "disabled" : isPending ? "pending" : "enabled"}
+                >
                     등록
                 </Button>
             </Hstack>

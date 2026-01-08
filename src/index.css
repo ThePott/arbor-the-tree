@@ -148,5 +148,5 @@ input::-webkit-inner-spin-button {
 @utility my-transition {
     transition-property: all;
     transition-timing-function: cubic-bezier(0.08, 0.34, 0.26, 1.11);
-    transition-duration: var(0.1);
+    transition-duration: 0.1s;
 }
