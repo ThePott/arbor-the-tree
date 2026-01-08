@@ -28,7 +28,7 @@ const BookListTable = ({ bookArray }: { bookArray: Book[] }) => {
             </thead>
             <tbody>
                 {table.getRowModel().rows.map((row) => (
-                    <tr key={row.id} className="border-border-dim border-t">
+                    <tr key={row.id} className="border-border-dim hover:bg-bg-0 border-t">
                         {row.getVisibleCells().map((cell) => (
                             <td
                                 key={cell.id}
