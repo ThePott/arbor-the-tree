@@ -1,5 +1,5 @@
 import type { Tab } from "@/packages/components/TabBar/TabBar"
-import type { BookWriteRow, BWTopicStep } from "../_bookWriteInterfaces"
+import type { BookWriteModalKey, BookWriteRow, BWTopicStep } from "../_bookWriteInterfaces"
 import type { BookWriteSchemaInput } from "../_bookWriteSchema"
 import type { FieldErrors, UseFormRegister } from "react-hook-form"
 
@@ -32,4 +32,7 @@ export interface BookWriteStoreState {
 
     isPending: boolean
     setIsPending: (isPending: boolean) => void
+
+    modalKey: BookWriteModalKey | null
+    setModalKey: (modalKey: BookWriteModalKey | null) => void
 }

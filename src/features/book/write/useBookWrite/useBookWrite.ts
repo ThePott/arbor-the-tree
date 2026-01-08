@@ -10,6 +10,7 @@ import { useEffect } from "react"
 
 const useBookWriteMutation = () => {
     const setIsPending = useBookWriteStore((state) => state.setIsPending)
+    const setModalKey = useBookWriteStore((state) => state.setModalKey)
     const postMutation = useMutation({
         mutationFn: async (body: BookWritePayload) => withHeadInstance.post("/book/write", body),
     })
@@ -17,6 +18,15 @@ const useBookWriteMutation = () => {
     useEffect(() => {
         setIsPending(postMutation.isPending)
     }, [postMutation.isPending])
+
+    useEffect(() => {
+        if (!postMutation.isSuccess) return
+        setModalKey("success")
+    }, [postMutation.isSuccess])
+    useEffect(() => {
+        if (!postMutation.isError) return
+        setModalKey("error")
+    }, [postMutation.isError])
 
     return { postMutation }
 }

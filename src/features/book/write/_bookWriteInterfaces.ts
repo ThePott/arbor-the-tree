@@ -32,3 +32,5 @@ export type BookWriteRow = Record<BookWriteColumnKey, BookWriteCell>
 export type BookWriteRowFlat = Record<BookWriteColumnKey, string>
 
 export type BookWritePayload = { title: string; published_year: number; data: BookWriteRowFlat[] }
+
+export type BookWriteModalKey = "success" | "error"

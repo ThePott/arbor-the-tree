@@ -90,6 +90,9 @@ const useBookWriteStore = create<BookWriteStoreState>()(
 
             isPending: false,
             setIsPending: (isPending) => set({ isPending }),
+
+            modalKey: null,
+            setModalKey: (modalKey) => set({ modalKey }),
         }),
         {
             name: "book-write-store",
