@@ -74,7 +74,6 @@ const useBookWriteStore = create<BookWriteStoreState>()(
                     return
                 }
 
-                // NOTE: 문제를 지웠는데...
                 if (columnKey === "question_name") {
                     handleQuestionMutation({ rowArray, rowIndex, value })
                 } else {
