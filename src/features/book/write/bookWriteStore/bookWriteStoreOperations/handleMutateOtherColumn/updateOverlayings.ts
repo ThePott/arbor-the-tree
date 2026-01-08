@@ -51,18 +51,19 @@ export const updateOverlayingColumn = ({
     const previousRow = rowArray[startRowIndex - 1]
     let previousOverlaying = previousRow ? previousRow[columnKey].overlaying : null
 
-    // TODO: 여기에 추가할 것
-    // TODO: 첫 번째 실제 값 찾기
-    // TODO: 그게 0이 아니면 그 이전까지 오류 처리
-    // const firstRowIndexWithValue = rowArray.findIndex((row) => row[columnKey].value)
-    // rowArray.map((row) => (row[columnKey].isError = false))
-    // for (let i = 0; i < firstRowIndexWithValue; i++) {
-    //     const row = rowArray[i]
-    //     row[columnKey].isError = true
-    // }
+    // NOTE: 오류 초기화
+    rowArray.map((row) => (row[columnKey].isError = false))
 
-    for (let iteratingIndex = startRowIndex; iteratingIndex <= endRowIndex; iteratingIndex++) {
-        const row = rowArray[iteratingIndex]
+    // NOTE: 위에 채울 곳 있으면 오류 표시
+    const firstRowIndexWithValue = rowArray.findIndex((row) => row[columnKey].value)
+    for (let i = 0; i < firstRowIndexWithValue; i++) {
+        const row = rowArray[i]
+        row[columnKey].isError = true
+    }
+
+    rowArray.forEach((row, iteratingIndex) => {
+        if (iteratingIndex < startRowIndex) return
+        if (iteratingIndex > endRowIndex) return
 
         // NOTE: 인풋에 실제로 기입된 값
         const iteratingCell = row[columnKey]
@@ -98,7 +99,7 @@ export const updateOverlayingColumn = ({
 
         // NOTE: 입력된 실제 값(underlyingValue)이 없다면 이전 오버레이 값을 따라감
         iteratingCell.overlaying = previousOverlaying ?? ""
-    }
+    })
 }
 
 type UpdateOverlayingInRowProps = {
