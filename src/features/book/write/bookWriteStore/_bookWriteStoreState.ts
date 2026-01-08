@@ -29,4 +29,7 @@ export interface BookWriteStoreState {
     setRegister: (register: UseFormRegister<BookWriteSchemaInput> | null) => void
     errors: FieldErrors<BookWriteSchemaInput> | null
     setErrors: (errors: FieldErrors<BookWriteSchemaInput> | null) => void
+
+    isPending: boolean
+    setIsPending: (isPending: boolean) => void
 }

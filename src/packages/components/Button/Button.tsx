@@ -11,8 +11,8 @@ const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm my-transition", {
         color: buttonColorToCn,
         status: {
             enabled: "cursor-pointer",
-            disabled: "text-fg-muted",
-            pending: "text-fg-muted",
+            disabled: "",
+            pending: "",
         },
         isWide: {
             true: "w-full",
@@ -28,12 +28,11 @@ const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm my-transition", {
         },
     },
     compoundVariants: [
-        { color: ["bg0", "bg1", "bg2"], status: "enabled", className: "text-fg-vivid" },
-        { color: ["bg0", "bg1", "bg2"], status: ["disabled", "pending"], className: "text-fg-muted" },
+        // NOTE: text colors
+        { color: ["bg0", "bg1", "bg2"], className: "text-fg-vivid disabled:text-fg-muted" },
+        { color: ["green", "red"], className: "text-fg-inverted-vivid disabled:text-fg-inverted-muted" },
 
-        { color: ["green", "red"], status: "enabled", className: "text-fg-inverted-vivid" },
-        { color: ["green", "red"], status: ["disabled", "pending"], className: "text-fg-inverted-muted" },
-
+        // NOTE: background colors
         { color: "bg0", status: "enabled", className: "hover:bg-bg-1 active:bg-bg-2" },
         { color: "bg1", status: "enabled", className: "hover:bg-bg-2 active:bg-bg-3" },
         { color: "bg2", status: "enabled", className: "hover:bg-bg-3 active:bg-washed-black" },

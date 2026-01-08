@@ -12,6 +12,7 @@ import bookWriteColumnArray from "./_BWTableColumns"
 
 const BWTable = () => {
     const rowArray = useBookWriteStore((state) => state.rowArray)
+    const isPending = useBookWriteStore((state) => state.isPending)
 
     // NOTE: for virtual scroll
     const parentRef = useRef<HTMLDivElement>(null)
@@ -35,7 +36,9 @@ const BWTable = () => {
                 <Title as="h2" isMuted>
                     문제 정보 기입
                 </Title>
-                <Button color="green">등록</Button>
+                <Button color="green" status={isPending ? "pending" : "enabled"}>
+                    등록
+                </Button>
             </Hstack>
             <FlexOneContainer ref={parentRef} isYScrollable>
                 <table style={{ height: `${rowVirtualizer.getTotalSize()}px` }} className="relative w-full">

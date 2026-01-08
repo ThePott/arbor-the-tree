@@ -87,6 +87,9 @@ const useBookWriteStore = create<BookWriteStoreState>()(
             setRegister: (register) => set({ register }),
             errors: null,
             setErrors: (errors) => set({ errors }),
+
+            isPending: false,
+            setIsPending: (isPending) => set({ isPending }),
         }),
         {
             name: "book-write-store",

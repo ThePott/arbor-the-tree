@@ -15,6 +15,7 @@ const BWTopicStepSection = () => {
     const setTopicInfo = useBookWriteStore((state) => state.setTopicInfo)
     const stepInfo = useBookWriteStore((state) => state.stepInfo)
     const setStepInfo = useBookWriteStore((state) => state.setStepInfo)
+    const isPending = useBookWriteStore((state) => state.isPending)
 
     const isTopicSelected = selectedTab.value === "topic"
 
@@ -49,7 +50,7 @@ const BWTopicStepSection = () => {
                     variant="underline"
                     onSelect={setSelectedTab}
                 />
-                <Textarea ref={textareaRef} className="flex-1" onBlur={handleBlur} />
+                <Textarea ref={textareaRef} disabled={isPending} className="flex-1" onBlur={handleBlur} />
             </Vstack>
         </RoundBox>
     )

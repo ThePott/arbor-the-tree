@@ -15,6 +15,7 @@ const BWInputCell = ({
 }) => {
     const rowArray = useBookWriteStore((state) => state.rowArray)
     const updateRowArray = useBookWriteStore((state) => state.updateRowArray)
+    const isPending = useBookWriteStore((state) => state.isPending)
 
     const handleBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
         const newValue = event.target.value
@@ -26,6 +27,7 @@ const BWInputCell = ({
     return (
         <div className="relative">
             <Input
+                disabled={isPending}
                 colorChangeIn="fill"
                 variant="ghost"
                 defaultValue={value}

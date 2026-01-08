@@ -12,6 +12,7 @@ const BWMetaInfoSection = () => {
     const setPublishedYear = useBookWriteStore((state) => state.setPublishedYear)
     const register = useBookWriteStore((state) => state.register)
     const errors = useBookWriteStore((state) => state.errors)
+    const isPending = useBookWriteStore((state) => state.isPending)
 
     return (
         <RoundBox isBordered padding="md">
@@ -22,6 +23,7 @@ const BWMetaInfoSection = () => {
                 <Labeled isInDanger={Boolean(errors?.title)} isRequired>
                     <Input
                         {...register?.("title")}
+                        disabled={isPending}
                         isRed={Boolean(errors?.title)}
                         variant="ghost"
                         className="text-my-xl"
@@ -34,6 +36,7 @@ const BWMetaInfoSection = () => {
                 <Labeled isInDanger={Boolean(errors?.published_year)} isRequired>
                     <Input
                         {...register?.("published_year")}
+                        disabled={isPending}
                         isRed={Boolean(errors?.published_year)}
                         variant="ghost"
                         type="number"

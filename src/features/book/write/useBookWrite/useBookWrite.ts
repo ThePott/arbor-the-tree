@@ -9,9 +9,14 @@ import { bookWriteSchema, type BookWriteSchemaInfer } from "../_bookWriteSchema"
 import { useEffect } from "react"
 
 const useBookWriteMutation = () => {
+    const setIsPending = useBookWriteStore((state) => state.setIsPending)
     const postMutation = useMutation({
         mutationFn: async (body: BookWritePayload) => withHeadInstance.post("/book/write", body),
     })
+
+    useEffect(() => {
+        setIsPending(postMutation.isPending)
+    }, [postMutation.isPending])
 
     return { postMutation }
 }
