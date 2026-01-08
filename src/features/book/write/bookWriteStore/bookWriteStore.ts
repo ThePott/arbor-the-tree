@@ -91,6 +91,9 @@ const useBookWriteStore = create<BookWriteStoreState>()(
             isPending: false,
             setIsPending: (isPending) => set({ isPending }),
 
+            mutationError: null,
+            setMutationError: (mutationError) => set({ mutationError }),
+
             modalKey: null,
             setModalKey: (modalKey) => set({ modalKey }),
         }),

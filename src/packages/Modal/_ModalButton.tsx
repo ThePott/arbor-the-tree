@@ -47,7 +47,7 @@ const ModalButton = ({ role, onClick, children, isPending = false }: ModalButton
     const config = makeConfig({ role, isPending })
 
     return (
-        <Button {...config} status={isPending ? "pending" : "enabled"} onClick={onClick}>
+        <Button {...config} status={isPending ? "pending" : "enabled"} onClick={onClick} isShadowed>
             {children}
         </Button>
     )

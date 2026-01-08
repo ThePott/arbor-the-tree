@@ -7,10 +7,13 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { bookWriteSchema, type BookWriteSchemaInfer } from "../_bookWriteSchema"
 import { useEffect } from "react"
+import type { AxiosError } from "axios"
 
 const useBookWriteMutation = () => {
     const setIsPending = useBookWriteStore((state) => state.setIsPending)
     const setModalKey = useBookWriteStore((state) => state.setModalKey)
+    const setMutationError = useBookWriteStore((state) => state.setMutationError)
+
     const postMutation = useMutation({
         mutationFn: async (body: BookWritePayload) => withHeadInstance.post("/book/write", body),
     })
@@ -24,9 +27,11 @@ const useBookWriteMutation = () => {
         setModalKey("success")
     }, [postMutation.isSuccess])
     useEffect(() => {
-        if (!postMutation.isError) return
+        setMutationError(postMutation.error as AxiosError)
+        if (!postMutation.error) return
+
         setModalKey("error")
-    }, [postMutation.isError])
+    }, [postMutation.error])
 
     return { postMutation }
 }

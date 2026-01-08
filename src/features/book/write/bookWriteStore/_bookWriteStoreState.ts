@@ -2,6 +2,7 @@ import type { Tab } from "@/packages/components/TabBar/TabBar"
 import type { BookWriteModalKey, BookWriteRow, BWTopicStep } from "../_bookWriteInterfaces"
 import type { BookWriteSchemaInput } from "../_bookWriteSchema"
 import type { FieldErrors, UseFormRegister } from "react-hook-form"
+import type { AxiosError } from "axios"
 
 export interface BookWriteStoreState {
     title: string
@@ -32,6 +33,9 @@ export interface BookWriteStoreState {
 
     isPending: boolean
     setIsPending: (isPending: boolean) => void
+
+    mutationError: AxiosError | null
+    setMutationError: (mutationError: AxiosError | null) => void
 
     modalKey: BookWriteModalKey | null
     setModalKey: (modalKey: BookWriteModalKey | null) => void

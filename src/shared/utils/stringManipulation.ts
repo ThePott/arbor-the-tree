@@ -19,7 +19,7 @@ export const separateStringNumber = (text: string): { baseText: string; startNum
     return { baseText, startNumber, endNumber }
 }
 
-export const addUlLul = (hangulText: string): string => {
+export const makeUlLul = (hangulText: string): string => {
     const strGA = 44032 // NOTE: 가
     const strHI = 55203 // NOTE: 힣
 
@@ -27,14 +27,14 @@ export const addUlLul = (hangulText: string): string => {
 
     // NOTE: 한글이 아니면...
     if (lastStrCode < strGA || lastStrCode > strHI) {
-        return hangulText
+        return ""
     }
 
     const hasJongsug = (lastStrCode - strGA) % 28 !== 0
 
     if (hasJongsug) {
-        return `${hangulText}을`
+        return "을"
     }
 
-    return `${hangulText}를`
+    return "를"
 }
