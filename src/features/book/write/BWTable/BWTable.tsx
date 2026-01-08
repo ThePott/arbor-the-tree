@@ -25,7 +25,6 @@ const BWTable = () => {
         overscan: 5,
     })
 
-    // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({
         columns: bookWriteColumnArray,
         data: rowArray,
@@ -48,7 +47,10 @@ const BWTable = () => {
                                 {headerGroup.headers.map((header) => (
                                     <th
                                         key={header.id}
-                                        className="border-border-dim hover:outline-border-muted z-10 border px-3 py-2 hover:outline"
+                                        className={clsx(
+                                            "border-border-dim hover:outline-border-muted z-10 border px-3 py-2 hover:outline",
+                                            header.id === "topic" || header.id === "step" ? "flex-1" : "w-[100px]"
+                                        )}
                                     >
                                         {header.isPlaceholder
                                             ? "this is header placeholder"
@@ -66,22 +68,26 @@ const BWTable = () => {
                                     transform: `translateY(${virtualRow.start}px)`,
                                     height: `${virtualRow.size}px`,
                                 }}
-                                className="absolute left-0"
+                                className="absolute left-0 flex w-full"
                             >
                                 {table
                                     .getRowModel()
                                     .rows[virtualRow.index].getVisibleCells()
-                                    .map((cell) => (
-                                        <td
-                                            key={cell.id}
-                                            className={clsx(
-                                                "border-border-dim hover:outline-border-muted z-10 border hover:outline",
-                                                cell.column.columnDef.header !== "topic" && "text-center"
-                                            )}
-                                        >
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </td>
-                                    ))}
+                                    .map((cell) => {
+                                        return (
+                                            <td
+                                                key={cell.id}
+                                                className={clsx(
+                                                    "border-border-dim hover:outline-border-muted z-10 border hover:outline",
+                                                    cell.column.id === "topic" || cell.column.id === "step"
+                                                        ? "flex-1"
+                                                        : "w-[100px]"
+                                                )}
+                                            >
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            </td>
+                                        )
+                                    })}
                             </tr>
                         ))}
                     </tbody>

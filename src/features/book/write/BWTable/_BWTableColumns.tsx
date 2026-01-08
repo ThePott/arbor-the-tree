@@ -7,7 +7,15 @@ const columnHelper = createColumnHelper<BookWriteRow>()
 const bookWriteColumnArray = BOOK_DETAIL_KEY_ARRAY.map((key) =>
     columnHelper.accessor(key, {
         header: BOOK_DETAIL_KEY_TO_LABEL[key],
-        cell: (info) => <BWInputCell columnKey={key} value={info.getValue().value} rowIndex={info.row.index} />,
+        size: key !== "topic" && key !== "step" ? 25 : undefined,
+        cell: (info) => (
+            <BWInputCell
+                key={info.getValue().value}
+                columnKey={key}
+                value={info.getValue().value}
+                rowIndex={info.row.index}
+            />
+        ),
     })
 )
 
