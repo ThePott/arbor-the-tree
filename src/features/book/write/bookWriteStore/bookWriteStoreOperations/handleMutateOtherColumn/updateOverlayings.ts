@@ -67,6 +67,9 @@ export const updateOverlayingColumn = ({
 
         // NOTE: 인풋에 실제로 기입된 값
         const iteratingCell = row[columnKey]
+        if (iteratingCell.value && !row.question_name.value) {
+            row.question_name.isError = true
+        }
 
         // TODO: 별도 함수로 분리
 
