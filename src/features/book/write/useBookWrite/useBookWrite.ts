@@ -1,13 +1,38 @@
 import { withHeadInstance } from "@/packages/api/axiosInstances"
 import { useMutation } from "@tanstack/react-query"
-import useBookWriteStore from "../_bookWriteStore"
 import type { BookWriteRowFlat, BookWritePayload } from "../_bookWriteInterfaces"
 import useGlobalStore from "@/shared/store/globalStore"
+import useBookWriteStore from "../bookWriteStore/bookWriteStore"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { bookWriteSchema, type BookWriteSchemaInfer } from "../_bookWriteSchema"
+import { useEffect } from "react"
+import type { AxiosError } from "axios"
+import type { AppError } from "@/shared/interfaces"
 
 const useBookWriteMutation = () => {
+    const setIsPending = useBookWriteStore((state) => state.setIsPending)
+    const setModalKey = useBookWriteStore((state) => state.setModalKey)
+    const setMutationError = useBookWriteStore((state) => state.setMutationError)
+
     const postMutation = useMutation({
         mutationFn: async (body: BookWritePayload) => withHeadInstance.post("/book/write", body),
     })
+
+    useEffect(() => {
+        setIsPending(postMutation.isPending)
+    }, [postMutation.isPending])
+
+    useEffect(() => {
+        if (!postMutation.isSuccess) return
+        setModalKey("success")
+    }, [postMutation.isSuccess])
+    useEffect(() => {
+        setMutationError(postMutation.error as AxiosError<AppError>)
+        if (!postMutation.error) return
+
+        setModalKey("error")
+    }, [postMutation.error])
 
     return { postMutation }
 }
@@ -15,16 +40,27 @@ const useBookWriteMutation = () => {
 interface UseBookWriteEventHandlerProps {
     postFn: (body: BookWritePayload) => void
 }
-
 const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => {
-    const title = useBookWriteStore((state) => state.title)
-    const publishedYear = useBookWriteStore((state) => state.publishedYear)
     const rowArray = useBookWriteStore((state) => state.rowArray)
     const me = useGlobalStore((state) => state.me)
+    const setRegister = useBookWriteStore((state) => state.setRegister)
+    const setErrors = useBookWriteStore((state) => state.setErrors)
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({ resolver: zodResolver(bookWriteSchema) })
+
+    useEffect(() => {
+        setRegister(register)
+    }, [register])
+    useEffect(() => {
+        setErrors(errors)
+    }, [errors])
+
+    const onSubmit = (formData: BookWriteSchemaInfer) => {
         if (!me) throw new Error("---- me missing")
-        event.preventDefault()
 
         const data: BookWriteRowFlat[] = rowArray
             .filter((row) => row.question_name.value)
@@ -35,12 +71,11 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
                 question_page: row.question_page.overlaying || row.question_page.value,
                 solution_page: row.solution_page.overlaying || row.solution_page.value,
                 session: row.session.overlaying || row.session.value,
-                sub_question_name: row.sub_question_name.value,
             }))
 
         // NOTE: Sending user id as prop is TEMPORARY SOLUTION
         // TODO: MUST EXCLUDE USER ID IN THE FUTURE
-        const body = { title, published_year: Number(publishedYear), data, user_id: me.id }
+        const body = { ...formData, data, user_id: me.id }
         const isError = rowArray.some((row) => Object.entries(row).some(([_, cell]) => cell.isError))
         if (isError) {
             // TODO: 모달로 교체해야 함
@@ -50,7 +85,12 @@ const useBookWriteEventHandler = ({ postFn }: UseBookWriteEventHandlerProps) => 
         postFn(body)
     }
 
-    return { handleSubmit }
+    const wrappedHandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        handleSubmit(onSubmit)(event)
+    }
+
+    return { wrappedHandleSubmit, register, errors, handleSubmit, onSubmit }
 }
 
 const useBookWrite = () => {

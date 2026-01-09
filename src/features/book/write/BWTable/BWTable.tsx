@@ -2,27 +2,17 @@ import { FlexOneContainer, Hstack } from "@/packages/components/layouts"
 import { Vstack } from "@/packages/components/layouts/_Vstack"
 import Title from "@/packages/components/Title/Title"
 import clsx from "clsx"
-import { BOOK_DETAIL_KEY_ARRAY, BOOK_DETAIL_KEY_TO_LABEL } from "../_bookWriteInterfaces"
-import BWInputCell from "./_BWInputCell"
 import Button from "@/packages/components/Button/Button"
-import { withHeadInstance } from "@/packages/api/axiosInstances"
-import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
 import { useRef } from "react"
 import { useVirtualizer } from "@tanstack/react-virtual"
 import { BW_DEFAULT_ROW_COUNT } from "../_bookWriteConstants"
-import useBookWriteStore from "../_bookWriteStore"
-
-// NOTE: for sub question auto complete
-const getBookDetail = async (searchText: string) => {
-    const params = { query: searchText }
-    const response = await withHeadInstance.get("/book/detail", { params })
-
-    return response.data
-}
+import useBookWriteStore from "../bookWriteStore/bookWriteStore"
+import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
+import bookWriteColumnArray from "./_BWTableColumns"
 
 const BWTable = () => {
     const rowArray = useBookWriteStore((state) => state.rowArray)
-    const updateRowArray = useBookWriteStore((state) => state.updateRowArray)
+    const isPending = useBookWriteStore((state) => state.isPending)
 
     // NOTE: for virtual scroll
     const parentRef = useRef<HTMLDivElement>(null)
@@ -34,27 +24,45 @@ const BWTable = () => {
         overscan: 5,
     })
 
+    const table = useReactTable({
+        columns: bookWriteColumnArray,
+        data: rowArray,
+        getCoreRowModel: getCoreRowModel(),
+    })
+
     return (
         <Vstack className="h-full grow">
-            <Hstack className="justify-between">
+            <Hstack className="items-end justify-between">
                 <Title as="h2" isMuted>
                     문제 정보 기입
                 </Title>
-                <Button color="green">등록</Button>
+                <Button
+                    color="green"
+                    status={!rowArray[0].question_name.value ? "disabled" : isPending ? "pending" : "enabled"}
+                >
+                    등록
+                </Button>
             </Hstack>
             <FlexOneContainer ref={parentRef} isYScrollable>
                 <table style={{ height: `${rowVirtualizer.getTotalSize()}px` }} className="relative w-full">
-                    <thead>
-                        <tr className="flex">
-                            {BOOK_DETAIL_KEY_ARRAY.map((columnKey) => (
-                                <th
-                                    key={columnKey}
-                                    className="border-border-dim hover:outline-border-muted z-10 flex-1 border px-3 py-2 hover:outline"
-                                >
-                                    {BOOK_DETAIL_KEY_TO_LABEL[columnKey]}
-                                </th>
-                            ))}
-                        </tr>
+                    <thead className="bg-bg-neg-1 sticky top-0 z-10">
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <tr key={headerGroup.id} className="flex">
+                                {headerGroup.headers.map((header) => (
+                                    <th
+                                        key={header.id}
+                                        className={clsx(
+                                            "border-border-dim hover:outline-border-muted z-10 border px-3 py-2 hover:outline",
+                                            header.id === "topic" || header.id === "step" ? "flex-1" : "w-[100px]"
+                                        )}
+                                    >
+                                        {header.isPlaceholder
+                                            ? "this is header placeholder"
+                                            : flexRender(header.column.columnDef.header, header.getContext())}
+                                    </th>
+                                ))}
+                            </tr>
+                        ))}
                     </thead>
                     <tbody>
                         {rowVirtualizer.getVirtualItems().map((virtualRow) => (
@@ -64,39 +72,26 @@ const BWTable = () => {
                                     transform: `translateY(${virtualRow.start}px)`,
                                     height: `${virtualRow.size}px`,
                                 }}
-                                className="absolute left-0"
+                                className="absolute left-0 flex w-full"
                             >
-                                {BOOK_DETAIL_KEY_ARRAY.map((columnKey) => (
-                                    <td
-                                        key={columnKey}
-                                        className={clsx(
-                                            "border-border-dim hover:outline-border-muted z-10 border hover:outline",
-                                            columnKey !== "topic" && "text-center"
-                                        )}
-                                    >
-                                        {columnKey === "sub_question_name" && (
-                                            <AutoComplete
-                                                available="onlyExisting"
-                                                getOptionArray={getBookDetail}
-                                                onValueChange={(value, isError) => {
-                                                    if (isError) return
-                                                    updateRowArray(virtualRow.index, columnKey, value)
-                                                }}
-                                                outerIsRed={false}
-                                                queryKey={["bookDetail"]}
-                                                colorChangeIn="fill"
-                                                variant="ghost"
-                                            />
-                                        )}
-                                        {columnKey !== "sub_question_name" && (
-                                            <BWInputCell
-                                                value={rowArray[virtualRow.index][columnKey].value}
-                                                columnKey={columnKey}
-                                                rowIndex={virtualRow.index}
-                                            />
-                                        )}
-                                    </td>
-                                ))}
+                                {table
+                                    .getRowModel()
+                                    .rows[virtualRow.index].getVisibleCells()
+                                    .map((cell) => {
+                                        return (
+                                            <td
+                                                key={cell.id}
+                                                className={clsx(
+                                                    "border-border-dim hover:outline-border-muted z-10 border hover:outline",
+                                                    cell.column.id === "topic" || cell.column.id === "step"
+                                                        ? "flex-1"
+                                                        : "w-[100px]"
+                                                )}
+                                            >
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            </td>
+                                        )
+                                    })}
                             </tr>
                         ))}
                     </tbody>

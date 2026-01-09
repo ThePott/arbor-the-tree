@@ -9,6 +9,7 @@
     color: var(--color-fg-vivid);
     background-color: var(--color-bg-neg-1);
     scrollbar-color: hsl(0 0 50) transparent;
+    word-break: keep-all;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -51,8 +52,8 @@ input::-webkit-inner-spin-button {
     --color-fg-muted: rgba(from var(--color-fg-vivid) r g b / 0.6);
     --color-fg-dim: rgba(from var(--color-fg-vivid) r g b / 0.3);
     --color-fg-inverted-vivid: var(--color-washed-black);
-    --color-fg-inverted-muted: rgba(from var(--color-fg-vivid) r g b / 0.6);
-    --color-fg-inverted-dim: rgba(from var(--color-fg-vivid) r g b / 0.3);
+    --color-fg-inverted-muted: rgba(from var(--color-fg-inverted-vivid) r g b / 0.6);
+    --color-fg-inverted-dim: rgba(from var(--color-fg-inverted-vivid) r g b / 0.3);
 
     --color-border-vivid: var(--color-washed-white);
     --color-border-muted: rgba(from var(--color-border-vivid) r g b / 0.6);
@@ -147,5 +148,5 @@ input::-webkit-inner-spin-button {
 @utility my-transition {
     transition-property: all;
     transition-timing-function: cubic-bezier(0.08, 0.34, 0.26, 1.11);
-    transition-duration: var(0.1);
+    transition-duration: 0.1s;
 }

@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react"
+import ModalTestPage from "./_ModalTestPage.tsx"
 const TabTestPage = lazy(() => import("./_TabTestPage.tsx"))
 const TableTestPage = lazy(() => import("./_TableTestPage.tsx"))
 const ResumeTestPage = lazy(() => import("./_ResumeTestPage.tsx"))
@@ -19,6 +20,7 @@ const testRouteArray = [
     { path: "/test/resume", element: <ResumeTestPage /> },
     { path: "/test/tab", element: <TabTestPage /> },
     { path: "/test/table", element: <TableTestPage /> },
+    { path: "/test/modal", element: <ModalTestPage /> },
 ]
 
 const suspendedTestRouteArray = testRouteArray.map((route) => ({

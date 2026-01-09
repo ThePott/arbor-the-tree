@@ -1,6 +1,8 @@
 import Input from "@/packages/components/Input/Input"
 import type { BookWriteRowFlat } from "../_bookWriteInterfaces"
-import useBookWriteStore from "../_bookWriteStore"
+import useBookWriteStore from "../bookWriteStore/bookWriteStore"
+import handleKeyDownNavigation from "./_bwInputCellNavigateWithKeydown"
+import validateChange from "./_bwInputCellValidateChange"
 
 const BWInputCell = ({
     value,
@@ -13,6 +15,7 @@ const BWInputCell = ({
 }) => {
     const rowArray = useBookWriteStore((state) => state.rowArray)
     const updateRowArray = useBookWriteStore((state) => state.updateRowArray)
+    const isPending = useBookWriteStore((state) => state.isPending)
 
     const handleBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
         const newValue = event.target.value
@@ -23,7 +26,17 @@ const BWInputCell = ({
 
     return (
         <div className="relative">
-            <Input colorChangeIn="fill" variant="ghost" defaultValue={value} onBlur={handleBlur} isRed={cell.isError} />
+            <Input
+                disabled={isPending}
+                colorChangeIn="fill"
+                variant="ghost"
+                defaultValue={value}
+                onBlur={handleBlur}
+                isRed={cell.isError}
+                onChange={(event) => validateChange({ event, columnKey })}
+                data-coordinate={`${columnKey}-${rowIndex}`}
+                onKeyDown={(event) => handleKeyDownNavigation({ event, columnKey, rowIndex })}
+            />
             <p className="text-fg-muted pointer-events-none absolute top-1/2 left-6 -translate-y-1/2">
                 {cell.overlaying}
             </p>

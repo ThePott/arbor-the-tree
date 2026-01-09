@@ -1,10 +1,12 @@
 import { create } from "zustand"
 import type { BookWriteStoreState } from "./_bookWriteStoreState"
-import { BW_DEFAULT_ROW_COUNT, BW_TOPIC_STEP_TAB_ARRAY } from "./_bookWriteConstants"
-import type { BookWriteRow } from "./_bookWriteInterfaces"
 import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
-import { findPreviousOverlaying, updateOverlayingColumn, validateValue } from "./_bookWriteStoreOperations"
 import { createJSONStorage, persist } from "zustand/middleware"
+import { BW_TOPIC_STEP_TAB_ARRAY, BW_DEFAULT_ROW_COUNT } from "../_bookWriteConstants"
+import type { BookWriteRow } from "../_bookWriteInterfaces"
+import { handleQuestionMutation } from "./bookWriteStoreOperations/handleMutateQuestion"
+import { updateOverlayingColumn } from "./bookWriteStoreOperations/handleMutateOtherColumn/updateOverlayings"
+import { calculateDash } from "./bookWriteStoreOperations/calculateDash"
 
 const useBookWriteStore = create<BookWriteStoreState>()(
     persist(
@@ -53,26 +55,47 @@ const useBookWriteStore = create<BookWriteStoreState>()(
                             question_page: {},
                             solution_page: {},
                             session: {},
-                            sub_question_name: {},
                         }) as BookWriteRow
                 ),
             updateRowArray: (rowIndex, columnKey, value) => {
                 const rowArray = [...get().rowArray]
-                if (!value && !rowArray[rowIndex][columnKey].value) return
+                const row = rowArray[rowIndex]
+                const cell = row[columnKey]
 
-                const cell = rowArray[rowIndex][columnKey]
+                // NOTE: 빈 셀 클릭했으면 아무것도 안 함
+                if (!value && !row[columnKey].value) return
 
-                const isValid = validateValue({ rowIndex, columnKey, value })
-                cell.isError = !isValid
-
-                const previousOverlaying = findPreviousOverlaying({ rowIndex, columnKey, rowArray })
-                updateOverlayingColumn({ rowIndex, columnKey, value, previousOverlaying, rowArray })
-
-                // NOTE: update underlying value by value from input
                 cell.value = value
+                cell.isError = false
+
+                if (value.match(/-$/)) {
+                    calculateDash({ rowIndex, rowArray, columnKey, value })
+                    set({ rowArray })
+                    return
+                }
+
+                if (columnKey === "question_name") {
+                    handleQuestionMutation({ rowArray, rowIndex, value })
+                } else {
+                    updateOverlayingColumn({ rowArray, columnKey })
+                }
 
                 set({ rowArray })
             },
+
+            register: null,
+            setRegister: (register) => set({ register }),
+            errors: null,
+            setErrors: (errors) => set({ errors }),
+
+            isPending: false,
+            setIsPending: (isPending) => set({ isPending }),
+
+            mutationError: null,
+            setMutationError: (mutationError) => set({ mutationError }),
+
+            modalKey: null,
+            setModalKey: (modalKey) => set({ modalKey }),
         }),
         {
             name: "book-write-store",
@@ -80,12 +103,12 @@ const useBookWriteStore = create<BookWriteStoreState>()(
             // NOTE: THIS IS FOR EARLY DEVELOPMENT
             // NOTE: THIS MUST BE DELETED
             // TODO: THIS MUST BE DELETED
-            partialize: (state) => ({
-                title: state.title,
-                topicInfo: state.topicInfo,
-                topicArray: state.topicArray,
-                stepInfo: state.stepInfo,
-                stepArray: state.stepArray,
+            partialize: () => ({
+                // title: state.title,
+                // topicInfo: state.topicInfo,
+                // topicArray: state.topicArray,
+                // stepInfo: state.stepInfo,
+                // stepArray: state.stepArray,
                 // rowArray: state.rowArray,
                 // overlayingRowArray: state.overlayingRowArray,
             }),
