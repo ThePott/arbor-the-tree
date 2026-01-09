@@ -17,7 +17,7 @@ const BookListContent = () => {
                     <Hstack className="justify-between">
                         <h1 className="text-my-xl font-semibold">문제집 관리</h1>
                         <Button color="green" onClick={() => navigate("/book/write")}>
-                            새 문제집 관리
+                            문제집 추가
                         </Button>
                     </Hstack>
                     <BookListTable bookArray={bookArray} />

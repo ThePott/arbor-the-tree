@@ -2,16 +2,19 @@ import Modal from "@/packages/Modal"
 import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 import { useNavigate } from "react-router"
 import { makeUlLul } from "@/shared/utils/stringManipulation"
+import { useQueryClient } from "@tanstack/react-query"
 
 const BWSuccessModal = () => {
     const setModalKey = useBookWriteStore((state) => state.setModalKey)
     const modalKey = useBookWriteStore((state) => state.modalKey)
     const title = useBookWriteStore((state) => state.title)
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
 
     const handleConfirm = () => {
         navigate("/book")
         setModalKey(null)
+        queryClient.invalidateQueries({ queryKey: ["book"] })
     }
 
     return (
