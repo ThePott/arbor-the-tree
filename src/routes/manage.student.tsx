@@ -1,9 +1,8 @@
+import ManageStudentPage from "@/featuresPerRoute/manage.student/page/ManageStudentPage"
+import ManageStudentPending from "@/featuresPerRoute/manage.student/pending/ManageStudentPending"
 import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/manage/student")({
-    component: RouteComponent,
+    component: ManageStudentPage,
+    pendingComponent: ManageStudentPending,
 })
-
-function RouteComponent() {
-    return <div>Hello "/manage/student"!</div>
-}
