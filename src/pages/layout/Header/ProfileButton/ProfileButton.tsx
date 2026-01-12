@@ -1,8 +1,8 @@
 import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown/Dropdown"
 import useGlobalStore from "@/shared/store/globalStore"
-import { useNavigate } from "react-router"
 import useLogoutMutation from "./_useLogoutMutation"
+import { useNavigate } from "@tanstack/react-router"
 
 const ProfileButton = () => {
     const me = useGlobalStore((state) => state.me)
@@ -12,7 +12,7 @@ const ProfileButton = () => {
     const handleChange = (value: string) => {
         switch (value) {
             case "mypage":
-                navigate("/mypage")
+                navigate({ to: "/mypage" })
                 break
             case "logout":
                 logoutMutate()

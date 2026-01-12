@@ -16,14 +16,12 @@ type WithSignupProps = {
     name: string
 }
 const requestSignup = async (body: LoginProps & WithSignupProps) => {
-    const response = await headlessInstance.post("/auth/email/signup", body)
-    console.log(response.data)
-    debugger
+    await headlessInstance.post("/auth/email/signup", body)
 }
 const requestLogin = async (body: LoginProps) => {
     const response = await headlessInstance.post("/auth/email/login", body)
-    console.log(response.data)
-    debugger
+    const me = response.data
+    useGlobalStore.getState().setMe(me)
 }
 
 const LoginWithEmailTestPage = () => {
@@ -43,8 +41,9 @@ const LoginWithEmailTestPage = () => {
         requestSignup({ email, password, name: userName })
     }
     const handleLoginSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        debugger
         event.preventDefault()
+        const email = event.currentTarget.email.value
+        const password = event.currentTarget.password.value
         requestLogin({ email, password })
     }
 
@@ -73,8 +72,8 @@ const LoginWithEmailTestPage = () => {
                                 <Title as="h2" isMuted>
                                     login with email
                                 </Title>
-                                <Input placeholder="email" />
-                                <Input placeholder="login" />
+                                <Input name="email" placeholder="email" />
+                                <Input name="password" placeholder="password" />
                                 <Button isShadowed>Login with email</Button>
                             </Vstack>
                         </RoundBox>

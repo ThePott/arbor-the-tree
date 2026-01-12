@@ -1,9 +1,8 @@
-import { useNavigate } from "react-router"
-
+import { useNavigate } from "@tanstack/react-router"
 const Logo = () => {
     const navigate = useNavigate()
     const handleClick = () => {
-        navigate("/")
+        navigate({ to: "/" })
     }
 
     return (
