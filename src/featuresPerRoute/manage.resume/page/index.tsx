@@ -1,8 +1,15 @@
 import { Container, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
+import { useLoaderData } from "@tanstack/react-router"
+import type { ExtendedResume } from "../types"
+
+const ResumeBox = ({ resume }: { resume: ExtendedResume }) => {
+    return <RoundBox isBordered padding="md"></RoundBox>
+}
 
 const ManageResumePage = () => {
+    const resumeArray = useLoaderData({ from: "/manage/resume" })
     return (
         <Container isPadded>
             <RoundBox color="bg2" padding="xl">
