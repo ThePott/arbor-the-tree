@@ -1,8 +1,8 @@
-import ManageResumePage from "@/featuresPerRoute/manage.resume/page/ManageResumePage"
-import ManageStudentPending from "@/featuresPerRoute/manage.student/pending/ManageStudentPending"
+import ManageResumePage from "@/featuresPerRoute/manage.resume/page"
+import ManageResumePending from "@/featuresPerRoute/manage.resume/pending"
 import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/manage/resume")({
     component: ManageResumePage,
-    pendingComponent: ManageStudentPending,
+    pendingComponent: ManageResumePending,
 })

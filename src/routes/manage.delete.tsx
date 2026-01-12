@@ -1,5 +1,5 @@
-import ManageDeletePage from "@/featuresPerRoute/manage.delete/page/ManageDeletePage"
-import ManageDeletePending from "@/featuresPerRoute/manage.delete/pending/ManageDeletePending"
+import ManageDeletePage from "@/featuresPerRoute/manage.delete/page"
+import ManageDeletePending from "@/featuresPerRoute/manage.delete/pending"
 import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/manage/delete")({
