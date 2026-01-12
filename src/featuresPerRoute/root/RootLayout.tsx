@@ -1,7 +1,7 @@
 import { FullScreen, FlexOneContainer } from "@/packages/components/layouts"
-import Header from "@/pages/layout/Header/Header"
 import useGlobalStore from "@/shared/store/globalStore"
 import { Outlet } from "@tanstack/react-router"
+import Header from "./Header"
 
 const RootLayout = () => {
     const isBodyScrollable = useGlobalStore((state) => state.isBodyScrollable)
