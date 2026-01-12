@@ -9,6 +9,7 @@ const AnimationTestPage = lazy(() => import("./_AnimationTestPage.tsx"))
 const AnimationExamplePage = lazy(() => import("./_AnimationExamplePage.tsx"))
 const AnimationEventTestPage = lazy(() => import("./_AnimationEventTestPage.tsx"))
 const DropdownTestPage = lazy(() => import("./_DropdownTestPage.tsx"))
+const LoginWithEmailTestPage = lazy(() => import("./_LoginWithEmailTestPage.tsx"))
 
 const testRouteArray = [
     { path: "/test/api", element: <ApiTestPage /> },
@@ -21,6 +22,7 @@ const testRouteArray = [
     { path: "/test/tab", element: <TabTestPage /> },
     { path: "/test/table", element: <TableTestPage /> },
     { path: "/test/modal", element: <ModalTestPage /> },
+    { path: "/test/login-with-email", element: <LoginWithEmailTestPage /> },
 ]
 
 const suspendedTestRouteArray = testRouteArray.map((route) => ({
