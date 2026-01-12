@@ -10,8 +10,8 @@
 
 import { Route as rootRouteImport } from "./routes/__root"
 import { Route as ProfileRouteImport } from "./routes/profile"
-import { Route as BookRouteImport } from "./routes/book"
 import { Route as IndexRouteImport } from "./routes/index"
+import { Route as BookIndexRouteImport } from "./routes/book.index"
 import { Route as TestLoginWithEmailRouteImport } from "./routes/test/login-with-email"
 import { Route as ManageStudentRouteImport } from "./routes/manage.student"
 import { Route as ManageResumeRouteImport } from "./routes/manage.resume"
@@ -24,14 +24,14 @@ const ProfileRoute = ProfileRouteImport.update({
     path: "/profile",
     getParentRoute: () => rootRouteImport,
 } as any)
-const BookRoute = BookRouteImport.update({
-    id: "/book",
-    path: "/book",
-    getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
     id: "/",
     path: "/",
+    getParentRoute: () => rootRouteImport,
+} as any)
+const BookIndexRoute = BookIndexRouteImport.update({
+    id: "/book/",
+    path: "/book/",
     getParentRoute: () => rootRouteImport,
 } as any)
 const TestLoginWithEmailRoute = TestLoginWithEmailRouteImport.update({
@@ -55,9 +55,9 @@ const ManageDeleteRoute = ManageDeleteRouteImport.update({
     getParentRoute: () => rootRouteImport,
 } as any)
 const BookWriteRoute = BookWriteRouteImport.update({
-    id: "/write",
-    path: "/write",
-    getParentRoute: () => BookRoute,
+    id: "/book/write",
+    path: "/book/write",
+    getParentRoute: () => rootRouteImport,
 } as any)
 const OauthKakaoCallbackRoute = OauthKakaoCallbackRouteImport.update({
     id: "/oauth/kakao/callback",
@@ -67,82 +67,83 @@ const OauthKakaoCallbackRoute = OauthKakaoCallbackRouteImport.update({
 
 export interface FileRoutesByFullPath {
     "/": typeof IndexRoute
-    "/book": typeof BookRouteWithChildren
     "/profile": typeof ProfileRoute
     "/book/write": typeof BookWriteRoute
     "/manage/delete": typeof ManageDeleteRoute
     "/manage/resume": typeof ManageResumeRoute
     "/manage/student": typeof ManageStudentRoute
     "/test/login-with-email": typeof TestLoginWithEmailRoute
+    "/book": typeof BookIndexRoute
     "/oauth/kakao/callback": typeof OauthKakaoCallbackRoute
 }
 export interface FileRoutesByTo {
     "/": typeof IndexRoute
-    "/book": typeof BookRouteWithChildren
     "/profile": typeof ProfileRoute
     "/book/write": typeof BookWriteRoute
     "/manage/delete": typeof ManageDeleteRoute
     "/manage/resume": typeof ManageResumeRoute
     "/manage/student": typeof ManageStudentRoute
     "/test/login-with-email": typeof TestLoginWithEmailRoute
+    "/book": typeof BookIndexRoute
     "/oauth/kakao/callback": typeof OauthKakaoCallbackRoute
 }
 export interface FileRoutesById {
     __root__: typeof rootRouteImport
     "/": typeof IndexRoute
-    "/book": typeof BookRouteWithChildren
     "/profile": typeof ProfileRoute
     "/book/write": typeof BookWriteRoute
     "/manage/delete": typeof ManageDeleteRoute
     "/manage/resume": typeof ManageResumeRoute
     "/manage/student": typeof ManageStudentRoute
     "/test/login-with-email": typeof TestLoginWithEmailRoute
+    "/book/": typeof BookIndexRoute
     "/oauth/kakao/callback": typeof OauthKakaoCallbackRoute
 }
 export interface FileRouteTypes {
     fileRoutesByFullPath: FileRoutesByFullPath
     fullPaths:
         | "/"
-        | "/book"
         | "/profile"
         | "/book/write"
         | "/manage/delete"
         | "/manage/resume"
         | "/manage/student"
         | "/test/login-with-email"
+        | "/book"
         | "/oauth/kakao/callback"
     fileRoutesByTo: FileRoutesByTo
     to:
         | "/"
-        | "/book"
         | "/profile"
         | "/book/write"
         | "/manage/delete"
         | "/manage/resume"
         | "/manage/student"
         | "/test/login-with-email"
+        | "/book"
         | "/oauth/kakao/callback"
     id:
         | "__root__"
         | "/"
-        | "/book"
         | "/profile"
         | "/book/write"
         | "/manage/delete"
         | "/manage/resume"
         | "/manage/student"
         | "/test/login-with-email"
+        | "/book/"
         | "/oauth/kakao/callback"
     fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
     IndexRoute: typeof IndexRoute
-    BookRoute: typeof BookRouteWithChildren
     ProfileRoute: typeof ProfileRoute
+    BookWriteRoute: typeof BookWriteRoute
     ManageDeleteRoute: typeof ManageDeleteRoute
     ManageResumeRoute: typeof ManageResumeRoute
     ManageStudentRoute: typeof ManageStudentRoute
     TestLoginWithEmailRoute: typeof TestLoginWithEmailRoute
+    BookIndexRoute: typeof BookIndexRoute
     OauthKakaoCallbackRoute: typeof OauthKakaoCallbackRoute
 }
 
@@ -155,18 +156,18 @@ declare module "@tanstack/react-router" {
             preLoaderRoute: typeof ProfileRouteImport
             parentRoute: typeof rootRouteImport
         }
-        "/book": {
-            id: "/book"
-            path: "/book"
-            fullPath: "/book"
-            preLoaderRoute: typeof BookRouteImport
-            parentRoute: typeof rootRouteImport
-        }
         "/": {
             id: "/"
             path: "/"
             fullPath: "/"
             preLoaderRoute: typeof IndexRouteImport
+            parentRoute: typeof rootRouteImport
+        }
+        "/book/": {
+            id: "/book/"
+            path: "/book"
+            fullPath: "/book"
+            preLoaderRoute: typeof BookIndexRouteImport
             parentRoute: typeof rootRouteImport
         }
         "/test/login-with-email": {
@@ -199,10 +200,10 @@ declare module "@tanstack/react-router" {
         }
         "/book/write": {
             id: "/book/write"
-            path: "/write"
+            path: "/book/write"
             fullPath: "/book/write"
             preLoaderRoute: typeof BookWriteRouteImport
-            parentRoute: typeof BookRoute
+            parentRoute: typeof rootRouteImport
         }
         "/oauth/kakao/callback": {
             id: "/oauth/kakao/callback"
@@ -214,24 +215,15 @@ declare module "@tanstack/react-router" {
     }
 }
 
-interface BookRouteChildren {
-    BookWriteRoute: typeof BookWriteRoute
-}
-
-const BookRouteChildren: BookRouteChildren = {
-    BookWriteRoute: BookWriteRoute,
-}
-
-const BookRouteWithChildren = BookRoute._addFileChildren(BookRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
     IndexRoute: IndexRoute,
-    BookRoute: BookRouteWithChildren,
     ProfileRoute: ProfileRoute,
+    BookWriteRoute: BookWriteRoute,
     ManageDeleteRoute: ManageDeleteRoute,
     ManageResumeRoute: ManageResumeRoute,
     ManageStudentRoute: ManageStudentRoute,
     TestLoginWithEmailRoute: TestLoginWithEmailRoute,
+    BookIndexRoute: BookIndexRoute,
     OauthKakaoCallbackRoute: OauthKakaoCallbackRoute,
 }
 export const routeTree = rootRouteImport._addFileChildren(rootRouteChildren)._addFileTypes<FileRouteTypes>()
