@@ -1,7 +1,7 @@
-import useBookListStore from "@/features/book/_bookListStore"
 import { withHeadInstance } from "@/packages/api/axiosInstances"
 import type { Book } from "@/shared/interfaces"
 import type { QueryClient } from "@tanstack/react-query"
+import useBookListStore from "../page/_bookListStore"
 
 type BookListLoaderFnProps = { queryClient: QueryClient }
 const bookListLoaderFn = async ({ queryClient }: BookListLoaderFnProps) => {
