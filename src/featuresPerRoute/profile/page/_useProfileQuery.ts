@@ -5,12 +5,11 @@ import { useQuery } from "@tanstack/react-query"
 import { useEffect } from "react"
 
 const useProfileQuery = () => {
-    const me = useGlobalStore((state) => state.me)
     const setMe = useGlobalStore((state) => state.setMe)
     const setResume = useGlobalStore((state) => state.setResume)
     const { data } = useQuery({
         queryKey: ["me"],
-        queryFn: async () => withHeadInstance.get(`/auth/me/${me?.id}`),
+        queryFn: async () => withHeadInstance.get(`/auth/me`),
     })
 
     useEffect(() => {
