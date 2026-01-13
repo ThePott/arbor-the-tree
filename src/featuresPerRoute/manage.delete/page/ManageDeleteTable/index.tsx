@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useLoaderData } from "@tanstack/react-router"
 import { manageDeleteQueryOptions } from "../../loader"
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
@@ -7,6 +7,35 @@ import { Trash } from "lucide-react"
 import { MANAGE_DELETE_ROW_KET_TO_LABEL, MANAGE_DELETE_ROW_KEY_ARRAY, type ManageDeleteRow } from "../../types"
 import type { AppUser } from "@/shared/interfaces"
 import { roleToText } from "@/shared/utils/apiTypeToLabel"
+import { withHeadInstance } from "@/packages/api/axiosInstances"
+
+const DeleteButton = ({ user_id }: { user_id: string }) => {
+    if (!user_id) throw new Error("---- Invalid request")
+    const deleteMutation = useMutation({
+        mutationFn: ({ user_id }: { user_id: string }) => withHeadInstance.delete(`/auth/user/${user_id}`),
+        onMutate: async ({ user_id }, context) => {
+            await context.client.cancelQueries()
+            const previousUserArray = context.client.getQueryData(["all"]) as AppUser[]
+
+            const newUserArray = previousUserArray.filter((user) => user.id !== user_id)
+            context.client.setQueryData(["all"], newUserArray)
+
+            return { previousUserArray }
+        },
+        onError: (_error, _variables, onMutateResult, context) => {
+            context.client.setQueryData(["all"], onMutateResult?.previousUserArray)
+        },
+        onSettled: (_data, _error, _variables, _onMutateResult, context) => {
+            context.client.invalidateQueries({ queryKey: ["all"] })
+        },
+    })
+
+    return (
+        <Button onClick={() => deleteMutation.mutate({ user_id })}>
+            <Trash />
+        </Button>
+    )
+}
 
 const columnHelper = createColumnHelper<ManageDeleteRow>()
 const columns = [
@@ -15,11 +44,11 @@ const columns = [
     ),
     columnHelper.display({
         id: "delete",
-        cell: () => (
-            <Button>
-                <Trash />
-            </Button>
-        ),
+        cell: ({
+            row: {
+                original: { id },
+            },
+        }) => <DeleteButton user_id={id} />,
     }),
 ]
 
@@ -28,6 +57,7 @@ const convertDataToRowArray = ({ appUserArray }: { appUserArray: AppUser[] }): M
         name: appUser.name,
         phone_number: appUser.phone_number,
         role: appUser.role ? roleToText[appUser.role] : undefined,
+        id: appUser.id,
     }))
 
     return rowArray
