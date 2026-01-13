@@ -9,8 +9,7 @@ const manageStudentLoaderFn = async ({ queryClient }: ManageStudentLoaderFnProps
             return response.data
         },
     })
-    console.log({ extendedStudentArray })
-    debugger
+    return extendedStudentArray
 }
 
 export default manageStudentLoaderFn
