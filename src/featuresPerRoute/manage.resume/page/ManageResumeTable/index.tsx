@@ -6,7 +6,7 @@ import {
     type ManageResumeRow,
 } from "../../types"
 import Button from "@/packages/components/Button/Button"
-import { Check, X } from "lucide-react"
+import { Check } from "lucide-react"
 import { useLoaderData } from "@tanstack/react-router"
 import { roleToText } from "@/shared/utils/apiTypeToLabel"
 
