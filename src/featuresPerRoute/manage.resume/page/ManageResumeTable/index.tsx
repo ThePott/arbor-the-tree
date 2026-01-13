@@ -9,6 +9,41 @@ import Button from "@/packages/components/Button/Button"
 import { Check } from "lucide-react"
 import { useLoaderData } from "@tanstack/react-router"
 import { roleToText } from "@/shared/utils/apiTypeToLabel"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { withHeadInstance } from "@/packages/api/axiosInstances"
+import { makeManageResumeQueryOptions } from "../../loader"
+
+type AcceptButtonProps = { resume_id: string }
+const AcceptButton = ({ resume_id }: AcceptButtonProps) => {
+    const postMutation = useMutation({
+        mutationFn: () => withHeadInstance.post(`/auth/resume/${resume_id}/accept`),
+        onMutate: async (_variables, context) => {
+            await context.client.cancelQueries({ queryKey: ["resume"] })
+            const previousResumeArray = context.client.getQueryData(["resume"]) as ExtendedResume[]
+
+            const newResumeArray = previousResumeArray.filter((resume) => resume.id !== resume_id)
+            context.client.setQueryData(["resume"], newResumeArray)
+
+            return { previousResumeArray }
+        },
+        onError: (_error, _variables, onMutateResult, context) => {
+            context.client.setQueryData(["resume"], onMutateResult?.previousResumeArray)
+        },
+        onSettled: (_data, _error, _variables, _onMutateResult, context) => {
+            context.client.invalidateQueries({ queryKey: ["resume"] })
+        },
+    })
+
+    const handleClick = () => {
+        postMutation.mutate()
+    }
+
+    return (
+        <Button isBorderedOnHover onClick={handleClick}>
+            <Check />
+        </Button>
+    )
+}
 
 const columnHelper = createColumnHelper<ManageResumeRow>()
 const columns = [
@@ -17,16 +52,17 @@ const columns = [
     ),
     columnHelper.display({
         id: "accept",
-        cell: () => (
-            <Button isBorderedOnHover>
-                <Check />
-            </Button>
-        ),
+        cell: ({
+            row: {
+                original: { id },
+            },
+        }) => <AcceptButton resume_id={id} />,
     }),
 ]
 type ExtendedResumeArrayToRowArrayProps = { extendedResumeArray: ExtendedResume[] }
 const convertDataToRowArray = ({ extendedResumeArray }: ExtendedResumeArrayToRowArrayProps): ManageResumeRow[] => {
     const rowArray: ManageResumeRow[] = extendedResumeArray.map((extendedResume) => ({
+        id: extendedResume.id,
         name: extendedResume.users.name,
         role: roleToText[extendedResume.role],
         hagwon_name: extendedResume.hagwon_name,
@@ -38,7 +74,8 @@ const convertDataToRowArray = ({ extendedResumeArray }: ExtendedResumeArrayToRow
 
 const ManageResumeTable = () => {
     const extendedResumeArray = useLoaderData({ from: "/manage/resume" })
-    const rowArray = convertDataToRowArray({ extendedResumeArray })
+    const { data } = useQuery(makeManageResumeQueryOptions<"useQuery">())
+    const rowArray = convertDataToRowArray({ extendedResumeArray: data ?? extendedResumeArray })
 
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ columns, data: rowArray, getCoreRowModel: getCoreRowModel() })

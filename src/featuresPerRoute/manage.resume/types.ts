@@ -7,7 +7,7 @@ export type ManageResuemRowKey = (typeof MANAGE_RESUME_ROW_KEY_ARRAY)[number]
 
 export type ManageResumeRow = {
     [K in ManageResuemRowKey]: K extends "school_name" ? string | undefined : string
-}
+} & { id: string }
 
 export const MANAGE_RESUME_ROW_KEY_TO_LABEL: Record<ManageResuemRowKey, string> = {
     name: "이름",
