@@ -8,6 +8,7 @@ import { MANAGE_DELETE_ROW_KET_TO_LABEL, MANAGE_DELETE_ROW_KEY_ARRAY, type Manag
 import type { AppUser } from "@/shared/interfaces"
 import { roleToText } from "@/shared/utils/apiTypeToLabel"
 import { withHeadInstance } from "@/packages/api/axiosInstances"
+import TanstackTable from "@/packages/components/TanstackTable"
 
 const DeleteButton = ({ user_id }: { user_id: string }) => {
     if (!user_id) throw new Error("---- Invalid request")
@@ -71,34 +72,7 @@ const ManageDeleteTable = () => {
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ columns: columns, data: rowArray, getCoreRowModel: getCoreRowModel() })
 
-    return (
-        <table className="rounded-my-md outline-fg-dim overflow-hidden outline">
-            <thead>
-                {table.getHeaderGroups().map((headerGroup) => (
-                    <tr key={headerGroup.id}>
-                        {headerGroup.headers.map((header) => (
-                            <th key={header.id} className="text-fg-muted px-4 py-2">
-                                {header.isPlaceholder
-                                    ? "this is header placeholder"
-                                    : flexRender(header.column.columnDef.header, header.getContext())}
-                            </th>
-                        ))}
-                    </tr>
-                ))}
-            </thead>
-            <tbody>
-                {table.getRowModel().rows.map((row) => (
-                    <tr key={row.id} className="border-t-fg-dim border-t">
-                        {row.getVisibleCells().map((cell) => (
-                            <td key={cell.id} className="px-4 py-2 text-center">
-                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                            </td>
-                        ))}
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    )
+    return <TanstackTable table={table} />
 }
 
 export default ManageDeleteTable
