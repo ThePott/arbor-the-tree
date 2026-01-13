@@ -49,10 +49,10 @@ const LoginPage = () => {
 
     return (
         <Container isPadded>
-            <RoundBox isShadowed radius="lg" padding="xl">
+            <RoundBox isShadowed radius="lg" padding="xl" color="bg0">
                 <Vstack gap="lg">
                     <form onSubmit={handleCreateSubmit}>
-                        <RoundBox isShadowed padding="lg">
+                        <RoundBox isShadowed padding="lg" color="bg1">
                             <Vstack gap="xs">
                                 <Title as="h2" isMuted>
                                     create new account
@@ -67,7 +67,7 @@ const LoginPage = () => {
                         </RoundBox>
                     </form>
                     <form onSubmit={handleLoginSubmit}>
-                        <RoundBox isShadowed padding="lg">
+                        <RoundBox isShadowed padding="lg" color="bg1">
                             <Vstack gap="xs">
                                 <Title as="h2" isMuted>
                                     login with email
