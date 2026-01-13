@@ -52,7 +52,7 @@ const LoginPage = () => {
             <RoundBox isShadowed radius="lg" padding="xl">
                 <Vstack gap="lg">
                     <form onSubmit={handleCreateSubmit}>
-                        <RoundBox isShadowed padding="md">
+                        <RoundBox isShadowed padding="lg">
                             <Vstack gap="xs">
                                 <Title as="h2" isMuted>
                                     create new account
@@ -67,7 +67,7 @@ const LoginPage = () => {
                         </RoundBox>
                     </form>
                     <form onSubmit={handleLoginSubmit}>
-                        <RoundBox isShadowed padding="md">
+                        <RoundBox isShadowed padding="lg">
                             <Vstack gap="xs">
                                 <Title as="h2" isMuted>
                                     login with email
