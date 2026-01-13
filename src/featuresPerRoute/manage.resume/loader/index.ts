@@ -1,27 +1,25 @@
 import { withHeadInstance } from "@/packages/api/axiosInstances"
 import useGlobalStore from "@/shared/store/globalStore"
-import type { EnsureQueryDataOptions, QueryClient, UndefinedInitialDataOptions } from "@tanstack/react-query"
+import type { QueryClient } from "@tanstack/react-query"
 import type { ExtendedResume } from "../types"
 
-type ForWhat = "ensureQueryData" | "useQuery"
-export const makeManageResumeQueryOptions = <T extends ForWhat>(): T extends "ensureQueryData"
-    ? EnsureQueryDataOptions<ExtendedResume[], Error, ExtendedResume[], string[], never>
-    : UndefinedInitialDataOptions<ExtendedResume[], Error, ExtendedResume[], string[]> => {
-    const me = useGlobalStore.getState().me
-    // TODO: custom error class 만들어야 함
-    if (!me) throw new Error("---- Unauthorized")
-
-    return {
-        queryKey: ["resume"],
-        queryFn: async () => (await withHeadInstance.get(`/auth/resume/user/${me.id}`)).data as ExtendedResume[],
-    }
+export const manageResumeQueryOptions = {
+    queryKey: ["resume"],
+    queryFn: async () => {
+        const me = useGlobalStore.getState().me
+        // NOTE: 커스텀 에러 클래스 만들어야
+        if (!me) throw new Error("---- Unauthorized")
+        const response = await withHeadInstance.get(`/auth/resume/user/${me.id}`)
+        const extendedResumeArray = response.data as ExtendedResume[]
+        return extendedResumeArray
+    },
 }
 
 type ManageResumeLoaderFnProps = {
     queryClient: QueryClient
 }
 const manageResumeLoaderFn = async ({ queryClient }: ManageResumeLoaderFnProps) => {
-    const responseData = await queryClient.ensureQueryData(makeManageResumeQueryOptions<"ensureQueryData">())
+    const responseData = await queryClient.ensureQueryData(manageResumeQueryOptions)
     return responseData
 }
 

@@ -11,9 +11,9 @@ import { useLoaderData } from "@tanstack/react-router"
 import { roleToText } from "@/shared/utils/apiTypeToLabel"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { withHeadInstance } from "@/packages/api/axiosInstances"
-import { makeManageResumeQueryOptions } from "../../loader"
 import useGlobalStore from "@/shared/store/globalStore"
 import type { Role } from "@/shared/interfaces"
+import { manageResumeQueryOptions } from "../../loader"
 
 type AcceptButtonProps = { resume_id: string }
 const AcceptButton = ({ resume_id }: AcceptButtonProps) => {
@@ -112,7 +112,7 @@ const principalConvertDataToRowArray = ({
 
 const ManageResumeTable = () => {
     const extendedResumeArray = useLoaderData({ from: "/manage/resume" })
-    const { data } = useQuery(makeManageResumeQueryOptions<"useQuery">())
+    const { data } = useQuery(manageResumeQueryOptions)
 
     const me = useGlobalStore((state) => state.me)
     const allowedRoleArray: (Role | undefined)[] = ["MAINTAINER", "PRINCIPAL"]
