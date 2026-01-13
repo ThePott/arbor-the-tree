@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useLoaderData } from "@tanstack/react-router"
 import { manageDeleteQueryOptions } from "../../loader"
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
+import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import Button from "@/packages/components/Button/Button"
 import { Trash } from "lucide-react"
 import { MANAGE_DELETE_ROW_KET_TO_LABEL, MANAGE_DELETE_ROW_KEY_ARRAY, type ManageDeleteRow } from "../../types"
