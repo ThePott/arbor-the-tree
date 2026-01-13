@@ -1,6 +1,7 @@
 import { withHeadInstance } from "@/packages/api/axiosInstances"
 import useGlobalStore from "@/shared/store/globalStore"
 import type { QueryClient } from "@tanstack/react-query"
+import type { ExtendedResume } from "../types"
 
 type ManageResumeLoaderFnProps = {
     queryClient: QueryClient
@@ -16,7 +17,7 @@ const manageResumeLoaderFn = async ({ queryClient }: ManageResumeLoaderFnProps) 
         queryFn: async () => await withHeadInstance.get(`/auth/resume/user/${me.id}`),
     })
 
-    return response.data
+    return response.data as ExtendedResume[]
 }
 
 export default manageResumeLoaderFn

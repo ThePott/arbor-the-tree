@@ -1,6 +1,15 @@
 export type Role = "MAINTAINER" | "PRINCIPAL" | "STUDENT" | "PARENT" | "HELPER"
 
-export interface Me {
+export type AppUser = {
+    id: string
+    name: string
+    role?: Role
+    phone_number?: string
+    kakao_id?: string
+    email?: string
+}
+
+export type Me = {
     id: number
     name: string
     kakao_id?: number
@@ -11,23 +20,26 @@ export interface Me {
     hagwon_name?: string
 }
 
-export interface School {
+export type School = {
     id: number
     name: string
 }
 
-export interface Hagwon {
+export type Hagwon = {
     id: number
     name: string
 }
 
-export interface Resume {
+export type Resume = {
+    id: string
+    user_id: string
     role: Role
+    school_name?: string // NOTE: 학생 제외하고선 학교 이름이 없음
     hagwon_name: string
-    school_name: string
+    applied_at: string // NOTE: ISOstring
 }
 
-export interface Book {
+export type Book = {
     id: string
     published_year: number
     title: string

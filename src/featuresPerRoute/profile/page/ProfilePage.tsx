@@ -14,14 +14,7 @@ import SchoolAutoComplete from "./_SchoolAutoComplete"
 import HagwonAutoComplete from "./_HagwonAutoComplete"
 import useProfileQuery from "./_useProfileQuery"
 import useGlobalStore from "@/shared/store/globalStore"
-
-const roleToText: Record<Role, string> = {
-    PRINCIPAL: "원장",
-    STUDENT: "학생",
-    HELPER: "조교",
-    PARENT: "학부모",
-    MAINTAINER: "관리자",
-}
+import { roleToText } from "@/shared/utils/apiTypeToLabel"
 
 const ProfilePage = () => {
     const me = useGlobalStore((state) => state.me)
