@@ -1,5 +1,16 @@
 export type Role = "MAINTAINER" | "PRINCIPAL" | "STUDENT" | "PARENT" | "HELPER"
 
+// NOTE: key array and actual type must be synced!
+export const APP_USER_KEY_ARRAY = ["id", "name", "role", "phone_number", "kakao_id", "email"] as const
+export type AppUserKey = (typeof APP_USER_KEY_ARRAY)[number]
+export const APP_USER_KEY_TO_LABEL: Record<AppUserKey, string> = {
+    id: "아이디",
+    name: "이름",
+    role: "권한",
+    phone_number: "핸드폰 번호",
+    kakao_id: "카카오 아이디",
+    email: "이메일",
+}
 export type AppUser = {
     id: string
     name: string

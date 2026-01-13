@@ -127,6 +127,7 @@ const ManageResumeTable = () => {
         ? maintainerConvertDataToRowArray({ extendedResumeArray: data ?? extendedResumeArray })
         : principalConvertDataToRowArray({ extendedResumeArray: data ?? extendedResumeArray })
 
+    // TODO: 에러 해결해야 함
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ columns, data: rowArray, getCoreRowModel: getCoreRowModel() })
 
