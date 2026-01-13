@@ -7,6 +7,8 @@ const useGlobalStore = create<GlobalStoreState>()(
         (set, _get) => ({
             accessToken: null,
             setAccessToken: (accessToken) => set({ accessToken }),
+            refreshToken: null,
+            setRefreshToken: (refreshToken) => set({ refreshToken }),
             me: null,
             setMe: (me) => set({ me }),
 
@@ -22,7 +24,7 @@ const useGlobalStore = create<GlobalStoreState>()(
         {
             name: "arbor-store",
             storage: createJSONStorage(() => localStorage),
-            partialize: (state) => ({ accessToken: state.accessToken, me: state.me }),
+            partialize: (state) => ({ accessToken: state.accessToken, refreshToken: state.refreshToken, me: state.me }),
         }
     )
 )
