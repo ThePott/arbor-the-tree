@@ -32,7 +32,7 @@ export type Me = {
 }
 
 export type School = {
-    id: number
+    id: string
     name: string
 }
 
@@ -69,4 +69,12 @@ export type ApiErrorCode =
 export type ApiError = {
     code: ApiErrorCode
     message: string
+}
+
+export type Student = {
+    id: string
+    user_id: string
+    school_id: string
+    hagwon_id: string
+    grade?: number
 }
