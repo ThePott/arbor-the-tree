@@ -76,5 +76,5 @@ export type Student = {
     user_id: string
     school_id: string
     hagwon_id: string
-    grade?: number
+    grade?: number // NOTE: 중1: 7, 고1: 10, n수: 13
 }

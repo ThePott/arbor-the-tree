@@ -2,6 +2,7 @@ import { Container, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import TabBar, { type Tab } from "@/packages/components/TabBar/TabBar"
 import Title from "@/packages/components/Title/Title"
+import ManageStudentTable from "./ManageStudentTable"
 
 const MANAGE_STUDENT_TAB_ARRAY: Tab<string>[] = [
     { label: "반별", value: "classroom" },
@@ -15,6 +16,7 @@ const ManageStudentPage = () => {
                 <Vstack gap="lg">
                     <Title as="h1">학생 관리</Title>
                     <TabBar variant="underline" tabArray={MANAGE_STUDENT_TAB_ARRAY} onSelect={() => {}} />
+                    <ManageStudentTable />
                 </Vstack>
             </RoundBox>
         </Container>
