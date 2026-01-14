@@ -2,7 +2,7 @@ import { Container } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
 
-const DefaultNotFound = () => {
+const DefaultNotFoundComponent = () => {
     return (
         <Container isPadded>
             <RoundBox color="bg0" padding="xl" radius="lg" isShadowed>
@@ -12,4 +12,4 @@ const DefaultNotFound = () => {
     )
 }
 
-export default DefaultNotFound
+export default DefaultNotFoundComponent

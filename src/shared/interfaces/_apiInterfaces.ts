@@ -56,8 +56,7 @@ export type Book = {
     title: string
 }
 
-export type AppError = {
+export type ApiError = {
     code: string
-    statusCode: number
     message: string
 }

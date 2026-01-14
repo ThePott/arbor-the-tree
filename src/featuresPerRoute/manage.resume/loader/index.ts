@@ -7,9 +7,8 @@ export const manageResumeQueryOptions = {
     queryKey: ["resume"],
     queryFn: async () => {
         const me = useGlobalStore.getState().me
-        // NOTE: 커스텀 에러 클래스 만들어야
-        if (!me) throw new Error("---- Unauthorized")
-        const response = await withHeadInstance.get(`/auth/resume/user/${me.id}`)
+        // Note: Authorization is checked in beforeLoad, me is guaranteed to exist here
+        const response = await withHeadInstance.get(`/auth/resume/user/${me!.id}`)
         const extendedResumeArray = response.data as ExtendedResume[]
         return extendedResumeArray
     },

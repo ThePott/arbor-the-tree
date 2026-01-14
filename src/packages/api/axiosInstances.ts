@@ -18,4 +18,11 @@ withHeadInstance.interceptors.request.use((config) => {
     return config
 })
 
+withHeadInstance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        return Promise.reject(error)
+    }
+)
+
 export { headlessInstance, withHeadInstance }
