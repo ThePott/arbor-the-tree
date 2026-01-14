@@ -19,9 +19,15 @@ const requestSignup = async (body: LoginProps & WithSignupProps) => {
     await headlessInstance.post("/auth/email/signup", body)
 }
 const requestLogin = async (body: LoginProps) => {
+    const state = useGlobalStore.getState()
+    const setMe = state.setMe
+    const setAccessToken = state.setAccessToken
+
     const response = await headlessInstance.post("/auth/email/login", body)
-    const me = response.data
-    useGlobalStore.getState().setMe(me)
+    const { me, access_token } = response.data
+
+    setMe(me)
+    setAccessToken(access_token)
 }
 
 const LoginPage = () => {

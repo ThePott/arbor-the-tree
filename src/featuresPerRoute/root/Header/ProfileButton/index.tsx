@@ -1,13 +1,13 @@
 import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown/Dropdown"
+import { ClientError } from "@/shared/error/clientError"
 import useGlobalStore from "@/shared/store/globalStore"
-import useLogoutMutation from "./_useLogoutMutation"
 import { useNavigate } from "@tanstack/react-router"
 
 const ProfileButton = () => {
     const me = useGlobalStore((state) => state.me)
+    const logout = useGlobalStore((state) => state.logout)
     const navigate = useNavigate()
-    const { mutate: logoutMutate } = useLogoutMutation()
 
     const handleChange = (value: string) => {
         switch (value) {
@@ -15,16 +15,15 @@ const ProfileButton = () => {
                 navigate({ to: "/profile" })
                 break
             case "logout":
-                logoutMutate()
+                logout()
                 break
             default:
                 break
         }
     }
 
-    if (!me) {
-        return <p>null me in profile ---- this should not be shown</p>
-    }
+    if (!me) throw ClientError.Unexpected("프로필 버튼이 보이는데 me가 없어요")
+
     return (
         <Dropdown>
             <Dropdown.Trigger>

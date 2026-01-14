@@ -40,6 +40,7 @@ instance.interceptors.response.use(
         const refreshToken = state.refreshToken
         const setAccessToken = state.setAccessToken
         const setRefreshToken = state.setRefreshToken
+        const logout = state.logout
 
         if (!refreshToken || !error.config) return Promise.reject(error)
 
@@ -53,6 +54,7 @@ instance.interceptors.response.use(
             await headOnlyInstance.request(error.config)
         } catch {
             // NOTE: expired refresh token -> logout
+            logout()
             return Promise.reject(error)
         }
     }

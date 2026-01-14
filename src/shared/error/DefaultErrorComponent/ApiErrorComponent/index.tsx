@@ -1,4 +1,3 @@
-import Button from "@/packages/components/Button/Button"
 import { Container } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
@@ -10,7 +9,7 @@ type ApiErrorComponentProps = {
     reset: () => void
 }
 
-const ApiErrorComponent = ({ error, reset }: ApiErrorComponentProps) => {
+const ApiErrorComponent = ({ error, reset: _reset }: ApiErrorComponentProps) => {
     return (
         <Container isPadded>
             <RoundBox padding="xl" radius="lg" isShadowed color="bg0">
@@ -21,7 +20,6 @@ const ApiErrorComponent = ({ error, reset }: ApiErrorComponentProps) => {
                 <p>code: {error.response?.data.code}</p>
                 <p>cause: {String(error.cause)}</p>
                 <p>name: {String(error.name)}</p>
-                <Button onClick={reset}>reset</Button>
             </RoundBox>
         </Container>
     )
