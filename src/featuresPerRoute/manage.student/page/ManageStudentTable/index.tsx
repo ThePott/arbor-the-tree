@@ -1,11 +1,9 @@
-// NOTE: student_id 제외해야 함
-
-import type { ManageDeleteRow } from "@/featuresPerRoute/manage.delete/types"
 import TanstackTable from "@/packages/components/TanstackTable"
 import { useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import type { ExtendedStudent } from "../../types"
 
+// NOTE: student_id 제외해야 함
 // NOTE: 타입과 맞춰야 함
 const MANAGE_STUDENT_COLUMN_KEY_ARRAY = ["name", "school", "grade"] as const
 type ManageStudentColumnKey = (typeof MANAGE_STUDENT_COLUMN_KEY_ARRAY)[number]
