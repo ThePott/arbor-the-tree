@@ -6,7 +6,7 @@ import axios from "axios"
 const baseURL = checkEnvVar(import.meta.env.VITE_BASE_URL)
 
 // NOTE: do not export
-const headOnlyInstance = axios.create({ baseURL })
+const headOnlyInstance = axios.create({ baseURL, withCredentials: true })
 headOnlyInstance.interceptors.request.use((config) => {
     const accessToken = useGlobalStore.getState().accessToken
     if (!accessToken) {
@@ -17,9 +17,9 @@ headOnlyInstance.interceptors.request.use((config) => {
     return config
 })
 
-const headlessInstance = axios.create({ baseURL })
+const headlessInstance = axios.create({ baseURL, withCredentials: true })
 
-const instance = axios.create({ baseURL })
+const instance = axios.create({ baseURL, withCredentials: true })
 instance.interceptors.request.use((config) => {
     const accessToken = useGlobalStore.getState().accessToken
     if (!accessToken) {
