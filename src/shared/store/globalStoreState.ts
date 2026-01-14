@@ -7,6 +7,7 @@ export interface GlobalStoreState {
     setRefreshToken: (refreshToken: string | null) => void
     me: Me | null
     setMe: (me: Me | null) => void
+    logout: () => void
 
     resume: Resume | null
     setResume: (resume: Resume | null) => void

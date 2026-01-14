@@ -7,13 +7,13 @@ import { Trash } from "lucide-react"
 import { MANAGE_DELETE_ROW_KET_TO_LABEL, MANAGE_DELETE_ROW_KEY_ARRAY, type ManageDeleteRow } from "../../types"
 import type { AppUser } from "@/shared/interfaces"
 import { roleToText } from "@/shared/utils/apiTypeToLabel"
-import { withHeadInstance } from "@/packages/api/axiosInstances"
+import { instance } from "@/packages/api/axiosInstances"
 import TanstackTable from "@/packages/components/TanstackTable"
 
 const DeleteButton = ({ user_id }: { user_id: string }) => {
     if (!user_id) throw new Error("---- Invalid request")
     const deleteMutation = useMutation({
-        mutationFn: ({ user_id }: { user_id: string }) => withHeadInstance.delete(`/auth/user/${user_id}`),
+        mutationFn: ({ user_id }: { user_id: string }) => instance.delete(`/auth/user/${user_id}`),
         onMutate: async ({ user_id }, context) => {
             await context.client.cancelQueries()
             const previousUserArray = context.client.getQueryData(["all"]) as AppUser[]

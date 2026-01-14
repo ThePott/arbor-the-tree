@@ -4,13 +4,19 @@ import { createJSONStorage, persist } from "zustand/middleware"
 
 const useGlobalStore = create<GlobalStoreState>()(
     persist(
-        (set, _get) => ({
+        (set, get) => ({
             accessToken: null,
             setAccessToken: (accessToken) => set({ accessToken }),
             refreshToken: null,
             setRefreshToken: (refreshToken) => set({ refreshToken }),
             me: null,
             setMe: (me) => set({ me }),
+            logout: () => {
+                const { setAccessToken, setRefreshToken, setMe } = get()
+                setAccessToken(null)
+                setRefreshToken(null)
+                setMe(null)
+            },
 
             resume: null,
             setResume: (resume) => set({ resume }),

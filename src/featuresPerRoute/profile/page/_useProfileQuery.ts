@@ -1,4 +1,4 @@
-import { withHeadInstance } from "@/packages/api/axiosInstances"
+import { instance } from "@/packages/api/axiosInstances"
 import type { Me } from "@/shared/interfaces"
 import useGlobalStore from "@/shared/store/globalStore"
 import { useQuery } from "@tanstack/react-query"
@@ -9,7 +9,7 @@ const useProfileQuery = () => {
     const setResume = useGlobalStore((state) => state.setResume)
     const { data } = useQuery({
         queryKey: ["me"],
-        queryFn: async () => withHeadInstance.get(`/auth/me`),
+        queryFn: async () => instance.get(`/auth/me`),
     })
 
     useEffect(() => {

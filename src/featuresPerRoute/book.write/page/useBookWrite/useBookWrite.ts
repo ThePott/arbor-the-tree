@@ -1,4 +1,4 @@
-import { withHeadInstance } from "@/packages/api/axiosInstances"
+import { instance } from "@/packages/api/axiosInstances"
 import { useMutation } from "@tanstack/react-query"
 import type { BookWriteRowFlat, BookWritePayload } from "../_bookWriteInterfaces"
 import useGlobalStore from "@/shared/store/globalStore"
@@ -16,7 +16,7 @@ const useBookWriteMutation = () => {
     const setMutationError = useBookWriteStore((state) => state.setMutationError)
 
     const postMutation = useMutation({
-        mutationFn: async (body: BookWritePayload) => withHeadInstance.post("/book/write", body),
+        mutationFn: async (body: BookWritePayload) => instance.post("/book/write", body),
     })
 
     useEffect(() => {
