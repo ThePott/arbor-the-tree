@@ -1,5 +1,4 @@
 import { Container, Hstack, Vstack } from "@/packages/components/layouts"
-import RoundBox from "@/packages/components/RoundBox"
 import TabBar, { type Tab } from "@/packages/components/TabBar/TabBar"
 import Title from "@/packages/components/Title/Title"
 import ManageStudentTable from "./ManageStudentTable"
@@ -9,31 +8,12 @@ import Button from "@/packages/components/Button/Button"
 import { useMutation } from "@tanstack/react-query"
 import { instance } from "@/packages/api/axiosInstances"
 import { useLoaderData } from "@tanstack/react-router"
-import type { Classroom } from "@/shared/interfaces"
+import ClassroomAccordian from "./ClassroomAccordian"
 
 const MANAGE_STUDENT_TAB_ARRAY: Tab<string>[] = [
     { label: "반별", value: "classroom" },
     { label: "학생별", value: "student" },
 ]
-
-type ClassroomAccordianProps = { classroom: Classroom }
-const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
-    return (
-        <RoundBox color="bg0" isShadowed padding="lg" radius="lg">
-            <Vstack>
-                <Title as="h2">{classroom.name}</Title>
-                <div className="rounded-my-md border-border-dim p-my-xl border">sameple table</div>
-
-                <Hstack gap="xs">
-                    <Input className="grow" />
-                    <Button>
-                        <Plus />
-                    </Button>
-                </Hstack>
-            </Vstack>
-        </RoundBox>
-    )
-}
 
 const ManageStudentPage = () => {
     const postMutation = useMutation({
@@ -66,7 +46,7 @@ const ManageStudentPage = () => {
                 </form>
 
                 {classroomArray.map((classroom) => (
-                    <ClassroomAccordian classroom={classroom} />
+                    <ClassroomAccordian key={classroom.id} classroom={classroom} />
                 ))}
 
                 <ManageStudentTable />
