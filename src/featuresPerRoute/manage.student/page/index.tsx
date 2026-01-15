@@ -15,8 +15,6 @@ const MANAGE_STUDENT_TAB_ARRAY: Tab<string>[] = [
 const ManageStudentPage = () => {
     const { classroomArray } = useLoaderData({ from: "/manage/student" })
 
-    console.log({ where: "manage.student/page/index.tsx" })
-
     return (
         <>
             <Container width="xl" isPadded>

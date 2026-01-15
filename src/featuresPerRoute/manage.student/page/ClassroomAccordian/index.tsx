@@ -1,6 +1,5 @@
 import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
-import Input from "@/packages/components/Input/Input"
 import { Vstack, Hstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
@@ -68,7 +67,6 @@ const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
         event.preventDefault()
     }
 
-    console.log({ component: "classroom accordian" })
     return (
         <RoundBox color="bg0" isShadowed padding="lg" radius="lg">
             <Vstack>
@@ -87,7 +85,7 @@ const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
                             name="optionLabel"
                             render={({ field: { onChange } }) => (
                                 <LocalAutoComplete
-                                    isRed={false}
+                                    isRed={Boolean(errors.optionLabel)}
                                     optionArray={optionArray}
                                     placeholder="학생 이름, 학교, 학년"
                                     onChange={onChange}
