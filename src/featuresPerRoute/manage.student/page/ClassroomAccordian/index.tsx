@@ -14,9 +14,13 @@ import { useLoaderData } from "@tanstack/react-router"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import z from "zod/v3"
-import { ManageStudentLoaderQueryOptions } from "../../loader"
+import { ManageStudentLoaderQueryOptions, type ManageStudentLoaderResponseData } from "../../loader"
 
 type ClassroomAccordianProps = { classroom: ExtendedClassroom }
+type PostBody = {
+    student_id: string
+    classroom_id: string
+}
 
 const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
     useQuery(ManageStudentLoaderQueryOptions)
@@ -26,7 +30,46 @@ const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
     const setModalKey = useManageStudentStore((state) => state.setModalKey)
 
     const postMutation = useMutation({
-        mutationFn: async (body: { student_id: string }) => await instance.post("/manage/classroom/student", body),
+        mutationFn: async (body: PostBody) => await instance.post("/manage/classroom-student", body),
+        onMutate: async ({ student_id, classroom_id }, context) => {
+            await context.client.cancelQueries({ queryKey: ["manageStudent"] })
+            const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
+
+            const targetStudent = previous.studentArray.find((student) => student.id === student_id)
+            if (!targetStudent) return { previous }
+
+            const targetClassroom = previous.classroomArray.find((classroomItem) => classroomItem.id === classroom_id)
+            if (!targetClassroom) return { previous }
+
+            const newClassroomStudent: ExtendedClassroom["classroomStudents"][number] = {
+                id: crypto.randomUUID(),
+                classroom_id,
+                student_id,
+                student: targetStudent,
+            }
+
+            const updatedClassroomArray = previous.classroomArray.map((classroomItem) => {
+                if (classroomItem.id !== classroom_id) return classroomItem
+                return {
+                    ...classroomItem,
+                    classroomStudents: [...classroomItem.classroomStudents, newClassroomStudent],
+                }
+            })
+
+            const newData: ManageStudentLoaderResponseData = {
+                ...previous,
+                classroomArray: updatedClassroomArray,
+            }
+            context.client.setQueryData(["manageStudent"], newData)
+
+            return { previous }
+        },
+        onError: (_error, _variables, onMutateResult, context) => {
+            context.client.setQueryData(["manageStudent"], onMutateResult?.previous)
+        },
+        onSettled: (_data, _error, _variables, _onMutateResult, context) => {
+            context.client.invalidateQueries({ queryKey: ["manageStudent"] })
+        },
     })
 
     const optionArray: ValueLabel[] = studentArray
@@ -55,7 +98,7 @@ const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
     const onSubmit = (data: Schema) => {
         const student_id = optionArray.filter((el) => el.label === data.optionLabel)[0].value
         const classroom_id = classroom.id
-        const body = { student_id, classroom_id }
+        const body: PostBody = { student_id, classroom_id }
         postMutation.mutate(body)
     }
 
