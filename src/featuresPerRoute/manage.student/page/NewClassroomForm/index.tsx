@@ -9,6 +9,7 @@ import { useLoaderData } from "@tanstack/react-router"
 import { Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
 import z from "zod/v3"
+import type { ManageStudentLoaderResponseData } from "../../loader"
 
 const NewClassroomForm = () => {
     const { classroomNameArray } = useLoaderData({ from: "/manage/student" })
@@ -26,18 +27,45 @@ const NewClassroomForm = () => {
         register,
         formState: { errors },
         handleSubmit,
+        watch,
+        reset,
     } = useForm({ resolver: zodResolver(schema) })
 
     const postMutation = useMutation({
         mutationFn: async (body: Schema) => {
             await instance.post("/manage/classroom", body)
         },
+        onMutate: async ({ classroom_name }, context) => {
+            await context.client.cancelQueries()
+            const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
+
+            const newClassroom: ManageStudentLoaderResponseData["classroomArray"][number] = {
+                id: crypto.randomUUID(),
+                hagwon_id: previous.classroomArray[0]?.hagwon_id ?? "",
+                name: classroom_name,
+                classroomStudents: [],
+            }
+            const newOne: ManageStudentLoaderResponseData = {
+                ...previous,
+                classroomArray: [...previous.classroomArray, newClassroom],
+                classroomNameArray: [...previous.classroomNameArray, classroom_name],
+            }
+            context.client.setQueryData(["manageStudent"], newOne)
+
+            return { previous }
+        },
+        onError: (_error, _variables, onMutateResult, context) => {
+            context.client.setQueryData(["manageStudent"], onMutateResult?.previous)
+        },
+        onSettled: (_data, _error, _variables, _onMutateResult, context) => {
+            context.client.invalidateQueries({ queryKey: ["manageStudent"] })
+        },
     })
 
     const onSubmit = (data: Schema) => {
         postMutation.mutate(data)
+        reset()
     }
-
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Labeled isInDanger={Boolean(errors.classroom_name)}>

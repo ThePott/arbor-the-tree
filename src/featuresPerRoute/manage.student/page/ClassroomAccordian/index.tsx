@@ -3,7 +3,7 @@ import Button from "@/packages/components/Button/Button"
 import { Vstack, Hstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { Plus, Trash } from "lucide-react"
 import ClassroomTable from "./ClassroomTable"
 import type { ExtendedClassroom } from "../../types"
@@ -14,10 +14,12 @@ import { useLoaderData } from "@tanstack/react-router"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import z from "zod/v3"
+import { ManageStudentLoaderQueryOptions } from "../../loader"
 
 type ClassroomAccordianProps = { classroom: ExtendedClassroom }
 
 const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
+    useQuery(ManageStudentLoaderQueryOptions)
     const { studentArray } = useLoaderData({ from: "/manage/student" })
 
     const setSelectedClassroom = useManageStudentStore((state) => state.setSelectedClassroom)

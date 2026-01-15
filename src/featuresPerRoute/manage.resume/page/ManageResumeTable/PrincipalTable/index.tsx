@@ -8,6 +8,7 @@ import { roleToText } from "@/shared/utils/apiTypeToLabel"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import AcceptButton from "../AcceptButton"
 import TanstackTable from "@/packages/components/TanstackTable"
+import { useMemo } from "react"
 
 const columnHelper = createColumnHelper<Omit<ManageResumeRow, "hagwon_name">>()
 const columns = [
@@ -42,7 +43,7 @@ const convertDataToRowArray = ({
 }
 type PrincipalTableProps = { extendedResumeArray: ExtendedResume[] }
 const PrincipalTable = ({ extendedResumeArray }: PrincipalTableProps) => {
-    const rowArray = convertDataToRowArray({ extendedResumeArray })
+    const rowArray = useMemo(() => convertDataToRowArray({ extendedResumeArray }), [extendedResumeArray])
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ data: rowArray, columns, getCoreRowModel: getCoreRowModel() })
 

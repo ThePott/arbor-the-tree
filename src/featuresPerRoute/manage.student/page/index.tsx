@@ -6,6 +6,8 @@ import ClassroomAccordian from "./ClassroomAccordian"
 import DeleteClassroomModal from "./DeleteClassroomModal"
 import IsolatedStudentTable from "./IsolatedStudentTable"
 import NewClassroomForm from "./NewClassroomForm"
+import { useQuery } from "@tanstack/react-query"
+import { ManageStudentLoaderQueryOptions } from "../loader"
 
 const MANAGE_STUDENT_TAB_ARRAY: Tab<string>[] = [
     { label: "반별", value: "classroom" },
@@ -14,6 +16,8 @@ const MANAGE_STUDENT_TAB_ARRAY: Tab<string>[] = [
 
 const ManageStudentPage = () => {
     const { classroomArray } = useLoaderData({ from: "/manage/student" })
+    const { data } = useQuery(ManageStudentLoaderQueryOptions)
+    const finalClassroomArray = data?.classroomArray ?? classroomArray
 
     return (
         <>
@@ -22,7 +26,7 @@ const ManageStudentPage = () => {
                     <Title as="h1">학생 관리</Title>
                     <TabBar variant="underline" tabArray={MANAGE_STUDENT_TAB_ARRAY} onSelect={() => {}} />
 
-                    {classroomArray.map((classroom) => (
+                    {finalClassroomArray.map((classroom) => (
                         <ClassroomAccordian key={classroom.id} classroom={classroom} />
                     ))}
 

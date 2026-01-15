@@ -5,6 +5,7 @@ import type { ExtendedStudent } from "../../types"
 import { Vstack } from "@/packages/components/layouts"
 import Title from "@/packages/components/Title/Title"
 import RoundBox from "@/packages/components/RoundBox"
+import { useMemo } from "react"
 
 // NOTE: student_id 제외해야 함
 // NOTE: 타입과 맞춰야 함
@@ -38,7 +39,7 @@ const columns = MANAGE_STUDENT_COLUMN_KEY_ARRAY.map((key) =>
 
 const IsolatedStudentTable = () => {
     const { isolatedStudentArray } = useLoaderData({ from: "/manage/student" })
-    const rowArray = convertDataToRowArray(isolatedStudentArray)
+    const rowArray = useMemo(() => convertDataToRowArray(isolatedStudentArray), [isolatedStudentArray])
 
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ data: rowArray, columns, getCoreRowModel: getCoreRowModel() })

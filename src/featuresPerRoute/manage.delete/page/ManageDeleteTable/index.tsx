@@ -9,6 +9,7 @@ import type { AppUser } from "@/shared/interfaces"
 import { roleToText } from "@/shared/utils/apiTypeToLabel"
 import { instance } from "@/packages/api/axiosInstances"
 import TanstackTable from "@/packages/components/TanstackTable"
+import { useMemo } from "react"
 
 const DeleteButton = ({ user_id }: { user_id: string }) => {
     if (!user_id) throw new Error("---- Invalid request")
@@ -67,7 +68,7 @@ const ManageDeleteTable = () => {
     const userArray = useLoaderData({ from: "/manage/delete" })
     const { data } = useQuery(manageDeleteQueryOptions)
 
-    const rowArray = convertDataToRowArray({ appUserArray: data ?? userArray })
+    const rowArray = useMemo(() => convertDataToRowArray({ appUserArray: data ?? userArray }), [data, userArray])
 
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ columns: columns, data: rowArray, getCoreRowModel: getCoreRowModel() })
