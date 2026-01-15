@@ -1,7 +1,6 @@
 import { Container, Hstack, Vstack } from "@/packages/components/layouts"
 import TabBar, { type Tab } from "@/packages/components/TabBar/TabBar"
 import Title from "@/packages/components/Title/Title"
-import IsolatedStudentTable from "./ManageStudentTable"
 import Input from "@/packages/components/Input/Input"
 import { Plus } from "lucide-react"
 import Button from "@/packages/components/Button/Button"
@@ -10,6 +9,7 @@ import { instance } from "@/packages/api/axiosInstances"
 import { useLoaderData } from "@tanstack/react-router"
 import ClassroomAccordian from "./ClassroomAccordian"
 import DeleteClassroomModal from "./DeleteClassroomModal"
+import IsolatedStudentTable from "./IsolatedStudentTable"
 
 const MANAGE_STUDENT_TAB_ARRAY: Tab<string>[] = [
     { label: "반별", value: "classroom" },
@@ -38,6 +38,10 @@ const ManageStudentPage = () => {
                     <Title as="h1">학생 관리</Title>
                     <TabBar variant="underline" tabArray={MANAGE_STUDENT_TAB_ARRAY} onSelect={() => {}} />
 
+                    {classroomArray.map((classroom) => (
+                        <ClassroomAccordian key={classroom.id} classroom={classroom} />
+                    ))}
+
                     <form onSubmit={handleSubmitEvent}>
                         <Hstack>
                             <Input name="classroom_name" placeholder="새 반 이름" className="grow" />
@@ -46,10 +50,6 @@ const ManageStudentPage = () => {
                             </Button>
                         </Hstack>
                     </form>
-
-                    {classroomArray.map((classroom) => (
-                        <ClassroomAccordian key={classroom.id} classroom={classroom} />
-                    ))}
 
                     <IsolatedStudentTable />
                 </Vstack>

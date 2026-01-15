@@ -43,7 +43,7 @@ const IsolatedStudentTable = () => {
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ data: rowArray, columns, getCoreRowModel: getCoreRowModel() })
     return (
-        <RoundBox padding="lg" isBordered>
+        <RoundBox padding="lg" isBordered radius="lg">
             <Vstack>
                 <Title as="h2">개별 진도</Title>
                 <TanstackTable table={table} />{" "}
