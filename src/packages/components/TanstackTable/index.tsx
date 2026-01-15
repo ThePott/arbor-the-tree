@@ -6,7 +6,7 @@ type TanstackTableProps<T> = {
 
 const TanstackTable = <T extends object>({ table }: TanstackTableProps<T>) => {
     return (
-        <table className="rounded-my-md outline-fg-dim overflow-hidden outline">
+        <table className="rounded-my-md outline-fg-dim overflow-hidden text-left outline">
             <thead>
                 {table.getHeaderGroups().map((headerGroup) => (
                     <tr key={headerGroup.id}>
@@ -24,7 +24,7 @@ const TanstackTable = <T extends object>({ table }: TanstackTableProps<T>) => {
                 {table.getRowModel().rows.map((row) => (
                     <tr key={row.id} className="border-t-fg-dim border-t">
                         {row.getVisibleCells().map((cell) => (
-                            <td key={cell.id} className="px-4 py-2 text-center">
+                            <td key={cell.id} className="px-4 py-2">
                                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
                             </td>
                         ))}

@@ -2,5 +2,7 @@ import type { AppUser, Classroom, ClassroomStudent, School, Student } from "@/sh
 
 export type ExtendedStudent = Student & { school: School } & { users: AppUser }
 export type ExtendedClassroom = Classroom & {
-    classroomStudents: (ClassroomStudent & { student: ExtendedStudent & { classroomStudents: ClassroomStudent[] } })[]
+    classroomStudents: (ClassroomStudent & {
+        student: ExtendedStudent & { classroomStudents: (ClassroomStudent & { classroom: Classroom })[] }
+    })[]
 }

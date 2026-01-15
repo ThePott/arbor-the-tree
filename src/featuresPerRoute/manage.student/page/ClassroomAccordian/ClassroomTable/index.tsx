@@ -1,13 +1,15 @@
 import type { ExtendedClassroom } from "@/featuresPerRoute/manage.student/types"
 import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
+import { Vstack } from "@/packages/components/layouts"
+import RoundBox from "@/packages/components/RoundBox"
 import TanstackTable from "@/packages/components/TanstackTable"
 import { useMutation } from "@tanstack/react-query"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import { X } from "lucide-react"
 
 // NOTE: student_id 빼고는 type과 일치해야 함
-const COLUMN_KEY_ARRAY = ["student_name", "school_name", "grade", "other_classrooms"] as const
+const COLUMN_KEY_ARRAY = ["student_name", "school_name", "grade"] as const
 type ColumnKey = (typeof COLUMN_KEY_ARRAY)[number]
 const KEY_TO_LABEL: Record<ColumnKey, string> = {
     student_name: "이름",
@@ -20,7 +22,7 @@ type ClassroomRow = {
     student_name: string
     school_name: string
     grade?: number
-    other_classrooms?: string[]
+    other_classrooms: string[]
 }
 const convertDataToRowArray = (extendedClassroom: ExtendedClassroom): ClassroomRow[] => {
     const classroomRowArray: ClassroomRow[] = extendedClassroom.classroomStudents.map((classroomStudent) => ({
@@ -29,7 +31,9 @@ const convertDataToRowArray = (extendedClassroom: ExtendedClassroom): ClassroomR
         school_name: classroomStudent.student.school.name,
         grade: classroomStudent.student.grade,
         // TODO: 이거 받아오게 수정해야 함
-        other_classrooms: undefined,
+        other_classrooms: classroomStudent.student.classroomStudents
+            .filter((cs) => cs.id !== classroomStudent.id)
+            .map((cs) => cs.classroom.name),
     }))
     return classroomRowArray
 }
@@ -56,6 +60,16 @@ const columns = [
     ...COLUMN_KEY_ARRAY.map((key) =>
         columnHelper.accessor(key, { header: KEY_TO_LABEL[key], cell: (info) => info.getValue() })
     ),
+    columnHelper.accessor("other_classrooms", {
+        header: "다른 반",
+        cell: (info) => (
+            <Vstack gap="none">
+                {info.getValue().map((clasroom_name) => (
+                    <p key={clasroom_name}>{clasroom_name}</p>
+                ))}
+            </Vstack>
+        ),
+    }),
     columnHelper.display({
         id: "exclude",
         cell: ({
