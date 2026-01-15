@@ -3,6 +3,7 @@ import type { QueryClient } from "@tanstack/react-query"
 import type { ExtendedClassroom, ExtendedStudent } from "../types"
 
 type ResponseData = {
+    studentArray: ExtendedStudent[]
     isolatedStudentArray: ExtendedStudent[]
     classroomArray: ExtendedClassroom[]
     classroomNameArray: string[]
