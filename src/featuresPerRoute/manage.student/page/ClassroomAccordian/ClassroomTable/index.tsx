@@ -1,4 +1,5 @@
 import type { ExtendedClassroom } from "@/featuresPerRoute/manage.student/types"
+import type { ManageStudentLoaderResponseData } from "@/featuresPerRoute/manage.student/loader"
 import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import { Vstack } from "@/packages/components/layouts"
@@ -43,6 +44,31 @@ type ExcludeButtonProps = {
 const ExcludeButton = ({ classroom_student_id }: ExcludeButtonProps) => {
     const deleteMutation = useMutation({
         mutationFn: () => instance.delete(`/manage/classroom-student/${classroom_student_id}`),
+        onMutate: async (_variables, context) => {
+            await context.client.cancelQueries({ queryKey: ["manageStudent"] })
+            const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
+
+            const updatedClassroomArray = previous.classroomArray.map((classroomItem) => ({
+                ...classroomItem,
+                classroomStudents: classroomItem.classroomStudents.filter(
+                    (classroomStudent) => classroomStudent.id !== classroom_student_id
+                ),
+            }))
+
+            const newData: ManageStudentLoaderResponseData = {
+                ...previous,
+                classroomArray: updatedClassroomArray,
+            }
+            context.client.setQueryData(["manageStudent"], newData)
+
+            return { previous }
+        },
+        onError: (_error, _variables, onMutateResult, context) => {
+            context.client.setQueryData(["manageStudent"], onMutateResult?.previous)
+        },
+        onSettled: (_data, _error, _variables, _onMutateResult, context) => {
+            context.client.invalidateQueries({ queryKey: ["manageStudent"] })
+        },
     })
     const handleClick = () => {
         deleteMutation.mutate()
