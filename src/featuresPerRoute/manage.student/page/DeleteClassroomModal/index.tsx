@@ -3,6 +3,7 @@ import useManageStudentStore from "../../store"
 import { useMutation } from "@tanstack/react-query"
 import { instance } from "@/packages/api/axiosInstances"
 import { makeUlLul } from "@/shared/utils/stringManipulation"
+import type { ManageStudentLoaderResponseData } from "../../loader"
 
 const DeleteClassroomModal = () => {
     const modalKey = useManageStudentStore((state) => state.modalKey)
@@ -12,6 +13,26 @@ const DeleteClassroomModal = () => {
 
     const deleteMutation = useMutation({
         mutationFn: (classroom_id: string) => instance.delete(`/manage/classroom/${classroom_id}`),
+        onMutate: async (classroom_id, context) => {
+            await context.client.cancelQueries({ queryKey: ["manageStudent"] })
+            const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
+
+            const deletedClassroom = previous.classroomArray.find((classroom) => classroom.id === classroom_id)
+            const newOne: ManageStudentLoaderResponseData = {
+                ...previous,
+                classroomArray: previous.classroomArray.filter((classroom) => classroom.id !== classroom_id),
+                classroomNameArray: previous.classroomNameArray.filter((name) => name !== deletedClassroom?.name),
+            }
+            context.client.setQueryData(["manageStudent"], newOne)
+
+            return { previous }
+        },
+        onError: (_error, _variables, onMutateResult, context) => {
+            context.client.setQueryData(["manageStudent"], onMutateResult?.previous)
+        },
+        onSettled: (_data, _error, _variables, _onMutateResult, context) => {
+            context.client.invalidateQueries({ queryKey: ["manageStudent"] })
+        },
     })
 
     const handleDelete = () => {
