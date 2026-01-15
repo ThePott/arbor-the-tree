@@ -1,6 +1,8 @@
 import type { ExtendedClassroom } from "@/featuresPerRoute/manage.student/types"
+import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import TanstackTable from "@/packages/components/TanstackTable"
+import { useMutation } from "@tanstack/react-query"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import { X } from "lucide-react"
 
@@ -32,6 +34,23 @@ const convertDataToRowArray = (extendedClassroom: ExtendedClassroom): ClassroomR
     return classroomRowArray
 }
 
+type ExcludeButtonProps = {
+    classroom_student_id: string
+}
+const ExcludeButton = ({ classroom_student_id }: ExcludeButtonProps) => {
+    const deleteMutation = useMutation({
+        mutationFn: () => instance.delete(`/manage/classroom-student/${classroom_student_id}`),
+    })
+    const handleClick = () => {
+        deleteMutation.mutate()
+    }
+    return (
+        <Button onClick={handleClick}>
+            <X />
+        </Button>
+    )
+}
+
 const columnHelper = createColumnHelper<ClassroomRow>()
 const columns = [
     ...COLUMN_KEY_ARRAY.map((key) =>
@@ -39,11 +58,11 @@ const columns = [
     ),
     columnHelper.display({
         id: "exclude",
-        cell: () => (
-            <Button>
-                <X />
-            </Button>
-        ),
+        cell: ({
+            row: {
+                original: { classroom_student_id },
+            },
+        }) => <ExcludeButton classroom_student_id={classroom_student_id} />,
     }),
 ]
 type ClassroomTableProps = {

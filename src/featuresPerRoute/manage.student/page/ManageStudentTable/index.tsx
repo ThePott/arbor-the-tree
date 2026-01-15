@@ -4,6 +4,7 @@ import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/re
 import type { ExtendedStudent } from "../../types"
 import { Vstack } from "@/packages/components/layouts"
 import Title from "@/packages/components/Title/Title"
+import RoundBox from "@/packages/components/RoundBox"
 
 // NOTE: student_id 제외해야 함
 // NOTE: 타입과 맞춰야 함
@@ -35,18 +36,20 @@ const columns = MANAGE_STUDENT_COLUMN_KEY_ARRAY.map((key) =>
     columnHelper.accessor(key, { header: columnKeyToLabel[key], cell: (info) => info.getValue() })
 )
 
-const ManageStudentTable = () => {
-    const { studentArray } = useLoaderData({ from: "/manage/student" })
-    const rowArray = convertDataToRowArray(studentArray)
+const IsolatedStudentTable = () => {
+    const { isolatedStudentArray } = useLoaderData({ from: "/manage/student" })
+    const rowArray = convertDataToRowArray(isolatedStudentArray)
 
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ data: rowArray, columns, getCoreRowModel: getCoreRowModel() })
     return (
-        <Vstack gap="xs">
-            <Title as="h2">개별 진도</Title>
-            <TanstackTable table={table} />{" "}
-        </Vstack>
+        <RoundBox padding="lg" isBordered>
+            <Vstack>
+                <Title as="h2">개별 진도</Title>
+                <TanstackTable table={table} />{" "}
+            </Vstack>
+        </RoundBox>
     )
 }
 
-export default ManageStudentTable
+export default IsolatedStudentTable

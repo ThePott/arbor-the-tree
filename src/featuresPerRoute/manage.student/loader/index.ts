@@ -7,7 +7,7 @@ const manageStudentLoaderFn = async ({ queryClient }: ManageStudentLoaderFnProps
         queryKey: ["student"],
         queryFn: async () => {
             const response = await instance.get("/manage/student")
-            return response.data as { studentArray: ExtendedStudent[]; classroomArray: ExtendedClassroom[] }
+            return response.data as { isolatedStudentArray: ExtendedStudent[]; classroomArray: ExtendedClassroom[] }
         },
     })
     return extendedStudentArray

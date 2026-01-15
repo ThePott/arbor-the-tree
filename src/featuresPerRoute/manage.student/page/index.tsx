@@ -1,7 +1,7 @@
 import { Container, Hstack, Vstack } from "@/packages/components/layouts"
 import TabBar, { type Tab } from "@/packages/components/TabBar/TabBar"
 import Title from "@/packages/components/Title/Title"
-import ManageStudentTable from "./ManageStudentTable"
+import IsolatedStudentTable from "./ManageStudentTable"
 import Input from "@/packages/components/Input/Input"
 import { Plus } from "lucide-react"
 import Button from "@/packages/components/Button/Button"
@@ -49,7 +49,7 @@ const ManageStudentPage = () => {
                     <ClassroomAccordian key={classroom.id} classroom={classroom} />
                 ))}
 
-                <ManageStudentTable />
+                <IsolatedStudentTable />
             </Vstack>
         </Container>
     )
