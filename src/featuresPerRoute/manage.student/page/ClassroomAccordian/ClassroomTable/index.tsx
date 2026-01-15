@@ -50,7 +50,7 @@ const ExcludeButton = ({ classroom_student_id }: ExcludeButtonProps) => {
     }
     return (
         <Button onClick={handleClick}>
-            <X />
+            <X size={16} />
         </Button>
     )
 }

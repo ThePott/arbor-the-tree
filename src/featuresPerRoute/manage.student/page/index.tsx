@@ -9,6 +9,7 @@ import { useMutation } from "@tanstack/react-query"
 import { instance } from "@/packages/api/axiosInstances"
 import { useLoaderData } from "@tanstack/react-router"
 import ClassroomAccordian from "./ClassroomAccordian"
+import DeleteClassroomModal from "./DeleteClassroomModal"
 
 const MANAGE_STUDENT_TAB_ARRAY: Tab<string>[] = [
     { label: "반별", value: "classroom" },
@@ -31,27 +32,30 @@ const ManageStudentPage = () => {
     const { classroomArray } = useLoaderData({ from: "/manage/student" })
 
     return (
-        <Container width="xl" isPadded>
-            <Vstack gap="lg">
-                <Title as="h1">학생 관리</Title>
-                <TabBar variant="underline" tabArray={MANAGE_STUDENT_TAB_ARRAY} onSelect={() => {}} />
+        <>
+            <Container width="xl" isPadded>
+                <Vstack gap="lg">
+                    <Title as="h1">학생 관리</Title>
+                    <TabBar variant="underline" tabArray={MANAGE_STUDENT_TAB_ARRAY} onSelect={() => {}} />
 
-                <form onSubmit={handleSubmitEvent}>
-                    <Hstack>
-                        <Input name="classroom_name" placeholder="새 반 이름" className="grow" />
-                        <Button color="green">
-                            <Plus />
-                        </Button>
-                    </Hstack>
-                </form>
+                    <form onSubmit={handleSubmitEvent}>
+                        <Hstack>
+                            <Input name="classroom_name" placeholder="새 반 이름" className="grow" />
+                            <Button color="green">
+                                <Plus />
+                            </Button>
+                        </Hstack>
+                    </form>
 
-                {classroomArray.map((classroom) => (
-                    <ClassroomAccordian key={classroom.id} classroom={classroom} />
-                ))}
+                    {classroomArray.map((classroom) => (
+                        <ClassroomAccordian key={classroom.id} classroom={classroom} />
+                    ))}
 
-                <IsolatedStudentTable />
-            </Vstack>
-        </Container>
+                    <IsolatedStudentTable />
+                </Vstack>
+            </Container>
+            <DeleteClassroomModal />
+        </>
     )
 }
 
