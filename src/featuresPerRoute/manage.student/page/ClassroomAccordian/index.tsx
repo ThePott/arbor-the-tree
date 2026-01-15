@@ -4,11 +4,12 @@ import Input from "@/packages/components/Input/Input"
 import { Vstack, Hstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
-import type { Classroom } from "@/shared/interfaces"
 import { useMutation } from "@tanstack/react-query"
 import { Plus } from "lucide-react"
+import ClassroomTable from "./ClassroomTable"
+import type { ExtendedClassroom } from "../../types"
 
-type ClassroomAccordianProps = { classroom: Classroom }
+type ClassroomAccordianProps = { classroom: ExtendedClassroom }
 
 const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
     const postMutation = useMutation({
@@ -28,7 +29,7 @@ const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
         <RoundBox color="bg0" isShadowed padding="lg" radius="lg">
             <Vstack>
                 <Title as="h2">{classroom.name}</Title>
-                <div className="rounded-my-md border-border-dim p-my-xl border">sameple table</div>
+                <ClassroomTable extendedClassroom={classroom} />
 
                 <form onSubmit={handleSubmitEvent}>
                     <Hstack gap="xs">
