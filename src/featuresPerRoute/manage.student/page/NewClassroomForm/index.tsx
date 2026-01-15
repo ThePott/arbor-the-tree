@@ -27,7 +27,6 @@ const NewClassroomForm = () => {
         register,
         formState: { errors },
         handleSubmit,
-        watch,
         reset,
     } = useForm({ resolver: zodResolver(schema) })
 
