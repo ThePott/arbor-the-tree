@@ -50,7 +50,6 @@ const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
         handleSubmit,
     } = useForm({ resolver: zodResolver(schema) })
 
-    // TODO: react hook form 으로 나중에 바꿔야
     const onSubmit = (data: Schema) => {
         const student_id = optionArray.filter((el) => el.label === data.optionLabel)[0].value
         const classroom_id = classroom.id

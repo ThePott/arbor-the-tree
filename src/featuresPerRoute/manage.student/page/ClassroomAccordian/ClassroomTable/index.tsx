@@ -6,6 +6,7 @@ import TanstackTable from "@/packages/components/TanstackTable"
 import { useMutation } from "@tanstack/react-query"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import { X } from "lucide-react"
+import { useMemo } from "react"
 
 // NOTE: student_id 빼고는 type과 일치해야 함
 const COLUMN_KEY_ARRAY = ["student_name", "school_name", "grade"] as const
@@ -81,7 +82,7 @@ type ClassroomTableProps = {
     extendedClassroom: ExtendedClassroom
 }
 const ClassroomTable = ({ extendedClassroom }: ClassroomTableProps) => {
-    const rowArray = convertDataToRowArray(extendedClassroom)
+    const rowArray = useMemo(() => convertDataToRowArray(extendedClassroom), [extendedClassroom])
 
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ data: rowArray, columns, getCoreRowModel: getCoreRowModel() })

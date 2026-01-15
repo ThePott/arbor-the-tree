@@ -5,6 +5,7 @@ import { LocalAutoCompleteStoreProvider, type LocalAutoCompleteExternalValues } 
 import useLocalAutoCompleteStore from "./useLocalAutoCompleteStore"
 
 const LocalAutoCompleteWrapper = () => {
+    console.log("LOG: LocalAutoCompleteWrapper render")
     const inputValue = useLocalAutoCompleteStore((state) => state.inputValue)
     const setInputValue = useLocalAutoCompleteStore((state) => state.setInputValue)
     const inputRef = useLocalAutoCompleteStore((state) => state.inputRef)
