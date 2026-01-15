@@ -1,15 +1,11 @@
-import { Container, Hstack, Vstack } from "@/packages/components/layouts"
+import { Container, Vstack } from "@/packages/components/layouts"
 import TabBar, { type Tab } from "@/packages/components/TabBar/TabBar"
 import Title from "@/packages/components/Title/Title"
-import Input from "@/packages/components/Input/Input"
-import { Plus } from "lucide-react"
-import Button from "@/packages/components/Button/Button"
-import { useMutation } from "@tanstack/react-query"
-import { instance } from "@/packages/api/axiosInstances"
 import { useLoaderData } from "@tanstack/react-router"
 import ClassroomAccordian from "./ClassroomAccordian"
 import DeleteClassroomModal from "./DeleteClassroomModal"
 import IsolatedStudentTable from "./IsolatedStudentTable"
+import NewClassroomForm from "./NewClassroomForm"
 
 const MANAGE_STUDENT_TAB_ARRAY: Tab<string>[] = [
     { label: "반별", value: "classroom" },
@@ -17,18 +13,6 @@ const MANAGE_STUDENT_TAB_ARRAY: Tab<string>[] = [
 ]
 
 const ManageStudentPage = () => {
-    const postMutation = useMutation({
-        mutationFn: async (body: { name: string }) => {
-            await instance.post("/manage/classroom", body)
-        },
-    })
-    const handleSubmitEvent = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-        const classroom_name = event.currentTarget.classroom_name.value
-        const body = { name: classroom_name }
-        postMutation.mutate(body)
-    }
-
     const { classroomArray } = useLoaderData({ from: "/manage/student" })
 
     return (
@@ -42,15 +26,7 @@ const ManageStudentPage = () => {
                         <ClassroomAccordian key={classroom.id} classroom={classroom} />
                     ))}
 
-                    <form onSubmit={handleSubmitEvent}>
-                        <Hstack>
-                            <Input name="classroom_name" placeholder="새 반 이름" className="grow" />
-                            <Button color="green">
-                                <Plus />
-                            </Button>
-                        </Hstack>
-                    </form>
-
+                    <NewClassroomForm />
                     <IsolatedStudentTable />
                 </Vstack>
             </Container>
