@@ -84,3 +84,9 @@ export type Classroom = {
     hagwon_id: string
     name: string
 }
+
+export type ClassroomStudent = {
+    id: string
+    classroom_id: string
+    student_id: string
+}

@@ -19,7 +19,8 @@ const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
     const handleSubmitEvent = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const student_id = event.currentTarget.student_id.value
-        const body = { student_id }
+        const classroom_id = classroom.id
+        const body = { student_id, classroom_id }
         postMutation.mutate(body)
     }
 
