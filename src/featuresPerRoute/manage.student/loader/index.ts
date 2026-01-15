@@ -11,7 +11,7 @@ type ResponseData = {
 type ManageStudentLoaderFnProps = { queryClient: QueryClient }
 const manageStudentLoaderFn = async ({ queryClient }: ManageStudentLoaderFnProps) => {
     const extendedStudentArray = await queryClient.ensureQueryData({
-        queryKey: ["student"],
+        queryKey: ["manageStudent"],
         queryFn: async () => {
             const response = await instance.get("/manage/student")
             return response.data as ResponseData
