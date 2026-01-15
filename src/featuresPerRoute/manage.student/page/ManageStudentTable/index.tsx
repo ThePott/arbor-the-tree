@@ -2,6 +2,8 @@ import TanstackTable from "@/packages/components/TanstackTable"
 import { useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import type { ExtendedStudent } from "../../types"
+import { Vstack } from "@/packages/components/layouts"
+import Title from "@/packages/components/Title/Title"
 
 // NOTE: student_id 제외해야 함
 // NOTE: 타입과 맞춰야 함
@@ -39,7 +41,12 @@ const ManageStudentTable = () => {
 
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ data: rowArray, columns, getCoreRowModel: getCoreRowModel() })
-    return <TanstackTable table={table} />
+    return (
+        <Vstack gap="xs">
+            <Title as="h2">개별 진도</Title>
+            <TanstackTable table={table} />{" "}
+        </Vstack>
+    )
 }
 
 export default ManageStudentTable

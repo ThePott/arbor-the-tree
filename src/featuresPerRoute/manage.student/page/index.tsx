@@ -9,11 +9,31 @@ import Button from "@/packages/components/Button/Button"
 import { useMutation } from "@tanstack/react-query"
 import { instance } from "@/packages/api/axiosInstances"
 import { useLoaderData } from "@tanstack/react-router"
+import type { Classroom } from "@/shared/interfaces"
 
 const MANAGE_STUDENT_TAB_ARRAY: Tab<string>[] = [
     { label: "반별", value: "classroom" },
     { label: "학생별", value: "student" },
 ]
+
+type ClassroomAccordianProps = { classroom: Classroom }
+const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
+    return (
+        <RoundBox color="bg0" isShadowed padding="lg" radius="lg">
+            <Vstack>
+                <Title as="h2">{classroom.name}</Title>
+                <div className="rounded-my-md border-border-dim p-my-xl border">sameple table</div>
+
+                <Hstack gap="xs">
+                    <Input className="grow" />
+                    <Button>
+                        <Plus />
+                    </Button>
+                </Hstack>
+            </Vstack>
+        </RoundBox>
+    )
+}
 
 const ManageStudentPage = () => {
     const postMutation = useMutation({
@@ -32,24 +52,25 @@ const ManageStudentPage = () => {
 
     return (
         <Container width="xl" isPadded>
-            <RoundBox radius="lg" padding="xl" isShadowed color="bg0">
-                <Vstack gap="lg">
-                    <Title as="h1">학생 관리</Title>
-                    <p>{JSON.stringify(classroomArray)}</p>
-                    <TabBar variant="underline" tabArray={MANAGE_STUDENT_TAB_ARRAY} onSelect={() => {}} />
-                    <RoundBox color="bg1" padding="lg">
-                        <form onSubmit={handleSubmitEvent}>
-                            <Hstack>
-                                <Input name="classroom_name" placeholder="새 반 이름" className="grow" />
-                                <Button color="green">
-                                    <Plus />
-                                </Button>
-                            </Hstack>
-                        </form>
-                    </RoundBox>
-                    <ManageStudentTable />
-                </Vstack>
-            </RoundBox>
+            <Vstack gap="lg">
+                <Title as="h1">학생 관리</Title>
+                <TabBar variant="underline" tabArray={MANAGE_STUDENT_TAB_ARRAY} onSelect={() => {}} />
+
+                <form onSubmit={handleSubmitEvent}>
+                    <Hstack>
+                        <Input name="classroom_name" placeholder="새 반 이름" className="grow" />
+                        <Button color="green">
+                            <Plus />
+                        </Button>
+                    </Hstack>
+                </form>
+
+                {classroomArray.map((classroom) => (
+                    <ClassroomAccordian classroom={classroom} />
+                ))}
+
+                <ManageStudentTable />
+            </Vstack>
         </Container>
     )
 }
