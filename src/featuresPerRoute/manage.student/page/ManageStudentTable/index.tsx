@@ -34,8 +34,8 @@ const columns = MANAGE_STUDENT_COLUMN_KEY_ARRAY.map((key) =>
 )
 
 const ManageStudentTable = () => {
-    const data = useLoaderData({ from: "/manage/student" })
-    const rowArray = convertDataToRowArray(data)
+    const { studentArray } = useLoaderData({ from: "/manage/student" })
+    const rowArray = convertDataToRowArray(studentArray)
 
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ data: rowArray, columns, getCoreRowModel: getCoreRowModel() })

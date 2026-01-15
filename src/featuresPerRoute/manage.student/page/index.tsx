@@ -8,6 +8,7 @@ import { Plus } from "lucide-react"
 import Button from "@/packages/components/Button/Button"
 import { useMutation } from "@tanstack/react-query"
 import { instance } from "@/packages/api/axiosInstances"
+import { useLoaderData } from "@tanstack/react-router"
 
 const MANAGE_STUDENT_TAB_ARRAY: Tab<string>[] = [
     { label: "반별", value: "classroom" },
@@ -27,11 +28,14 @@ const ManageStudentPage = () => {
         postMutation.mutate(body)
     }
 
+    const { classroomArray } = useLoaderData({ from: "/manage/student" })
+
     return (
         <Container width="xl" isPadded>
             <RoundBox radius="lg" padding="xl" isShadowed color="bg0">
                 <Vstack gap="lg">
                     <Title as="h1">학생 관리</Title>
+                    <p>{JSON.stringify(classroomArray)}</p>
                     <TabBar variant="underline" tabArray={MANAGE_STUDENT_TAB_ARRAY} onSelect={() => {}} />
                     <RoundBox color="bg1" padding="lg">
                         <form onSubmit={handleSubmitEvent}>
