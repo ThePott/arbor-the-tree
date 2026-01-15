@@ -2,7 +2,6 @@ import type { ExtendedClassroom } from "@/featuresPerRoute/manage.student/types"
 import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import { Vstack } from "@/packages/components/layouts"
-import RoundBox from "@/packages/components/RoundBox"
 import TanstackTable from "@/packages/components/TanstackTable"
 import { useMutation } from "@tanstack/react-query"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
@@ -15,7 +14,6 @@ const KEY_TO_LABEL: Record<ColumnKey, string> = {
     student_name: "이름",
     school_name: "학교",
     grade: "학년",
-    other_classrooms: "다른 반",
 } as const
 type ClassroomRow = {
     classroom_student_id: string
