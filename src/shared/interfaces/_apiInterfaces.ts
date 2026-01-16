@@ -1,6 +1,26 @@
 export type Role = "MAINTAINER" | "PRINCIPAL" | "STUDENT" | "PARENT" | "HELPER"
 
-export interface Me {
+// NOTE: key array and actual type must be synced!
+export const APP_USER_KEY_ARRAY = ["id", "name", "role", "phone_number", "kakao_id", "email"] as const
+export type AppUserKey = (typeof APP_USER_KEY_ARRAY)[number]
+export const APP_USER_KEY_TO_LABEL: Record<AppUserKey, string> = {
+    id: "아이디",
+    name: "이름",
+    role: "권한",
+    phone_number: "핸드폰 번호",
+    kakao_id: "카카오 아이디",
+    email: "이메일",
+}
+export type AppUser = {
+    id: string
+    name: string
+    role?: Role
+    phone_number?: string
+    kakao_id?: string
+    email?: string
+}
+
+export type Me = {
     id: number
     name: string
     kakao_id?: number
@@ -11,30 +31,62 @@ export interface Me {
     hagwon_name?: string
 }
 
-export interface School {
+export type School = {
+    id: string
+    name: string
+}
+
+export type Hagwon = {
     id: number
     name: string
 }
 
-export interface Hagwon {
-    id: number
-    name: string
-}
-
-export interface Resume {
+export type Resume = {
+    id: string
+    user_id: string
     role: Role
+    school_name?: string // NOTE: 학생 제외하고선 학교 이름이 없음
     hagwon_name: string
-    school_name: string
+    applied_at: string // NOTE: ISOstring
 }
 
-export interface Book {
+export type Book = {
     id: string
     published_year: number
     title: string
 }
 
-export type AppError = {
-    code: string
-    statusCode: number
+export type ApiErrorCode =
+    | "BAD_REQUEST"
+    | "UNAUTHORIZED"
+    | "ACCESS_TOKEN_EXPIRED"
+    | "REFRESH_TOKEN_EXPIRED"
+    | "FORBIDDEN"
+    | "NOT_FOUND"
+    | "CONFLICT"
+    | "INTERNAL_ERROR"
+
+export type ApiError = {
+    code: ApiErrorCode
     message: string
+}
+
+export type Student = {
+    id: string
+    user_id: string
+    school_id: string
+    hagwon_id: string
+    grade?: number // NOTE: 중1: 7, 고1: 10, n수: 13
+}
+
+export type Classroom = {
+    id: string
+    hagwon_id: string
+    name: string
+}
+
+export type ClassroomStudent = {
+    id: string
+    classroom_id: string
+    student_id: string
 }

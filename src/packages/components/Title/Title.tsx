@@ -1,13 +1,13 @@
-import type { HeadingProps, SmToLg } from "@/shared/interfaces"
+import type { HeadingProps } from "@/shared/interfaces"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
 
 const titleVariants = cva("font-semibold", {
     variants: {
         size: {
-            sm: "",
-            md: "text-my-lg",
-            lg: "text-my-xl",
+            md: "",
+            lg: "text-my-lg",
+            xl: "text-my-xl",
         },
         isMuted: {
             false: "",
@@ -18,7 +18,7 @@ const titleVariants = cva("font-semibold", {
 
 interface WithTitleProps {
     as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
-    size?: SmToLg
+    size?: "md" | "lg" | "xl"
     isMuted?: boolean
 }
 

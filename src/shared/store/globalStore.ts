@@ -4,11 +4,19 @@ import { createJSONStorage, persist } from "zustand/middleware"
 
 const useGlobalStore = create<GlobalStoreState>()(
     persist(
-        (set, _get) => ({
+        (set, get) => ({
             accessToken: null,
             setAccessToken: (accessToken) => set({ accessToken }),
+            refreshToken: null,
+            setRefreshToken: (refreshToken) => set({ refreshToken }),
             me: null,
             setMe: (me) => set({ me }),
+            logout: () => {
+                const { setAccessToken, setRefreshToken, setMe } = get()
+                setAccessToken(null)
+                setRefreshToken(null)
+                setMe(null)
+            },
 
             resume: null,
             setResume: (resume) => set({ resume }),
@@ -22,7 +30,7 @@ const useGlobalStore = create<GlobalStoreState>()(
         {
             name: "arbor-store",
             storage: createJSONStorage(() => localStorage),
-            partialize: (state) => ({ accessToken: state.accessToken, me: state.me }),
+            partialize: (state) => ({ accessToken: state.accessToken, refreshToken: state.refreshToken, me: state.me }),
         }
     )
 )

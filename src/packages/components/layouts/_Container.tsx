@@ -14,7 +14,7 @@ const containerVariants = cva("mx-auto", {
 })
 
 interface WithContainerProps {
-    width?: "sm" | "md" | "lg"
+    width?: "sm" | "md" | "lg" | "xl"
     isPadded?: boolean
 }
 

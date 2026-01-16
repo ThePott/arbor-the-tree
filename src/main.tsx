@@ -1,56 +1,40 @@
-import { createRoot } from "react-dom/client"
+import ReactDOM from "react-dom/client"
+import { RouterProvider, createRouter } from "@tanstack/react-router"
 import "./index.css"
-import { lazy, Suspense } from "react"
-import { createBrowserRouter, RouterProvider } from "react-router"
-import suspendedTestRouteArray from "./testRoutes/index.tsx"
-import Layout from "./pages/layout/Layout.tsx"
-import NotFoundPage from "./pages/error/NotFoundPage.tsx"
-import { QueryClientProvider } from "@tanstack/react-query"
-import queryClient from "./packages/api/queryClient.ts"
-import LandingPage from "./pages/landing/LandingPage.tsx"
-import MypageSkeleton from "./features/mypage/MypageSkeleton.tsx"
-import BookListSkeleton from "./features/book/BookListSkeleton.tsx"
-import BookWriteSkeleton from "./features/book/write/BookWriteSkeleton.tsx"
-const BookListPage = lazy(() => import("./pages/book/BookListPage.tsx"))
-const BookWritePage = lazy(() => import("./pages/book/write/BookWritePage.tsx"))
-const SummaryPage = lazy(() => import("./pages/summary/SummaryPage.tsx"))
-const ProgressPage = lazy(() => import("./pages/progress/ProgressPage.tsx"))
-const Mypage = lazy(() => import("./pages/mypage/Mypage.tsx"))
+import { routeTree } from "./routeTree.gen"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import queryClient from "./packages/api/queryClient"
+import DefaultNotFoundComponent from "./shared/error/DefaultNotFoundComponent/DefaultNotFoundComponent"
+import DefaultErrorComponent from "./shared/error/DefaultErrorComponent"
 
-const routeArray = [
-    { path: "/summary", element: <SummaryPage />, fallback: <p>여기에 스켈레톤을 넣어야 합니다</p> },
-    { path: "/progress", element: <ProgressPage />, fallback: <p>여기에 스켈레톤을 넣어야 합니다</p> },
-    { path: "/mypage", element: <Mypage />, fallback: <MypageSkeleton /> },
-    { path: "/book", element: <BookListPage />, fallback: <BookListSkeleton /> },
-    { path: "/book/write", element: <BookWritePage />, fallback: <BookWriteSkeleton /> },
-]
+// Create a new router instance
+const router = createRouter({
+    routeTree,
+    defaultPendingMs: 0,
+    context: { queryClient },
+    defaultErrorComponent: ({ error, reset }) => DefaultErrorComponent({ error, reset }),
+    defaultNotFoundComponent: DefaultNotFoundComponent,
+})
 
-const suspendedRouteArray = routeArray.map((route) => ({
-    path: route.path,
-    element: <Suspense fallback={route.fallback}>{route.element}</Suspense>,
-}))
+// NOTE: context에서 꺼내는 route마다 이 타입을 제네릭 자리에 넣어야 함
+export type RouterContext = {
+    queryClient: QueryClient
+}
 
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <Layout />,
-        children: [
-            ...suspendedRouteArray,
-            ...suspendedTestRouteArray,
-            {
-                path: "/",
-                element: <LandingPage />,
-            },
-            {
-                path: "*",
-                element: <NotFoundPage />,
-            },
-        ],
-    },
-])
+// Register the router instance for type safety
+declare module "@tanstack/react-router" {
+    interface Register {
+        router: typeof router
+    }
+}
 
-createRoot(document.getElementById("root")!).render(
-    <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-    </QueryClientProvider>
-)
+// Render the app
+const rootElement = document.getElementById("root")!
+if (!rootElement.innerHTML) {
+    const root = ReactDOM.createRoot(rootElement)
+    root.render(
+        <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+        </QueryClientProvider>
+    )
+}

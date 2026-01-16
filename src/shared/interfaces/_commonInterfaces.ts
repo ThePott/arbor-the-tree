@@ -15,3 +15,8 @@ export type Color =
     | "bg2"
     | "bg3"
     | "black"
+
+export type ValueLabel = {
+    value: string
+    label: string
+}
