@@ -27,7 +27,10 @@ type PostBody = {
 const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
     console.log("LOG: ClassroomAccordian render", classroom.name)
     useQuery(ManageStudentLoaderQueryOptions)
-    const { studentArray, classroomStudentArray } = useLoaderData({ from: "/manage/student" })
+    const loaderData = useLoaderData({ from: "/manage/student" })
+    const { data: queryData } = useQuery(ManageStudentLoaderQueryOptions)
+    const studentArray = queryData?.studentArray ?? loaderData.studentArray
+    const classroomStudentArray = queryData?.classroomStudentArray ?? loaderData.classroomStudentArray
 
     const setSelectedClassroom = useManageStudentStore((state) => state.setSelectedClassroom)
     const setModalKey = useManageStudentStore((state) => state.setModalKey)
@@ -80,6 +83,7 @@ const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
             label: `${student.users.name}, ${student.school.name}, ${student.grade}`,
         }))
     const optionLabelArray = optionArray.map((option) => option.label)
+    console.log({ optionLabelArray })
 
     const schema = z.object({
         optionLabel: z

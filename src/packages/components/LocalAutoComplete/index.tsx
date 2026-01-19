@@ -46,7 +46,7 @@ const LocalAutoCompleteWrapper = () => {
 
 const LocalAutoComplete = (externalValues: LocalAutoCompleteExternalValues) => {
     return (
-        <LocalAutoCompleteStoreProvider {...externalValues}>
+        <LocalAutoCompleteStoreProvider {...externalValues} key={JSON.stringify(externalValues)}>
             <LocalAutoCompleteWrapper />
         </LocalAutoCompleteStoreProvider>
     )
