@@ -6,4 +6,4 @@ dist
 package.json
 package-lock.json
 .husky
-
+**/*.gen.ts
