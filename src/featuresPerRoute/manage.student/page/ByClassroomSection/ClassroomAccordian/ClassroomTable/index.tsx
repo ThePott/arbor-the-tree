@@ -1,19 +1,14 @@
-import {
-    ManageStudentLoaderQueryOptions,
-    type ManageStudentLoaderResponseData,
-} from "@/featuresPerRoute/manage.student/loader"
+import { ManageStudentLoaderQueryOptions } from "@/featuresPerRoute/manage.student/loader"
 import type { ExtendedStudent } from "@/featuresPerRoute/manage.student/types"
-import { instance } from "@/packages/api/axiosInstances"
-import Button from "@/packages/components/Button/Button"
 import { Vstack } from "@/packages/components/layouts"
 import TanstackTable from "@/packages/components/TanstackTable"
 import { ClientError } from "@/shared/error/clientError"
 import type { Classroom, ClassroomStudent } from "@/shared/interfaces"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
-import { X } from "lucide-react"
 import { useMemo } from "react"
+import ExcludeButton from "./ExcludeButton"
 
 // NOTE: student_id 빼고는 type과 일치해야 함
 const COLUMN_KEY_ARRAY = ["student_name", "school_name", "grade"] as const
@@ -70,45 +65,6 @@ const convertDataToRowArray = ({
         })
 
     return rowArray
-}
-
-type ExcludeButtonProps = {
-    classroom_student_id: string
-}
-const ExcludeButton = ({ classroom_student_id }: ExcludeButtonProps) => {
-    // NOTE: 반에서 학생 삭제
-    const deleteMutation = useMutation({
-        mutationFn: () => instance.delete(`/manage/classroom-student/${classroom_student_id}`),
-        onMutate: async (_variables, context) => {
-            // NOTE: classroomStudent 지우기만 하면 됨
-            await context.client.cancelQueries({ queryKey: ["manageStudent"] })
-            const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
-            const classroomStudentArray: ClassroomStudent[] = previous.classroomStudentArray.filter(
-                (classroomStudent) => classroomStudent.id !== classroom_student_id
-            )
-
-            const newData: ManageStudentLoaderResponseData = {
-                ...previous,
-                classroomStudentArray,
-            }
-            context.client.setQueryData(["manageStudent"], newData)
-            return { previous }
-        },
-        onError: (_error, _variables, onMutateResult, context) => {
-            context.client.setQueryData(["manageStudent"], onMutateResult?.previous)
-        },
-        onSettled: (_data, _error, _variables, _onMutateResult, context) => {
-            context.client.invalidateQueries({ queryKey: ["manageStudent"] })
-        },
-    })
-    const handleClick = () => {
-        deleteMutation.mutate()
-    }
-    return (
-        <Button onClick={handleClick}>
-            <X size={16} />
-        </Button>
-    )
 }
 
 const columnHelper = createColumnHelper<ClassroomRow>()
