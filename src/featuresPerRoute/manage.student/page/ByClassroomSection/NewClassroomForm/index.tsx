@@ -4,6 +4,7 @@ import Button from "@/packages/components/Button/Button"
 import Input from "@/packages/components/Input/Input"
 import Labeled from "@/packages/components/Labeled/Labeled"
 import { Hstack } from "@/packages/components/layouts"
+import { debugMutation, debugRender } from "@/shared/config/debug/debug"
 import type { Classroom } from "@/shared/interfaces"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -13,6 +14,7 @@ import { useForm } from "react-hook-form"
 import z from "zod/v3"
 
 const NewClassroomForm = () => {
+    debugRender("NewClassroomForm")
     const { classroomArray } = useLoaderData({ from: "/manage/student" })
     const classroomNameArray = classroomArray.map((classroom) => classroom.name)
 
@@ -37,6 +39,7 @@ const NewClassroomForm = () => {
             await instance.post("/manage/classroom", body)
         },
         onMutate: async ({ classroom_name }, context) => {
+            debugMutation("NewClassroomForm:onMutate - creating classroom: %s", classroom_name)
             await context.client.cancelQueries()
             const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
 
@@ -50,13 +53,16 @@ const NewClassroomForm = () => {
                 classroomArray: [...previous.classroomArray, newClassroom],
             }
             context.client.setQueryData(["manageStudent"], newOne)
+            debugMutation("NewClassroomForm:onMutate - cache updated, added classroom: %s", classroom_name)
 
             return { previous }
         },
         onError: (_error, _variables, onMutateResult, context) => {
+            debugMutation("NewClassroomForm:onError - rolling back")
             context.client.setQueryData(["manageStudent"], onMutateResult?.previous)
         },
         onSettled: (_data, _error, _variables, _onMutateResult, context) => {
+            debugMutation("NewClassroomForm:onSettled - invalidating queries")
             context.client.invalidateQueries({ queryKey: ["manageStudent"] })
         },
     })

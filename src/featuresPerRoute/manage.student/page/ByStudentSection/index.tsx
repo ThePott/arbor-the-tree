@@ -1,7 +1,9 @@
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
+import { debugRender } from "@/shared/config/debug/debug"
 
 const ByStudentSection = () => {
+    debugRender("ByStudentSection")
     return (
         <RoundBox padding="xl" color="bg2">
             <Title as="h2">여기에 추가할 것</Title>

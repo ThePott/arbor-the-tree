@@ -1,11 +1,13 @@
 import Modal from "@/packages/Modal"
 import { useMutation } from "@tanstack/react-query"
 import { instance } from "@/packages/api/axiosInstances"
+import { debugMutation, debugRender } from "@/shared/config/debug/debug"
 import { makeUlLul } from "@/shared/utils/stringManipulation"
 import useManageStudentStore from "@/featuresPerRoute/manage.student/store"
 import type { ManageStudentLoaderResponseData } from "@/featuresPerRoute/manage.student/loader"
 
 const DeleteClassroomModal = () => {
+    debugRender("DeleteClassroomModal")
     const modalKey = useManageStudentStore((state) => state.modalKey)
     const setModalKey = useManageStudentStore((state) => state.setModalKey)
     const selectedClassroom = useManageStudentStore((state) => state.selectedClassroom)
@@ -14,6 +16,7 @@ const DeleteClassroomModal = () => {
     const deleteMutation = useMutation({
         mutationFn: (classroom_id: string) => instance.delete(`/manage/classroom/${classroom_id}`),
         onMutate: async (classroom_id, context) => {
+            debugMutation("DeleteClassroomModal:onMutate - deleting classroom_id: %s", classroom_id)
             await context.client.cancelQueries({ queryKey: ["manageStudent"] })
             const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
 
@@ -22,13 +25,16 @@ const DeleteClassroomModal = () => {
                 classroomArray: previous.classroomArray.filter((classroom) => classroom.id !== classroom_id),
             }
             context.client.setQueryData(["manageStudent"], newData)
+            debugMutation("DeleteClassroomModal:onMutate - cache updated, removed classroom")
 
             return { previous }
         },
         onError: (_error, _variables, onMutateResult, context) => {
+            debugMutation("DeleteClassroomModal:onError - rolling back")
             context.client.setQueryData(["manageStudent"], onMutateResult?.previous)
         },
         onSettled: (_data, _error, _variables, _onMutateResult, context) => {
+            debugMutation("DeleteClassroomModal:onSettled - invalidating queries")
             context.client.invalidateQueries({ queryKey: ["manageStudent"] })
         },
     })

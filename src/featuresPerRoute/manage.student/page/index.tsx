@@ -1,6 +1,7 @@
 import { Container, Vstack } from "@/packages/components/layouts"
 import TabBar, { type Tab } from "@/packages/components/TabBar/TabBar"
 import Title from "@/packages/components/Title/Title"
+import { debugRender } from "@/shared/config/debug/debug"
 import { getRouteApi, useNavigate } from "@tanstack/react-router"
 import type { ManageStudentSearch } from "../types"
 import ByClassroomSection from "./ByClassroomSection"
@@ -13,6 +14,7 @@ const MANAGE_STUDENT_TAB_ARRAY: Tab<ManageStudentSearch>[] = [
 
 const routeApi = getRouteApi("/manage/student")
 const ManageStudentPage = () => {
+    debugRender("ManageStudentPage")
     const navigate = useNavigate({ from: "/manage/student" })
 
     const { by } = routeApi.useSearch()

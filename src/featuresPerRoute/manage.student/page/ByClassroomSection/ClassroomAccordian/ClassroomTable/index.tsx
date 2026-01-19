@@ -2,6 +2,7 @@ import { ManageStudentLoaderQueryOptions } from "@/featuresPerRoute/manage.stude
 import type { ExtendedStudent } from "@/featuresPerRoute/manage.student/types"
 import { Vstack } from "@/packages/components/layouts"
 import TanstackTable from "@/packages/components/TanstackTable"
+import { debugRender } from "@/shared/config/debug/debug"
 import { ClientError } from "@/shared/error/clientError"
 import type { Classroom, ClassroomStudent } from "@/shared/interfaces"
 import { useQuery } from "@tanstack/react-query"
@@ -95,6 +96,7 @@ type ClassroomTableProps = {
     classroom: Classroom
 }
 const ClassroomTable = ({ classroom }: ClassroomTableProps) => {
+    debugRender("ClassroomTable %s", classroom.name)
     const loaderData = useLoaderData({ from: "/manage/student" })
     const { data: queryData } = useQuery(ManageStudentLoaderQueryOptions)
     const data = queryData ?? loaderData

@@ -5,8 +5,10 @@ import { useQuery } from "@tanstack/react-query"
 import { useLoaderData } from "@tanstack/react-router"
 import { ManageStudentLoaderQueryOptions } from "../../loader"
 import DeleteClassroomModal from "./DeleteClassroomModal"
+import { debugRender } from "@/shared/config/debug/debug"
 
 const ByClassroomSection = () => {
+    debugRender("ByClassroomSection")
     const { classroomArray } = useLoaderData({ from: "/manage/student" })
     const { data } = useQuery(ManageStudentLoaderQueryOptions)
     const finalClassroomArray = data?.classroomArray ?? classroomArray
