@@ -1,8 +1,10 @@
 import ExpandableDiv from "@/packages/components/ExpandableDiv/ExpendableDiv"
 import { CenterContainer, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
+import { debugRender } from "@/shared/config/debug/debug"
 
 const LandingPage = () => {
+    debugRender("LandingPage")
     return (
         <CenterContainer>
             <ExpandableDiv isDramatic={true}>

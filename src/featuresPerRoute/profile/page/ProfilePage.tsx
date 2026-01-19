@@ -3,6 +3,7 @@ import Labeled from "@/packages/components/Labeled/Labeled"
 import { Container, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Select from "@/packages/components/Select/Select"
+import { debugForm, debugRender } from "@/shared/config/debug/debug"
 import type { Role } from "@/shared/interfaces"
 import { Activity, useState } from "react"
 import { Controller, useForm, type FieldValues } from "react-hook-form"
@@ -17,6 +18,7 @@ import useGlobalStore from "@/shared/store/globalStore"
 import { roleToText } from "@/shared/utils/apiTypeToLabel"
 
 const ProfilePage = () => {
+    debugRender("ProfilePage")
     const me = useGlobalStore((state) => state.me)
     const resume = useGlobalStore((state) => state.resume)
     const [role, setRole] = useState<Role | null>(resume?.role ?? me?.role ?? null)
@@ -37,6 +39,7 @@ const ProfilePage = () => {
     }
 
     const onSubmit = (data: FieldValues) => {
+        debugForm("ProfilePage:onSubmit %o", data)
         const body = { ...data, id: me.id } as ProfileSchema & { id: number }
         mutate(body)
     }

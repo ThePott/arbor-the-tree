@@ -1,33 +1,39 @@
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { useLoaderData } from "@tanstack/react-router"
-import { manageDeleteQueryOptions } from "../../loader"
-import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
+import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
-import { Trash } from "lucide-react"
-import { MANAGE_DELETE_ROW_KET_TO_LABEL, MANAGE_DELETE_ROW_KEY_ARRAY, type ManageDeleteRow } from "../../types"
+import TanstackTable from "@/packages/components/TanstackTable"
+import { debugCache, debugMutation, debugRender } from "@/shared/config/debug/debug"
 import type { AppUser } from "@/shared/interfaces"
 import { roleToText } from "@/shared/utils/apiTypeToLabel"
-import { instance } from "@/packages/api/axiosInstances"
-import TanstackTable from "@/packages/components/TanstackTable"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { useLoaderData } from "@tanstack/react-router"
+import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
+import { Trash } from "lucide-react"
 import { useMemo } from "react"
+import { manageDeleteQueryOptions } from "../../loader"
+import { MANAGE_DELETE_ROW_KET_TO_LABEL, MANAGE_DELETE_ROW_KEY_ARRAY, type ManageDeleteRow } from "../../types"
 
 const DeleteButton = ({ user_id }: { user_id: string }) => {
+    debugRender("DeleteButton %s", user_id)
     if (!user_id) throw new Error("---- Invalid request")
     const deleteMutation = useMutation({
         mutationFn: ({ user_id }: { user_id: string }) => instance.delete(`/auth/user/${user_id}`),
         onMutate: async ({ user_id }, context) => {
+            debugMutation("DeleteButton:onMutate - deleting user_id: %s", user_id)
             await context.client.cancelQueries()
             const previousUserArray = context.client.getQueryData(["all"]) as AppUser[]
 
             const newUserArray = previousUserArray.filter((user) => user.id !== user_id)
             context.client.setQueryData(["all"], newUserArray)
+            debugCache("DeleteButton - cache updated, removed user from list")
 
             return { previousUserArray }
         },
         onError: (_error, _variables, onMutateResult, context) => {
+            debugMutation("DeleteButton:onError - rolling back")
             context.client.setQueryData(["all"], onMutateResult?.previousUserArray)
         },
         onSettled: (_data, _error, _variables, _onMutateResult, context) => {
+            debugMutation("DeleteButton:onSettled - invalidating queries")
             context.client.invalidateQueries({ queryKey: ["all"] })
         },
     })
@@ -65,6 +71,7 @@ const convertDataToRowArray = ({ appUserArray }: { appUserArray: AppUser[] }): M
     return rowArray
 }
 const ManageDeleteTable = () => {
+    debugRender("ManageDeleteTable")
     const userArray = useLoaderData({ from: "/manage/delete" })
     const { data } = useQuery(manageDeleteQueryOptions)
 

@@ -1,10 +1,12 @@
 import { Hstack } from "@/packages/components/layouts"
-import Logo from "./_LogoButton"
+import { debugRender } from "@/shared/config/debug/debug"
 import useGlobalStore from "@/shared/store/globalStore"
-import ProfileButton from "./ProfileButton"
 import KakaoLoginButton from "./_KakaoLoginButton"
+import Logo from "./_LogoButton"
+import ProfileButton from "./ProfileButton"
 
 const Header = () => {
+    debugRender("Header")
     const me = useGlobalStore((state) => state.me)
 
     return (

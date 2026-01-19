@@ -1,9 +1,11 @@
 import { Container, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
+import { debugRender } from "@/shared/config/debug/debug"
 import ManageDeleteTable from "./ManageDeleteTable"
 
 const ManageDeletePage = () => {
+    debugRender("ManageDeletePage")
     return (
         <Container width="xl" isPadded>
             <RoundBox radius="lg" isShadowed color="bg2" padding="xl">

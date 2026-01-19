@@ -4,9 +4,10 @@ import {
 } from "@/featuresPerRoute/manage.student/loader"
 import useManageStudentStore from "@/featuresPerRoute/manage.student/store"
 import { instance } from "@/packages/api/axiosInstances"
+import { debugCache, debugForm, debugMutation } from "@/shared/config/debug/debug"
 import type { Classroom, ClassroomStudent, ValueLabel } from "@/shared/interfaces"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useQuery, useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useLoaderData } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 import z from "zod/v3"
@@ -58,6 +59,7 @@ const useClassroomAccordianMutation = () => {
     const postMutation = useMutation({
         mutationFn: async (body: PostBody) => await instance.post("/manage/classroom-student", body),
         onMutate: async ({ student_id, classroom_id }, context) => {
+            debugMutation("ClassroomAccordian:onMutate - adding student:%s to classroom:%s", student_id, classroom_id)
             await context.client.cancelQueries({ queryKey: ["manageStudent"] })
             const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
 
@@ -74,13 +76,16 @@ const useClassroomAccordianMutation = () => {
             ]
             const newData = { ...previous, classroomStudentArray }
             context.client.setQueryData(["manageStudent"], newData)
+            debugCache("ClassroomAccordian - cache updated, added student to classroom")
 
             return { previous }
         },
         onError: (_error, _variables, onMutateResult, context) => {
+            debugMutation("ClassroomAccordian:onError - rolling back")
             context.client.setQueryData(["manageStudent"], onMutateResult?.previous)
         },
         onSettled: (_data, _error, _variables, _onMutateResult, context) => {
+            debugMutation("ClassroomAccordian:onSettled - invalidating queries")
             context.client.invalidateQueries({ queryKey: ["manageStudent"] })
         },
     })
@@ -97,6 +102,7 @@ const useClassroomAccordian = (classroom: Classroom) => {
 
     type Schema = z.input<typeof _schema>
     const onSubmit = (data: Schema) => {
+        debugForm("ClassroomAccordian:onSubmit %o", data)
         const student_id = optionArray.filter((el) => el.label === data.optionLabel)[0].value
         const classroom_id = classroom.id
         const body: PostBody = { student_id, classroom_id }

@@ -1,22 +1,38 @@
+import { debugStore } from "@/shared/config/debug/debug"
 import { create } from "zustand"
-import type { BookListStoreState } from "./_bookListStoreState"
 import { BOOK_LIST_TAB_ARRAY } from "./_bookArrayConstant"
+import type { BookListStoreState } from "./_bookListStoreState"
 
 const useBookListStore = create<BookListStoreState>()((set) => ({
     selectedTab: BOOK_LIST_TAB_ARRAY[0],
-    setSelectedTab: (selectedTab) => set({ selectedTab }),
+    setSelectedTab: (selectedTab) => {
+        debugStore("BookListStore:setSelectedTab %o", selectedTab)
+        set({ selectedTab })
+    },
 
     bookArray: [],
-    setBookArray: (bookArray) => set({ bookArray }),
+    setBookArray: (bookArray) => {
+        debugStore("BookListStore:setBookArray %o", bookArray)
+        set({ bookArray })
+    },
 
     isPending: true,
-    setIsPending: (isPending) => set({ isPending }),
+    setIsPending: (isPending) => {
+        debugStore("BookListStore:setIsPending %o", isPending)
+        set({ isPending })
+    },
 
     modalKey: null,
-    setModalKey: (modalKey) => set({ modalKey }),
+    setModalKey: (modalKey) => {
+        debugStore("BookListStore:setModalKey %o", modalKey)
+        set({ modalKey })
+    },
 
     selectedBook: null,
-    setSelectedBook: (selectedBook) => set({ selectedBook }),
+    setSelectedBook: (selectedBook) => {
+        debugStore("BookListStore:setSelectedBook %o", selectedBook)
+        set({ selectedBook })
+    },
 }))
 
 export default useBookListStore

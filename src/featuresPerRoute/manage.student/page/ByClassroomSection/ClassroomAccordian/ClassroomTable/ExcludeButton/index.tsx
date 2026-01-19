@@ -1,7 +1,7 @@
 import type { ManageStudentLoaderResponseData } from "@/featuresPerRoute/manage.student/loader"
 import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
-import { debugMutation, debugRender } from "@/shared/config/debug/debug"
+import { debugCache, debugMutation, debugRender } from "@/shared/config/debug/debug"
 import type { ClassroomStudent } from "@/shared/interfaces"
 import { useMutation } from "@tanstack/react-query"
 import { X } from "lucide-react"
@@ -28,7 +28,7 @@ const ExcludeButton = ({ classroom_student_id }: ExcludeButtonProps) => {
                 classroomStudentArray,
             }
             context.client.setQueryData(["manageStudent"], newData)
-            debugMutation("ExcludeButton:onMutate - cache updated, removed 1 classroomStudent")
+            debugCache("ExcludeButton - cache updated, removed 1 classroomStudent")
             return { previous }
         },
         onError: (_error, _variables, onMutateResult, context) => {

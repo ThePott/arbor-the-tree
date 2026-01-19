@@ -2,10 +2,12 @@ import Button from "@/packages/components/Button/Button"
 import Labeled from "@/packages/components/Labeled/Labeled"
 import { Hstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
+import { debugRender } from "@/shared/config/debug/debug"
 import { Plus, Trash } from "lucide-react"
 import { useState } from "react"
 
 const ParentInputMany = () => {
+    debugRender("ParentInputMany")
     const [childrenCount, setChildrenCount] = useState(1)
     const indexArray = Array(childrenCount).fill(0)
 

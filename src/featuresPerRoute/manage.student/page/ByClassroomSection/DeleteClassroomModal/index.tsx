@@ -1,7 +1,7 @@
 import Modal from "@/packages/Modal"
 import { useMutation } from "@tanstack/react-query"
 import { instance } from "@/packages/api/axiosInstances"
-import { debugMutation, debugRender } from "@/shared/config/debug/debug"
+import { debugCache, debugMutation, debugRender } from "@/shared/config/debug/debug"
 import { makeUlLul } from "@/shared/utils/stringManipulation"
 import useManageStudentStore from "@/featuresPerRoute/manage.student/store"
 import type { ManageStudentLoaderResponseData } from "@/featuresPerRoute/manage.student/loader"
@@ -25,7 +25,7 @@ const DeleteClassroomModal = () => {
                 classroomArray: previous.classroomArray.filter((classroom) => classroom.id !== classroom_id),
             }
             context.client.setQueryData(["manageStudent"], newData)
-            debugMutation("DeleteClassroomModal:onMutate - cache updated, removed classroom")
+            debugCache("DeleteClassroomModal - cache updated, removed classroom")
 
             return { previous }
         },

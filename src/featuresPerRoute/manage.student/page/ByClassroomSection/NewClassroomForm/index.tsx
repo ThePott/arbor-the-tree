@@ -4,7 +4,7 @@ import Button from "@/packages/components/Button/Button"
 import Input from "@/packages/components/Input/Input"
 import Labeled from "@/packages/components/Labeled/Labeled"
 import { Hstack } from "@/packages/components/layouts"
-import { debugMutation, debugRender } from "@/shared/config/debug/debug"
+import { debugCache, debugForm, debugMutation, debugRender } from "@/shared/config/debug/debug"
 import type { Classroom } from "@/shared/interfaces"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -53,7 +53,7 @@ const NewClassroomForm = () => {
                 classroomArray: [...previous.classroomArray, newClassroom],
             }
             context.client.setQueryData(["manageStudent"], newOne)
-            debugMutation("NewClassroomForm:onMutate - cache updated, added classroom: %s", classroom_name)
+            debugCache("NewClassroomForm - cache updated, added classroom: %s", classroom_name)
 
             return { previous }
         },
@@ -68,6 +68,7 @@ const NewClassroomForm = () => {
     })
 
     const onSubmit = (data: Schema) => {
+        debugForm("NewClassroomForm:onSubmit %o", data)
         postMutation.mutate(data)
         reset()
     }

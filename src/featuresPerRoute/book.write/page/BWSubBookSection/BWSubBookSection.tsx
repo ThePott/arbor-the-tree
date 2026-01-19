@@ -1,7 +1,8 @@
+import { instance } from "@/packages/api/axiosInstances"
+import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
-import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
-import { instance } from "@/packages/api/axiosInstances"
+import { debugRender } from "@/shared/config/debug/debug"
 import type { Book } from "@/shared/interfaces"
 import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 
@@ -12,6 +13,7 @@ const getBookTitleArray = async () => {
 }
 
 const BWSubBookSection = () => {
+    debugRender("BWSubBookSection")
     const setSubBookTitle = useBookWriteStore((state) => state.setSubBookTitle)
 
     const handleValueChange = (value: string, isError: boolean) => {

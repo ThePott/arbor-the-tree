@@ -1,6 +1,8 @@
 import ExpandableDiv from "@/packages/components/ExpandableDiv/ExpendableDiv"
+import { debugRender } from "@/shared/config/debug/debug"
 
 const ProfilePending = () => {
+    debugRender("ProfilePending")
     // TODO: 여기 꾸미기
     return (
         <ExpandableDiv>

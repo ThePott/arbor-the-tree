@@ -1,11 +1,13 @@
 import Button from "@/packages/components/Button/Button"
 import { Container, Hstack, Vstack } from "@/packages/components/layouts"
-import BookListTable from "./BookListTable/BookListTable"
-import useBookListStore from "./_bookListStore"
-import BookListDeleteModal from "./_BookListDeleteModal"
+import { debugRender } from "@/shared/config/debug/debug"
 import { useNavigate } from "@tanstack/react-router"
+import BookListDeleteModal from "./_BookListDeleteModal"
+import useBookListStore from "./_bookListStore"
+import BookListTable from "./BookListTable/BookListTable"
 
 const BookListPage = () => {
+    debugRender("BookListPage")
     const bookArray = useBookListStore((state) => state.bookArray)
 
     const navigate = useNavigate()

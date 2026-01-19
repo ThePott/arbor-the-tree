@@ -4,6 +4,7 @@ import Input from "@/packages/components/Input/Input"
 import { Container, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
+import { debugRender } from "@/shared/config/debug/debug"
 import useGlobalStore from "@/shared/store/globalStore"
 import { useNavigate } from "@tanstack/react-router"
 import { useLayoutEffect } from "react"
@@ -31,6 +32,7 @@ const requestLogin = async (body: LoginProps) => {
 }
 
 const LoginPage = () => {
+    debugRender("LoginPage")
     const me = useGlobalStore((state) => state.me)
     const navigate = useNavigate()
 

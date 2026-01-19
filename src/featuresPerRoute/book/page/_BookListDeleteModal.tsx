@@ -1,8 +1,10 @@
 import Modal from "@/packages/Modal"
+import { debugRender } from "@/shared/config/debug/debug"
 import useBookListStore from "./_bookListStore"
 import useBookListMutation from "./_useBookListMutation"
 
 const BookListDeleteModal = () => {
+    debugRender("BookListDeleteModal")
     const modalKey = useBookListStore((state) => state.modalKey)
     const selectedBook = useBookListStore((state) => state.selectedBook)
     const setModalKey = useBookListStore((state) => state.setModalKey)

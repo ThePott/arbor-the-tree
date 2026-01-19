@@ -1,11 +1,13 @@
 import Input from "@/packages/components/Input/Input"
-import RoundBox from "@/packages/components/RoundBox"
-import { Vstack } from "@/packages/components/layouts"
-import Title from "@/packages/components/Title/Title"
-import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 import Labeled from "@/packages/components/Labeled/Labeled"
+import { Vstack } from "@/packages/components/layouts"
+import RoundBox from "@/packages/components/RoundBox"
+import Title from "@/packages/components/Title/Title"
+import { debugRender } from "@/shared/config/debug/debug"
+import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 
 const BWMetaInfoSection = () => {
+    debugRender("BWMetaInfoSection")
     const title = useBookWriteStore((state) => state.title)
     const setTitle = useBookWriteStore((state) => state.setTitle)
     const publishedYear = useBookWriteStore((state) => state.publishedYear)
