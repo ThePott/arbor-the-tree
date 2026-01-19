@@ -1,3 +1,4 @@
+import type { ManageStudentLoaderResponseData } from "@/featuresPerRoute/manage.student/loader"
 import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import Input from "@/packages/components/Input/Input"
@@ -9,7 +10,6 @@ import { useLoaderData } from "@tanstack/react-router"
 import { Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
 import z from "zod/v3"
-import type { ManageStudentLoaderResponseData } from "../../loader"
 
 const NewClassroomForm = () => {
     const { classroomNameArray } = useLoaderData({ from: "/manage/student" })

@@ -6,15 +6,18 @@ import Title from "@/packages/components/Title/Title"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { Plus, Trash } from "lucide-react"
 import ClassroomTable from "./ClassroomTable"
-import type { ExtendedClassroom } from "../../types"
-import useManageStudentStore from "../../store"
 import LocalAutoComplete from "@/packages/components/LocalAutoComplete"
 import type { ValueLabel } from "@/shared/interfaces"
 import { useLoaderData } from "@tanstack/react-router"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import z from "zod/v3"
-import { ManageStudentLoaderQueryOptions, type ManageStudentLoaderResponseData } from "../../loader"
+import {
+    ManageStudentLoaderQueryOptions,
+    type ManageStudentLoaderResponseData,
+} from "@/featuresPerRoute/manage.student/loader"
+import useManageStudentStore from "@/featuresPerRoute/manage.student/store"
+import type { ExtendedClassroom } from "@/featuresPerRoute/manage.student/types"
 
 type ClassroomAccordianProps = { classroom: ExtendedClassroom }
 type PostBody = {

@@ -1,11 +1,11 @@
 import TanstackTable from "@/packages/components/TanstackTable"
 import { useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
-import type { ExtendedStudent } from "../../types"
 import { Vstack } from "@/packages/components/layouts"
 import Title from "@/packages/components/Title/Title"
 import RoundBox from "@/packages/components/RoundBox"
 import { useMemo } from "react"
+import type { ExtendedStudent } from "@/featuresPerRoute/manage.student/types"
 
 // NOTE: student_id 제외해야 함
 // NOTE: 타입과 맞춰야 함

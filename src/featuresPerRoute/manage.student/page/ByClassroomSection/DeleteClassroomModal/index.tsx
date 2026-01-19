@@ -1,9 +1,9 @@
 import Modal from "@/packages/Modal"
-import useManageStudentStore from "../../store"
 import { useMutation } from "@tanstack/react-query"
 import { instance } from "@/packages/api/axiosInstances"
 import { makeUlLul } from "@/shared/utils/stringManipulation"
-import type { ManageStudentLoaderResponseData } from "../../loader"
+import useManageStudentStore from "@/featuresPerRoute/manage.student/store"
+import type { ManageStudentLoaderResponseData } from "@/featuresPerRoute/manage.student/loader"
 
 const DeleteClassroomModal = () => {
     const modalKey = useManageStudentStore((state) => state.modalKey)
