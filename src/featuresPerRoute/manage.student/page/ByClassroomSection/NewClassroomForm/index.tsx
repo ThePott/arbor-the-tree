@@ -12,7 +12,8 @@ import { useForm } from "react-hook-form"
 import z from "zod/v3"
 
 const NewClassroomForm = () => {
-    const { classroomNameArray } = useLoaderData({ from: "/manage/student" })
+    const { classroomArray } = useLoaderData({ from: "/manage/student" })
+    const classroomNameArray = classroomArray.map((classroom) => classroom.name)
 
     const schema = z.object({
         classroom_name: z

@@ -1,12 +1,12 @@
 import { instance } from "@/packages/api/axiosInstances"
 import type { QueryClient } from "@tanstack/react-query"
-import type { ExtendedClassroom, ExtendedStudent } from "../types"
+import type { ExtendedStudent } from "../types"
+import type { Classroom, ClassroomStudent } from "@/shared/interfaces"
 
 export type ManageStudentLoaderResponseData = {
     studentArray: ExtendedStudent[]
-    isolatedStudentArray: ExtendedStudent[]
-    classroomArray: ExtendedClassroom[]
-    classroomNameArray: string[]
+    classroomArray: Classroom[]
+    classroomStudentArray: ClassroomStudent[]
 }
 export const ManageStudentLoaderQueryOptions = {
     queryKey: ["manageStudent"],

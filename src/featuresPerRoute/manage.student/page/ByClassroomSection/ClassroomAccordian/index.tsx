@@ -7,7 +7,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { Plus, Trash } from "lucide-react"
 import ClassroomTable from "./ClassroomTable"
 import LocalAutoComplete from "@/packages/components/LocalAutoComplete"
-import type { ValueLabel } from "@/shared/interfaces"
+import type { Classroom, ClassroomStudent, ValueLabel } from "@/shared/interfaces"
 import { useLoaderData } from "@tanstack/react-router"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -17,9 +17,8 @@ import {
     type ManageStudentLoaderResponseData,
 } from "@/featuresPerRoute/manage.student/loader"
 import useManageStudentStore from "@/featuresPerRoute/manage.student/store"
-import type { ExtendedClassroom } from "@/featuresPerRoute/manage.student/types"
 
-type ClassroomAccordianProps = { classroom: ExtendedClassroom }
+type ClassroomAccordianProps = { classroom: Classroom }
 type PostBody = {
     student_id: string
     classroom_id: string
@@ -27,11 +26,13 @@ type PostBody = {
 
 const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
     useQuery(ManageStudentLoaderQueryOptions)
-    const { studentArray } = useLoaderData({ from: "/manage/student" })
+    const { studentArray, classroomStudentArray } = useLoaderData({ from: "/manage/student" })
 
     const setSelectedClassroom = useManageStudentStore((state) => state.setSelectedClassroom)
     const setModalKey = useManageStudentStore((state) => state.setModalKey)
 
+    // NOTE: 여기서는 classroomStudent를 추가하기만 한다. <<<< 반에 학생 추가
+    // TODO: refactor
     const postMutation = useMutation({
         mutationFn: async (body: PostBody) => await instance.post("/manage/classroom-student", body),
         onMutate: async ({ student_id, classroom_id }, context) => {
@@ -41,28 +42,15 @@ const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
             const targetStudent = previous.studentArray.find((student) => student.id === student_id)
             if (!targetStudent) return { previous }
 
-            const targetClassroom = previous.classroomArray.find((classroomItem) => classroomItem.id === classroom_id)
-            if (!targetClassroom) return { previous }
-
-            const newClassroomStudent: ExtendedClassroom["classroomStudents"][number] = {
-                id: crypto.randomUUID(),
-                classroom_id,
-                student_id,
-                student: targetStudent,
-            }
-
-            const updatedClassroomArray = previous.classroomArray.map((classroomItem) => {
-                if (classroomItem.id !== classroom_id) return classroomItem
-                return {
-                    ...classroomItem,
-                    classroomStudents: [...classroomItem.classroomStudents, newClassroomStudent],
-                }
-            })
-
-            const newData: ManageStudentLoaderResponseData = {
-                ...previous,
-                classroomArray: updatedClassroomArray,
-            }
+            const classroomStudentArray: ClassroomStudent[] = [
+                ...previous.classroomStduentArray,
+                {
+                    id: crypto.randomUUID(),
+                    classroom_id,
+                    student_id,
+                },
+            ]
+            const newData = { ...previous, classroomStudentArray }
             context.client.setQueryData(["manageStudent"], newData)
 
             return { previous }
@@ -75,10 +63,17 @@ const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
         },
     })
 
+    // TODO: refactor
+    // NOTE: local auto complete options
+    // NOTE: 해당 반에 아직 등록되지 않은 학생 목록
     const optionArray: ValueLabel[] = studentArray
-        .filter((student) =>
-            student.classroomStudents.every((classroomStudent) => classroomStudent.classroom_id !== classroom.id)
-        )
+        .filter((student) => {
+            const index = classroomStudentArray.findIndex(
+                (classroomStudent) =>
+                    classroomStudent.student_id === student.id && classroomStudent.classroom_id === classroom.id
+            )
+            return index === -1
+        })
         .map((student) => ({
             value: student.id,
             label: `${student.users.name}, ${student.school.name}, ${student.grade}`,
@@ -123,7 +118,7 @@ const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
                         <Trash size={16} />
                     </Button>
                 </Hstack>
-                <ClassroomTable extendedClassroom={classroom} />
+                <ClassroomTable classroom={classroom} />
 
                 <form onSubmit={handleSubmit(onSubmit)} onKeyDown={handleKeyDown}>
                     <Hstack gap="xs">

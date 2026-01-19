@@ -22,12 +22,12 @@ type ManageStudentRow = {
     school: string
     grade?: number
 }
-const convertDataToRowArray = (extendedStudendArray: ExtendedStudent[]): ManageStudentRow[] => {
-    const rowArray: ManageStudentRow[] = extendedStudendArray.map((extendedStudent) => ({
-        name: extendedStudent.users.name,
-        student_id: extendedStudent.id,
-        school: extendedStudent.school.name,
-        grade: extendedStudent.grade,
+const convertDataToRowArray = (studentArray: ExtendedStudent[]): ManageStudentRow[] => {
+    const rowArray: ManageStudentRow[] = studentArray.map((student) => ({
+        name: student.users.name,
+        student_id: student.id,
+        school: student.school.name,
+        grade: student.grade,
     }))
     return rowArray
 }
@@ -38,7 +38,11 @@ const columns = MANAGE_STUDENT_COLUMN_KEY_ARRAY.map((key) =>
 )
 
 const IsolatedStudentTable = () => {
-    const { isolatedStudentArray } = useLoaderData({ from: "/manage/student" })
+    const { studentArray, classroomStudentArray } = useLoaderData({ from: "/manage/student" })
+    const isolatedStudentArray = studentArray.filter((student) => {
+        const index = classroomStudentArray.findIndex((classroomStudent) => classroomStudent.student_id === student.id)
+        return index === -1
+    })
     const rowArray = useMemo(() => convertDataToRowArray(isolatedStudentArray), [isolatedStudentArray])
 
     // eslint-disable-next-line react-hooks/incompatible-library

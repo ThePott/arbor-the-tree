@@ -1,10 +1,13 @@
-import type { ExtendedClassroom } from "@/featuresPerRoute/manage.student/types"
 import type { ManageStudentLoaderResponseData } from "@/featuresPerRoute/manage.student/loader"
+import type { ExtendedStudent } from "@/featuresPerRoute/manage.student/types"
 import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import { Vstack } from "@/packages/components/layouts"
 import TanstackTable from "@/packages/components/TanstackTable"
+import { ClientError } from "@/shared/error/clientError"
+import type { Classroom, ClassroomStudent } from "@/shared/interfaces"
 import { useMutation } from "@tanstack/react-query"
+import { useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import { X } from "lucide-react"
 import { useMemo } from "react"
@@ -24,40 +27,66 @@ type ClassroomRow = {
     grade?: number
     other_classrooms: string[]
 }
-const convertDataToRowArray = (extendedClassroom: ExtendedClassroom): ClassroomRow[] => {
-    const classroomRowArray: ClassroomRow[] = extendedClassroom.classroomStudents.map((classroomStudent) => ({
-        classroom_student_id: classroomStudent.id,
-        student_name: classroomStudent.student.users.name,
-        school_name: classroomStudent.student.school.name,
-        grade: classroomStudent.student.grade,
-        // TODO: 이거 받아오게 수정해야 함
-        other_classrooms: classroomStudent.student.classroomStudents
-            .filter((cs) => cs.id !== classroomStudent.id)
-            .map((cs) => cs.classroom.name),
-    }))
-    return classroomRowArray
+
+type ConvertDataToRowArrayProps = {
+    classroom_id: string // NOTE: 여기의 반의 학생 테이블 작성할 것
+    classroomArray: Classroom[]
+    classroomStudentArray: ClassroomStudent[]
+    studentArray: ExtendedStudent[]
+}
+const convertDataToRowArray = ({
+    classroom_id,
+    classroomArray,
+    classroomStudentArray,
+    studentArray,
+}: ConvertDataToRowArrayProps): ClassroomRow[] => {
+    // TODO: 지금 반의 cs 만 모음
+    // TODO: 학생 찾아냄
+    // TODO: 그 학생의 다른 반 찾아냄
+
+    const rowArray: ClassroomRow[] = classroomStudentArray
+        .filter((classroomStudent) => classroomStudent.classroom_id === classroom_id)
+        .map((classroomStudent) => {
+            const student = studentArray.find((el) => el.id === classroomStudent.student_id)
+            if (!student) throw ClientError.Unexpected("학생을 못 찾았어요")
+
+            const otherClassroomArray: string[] = classroomStudentArray
+                .filter((cs) => cs.student_id === student.id && cs.classroom_id !== classroom_id)
+                .map((cs) => {
+                    const targetClassroom = classroomArray.find((classroom) => classroom.id === cs.classroom_id)
+                    if (!targetClassroom) throw ClientError.Unexpected("반을 못 찾았어요")
+                    return targetClassroom.name
+                })
+
+            return {
+                student_name: student.users.name,
+                school_name: student.school.name,
+                classroom_student_id: classroomStudent.id,
+                other_classrooms: otherClassroomArray,
+            }
+        })
+
+    return rowArray
 }
 
 type ExcludeButtonProps = {
     classroom_student_id: string
 }
 const ExcludeButton = ({ classroom_student_id }: ExcludeButtonProps) => {
+    // NOTE: 반에서 학생 삭제
     const deleteMutation = useMutation({
         mutationFn: () => instance.delete(`/manage/classroom-student/${classroom_student_id}`),
         onMutate: async (_variables, context) => {
+            // NOTE: classroomStudent 지우기만 하면 됨
             await context.client.cancelQueries({ queryKey: ["manageStudent"] })
             const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
-
-            const updatedClassroomArray = previous.classroomArray.map((classroomItem) => ({
-                ...classroomItem,
-                classroomStudents: classroomItem.classroomStudents.filter(
-                    (classroomStudent) => classroomStudent.id !== classroom_student_id
-                ),
-            }))
+            const classroomStudentArray = previous.classroomStudentArray.filter(
+                (classroomStudent) => classroomStudent.id !== classroom_student_id
+            )
 
             const newData: ManageStudentLoaderResponseData = {
                 ...previous,
-                classroomArray: updatedClassroomArray,
+                classroomStudentArray,
             }
             context.client.setQueryData(["manageStudent"], newData)
 
@@ -105,10 +134,11 @@ const columns = [
     }),
 ]
 type ClassroomTableProps = {
-    extendedClassroom: ExtendedClassroom
+    classroom: Classroom
 }
-const ClassroomTable = ({ extendedClassroom }: ClassroomTableProps) => {
-    const rowArray = useMemo(() => convertDataToRowArray(extendedClassroom), [extendedClassroom])
+const ClassroomTable = ({ classroom }: ClassroomTableProps) => {
+    const data = useLoaderData({ from: "/manage/student" })
+    const rowArray = useMemo(() => convertDataToRowArray({ classroom_id: classroom.id, ...data }), [classroom])
 
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ data: rowArray, columns, getCoreRowModel: getCoreRowModel() })
