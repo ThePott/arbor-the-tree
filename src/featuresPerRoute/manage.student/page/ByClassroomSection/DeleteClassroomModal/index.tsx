@@ -18,13 +18,11 @@ const DeleteClassroomModal = () => {
             await context.client.cancelQueries({ queryKey: ["manageStudent"] })
             const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
 
-            const deletedClassroom = previous.classroomArray.find((classroom) => classroom.id === classroom_id)
-            const newOne: ManageStudentLoaderResponseData = {
+            const newData: ManageStudentLoaderResponseData = {
                 ...previous,
                 classroomArray: previous.classroomArray.filter((classroom) => classroom.id !== classroom_id),
-                classroomNameArray: previous.classroomNameArray.filter((name) => name !== deletedClassroom?.name),
             }
-            context.client.setQueryData(["manageStudent"], newOne)
+            context.client.setQueryData(["manageStudent"], newData)
 
             return { previous }
         },

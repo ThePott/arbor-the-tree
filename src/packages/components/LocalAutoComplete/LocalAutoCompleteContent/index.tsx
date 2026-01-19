@@ -55,7 +55,7 @@ const LocalAutoCompleteContent = () => {
                 >
                     <Vstack gap="none">
                         {filteredOptionArray.map((option) => (
-                            <LocalAutoCompleteOption option={option} />
+                            <LocalAutoCompleteOption key={option.value} option={option} />
                         ))}
                     </Vstack>
                 </RoundBox>

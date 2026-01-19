@@ -1,4 +1,7 @@
-import type { ManageStudentLoaderResponseData } from "@/featuresPerRoute/manage.student/loader"
+import {
+    ManageStudentLoaderQueryOptions,
+    type ManageStudentLoaderResponseData,
+} from "@/featuresPerRoute/manage.student/loader"
 import type { ExtendedStudent } from "@/featuresPerRoute/manage.student/types"
 import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
@@ -6,7 +9,7 @@ import { Vstack } from "@/packages/components/layouts"
 import TanstackTable from "@/packages/components/TanstackTable"
 import { ClientError } from "@/shared/error/clientError"
 import type { Classroom, ClassroomStudent } from "@/shared/interfaces"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import { X } from "lucide-react"
@@ -44,6 +47,7 @@ const convertDataToRowArray = ({
     // TODO: 학생 찾아냄
     // TODO: 그 학생의 다른 반 찾아냄
 
+    console.log({ classroom_id, classroomArray, classroomStudentArray, studentArray })
     const rowArray: ClassroomRow[] = classroomStudentArray
         .filter((classroomStudent) => classroomStudent.classroom_id === classroom_id)
         .map((classroomStudent) => {
@@ -80,7 +84,7 @@ const ExcludeButton = ({ classroom_student_id }: ExcludeButtonProps) => {
             // NOTE: classroomStudent 지우기만 하면 됨
             await context.client.cancelQueries({ queryKey: ["manageStudent"] })
             const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
-            const classroomStudentArray = previous.classroomStudentArray.filter(
+            const classroomStudentArray: ClassroomStudent[] = previous.classroomStudentArray.filter(
                 (classroomStudent) => classroomStudent.id !== classroom_student_id
             )
 
@@ -89,7 +93,6 @@ const ExcludeButton = ({ classroom_student_id }: ExcludeButtonProps) => {
                 classroomStudentArray,
             }
             context.client.setQueryData(["manageStudent"], newData)
-
             return { previous }
         },
         onError: (_error, _variables, onMutateResult, context) => {
@@ -138,8 +141,13 @@ type ClassroomTableProps = {
 }
 const ClassroomTable = ({ classroom }: ClassroomTableProps) => {
     console.log("LOG: ClassroomTable render", classroom.name)
-    const data = useLoaderData({ from: "/manage/student" })
-    const rowArray = useMemo(() => convertDataToRowArray({ classroom_id: classroom.id, ...data }), [classroom])
+    const loaderData = useLoaderData({ from: "/manage/student" })
+    const { data: queryData } = useQuery(ManageStudentLoaderQueryOptions)
+    const data = queryData ?? loaderData
+    const rowArray = useMemo(
+        () => convertDataToRowArray({ classroom_id: classroom.id, ...data }),
+        [classroom, loaderData]
+    )
 
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ data: rowArray, columns, getCoreRowModel: getCoreRowModel() })

@@ -44,7 +44,7 @@ const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
             if (!targetStudent) return { previous }
 
             const classroomStudentArray: ClassroomStudent[] = [
-                ...previous.classroomStduentArray,
+                ...previous.classroomStudentArray,
                 {
                     id: crypto.randomUUID(),
                     classroom_id,

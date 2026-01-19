@@ -4,6 +4,7 @@ import Button from "@/packages/components/Button/Button"
 import Input from "@/packages/components/Input/Input"
 import Labeled from "@/packages/components/Labeled/Labeled"
 import { Hstack } from "@/packages/components/layouts"
+import type { Classroom } from "@/shared/interfaces"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useLoaderData } from "@tanstack/react-router"
@@ -40,16 +41,14 @@ const NewClassroomForm = () => {
             await context.client.cancelQueries()
             const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
 
-            const newClassroom: ManageStudentLoaderResponseData["classroomArray"][number] = {
+            const newClassroom: Classroom = {
                 id: crypto.randomUUID(),
                 hagwon_id: previous.classroomArray[0]?.hagwon_id ?? "",
                 name: classroom_name,
-                classroomStudents: [],
             }
             const newOne: ManageStudentLoaderResponseData = {
                 ...previous,
                 classroomArray: [...previous.classroomArray, newClassroom],
-                classroomNameArray: [...previous.classroomNameArray, classroom_name],
             }
             context.client.setQueryData(["manageStudent"], newOne)
 

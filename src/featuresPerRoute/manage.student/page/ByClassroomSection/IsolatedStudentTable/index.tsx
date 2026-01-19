@@ -4,8 +4,10 @@ import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/re
 import { Vstack } from "@/packages/components/layouts"
 import Title from "@/packages/components/Title/Title"
 import RoundBox from "@/packages/components/RoundBox"
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 import type { ExtendedStudent } from "@/featuresPerRoute/manage.student/types"
+import { useQuery } from "@tanstack/react-query"
+import { ManageStudentLoaderQueryOptions } from "@/featuresPerRoute/manage.student/loader"
 
 // NOTE: student_id 제외해야 함
 // NOTE: 타입과 맞춰야 함
@@ -39,7 +41,11 @@ const columns = MANAGE_STUDENT_COLUMN_KEY_ARRAY.map((key) =>
 
 const IsolatedStudentTable = () => {
     console.log("LOG: IsolatedStudentTable render")
-    const { studentArray, classroomStudentArray } = useLoaderData({ from: "/manage/student" })
+    const loaderData = useLoaderData({ from: "/manage/student" })
+    const { data: queryData } = useQuery(ManageStudentLoaderQueryOptions)
+    const classroomStudentArray = queryData?.classroomStudentArray ?? loaderData.classroomStudentArray
+    const studentArray = queryData?.studentArray ?? loaderData.studentArray
+
     const isolatedStudentArray = useMemo(
         () =>
             studentArray.filter((student) => {
@@ -58,7 +64,7 @@ const IsolatedStudentTable = () => {
         <RoundBox padding="lg" isBordered radius="lg">
             <Vstack>
                 <Title as="h2">개별 진도</Title>
-                <TanstackTable table={table} />{" "}
+                <TanstackTable table={table} />
             </Vstack>
         </RoundBox>
     )
