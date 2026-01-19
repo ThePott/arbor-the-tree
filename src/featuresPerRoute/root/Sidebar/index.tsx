@@ -37,7 +37,6 @@ const Sidebar = () => {
                     >
                         <RoundBox
                             padding="lg"
-                            radius="lg"
                             color="bg2"
                             className="absolute top-0 left-0 h-full rounded-l-none w-[300px]"
                             onClick={(event) => event.stopPropagation()}
@@ -54,6 +53,8 @@ const Sidebar = () => {
                                     <RoundBox isBordered padding="md">
                                         <Vstack gap="xs">
                                             <Button
+                                                color="bg2"
+                                                isBorderedOnHover
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
@@ -63,6 +64,8 @@ const Sidebar = () => {
                                                 전체
                                             </Button>
                                             <Button
+                                                color="bg2"
+                                                isBorderedOnHover
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
@@ -80,6 +83,8 @@ const Sidebar = () => {
                                     <RoundBox isBordered padding="md">
                                         <Vstack gap="xs">
                                             <Button
+                                                color="bg2"
+                                                isBorderedOnHover
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
@@ -89,6 +94,8 @@ const Sidebar = () => {
                                                 오답 과제 목록
                                             </Button>
                                             <Button
+                                                color="bg2"
+                                                isBorderedOnHover
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
