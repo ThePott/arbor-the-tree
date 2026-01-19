@@ -38,11 +38,18 @@ const columns = MANAGE_STUDENT_COLUMN_KEY_ARRAY.map((key) =>
 )
 
 const IsolatedStudentTable = () => {
+    console.log("LOG: IsolatedStudentTable render")
     const { studentArray, classroomStudentArray } = useLoaderData({ from: "/manage/student" })
-    const isolatedStudentArray = studentArray.filter((student) => {
-        const index = classroomStudentArray.findIndex((classroomStudent) => classroomStudent.student_id === student.id)
-        return index === -1
-    })
+    const isolatedStudentArray = useMemo(
+        () =>
+            studentArray.filter((student) => {
+                const index = classroomStudentArray.findIndex(
+                    (classroomStudent) => classroomStudent.student_id === student.id
+                )
+                return index === -1
+            }),
+        [studentArray, classroomStudentArray]
+    )
     const rowArray = useMemo(() => convertDataToRowArray(isolatedStudentArray), [isolatedStudentArray])
 
     // eslint-disable-next-line react-hooks/incompatible-library

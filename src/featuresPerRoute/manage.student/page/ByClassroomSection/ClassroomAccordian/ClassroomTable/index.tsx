@@ -137,6 +137,7 @@ type ClassroomTableProps = {
     classroom: Classroom
 }
 const ClassroomTable = ({ classroom }: ClassroomTableProps) => {
+    console.log("LOG: ClassroomTable render", classroom.name)
     const data = useLoaderData({ from: "/manage/student" })
     const rowArray = useMemo(() => convertDataToRowArray({ classroom_id: classroom.id, ...data }), [classroom])
 

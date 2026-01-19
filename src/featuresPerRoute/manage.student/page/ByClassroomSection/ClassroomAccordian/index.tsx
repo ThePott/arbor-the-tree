@@ -25,6 +25,7 @@ type PostBody = {
 }
 
 const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
+    console.log("LOG: ClassroomAccordian render", classroom.name)
     useQuery(ManageStudentLoaderQueryOptions)
     const { studentArray, classroomStudentArray } = useLoaderData({ from: "/manage/student" })
 

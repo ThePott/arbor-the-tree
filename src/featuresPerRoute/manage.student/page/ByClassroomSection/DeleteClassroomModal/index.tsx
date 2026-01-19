@@ -6,6 +6,7 @@ import useManageStudentStore from "@/featuresPerRoute/manage.student/store"
 import type { ManageStudentLoaderResponseData } from "@/featuresPerRoute/manage.student/loader"
 
 const DeleteClassroomModal = () => {
+    console.log("LOG: DeleteClassroomModal render")
     const modalKey = useManageStudentStore((state) => state.modalKey)
     const setModalKey = useManageStudentStore((state) => state.setModalKey)
     const selectedClassroom = useManageStudentStore((state) => state.selectedClassroom)
