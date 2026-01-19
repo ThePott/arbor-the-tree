@@ -13,7 +13,6 @@ const MANAGE_STUDENT_TAB_ARRAY: Tab<ManageStudentSearch>[] = [
 
 const routeApi = getRouteApi("/manage/student")
 const ManageStudentPage = () => {
-    console.log("LOG: ManageStudentPage render")
     const navigate = useNavigate({ from: "/manage/student" })
 
     const { by } = routeApi.useSearch()
