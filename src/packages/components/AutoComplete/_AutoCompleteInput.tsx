@@ -1,10 +1,10 @@
+import useDebounce from "@/packages/utils/useDebounce"
+import { useLayoutEffect } from "react"
 import Input from "../Input/Input"
 import Loader from "../Loader/Loader"
-import useDebounce from "@/packages/utils/useDebounce"
-import { useAutoCompleteStore, useAutoCompleteQuery } from "./_autoCompleteHooks"
+import { useAutoCompleteQuery, useAutoCompleteStore } from "./_autoCompleteHooks"
 import useAutoCompleteEffect from "./autoCompleteHooks/useAutoCompleteEffect"
 import useAutoCompleteEventHandler from "./autoCompleteHooks/useAutoCompleteEventHandlers"
-import { useLayoutEffect } from "react"
 
 const AutoCompleteInput = ({ outerIsRed }: { outerIsRed: boolean }) => {
     const setIsContentOn = useAutoCompleteStore((state) => state.setIsContentOn)

@@ -1,11 +1,11 @@
-import ClassroomAccordian from "./ClassroomAccordian"
-import IsolatedStudentTable from "./IsolatedStudentTable"
-import NewClassroomForm from "./NewClassroomForm"
+import { debugRender } from "@/shared/config/debug/debug"
 import { useQuery } from "@tanstack/react-query"
 import { useLoaderData } from "@tanstack/react-router"
 import { ManageStudentLoaderQueryOptions } from "../../loader"
+import ClassroomAccordian from "./ClassroomAccordian"
 import DeleteClassroomModal from "./DeleteClassroomModal"
-import { debugRender } from "@/shared/config/debug/debug"
+import IsolatedStudentTable from "./IsolatedStudentTable"
+import NewClassroomForm from "./NewClassroomForm"
 
 const ByClassroomSection = () => {
     debugRender("ByClassroomSection")

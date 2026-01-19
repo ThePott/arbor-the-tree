@@ -1,4 +1,4 @@
-import { type BookWriteRowFlat, type BookWriteRow, BOOK_DETAIL_KEY_ARRAY } from "../../../_bookWriteInterfaces"
+import { type BookWriteRow, type BookWriteRowFlat, BOOK_DETAIL_KEY_ARRAY } from "../../../_bookWriteInterfaces"
 import useBookWriteStore from "../../bookWriteStore"
 
 type MakeNewOverlayingProps = {

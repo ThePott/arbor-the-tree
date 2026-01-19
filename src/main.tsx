@@ -1,11 +1,11 @@
-import ReactDOM from "react-dom/client"
-import { RouterProvider, createRouter } from "@tanstack/react-router"
-import "./index.css"
-import { routeTree } from "./routeTree.gen"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { RouterProvider, createRouter } from "@tanstack/react-router"
+import ReactDOM from "react-dom/client"
+import "./index.css"
 import queryClient from "./packages/api/queryClient"
-import DefaultNotFoundComponent from "./shared/error/DefaultNotFoundComponent/DefaultNotFoundComponent"
+import { routeTree } from "./routeTree.gen"
 import DefaultErrorComponent from "./shared/error/DefaultErrorComponent"
+import DefaultNotFoundComponent from "./shared/error/DefaultNotFoundComponent/DefaultNotFoundComponent"
 
 // Create a new router instance
 const router = createRouter({

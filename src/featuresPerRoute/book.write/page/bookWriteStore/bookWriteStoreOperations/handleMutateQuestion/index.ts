@@ -1,8 +1,8 @@
 import type { BookWriteRow } from "../../../_bookWriteInterfaces"
-import { validateJumpedQuestions } from "./_validateJumpedQuestion"
-import { handleQuestionDeletion } from "./_handleDeleteQuestion"
-import { calculateTilda } from "./_calculateTilda"
 import { updateOverlayingInRow } from "../handleMutateOtherColumn/updateOverlayings"
+import { calculateTilda } from "./_calculateTilda"
+import { handleQuestionDeletion } from "./_handleDeleteQuestion"
+import { validateJumpedQuestions } from "./_validateJumpedQuestion"
 
 type HandleQuestionMutationProps = {
     rowIndex: number

@@ -1,7 +1,7 @@
 import { instance } from "@/packages/api/axiosInstances"
+import type { Classroom, ClassroomStudent } from "@/shared/interfaces"
 import type { QueryClient } from "@tanstack/react-query"
 import type { ExtendedStudent } from "../types"
-import type { Classroom, ClassroomStudent } from "@/shared/interfaces"
 
 export type ManageStudentLoaderResponseData = {
     studentArray: ExtendedStudent[]

@@ -1,10 +1,10 @@
 import type { ButtonProps, Color } from "@/shared/interfaces"
+import { buttonColorToCn } from "@/shared/utils/styles"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
-import type { ButtonColor } from "./buttonInterfaces"
 import Loader from "../Loader/Loader"
 import { Hstack } from "../layouts"
-import { buttonColorToCn } from "@/shared/utils/styles"
+import type { ButtonColor } from "./buttonInterfaces"
 
 const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm my-transition", {
     variants: {

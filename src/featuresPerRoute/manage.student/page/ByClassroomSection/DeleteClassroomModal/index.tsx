@@ -1,10 +1,10 @@
-import Modal from "@/packages/Modal"
-import { useMutation } from "@tanstack/react-query"
+import type { ManageStudentLoaderResponseData } from "@/featuresPerRoute/manage.student/loader"
+import useManageStudentStore from "@/featuresPerRoute/manage.student/store"
 import { instance } from "@/packages/api/axiosInstances"
+import Modal from "@/packages/Modal"
 import { debugCache, debugMutation, debugRender } from "@/shared/config/debug/debug"
 import { makeUlLul } from "@/shared/utils/stringManipulation"
-import useManageStudentStore from "@/featuresPerRoute/manage.student/store"
-import type { ManageStudentLoaderResponseData } from "@/featuresPerRoute/manage.student/loader"
+import { useMutation } from "@tanstack/react-query"
 
 const DeleteClassroomModal = () => {
     debugRender("DeleteClassroomModal")

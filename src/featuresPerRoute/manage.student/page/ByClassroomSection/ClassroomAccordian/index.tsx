@@ -1,13 +1,13 @@
 import Button from "@/packages/components/Button/Button"
-import { Vstack, Hstack } from "@/packages/components/layouts"
+import { Hstack, Vstack } from "@/packages/components/layouts"
+import LocalAutoComplete from "@/packages/components/LocalAutoComplete"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug"
 import type { Classroom } from "@/shared/interfaces"
 import { Plus, Trash } from "lucide-react"
 import { Controller } from "react-hook-form"
 import ClassroomTable from "./ClassroomTable"
-import LocalAutoComplete from "@/packages/components/LocalAutoComplete"
 import useClassroomAccordian from "./useClassroomAccordian"
 
 type ClassroomAccordianProps = { classroom: Classroom }
@@ -16,7 +16,6 @@ const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
     debugRender("ClassroomAccordian %s", classroom.name)
     const { control, errors, handleSubmit, handleClassroomDelete, handleKeyDown, optionArray } =
         useClassroomAccordian(classroom)
-
     return (
         <RoundBox color="bg0" isShadowed padding="lg" radius="lg">
             <Vstack>

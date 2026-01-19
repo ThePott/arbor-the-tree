@@ -1,12 +1,12 @@
 import useDetectOutsideClick from "@/packages/utils/useDetectOutsideClick"
+import useGlobalStore from "@/shared/store/globalStore"
+import clsx from "clsx"
+import { useEffect } from "react"
+import ExpandableDiv from "../ExpandableDiv/ExpendableDiv"
 import RoundBox from "../RoundBox"
 import { Vstack } from "../layouts"
 import AutoCompleteOption from "./_AutoCompleteItem"
 import { useAutoCompleteStore } from "./_autoCompleteHooks"
-import ExpandableDiv from "../ExpandableDiv/ExpendableDiv"
-import clsx from "clsx"
-import { useEffect } from "react"
-import useGlobalStore from "@/shared/store/globalStore"
 
 const AutoCompleteContent = () => {
     const setIsBodyScrollable = useGlobalStore((state) => state.setIsBodyScrollable)

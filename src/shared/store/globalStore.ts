@@ -1,7 +1,7 @@
 import { debugStore } from "@/shared/config/debug/debug"
 import { create } from "zustand"
-import type { GlobalStoreState } from "./globalStoreState"
 import { createJSONStorage, persist } from "zustand/middleware"
+import type { GlobalStoreState } from "./globalStoreState"
 
 const useGlobalStore = create<GlobalStoreState>()(
     persist(

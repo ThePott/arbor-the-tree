@@ -1,8 +1,8 @@
 import type { TextareaProps } from "@/shared/interfaces"
-import { Hstack } from "../layouts"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
 import type { JSX } from "react"
+import { Hstack } from "../layouts"
 
 const textareaVariants = cva("rounded-my-sm outline my-transition items-center", {
     variants: {

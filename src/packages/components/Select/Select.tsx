@@ -1,8 +1,8 @@
+import type { DivProps } from "@/shared/interfaces"
 import { useRef, useState } from "react"
-import SelectTrigger from "./_SelectTrigger"
 import SelectContent from "./_SelectContent"
 import SelectOption from "./_SelectOption"
-import type { DivProps } from "@/shared/interfaces"
+import SelectTrigger from "./_SelectTrigger"
 import { SelectContext } from "./_useSelectContext"
 
 // NOTE: onSelect는 이미 있는 이름이라 쓰면 안 됨

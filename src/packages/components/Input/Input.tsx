@@ -1,8 +1,8 @@
 import type { InputProps } from "@/shared/interfaces"
-import { Hstack } from "../layouts"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
 import type { JSX } from "react"
+import { Hstack } from "../layouts"
 
 const inputVariants = cva("rounded-my-sm my-transition items-center outline", {
     variants: {
