@@ -146,7 +146,7 @@ const ClassroomTable = ({ classroom }: ClassroomTableProps) => {
     const data = queryData ?? loaderData
     const rowArray = useMemo(
         () => convertDataToRowArray({ classroom_id: classroom.id, ...data }),
-        [classroom, loaderData]
+        [classroom, loaderData, queryData]
     )
 
     // eslint-disable-next-line react-hooks/incompatible-library
