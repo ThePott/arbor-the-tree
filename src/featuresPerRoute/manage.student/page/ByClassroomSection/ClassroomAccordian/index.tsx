@@ -25,7 +25,6 @@ type PostBody = {
 }
 
 const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
-    console.log("LOG: ClassroomAccordian render", classroom.name)
     useQuery(ManageStudentLoaderQueryOptions)
     const loaderData = useLoaderData({ from: "/manage/student" })
     const { data: queryData } = useQuery(ManageStudentLoaderQueryOptions)
@@ -83,7 +82,6 @@ const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
             label: `${student.users.name}, ${student.school.name}, ${student.grade}`,
         }))
     const optionLabelArray = optionArray.map((option) => option.label)
-    console.log({ optionLabelArray })
 
     const schema = z.object({
         optionLabel: z

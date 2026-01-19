@@ -4,7 +4,7 @@ import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/re
 import { Vstack } from "@/packages/components/layouts"
 import Title from "@/packages/components/Title/Title"
 import RoundBox from "@/packages/components/RoundBox"
-import { useEffect, useMemo } from "react"
+import { useMemo } from "react"
 import type { ExtendedStudent } from "@/featuresPerRoute/manage.student/types"
 import { useQuery } from "@tanstack/react-query"
 import { ManageStudentLoaderQueryOptions } from "@/featuresPerRoute/manage.student/loader"
@@ -40,7 +40,6 @@ const columns = MANAGE_STUDENT_COLUMN_KEY_ARRAY.map((key) =>
 )
 
 const IsolatedStudentTable = () => {
-    console.log("LOG: IsolatedStudentTable render")
     const loaderData = useLoaderData({ from: "/manage/student" })
     const { data: queryData } = useQuery(ManageStudentLoaderQueryOptions)
     const classroomStudentArray = queryData?.classroomStudentArray ?? loaderData.classroomStudentArray

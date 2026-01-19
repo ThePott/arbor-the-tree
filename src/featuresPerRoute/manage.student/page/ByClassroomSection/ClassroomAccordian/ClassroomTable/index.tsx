@@ -47,7 +47,6 @@ const convertDataToRowArray = ({
     // TODO: 학생 찾아냄
     // TODO: 그 학생의 다른 반 찾아냄
 
-    console.log({ classroom_id, classroomArray, classroomStudentArray, studentArray })
     const rowArray: ClassroomRow[] = classroomStudentArray
         .filter((classroomStudent) => classroomStudent.classroom_id === classroom_id)
         .map((classroomStudent) => {
@@ -140,7 +139,6 @@ type ClassroomTableProps = {
     classroom: Classroom
 }
 const ClassroomTable = ({ classroom }: ClassroomTableProps) => {
-    console.log("LOG: ClassroomTable render", classroom.name)
     const loaderData = useLoaderData({ from: "/manage/student" })
     const { data: queryData } = useQuery(ManageStudentLoaderQueryOptions)
     const data = queryData ?? loaderData

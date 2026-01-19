@@ -7,7 +7,6 @@ import { ManageStudentLoaderQueryOptions } from "../../loader"
 import DeleteClassroomModal from "./DeleteClassroomModal"
 
 const ByClassroomSection = () => {
-    console.log("LOG: ByClassroomSection render")
     const { classroomArray } = useLoaderData({ from: "/manage/student" })
     const { data } = useQuery(ManageStudentLoaderQueryOptions)
     const finalClassroomArray = data?.classroomArray ?? classroomArray
