@@ -1,19 +1,23 @@
-import { FlexOneContainer, FullScreen } from "@/packages/components/layouts"
+import { FlexOneContainer, FullScreen, Vstack } from "@/packages/components/layouts"
 import { debugRender } from "@/shared/config/debug/debug"
 import useGlobalStore from "@/shared/store/globalStore"
 import { Outlet } from "@tanstack/react-router"
 import Header from "./Header"
+import Sidebar from "./Sidebar"
 
 const RootLayout = () => {
     debugRender("RootLayout")
     const isBodyScrollable = useGlobalStore((state) => state.isBodyScrollable)
 
     return (
-        <FullScreen>
-            <Header />
-            <FlexOneContainer isYScrollable={isBodyScrollable} className="[scrollbar-gutter:stable]">
-                <Outlet />
-            </FlexOneContainer>
+        <FullScreen className="relative">
+            <Sidebar />
+            <Vstack className="grow">
+                <Header />
+                <FlexOneContainer isYScrollable={isBodyScrollable} className="[scrollbar-gutter:stable]">
+                    <Outlet />
+                </FlexOneContainer>
+            </Vstack>
         </FullScreen>
     )
 }

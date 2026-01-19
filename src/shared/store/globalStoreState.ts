@@ -17,4 +17,7 @@ export interface GlobalStoreState {
 
     isBodyScrollable: boolean
     setIsBodyScrollable: (isBodyScrollable: boolean) => void
+
+    isSidebarOn: boolean
+    setIsSidebarOn: (isSidebarOn: boolean) => void
 }

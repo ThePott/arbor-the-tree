@@ -46,6 +46,9 @@ const useGlobalStore = create<GlobalStoreState>()(
                 debugStore("GlobalStore:setIsBodyScrollable %o", isBodyScrollable)
                 set({ isBodyScrollable })
             },
+
+            isSidebarOn: false,
+            setIsSidebarOn: (isSidebarOn) => set({ isSidebarOn }),
         }),
         {
             name: "arbor-store",
