@@ -1,10 +1,11 @@
 import { Hstack } from "@/packages/components/layouts"
 import ProgressColumnSection from "./ProgressColumnSection"
+import ProgressSidebarSection from "./ProgressSidebarSection"
 
 const ProgressPage = () => {
     return (
         <Hstack className="h-full" gap="none">
-            <div className="border-r border-r-border-dim p-my-lg w-[300px]">this is sidebar</div>
+            <ProgressSidebarSection />
             <ProgressColumnSection />
         </Hstack>
     )
