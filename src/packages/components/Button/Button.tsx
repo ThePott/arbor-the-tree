@@ -82,7 +82,7 @@ const Button = ({
             disabled={status !== "enabled"}
             className={clsx(buttonVariants({ color, status, isWide, isBorderedOnHover, isShadowed }), className)}
         >
-            <Hstack className={clsx("items-center", isOnLeft ? "" : "justify-center")}>
+            <Hstack className={clsx("items-center", isOnLeft ? "text-left" : "justify-center")}>
                 {status === "pending" && <Loader isDark={isLoaderDark} />}
                 {children}
             </Hstack>
