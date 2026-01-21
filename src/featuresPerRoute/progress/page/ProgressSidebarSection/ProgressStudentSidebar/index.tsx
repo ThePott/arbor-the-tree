@@ -5,7 +5,7 @@ import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
 import { ClientError } from "@/shared/error/clientError"
 import type { Classroom, ClassroomStudent } from "@/shared/interfaces"
-import { useLoaderData, useNavigate } from "@tanstack/react-router"
+import { getRouteApi, useLoaderData, useNavigate } from "@tanstack/react-router"
 
 type GroupByClassroomProps = {
     studentArray: ExtendedStudent[]
@@ -60,21 +60,31 @@ const StudentButton = ({ student, classroomId }: StudentButtonProps) => {
         event.stopPropagation()
         navigate({ search: { student: student.id, classroom: classroomId } })
     }
+
+    const { classroom: classroomInSearch, student: studentInSearch } = route.useSearch()
+    const isSelected = classroomInSearch === classroomId && studentInSearch === student.id
+
     return (
-        <Button color="black" isBorderedOnHover isOnLeft onClick={handleClick}>
+        <Button color={isSelected ? "bg2" : "black"} isBorderedOnHover isOnLeft onClick={handleClick}>
             {student.users.name}
         </Button>
     )
 }
 
+const route = getRouteApi("/progress/")
 type ProgressClassroomAccordianProps = {
     classroomWithStudent: ClassroomWithStudent
 }
 const ProgressClassroomAccordian = ({ classroomWithStudent }: ProgressClassroomAccordianProps) => {
     const navigate = useNavigate({ from: "/progress/" })
+    const { classroom, student } = route.useSearch()
+
+    const isSelected = classroom === classroomWithStudent.classroomId && !student
+
     // NOTE: color="black"은 스타일 설정이 안 되어 있어서 투명한 색으로 나온다
     return (
         <RoundBox
+            color={isSelected ? "bg2" : undefined}
             padding="md"
             isBordered
             onClick={() => navigate({ search: { classroom: classroomWithStudent.classroomId } })}
