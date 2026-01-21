@@ -5,7 +5,7 @@ import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
 import { ClientError } from "@/shared/error/clientError"
 import type { Classroom, ClassroomStudent } from "@/shared/interfaces"
-import { useLoaderData } from "@tanstack/react-router"
+import { useLoaderData, useNavigate } from "@tanstack/react-router"
 
 type GroupByClassroomProps = {
     studentArray: ExtendedStudent[]
@@ -13,6 +13,7 @@ type GroupByClassroomProps = {
     classroomStudentArray: ClassroomStudent[]
 }
 type ClassroomWithStudent = {
+    classroomId?: string
     classroomName: string
     studentArray: ExtendedStudent[]
 }
@@ -39,6 +40,7 @@ const groupByClassroom = ({
                 return student
             })
         const classroomWithStudent = {
+            classroomId: classroom.id,
             classroomName: classroom.name,
             studentArray: filteredStudentArray,
         }
@@ -48,19 +50,40 @@ const groupByClassroom = ({
     return { isolatedStudentArray, classroomWithStudentArray }
 }
 
+type StudentButtonProps = {
+    classroomId?: string
+    student: ExtendedStudent
+}
+const StudentButton = ({ student, classroomId }: StudentButtonProps) => {
+    const navigate = useNavigate({ from: "/progress/" })
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.stopPropagation()
+        navigate({ search: { student: student.id, classroom: classroomId } })
+    }
+    return (
+        <Button color="black" isBorderedOnHover isOnLeft onClick={handleClick}>
+            {student.users.name}
+        </Button>
+    )
+}
+
 type ProgressClassroomAccordianProps = {
     classroomWithStudent: ClassroomWithStudent
 }
 const ProgressClassroomAccordian = ({ classroomWithStudent }: ProgressClassroomAccordianProps) => {
+    const navigate = useNavigate({ from: "/progress/" })
     // NOTE: color="black"은 스타일 설정이 안 되어 있어서 투명한 색으로 나온다
     return (
-        <RoundBox padding="md" isBordered>
-            <Vstack gap="xs">
+        <RoundBox
+            padding="md"
+            isBordered
+            onClick={() => navigate({ search: { classroom: classroomWithStudent.classroomId } })}
+            className="my-transition hover:outline-2 cursor-pointer"
+        >
+            <Vstack gap="none">
                 <Title as="h2">{classroomWithStudent.classroomName}</Title>
                 {classroomWithStudent.studentArray.map((student) => (
-                    <Button isOnLeft color="black" isBorderedOnHover key={student.id}>
-                        {student.users.name}
-                    </Button>
+                    <StudentButton classroomId={classroomWithStudent.classroomId} student={student} />
                 ))}
             </Vstack>
         </RoundBox>
@@ -78,7 +101,10 @@ const ProgressStudentSidebar = () => {
             ))}
             {isolatedStudentArray.length > 0 && (
                 <ProgressClassroomAccordian
-                    classroomWithStudent={{ classroomName: "개별 진도", studentArray: isolatedStudentArray }}
+                    classroomWithStudent={{
+                        classroomName: "개별 진도",
+                        studentArray: isolatedStudentArray,
+                    }}
                 />
             )}
         </Vstack>

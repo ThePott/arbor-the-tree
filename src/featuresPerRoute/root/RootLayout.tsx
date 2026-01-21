@@ -12,7 +12,7 @@ const RootLayout = () => {
     return (
         <FullScreen className="relative">
             <Sidebar />
-            <Vstack className="grow" gap="none">
+            <Vstack className="grow h-full" gap="none">
                 <Header />
                 <FlexOneContainer isYScrollable={isBodyScrollable} className="[scrollbar-gutter:stable]">
                     <Outlet />
