@@ -76,9 +76,11 @@ const ProgressBookSidebar = () => {
     const { studentArray, classroomArray, bookArray } = useLoaderData({ from: "/progress/" })
     const { student_id, classroom_id } = route.useSearch()
     const { data } = useQuery({
-        queryKey: ["progressBook", { classroom_id, student_id }],
+        queryKey: ["progressBook", { classroom_id, student_id: classroom_id ? undefined : student_id }],
         queryFn: async () => {
-            const response = await instance.get("/progress/book", { params: { student_id, classroom_id } })
+            const response = await instance.get("/progress/book", {
+                params: { classroom_id, student_id: classroom_id ? undefined : student_id },
+            })
             return response.data as JoinedBook[]
         },
         enabled: Boolean(classroom_id || student_id),
