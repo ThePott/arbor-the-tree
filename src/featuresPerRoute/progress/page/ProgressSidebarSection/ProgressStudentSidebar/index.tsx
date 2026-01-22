@@ -79,7 +79,7 @@ const ProgressClassroomAccordian = ({ classroomWithStudent }: ProgressClassroomA
     const navigate = useNavigate({ from: "/progress/" })
     const { classroom, student } = route.useSearch()
 
-    const isSelected = classroom === classroomWithStudent.classroomId && !student
+    const isSelected = classroom && classroom === classroomWithStudent.classroomId && !student
 
     // NOTE: color="black"은 스타일 설정이 안 되어 있어서 투명한 색으로 나온다
     return (
@@ -93,7 +93,7 @@ const ProgressClassroomAccordian = ({ classroomWithStudent }: ProgressClassroomA
             <Vstack gap="none">
                 <Title as="h2">{classroomWithStudent.classroomName}</Title>
                 {classroomWithStudent.studentArray.map((student) => (
-                    <StudentButton classroomId={classroomWithStudent.classroomId} student={student} />
+                    <StudentButton key={student.id} classroomId={classroomWithStudent.classroomId} student={student} />
                 ))}
             </Vstack>
         </RoundBox>
@@ -107,7 +107,10 @@ const ProgressStudentSidebar = () => {
     return (
         <Vstack>
             {classroomWithStudentArray.map((classroomWithStudent) => (
-                <ProgressClassroomAccordian classroomWithStudent={classroomWithStudent} />
+                <ProgressClassroomAccordian
+                    key={classroomWithStudent.classroomId}
+                    classroomWithStudent={classroomWithStudent}
+                />
             ))}
             {isolatedStudentArray.length > 0 && (
                 <ProgressClassroomAccordian
