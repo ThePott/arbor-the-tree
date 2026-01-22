@@ -2,28 +2,27 @@ import { instance } from "@/packages/api/axiosInstances"
 import type { RequestMethod } from "@/shared/interfaces"
 import { useMutation } from "@tanstack/react-query"
 
-type UseDeleteMutationProps<TBody, TParams, TQueryKeyElement, TPrevious> = {
+type UseDeleteMutationProps<TAdditionalData, TParams, TQueryKeyElement, TPrevious> = {
     method: RequestMethod
     url: string
-    body?: TBody
     params?: TParams
     queryKey: TQueryKeyElement[]
-    update: (previous: TPrevious) => TPrevious
+    update: ({ previous, additionalData }: { previous: TPrevious; additionalData: TAdditionalData }) => TPrevious
 }
-const useSimpleMutation = <TBody, TParams, TQueryKey, TPrevious>({
+const useSimpleMutation = <TBody, TAdditionalData, TParams, TQueryKey, TPrevious>({
     method,
     url,
-    body,
     params,
     queryKey,
     update,
-}: UseDeleteMutationProps<TBody, TParams, TQueryKey, TPrevious>) => {
+}: UseDeleteMutationProps<TAdditionalData, TParams, TQueryKey, TPrevious>) => {
     const mutation = useMutation({
-        mutationFn: () => instance.request({ method, url, params, data: body }),
-        onMutate: (_variables, context) => {
+        mutationFn: ({ body, additionalData: _additionalData }: { body: TBody; additionalData: TAdditionalData }) =>
+            instance.request({ method, url, params, data: body }),
+        onMutate: ({ additionalData }, context) => {
             context.client.cancelQueries({ queryKey })
             const previous = context.client.getQueryData(queryKey) as TPrevious
-            const newData = update(previous)
+            const newData = update({ previous, additionalData })
             context.client.setQueryData(queryKey, newData)
             return { previous }
         },

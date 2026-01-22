@@ -8,20 +8,16 @@ import { ClientError } from "@/shared/error/clientError"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import type { ValueLabel } from "@/shared/interfaces"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { getRouteApi, useLoaderData, useNavigate } from "@tanstack/react-router"
-import { Plus, X } from "lucide-react"
+import { useQuery } from "@tanstack/react-query"
+import { getRouteApi, useLoaderData } from "@tanstack/react-router"
+import { Plus } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
 import z from "zod/v3"
+import ProgressBookButton from "./ProgressBookButton"
 
 const route = getRouteApi("/progress/")
 
-type PostBody = {
-    book_id: string
-    classroom_id?: string
-    student_id?: string
-}
-type JoinedBook = {
+export type JoinedBook = {
     id: string
     classroom_id?: string
     student_id?: string
@@ -31,47 +27,11 @@ type JoinedBook = {
         published_year: number
     }
 }
-type ProgressBookButtonProps = {
-    joinedBook: JoinedBook | null
+type PostBody = {
+    book_id: string
+    classroom_id?: string
+    student_id?: string
 }
-const ProgressBookButton = ({ joinedBook }: ProgressBookButtonProps) => {
-    const navigate = useNavigate({ from: "/progress/" })
-    const searchParams = route.useSearch()
-
-    const deleteMutation = useSimpleMutation({
-        method: "delete",
-        url: `/progress/book/${joinedBook?.book.id}`,
-        params: { student_id: joinedBook?.student_id, classroom_id: joinedBook?.classroom_id },
-        queryKey: ["progressBook", { student_id: joinedBook?.student_id, classroom_id: joinedBook?.classroom_id }],
-        update: (previous: JoinedBook[]) => previous.filter((el) => el.book.id !== joinedBook?.book.id),
-    })
-
-    const handleBodyClick = () => {
-        navigate({ search: { ...searchParams, book_id: joinedBook?.book.id } })
-    }
-    const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        event.stopPropagation()
-        deleteMutation.mutate()
-    }
-
-    const isDeleteButtonVisible =
-        Boolean(searchParams.classroom_id) !== Boolean(searchParams.student_id) && joinedBook?.book.id
-
-    return (
-        <Button isBorderedOnHover color="black" isOnLeft onClick={handleBodyClick} className="grow">
-            <Hstack className="w-full">
-                <p className="grow">{joinedBook ? joinedBook.book.title : "전체"}</p>
-
-                {isDeleteButtonVisible && (
-                    <Button color="black" isBorderedOnHover onClick={handleDeleteClick}>
-                        <X size={16} />
-                    </Button>
-                )}
-            </Hstack>
-        </Button>
-    )
-}
-
 const ProgressBookSidebar = () => {
     const { studentArray, classroomArray, bookArray } = useLoaderData({ from: "/progress/" })
     const { student_id, classroom_id } = route.useSearch()
@@ -111,30 +71,21 @@ const ProgressBookSidebar = () => {
         resolver: zodResolver(schema),
     })
 
-    const postMutation = useMutation({
-        mutationFn: async ({ body, book_title: _book_title }: { body: PostBody; book_title: string }) =>
-            await instance.post("/progress/book", body),
-        onMutate: ({ book_title }, context) => {
-            context.client.cancelQueries({ queryKey: ["progressBook", { student_id, classroom_id }] })
-            const previous = context.client.getQueryData(["progressBook", { student_id, classroom_id }]) as JoinedBook[]
-            const newJoinedBook = {
+    const postMutation = useSimpleMutation({
+        method: "post",
+        url: "/progress/book",
+        queryKey: ["progressBook", { student_id, classroom_id }],
+        update: ({ previous, additionalData: book_title }: { previous: JoinedBook[]; additionalData: string }) => [
+            ...previous,
+            {
                 id: "",
                 book: {
                     id: "",
                     title: book_title,
                     published_year: 2000,
                 },
-            }
-            const newData: JoinedBook[] = [...previous, newJoinedBook]
-            context.client.setQueryData(["progressBook", { student_id, classroom_id }], newData)
-            return { previous }
-        },
-        onError: (_error, _variables, onMutateResult, context) => {
-            context.client.setQueryData(["progressBook", { student_id, classroom_id }], onMutateResult?.previous)
-        },
-        onSettled: (_data, _error, _vaiables, _onMutateResult, context) => {
-            context.client.invalidateQueries({ queryKey: ["progressBook", { student_id, classroom_id }] })
-        },
+            },
+        ],
     })
 
     const onSubmit = (data: Schema) => {
@@ -151,7 +102,7 @@ const ProgressBookSidebar = () => {
                   student_id,
               }
 
-        postMutation.mutate({ body, book_title: data.book_title })
+        postMutation.mutate({ body, additionalData: data.book_title })
     }
 
     const isFormVisible = (classroom_id && !student_id) || (!classroom_id && student_id)
