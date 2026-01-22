@@ -5,6 +5,7 @@ import { Hstack, Vstack } from "@/packages/components/layouts"
 import LocalAutoComplete from "@/packages/components/LocalAutoComplete"
 import Title from "@/packages/components/Title/Title"
 import { ClientError } from "@/shared/error/clientError"
+import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import type { ValueLabel } from "@/shared/interfaces"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -37,11 +38,12 @@ const ProgressBookButton = ({ joinedBook }: ProgressBookButtonProps) => {
     const navigate = useNavigate({ from: "/progress/" })
     const searchParams = route.useSearch()
 
-    const deleteMutation = useMutation({
-        mutationFn: () =>
-            instance.delete(`/progress/book/${joinedBook?.book.id}`, {
-                params: { student_id: joinedBook?.student_id, classroom_id: joinedBook?.classroom_id },
-            }),
+    const deleteMutation = useSimpleMutation({
+        method: "delete",
+        url: `/progress/book/${joinedBook?.book.id}`,
+        params: { student_id: joinedBook?.student_id, classroom_id: joinedBook?.classroom_id },
+        queryKey: ["progressBook", { student_id: joinedBook?.student_id, classroom_id: joinedBook?.classroom_id }],
+        update: (previous: JoinedBook[]) => previous.filter((el) => el.book.id !== joinedBook?.book.id),
     })
 
     const handleBodyClick = () => {
