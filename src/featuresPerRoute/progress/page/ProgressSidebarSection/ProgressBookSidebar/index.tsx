@@ -9,7 +9,7 @@ import type { ValueLabel } from "@/shared/interfaces"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData, useNavigate } from "@tanstack/react-router"
-import { Plus } from "lucide-react"
+import { Plus, X } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
 import z from "zod/v3"
 
@@ -37,13 +37,22 @@ const ProgressBookButton = ({ joinedBook }: ProgressBookButtonProps) => {
     const navigate = useNavigate({ from: "/progress/" })
     const searchParams = route.useSearch()
 
-    const handleClick = () => {
+    const handleBodyClick = () => {
         navigate({ search: { ...searchParams, book_id: joinedBook?.book.id } })
+    }
+    const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.stopPropagation()
     }
 
     return (
-        <Button isBorderedOnHover color="black" isOnLeft onClick={handleClick}>
-            {joinedBook ? joinedBook.book.title : "전체"}
+        <Button isBorderedOnHover color="black" isOnLeft onClick={handleBodyClick} className="grow">
+            <Hstack className="w-full">
+                <p className="grow">{joinedBook ? joinedBook.book.title : "전체"}</p>
+
+                <Button color="black" isBorderedOnHover onClick={handleDeleteClick}>
+                    <X size={16} />
+                </Button>
+            </Hstack>
         </Button>
     )
 }
