@@ -9,7 +9,8 @@ export const Route = createFileRoute("/progress/")({
     pendingComponent: ProgressPending,
     loader: ({ context: { queryClient } }) => progressLoaderFn(queryClient),
     validateSearch: z.object({
-        student: z.string().optional(),
-        classroom: z.string().optional(),
+        student_id: z.string().optional(),
+        classroom_id: z.string().optional(),
+        book_id: z.string().optional(),
     }),
 })

@@ -58,10 +58,10 @@ const StudentButton = ({ student, classroomId }: StudentButtonProps) => {
     const navigate = useNavigate({ from: "/progress/" })
     const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.stopPropagation()
-        navigate({ search: { student: student.id, classroom: classroomId } })
+        navigate({ search: { student_id: student.id, classroom_id: classroomId } })
     }
 
-    const { classroom: classroomInSearch, student: studentInSearch } = route.useSearch()
+    const { classroom_id: classroomInSearch, student_id: studentInSearch } = route.useSearch()
     const isSelected = classroomInSearch === classroomId && studentInSearch === student.id
 
     return (
@@ -77,9 +77,9 @@ type ProgressClassroomAccordianProps = {
 }
 const ProgressClassroomAccordian = ({ classroomWithStudent }: ProgressClassroomAccordianProps) => {
     const navigate = useNavigate({ from: "/progress/" })
-    const { classroom, student } = route.useSearch()
+    const { classroom_id, student_id } = route.useSearch()
 
-    const isSelected = classroom && classroom === classroomWithStudent.classroomId && !student
+    const isSelected = classroom_id && classroom_id === classroomWithStudent.classroomId && !student_id
 
     // NOTE: color="black"은 스타일 설정이 안 되어 있어서 투명한 색으로 나온다
     return (
@@ -87,7 +87,7 @@ const ProgressClassroomAccordian = ({ classroomWithStudent }: ProgressClassroomA
             color={isSelected ? "bg2" : undefined}
             padding="md"
             isBordered
-            onClick={() => navigate({ search: { classroom: classroomWithStudent.classroomId } })}
+            onClick={() => navigate({ search: { classroom_id: classroomWithStudent.classroomId } })}
             className="my-transition hover:outline-2 cursor-pointer"
         >
             <Vstack gap="none">

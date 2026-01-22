@@ -8,7 +8,7 @@ import { ClientError } from "@/shared/error/clientError"
 import type { ValueLabel } from "@/shared/interfaces"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { getRouteApi, useLoaderData } from "@tanstack/react-router"
+import { getRouteApi, useLoaderData, useNavigate } from "@tanstack/react-router"
 import { Plus } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
 import z from "zod/v3"
@@ -20,24 +20,42 @@ type PostBody = {
     classroom_id?: string
     student_id?: string
 }
+type JoinedBook = {
+    id: string
+    classroom_id?: string
+    student_id?: string
+    book: {
+        id: string
+        title: string
+        published_year: number
+    }
+}
+type ProgressBookButtonProps = {
+    joinedBook: JoinedBook | null
+}
+const ProgressBookButton = ({ joinedBook }: ProgressBookButtonProps) => {
+    const navigate = useNavigate({ from: "/progress/" })
+    const searchParams = route.useSearch()
+
+    const handleClick = () => {
+        navigate({ search: { ...searchParams, book_id: joinedBook?.book.id } })
+    }
+
+    return (
+        <Button isBorderedOnHover color="black" isOnLeft onClick={handleClick}>
+            {joinedBook ? joinedBook.book.title : "전체"}
+        </Button>
+    )
+}
 
 const ProgressBookSidebar = () => {
-    const { studentArray, classroomArray, bookArray, classroomStudentArray } = useLoaderData({ from: "/progress/" })
-    const { student: student_id, classroom: classroom_id } = route.useSearch()
+    const { studentArray, classroomArray, bookArray } = useLoaderData({ from: "/progress/" })
+    const { student_id, classroom_id } = route.useSearch()
     const { data } = useQuery({
         queryKey: ["progressBook", { classroom_id, student_id }],
         queryFn: async () => {
             const response = await instance.get("/progress/book", { params: { student_id, classroom_id } })
-            return response.data as {
-                id: string
-                book_id?: string
-                student_id?: string
-                book: {
-                    id: string
-                    title: string
-                    published_year: number
-                }
-            }[]
+            return response.data as []
         },
         enabled: Boolean(classroom_id || student_id),
     })
@@ -120,15 +138,14 @@ const ProgressBookSidebar = () => {
             )}
 
             <Vstack gap="none">
-                <Button color="black" isBorderedOnHover>
-                    전체
-                </Button>
-                {data &&
-                    data.map((joined_book) => (
-                        <Button color="black" isBorderedOnHover key={joined_book.book_id} isOnLeft>
-                            {joined_book.book.title}
-                        </Button>
-                    ))}
+                {data && data.length > 0 && (
+                    <>
+                        <ProgressBookButton joinedBook={null} />
+                        {data.map((joinedBook) => (
+                            <ProgressBookButton joinedBook={joinedBook} />
+                        ))}
+                    </>
+                )}
             </Vstack>
         </Vstack>
     )
