@@ -55,7 +55,7 @@ const ProgressBookSidebar = () => {
         queryKey: ["progressBook", { classroom_id, student_id }],
         queryFn: async () => {
             const response = await instance.get("/progress/book", { params: { student_id, classroom_id } })
-            return response.data as []
+            return response.data as JoinedBook[]
         },
         enabled: Boolean(classroom_id || student_id),
     })
@@ -86,7 +86,29 @@ const ProgressBookSidebar = () => {
     })
 
     const postMutation = useMutation({
-        mutationFn: async (body: PostBody) => await instance.post("/progress/book", body),
+        mutationFn: async ({ body, book_title: _book_title }: { body: PostBody; book_title: string }) =>
+            await instance.post("/progress/book", body),
+        onMutate: ({ book_title }, context) => {
+            context.client.cancelQueries({ queryKey: ["progressBook", { student_id, classroom_id }] })
+            const previous = context.client.getQueryData(["progressBook", { student_id, classroom_id }]) as JoinedBook[]
+            const newJoinedBook = {
+                id: "",
+                book: {
+                    id: "",
+                    title: book_title,
+                    published_year: 2000,
+                },
+            }
+            const newData: JoinedBook[] = [...previous, newJoinedBook]
+            context.client.setQueryData(["progressBook", { student_id, classroom_id }], newData)
+            return { previous }
+        },
+        onError: (_error, _variables, onMutateResult, context) => {
+            context.client.setQueryData(["progressBook", { student_id, classroom_id }], onMutateResult?.previous)
+        },
+        onSettled: (_data, _error, _vaiables, _onMutateResult, context) => {
+            context.client.invalidateQueries({ queryKey: ["progressBook", { student_id, classroom_id }] })
+        },
     })
 
     const onSubmit = (data: Schema) => {
@@ -103,7 +125,7 @@ const ProgressBookSidebar = () => {
                   student_id,
               }
 
-        postMutation.mutate(body)
+        postMutation.mutate({ body, book_title: data.book_title })
     }
 
     const isFormVisible = (classroom_id && !student_id) || (!classroom_id && student_id)
@@ -142,7 +164,7 @@ const ProgressBookSidebar = () => {
                     <>
                         <ProgressBookButton joinedBook={null} />
                         {data.map((joinedBook) => (
-                            <ProgressBookButton joinedBook={joinedBook} />
+                            <ProgressBookButton key={joinedBook.id} joinedBook={joinedBook} />
                         ))}
                     </>
                 )}
