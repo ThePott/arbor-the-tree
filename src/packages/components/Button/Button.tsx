@@ -1,7 +1,8 @@
-import type { ButtonProps, Color } from "@/shared/interfaces"
+import type { Color } from "@/shared/interfaces"
 import { buttonColorToCn } from "@/shared/utils/styles"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
+import type { ComponentPropsWithRef, ElementType } from "react"
 import Loader from "../Loader/Loader"
 import { Hstack } from "../layouts"
 import type { ButtonColor } from "./buttonInterfaces"
@@ -53,7 +54,8 @@ const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm my-transition", {
     ],
 })
 
-interface WithButtonProps {
+interface WithButtonProps<T extends ElementType = "button"> {
+    as?: T
     color?: Extract<Color, ButtonColor>
     status?: "enabled" | "disabled" | "pending"
     isWide?: boolean
@@ -61,9 +63,12 @@ interface WithButtonProps {
     isBorderedOnHover?: boolean
     isOnLeft?: boolean
 }
+type ButtonProps<T extends ElementType> = WithButtonProps<T> & Omit<ComponentPropsWithRef<T>, keyof WithButtonProps<T>>
 
 const lightBgArray: ButtonColor[] = ["green", "red"]
-const Button = ({
+
+const Button = <T extends ElementType>({
+    as,
     color = "bg1",
     status = "enabled",
     isWide,
@@ -71,13 +76,14 @@ const Button = ({
     isBorderedOnHover = false,
     isOnLeft = false,
     ...props
-}: ButtonProps & WithButtonProps) => {
+}: ButtonProps<T>) => {
     const { className, children, ...rest } = props
 
     const isLoaderDark = lightBgArray.includes(color)
 
+    const Component: ElementType = as ?? "button"
     return (
-        <button
+        <Component
             {...rest}
             disabled={status !== "enabled"}
             className={clsx(buttonVariants({ color, status, isWide, isBorderedOnHover, isShadowed }), className)}
@@ -86,7 +92,7 @@ const Button = ({
                 {status === "pending" && <Loader isDark={isLoaderDark} />}
                 {children}
             </Hstack>
-        </button>
+        </Component>
     )
 }
 
