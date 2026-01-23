@@ -20,15 +20,15 @@ const ProgressSyllabusAssignedButton = ({ assignedJoinedSyllabus }: ProgressSyll
     }
     const deleteMutation = useSimpleMutation({
         method: "delete",
-        url: `/progress/syllabus/assigned/${assignedJoinedSyllabus?.id}`,
+        url: `/progress/syllabus/assigned/${assignedJoinedSyllabus?.syllabus.id}`,
         params,
-        queryKey: ["progressBook", params],
+        queryKey: ["progressSyllabusAssigned", params],
         update: ({ previous }: { previous: AssignedJoinedSyllabus[] }) =>
             previous.filter((el) => el.syllabus.id !== assignedJoinedSyllabus?.syllabus.id),
     })
 
     const handleBodyClick = () => {
-        navigate({ search: { ...searchParams, assigned_joined_syllabus_id: assignedJoinedSyllabus?.id } })
+        navigate({ search: { ...searchParams, syllabus_id: assignedJoinedSyllabus?.syllabus.id } })
     }
     const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.stopPropagation()
@@ -36,9 +36,9 @@ const ProgressSyllabusAssignedButton = ({ assignedJoinedSyllabus }: ProgressSyll
     }
 
     const isDeleteButtonVisible =
-        Boolean(searchParams.classroom_id) !== Boolean(searchParams.student_id) && assignedJoinedSyllabus?.id
+        Boolean(searchParams.classroom_id) !== Boolean(searchParams.student_id) && assignedJoinedSyllabus?.syllabus.id
 
-    const isSelected = searchParams.assigned_joined_syllabus_id === assignedJoinedSyllabus?.id
+    const isSelected = searchParams.syllabus_id === assignedJoinedSyllabus?.syllabus.id
 
     return (
         <Button

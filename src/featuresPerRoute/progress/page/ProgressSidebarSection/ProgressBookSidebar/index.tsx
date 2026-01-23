@@ -41,7 +41,7 @@ const ProgressSyllabusSidebar = () => {
                         <ProgressSyllabusAssignedButton assignedJoinedSyllabus={null} />
                         {data.map((assignedJoinedSyllabus) => (
                             <ProgressSyllabusAssignedButton
-                                key={assignedJoinedSyllabus.id}
+                                key={assignedJoinedSyllabus.syllabus.id}
                                 assignedJoinedSyllabus={assignedJoinedSyllabus}
                             />
                         ))}
