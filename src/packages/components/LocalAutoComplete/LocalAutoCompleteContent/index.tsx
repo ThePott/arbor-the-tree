@@ -44,7 +44,7 @@ const LocalAutoCompleteContent = () => {
     }, [isVisible])
 
     return (
-        <ExpandableDiv className="my-my-sm absolute top-full z-10 w-full">
+        <ExpandableDiv className="my-my-sm absolute top-full z-10 w-[400px]">
             {isVisible && (
                 <RoundBox
                     ref={contentRef}

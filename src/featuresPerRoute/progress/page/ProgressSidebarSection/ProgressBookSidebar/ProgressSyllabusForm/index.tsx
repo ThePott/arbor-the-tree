@@ -5,8 +5,8 @@ import { Hstack } from "@/packages/components/layouts"
 import LocalAutoComplete from "@/packages/components/LocalAutoComplete"
 import { ClientError } from "@/shared/error/clientError"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
-import type { ValueLabel } from "@/shared/interfaces"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useQueryClient } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import { Plus } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
@@ -21,11 +21,19 @@ type PostBody = {
 const route = getRouteApi("/progress/")
 const ProgressBookForm = () => {
     const { extendedSyllabusArray } = useLoaderData({ from: "/progress/" })
+    const queryClient = useQueryClient()
     const { student_id, classroom_id } = route.useSearch()
-    const optionArray: ValueLabel[] = extendedSyllabusArray.map((extendedSyllabus) => ({
-        value: extendedSyllabus.id,
-        label: extendedSyllabus.book.title,
-    }))
+    const data = queryClient.getQueryData(["progressSyllabusAssigned", { student_id, classroom_id }]) as
+        | AssignedJoinedSyllabus[]
+        | null
+
+    const assignedSyllabusIdArray: string[] = data ? data.map((joinedSyllabus) => joinedSyllabus.syllabus_id) : []
+    const optionArray = extendedSyllabusArray
+        .filter((syllabus) => !assignedSyllabusIdArray.includes(syllabus.id))
+        .map((extendedSyllabus) => ({
+            value: extendedSyllabus.id,
+            label: `${extendedSyllabus.book.title}, ${extendedSyllabus.created_at.slice(0, 10)}`,
+        }))
 
     const postMutation = useSimpleMutation({
         method: "post",
@@ -55,7 +63,7 @@ const ProgressBookForm = () => {
     })
 
     const schema = z.object({
-        book_title: z
+        syllabusInfo: z
             .string()
             .min(1, "문제집 제목을 입력해주세요")
             .refine(
@@ -72,7 +80,7 @@ const ProgressBookForm = () => {
         resolver: zodResolver(schema),
     })
     const onSubmit = (data: Schema) => {
-        const syllabus_id = optionArray.find((option) => option.label === data.book_title)?.value
+        const syllabus_id = optionArray.find((option) => option.label === data.syllabusInfo)?.value
         if (!syllabus_id) throw ClientError.Unexpected("문제집을 못 찾았어요")
 
         const body: PostBody = classroom_id
@@ -85,7 +93,7 @@ const ProgressBookForm = () => {
                   student_id,
               }
 
-        postMutation.mutate({ body, additionalData: data.book_title })
+        postMutation.mutate({ body, additionalData: data.syllabusInfo.split(",")[0] })
     }
 
     const isFormVisible = Boolean((classroom_id && !student_id) || (!classroom_id && student_id))
@@ -93,11 +101,11 @@ const ProgressBookForm = () => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Labeled isInDanger={Boolean(errors.book_title)}>
+            <Labeled isInDanger={Boolean(errors.syllabusInfo)}>
                 <Hstack gap="xs">
                     <Controller
                         control={control}
-                        name="book_title"
+                        name="syllabusInfo"
                         render={({ field: { onChange } }) => (
                             <LocalAutoComplete
                                 optionArray={optionArray}
@@ -111,7 +119,7 @@ const ProgressBookForm = () => {
                         <Plus />
                     </Button>
                 </Hstack>
-                <Labeled.Footer>{errors.book_title?.message}</Labeled.Footer>
+                <Labeled.Footer>{errors.syllabusInfo?.message}</Labeled.Footer>
             </Labeled>
         </form>
     )
