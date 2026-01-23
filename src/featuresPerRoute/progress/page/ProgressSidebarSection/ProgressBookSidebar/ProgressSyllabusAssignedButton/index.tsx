@@ -1,30 +1,34 @@
+import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/progress/loader"
 import Button from "@/packages/components/Button/Button"
 import { Hstack } from "@/packages/components/layouts"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import { getRouteApi, useNavigate } from "@tanstack/react-router"
 import { X } from "lucide-react"
-import type { JoinedBook } from ".."
 
 const route = getRouteApi("/progress/")
 
-type ProgressBookButtonProps = {
-    joinedBook: JoinedBook | null
+type ProgressSyllabusAssignedButtonProps = {
+    assignedJoinedSyllabus: AssignedJoinedSyllabus | null
 }
-const ProgressBookButton = ({ joinedBook }: ProgressBookButtonProps) => {
+const ProgressSyllabusAssignedButton = ({ assignedJoinedSyllabus }: ProgressSyllabusAssignedButtonProps) => {
     const navigate = useNavigate({ from: "/progress/" })
     const searchParams = route.useSearch()
 
+    const params = {
+        student_id: assignedJoinedSyllabus?.student_id,
+        classroom_id: assignedJoinedSyllabus?.classroom_id,
+    }
     const deleteMutation = useSimpleMutation({
         method: "delete",
-        url: `/progress/book/${joinedBook?.book.id}`,
-        params: { student_id: joinedBook?.student_id, classroom_id: joinedBook?.classroom_id },
-        queryKey: ["progressBook", { student_id: joinedBook?.student_id, classroom_id: joinedBook?.classroom_id }],
-        update: ({ previous }: { previous: JoinedBook[] }) =>
-            previous.filter((el) => el.book.id !== joinedBook?.book.id),
+        url: `/progress/syllabus/assigned/${assignedJoinedSyllabus?.id}`,
+        params,
+        queryKey: ["progressBook", params],
+        update: ({ previous }: { previous: AssignedJoinedSyllabus[] }) =>
+            previous.filter((el) => el.syllabus.id !== assignedJoinedSyllabus?.syllabus.id),
     })
 
     const handleBodyClick = () => {
-        navigate({ search: { ...searchParams, book_id: joinedBook?.book.id } })
+        navigate({ search: { ...searchParams, assigned_joined_syllabus_id: assignedJoinedSyllabus?.id } })
     }
     const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.stopPropagation()
@@ -32,9 +36,9 @@ const ProgressBookButton = ({ joinedBook }: ProgressBookButtonProps) => {
     }
 
     const isDeleteButtonVisible =
-        Boolean(searchParams.classroom_id) !== Boolean(searchParams.student_id) && joinedBook?.book.id
+        Boolean(searchParams.classroom_id) !== Boolean(searchParams.student_id) && assignedJoinedSyllabus?.id
 
-    const isSelected = searchParams.book_id === joinedBook?.book.id
+    const isSelected = searchParams.assigned_joined_syllabus_id === assignedJoinedSyllabus?.id
 
     return (
         <Button
@@ -46,7 +50,7 @@ const ProgressBookButton = ({ joinedBook }: ProgressBookButtonProps) => {
             className="grow"
         >
             <Hstack className="w-full items-center">
-                <p className="grow">{joinedBook ? joinedBook.book.title : "전체"}</p>
+                <p className="grow">{assignedJoinedSyllabus ? assignedJoinedSyllabus.syllabus.book.title : "전체"}</p>
 
                 {isDeleteButtonVisible && (
                     <Button color="black" isBorderedOnHover onClick={handleDeleteClick}>
@@ -58,4 +62,4 @@ const ProgressBookButton = ({ joinedBook }: ProgressBookButtonProps) => {
     )
 }
 
-export default ProgressBookButton
+export default ProgressSyllabusAssignedButton

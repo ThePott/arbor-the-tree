@@ -1,3 +1,4 @@
+import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/progress/loader"
 import Button from "@/packages/components/Button/Button"
 import Labeled from "@/packages/components/Labeled/Labeled"
 import { Hstack } from "@/packages/components/layouts"
@@ -10,10 +11,9 @@ import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import { Plus } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
 import z from "zod/v3"
-import type { JoinedBook } from ".."
 
 type PostBody = {
-    book_id: string
+    syllabus_id: string
     classroom_id?: string
     student_id?: string
 }
@@ -29,16 +29,26 @@ const ProgressBookForm = () => {
 
     const postMutation = useSimpleMutation({
         method: "post",
-        url: "/progress/book/assigned",
-        queryKey: ["progressBookAssigned", { student_id, classroom_id }],
-        update: ({ previous, additionalData: book_title }: { previous: JoinedBook[]; additionalData: string }) => [
+        url: "/progress/syllabus/assigned",
+        queryKey: ["progressSyllabusAssigned", { student_id, classroom_id }],
+        update: ({
+            previous,
+            additionalData: book_title,
+        }: {
+            previous: AssignedJoinedSyllabus[]
+            additionalData: string
+        }) => [
             ...previous,
             {
                 id: "",
-                book: {
+                completed_at: "",
+                syllabus_id: "",
+                syllabus: {
+                    user_id: "",
                     id: "",
-                    title: book_title,
-                    published_year: 2000,
+                    created_at: "",
+                    book_id: "",
+                    book: { id: "", title: book_title, published_year: 2000 },
                 },
             },
         ],
@@ -62,16 +72,16 @@ const ProgressBookForm = () => {
         resolver: zodResolver(schema),
     })
     const onSubmit = (data: Schema) => {
-        const book_id = optionArray.find((option) => option.label === data.book_title)?.value
-        if (!book_id) throw ClientError.Unexpected("문제집을 못 찾았어요")
+        const syllabus_id = optionArray.find((option) => option.label === data.book_title)?.value
+        if (!syllabus_id) throw ClientError.Unexpected("문제집을 못 찾았어요")
 
         const body: PostBody = classroom_id
             ? {
-                  book_id,
+                  syllabus_id,
                   classroom_id,
               }
             : {
-                  book_id,
+                  syllabus_id,
                   student_id,
               }
 
@@ -80,6 +90,7 @@ const ProgressBookForm = () => {
 
     const isFormVisible = Boolean((classroom_id && !student_id) || (!classroom_id && student_id))
     if (!isFormVisible) return null
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Labeled isInDanger={Boolean(errors.book_title)}>

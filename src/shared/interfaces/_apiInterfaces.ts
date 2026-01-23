@@ -97,3 +97,17 @@ export type Syllabus = {
     book_id: string
     created_at: string
 }
+
+export type ClassroomSyllabus = {
+    id: string
+    classroom_id: string
+    syllabus_id: string
+    completed_at: string
+}
+
+export type StudentSyllabus = {
+    id: string
+    student_id: string
+    syllabus_id: string
+    completed_at: string
+}

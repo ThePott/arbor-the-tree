@@ -11,6 +11,6 @@ export const Route = createFileRoute("/progress/")({
     validateSearch: z.object({
         student_id: z.string().optional(),
         classroom_id: z.string().optional(),
-        book_id: z.string().optional(),
+        assigned_joined_syllabus_id: z.string().optional(),
     }),
 })
