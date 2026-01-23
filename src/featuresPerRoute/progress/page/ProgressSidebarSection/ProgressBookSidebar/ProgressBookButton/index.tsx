@@ -34,8 +34,17 @@ const ProgressBookButton = ({ joinedBook }: ProgressBookButtonProps) => {
     const isDeleteButtonVisible =
         Boolean(searchParams.classroom_id) !== Boolean(searchParams.student_id) && joinedBook?.book.id
 
+    const isSelected = searchParams.book_id === joinedBook?.book.id
+
     return (
-        <Button as="div" isBorderedOnHover color="black" isOnLeft onClick={handleBodyClick} className="grow">
+        <Button
+            as="div"
+            isBorderedOnHover
+            color={isSelected ? "bg2" : "black"}
+            isOnLeft
+            onClick={handleBodyClick}
+            className="grow"
+        >
             <Hstack className="w-full items-center">
                 <p className="grow">{joinedBook ? joinedBook.book.title : "전체"}</p>
 
