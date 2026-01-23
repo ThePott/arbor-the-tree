@@ -1,6 +1,6 @@
 import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/progress/loader"
 import Button from "@/packages/components/Button/Button"
-import { Hstack } from "@/packages/components/layouts"
+import { Hstack, Vstack } from "@/packages/components/layouts"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import { getRouteApi, useNavigate } from "@tanstack/react-router"
 import { X } from "lucide-react"
@@ -50,7 +50,10 @@ const ProgressSyllabusAssignedButton = ({ assignedJoinedSyllabus }: ProgressSyll
             className="grow"
         >
             <Hstack className="w-full items-center">
-                <p className="grow">{assignedJoinedSyllabus ? assignedJoinedSyllabus.syllabus.book.title : "전체"}</p>
+                <Vstack gap="none" className="grow">
+                    <p>{assignedJoinedSyllabus ? assignedJoinedSyllabus.syllabus.book.title : "전체"}</p>
+                    <p className="text-fg-dim text-my-xs">{assignedJoinedSyllabus?.syllabus.created_at.slice(0, 10)}</p>
+                </Vstack>
 
                 {isDeleteButtonVisible && (
                     <Button color="black" isBorderedOnHover onClick={handleDeleteClick}>
