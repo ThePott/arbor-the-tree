@@ -22,9 +22,9 @@ const ProgressSyllabusSidebar = () => {
     const { studentArray, classroomArray } = useLoaderData({ from: "/progress/" })
     const { student_id, classroom_id } = route.useSearch()
     const { data } = useQuery({
-        queryKey: ["progressBook", { classroom_id, student_id: classroom_id ? undefined : student_id }],
+        queryKey: ["progressBookAssigned", { classroom_id, student_id: classroom_id ? undefined : student_id }],
         queryFn: async () => {
-            const response = await instance.get("/progress/syllabus", {
+            const response = await instance.get("/progress/syllabus/assigned", {
                 params: { classroom_id, student_id: classroom_id ? undefined : student_id },
             })
             return response.data as JoinedBook[]
