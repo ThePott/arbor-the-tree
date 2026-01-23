@@ -8,7 +8,8 @@ const route = getRouteApi("/progress/")
 
 const ProgressColumnSection = () => {
     const searchParams = route.useSearch()
-    const { data } = useQuery({
+    // TODO: 여기서 data 이용해서 session들 보여줘야
+    useQuery({
         queryKey: ["progressSession", searchParams],
         queryFn: () => instance.get("/progress/session", { params: searchParams }),
     })
