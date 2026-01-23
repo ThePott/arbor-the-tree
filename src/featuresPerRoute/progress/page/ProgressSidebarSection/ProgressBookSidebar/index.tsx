@@ -18,13 +18,13 @@ export type JoinedBook = {
         published_year: number
     }
 }
-const ProgressBookSidebar = () => {
+const ProgressSyllabusSidebar = () => {
     const { studentArray, classroomArray } = useLoaderData({ from: "/progress/" })
     const { student_id, classroom_id } = route.useSearch()
     const { data } = useQuery({
         queryKey: ["progressBook", { classroom_id, student_id: classroom_id ? undefined : student_id }],
         queryFn: async () => {
-            const response = await instance.get("/progress/book", {
+            const response = await instance.get("/progress/syllabus", {
                 params: { classroom_id, student_id: classroom_id ? undefined : student_id },
             })
             return response.data as JoinedBook[]
@@ -56,4 +56,4 @@ const ProgressBookSidebar = () => {
     )
 }
 
-export default ProgressBookSidebar
+export default ProgressSyllabusSidebar

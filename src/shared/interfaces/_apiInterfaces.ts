@@ -90,3 +90,10 @@ export type ClassroomStudent = {
     classroom_id: string
     student_id: string
 }
+
+export type Syllabus = {
+    id: string
+    user_id: string
+    book_id: string
+    created_at: string
+}

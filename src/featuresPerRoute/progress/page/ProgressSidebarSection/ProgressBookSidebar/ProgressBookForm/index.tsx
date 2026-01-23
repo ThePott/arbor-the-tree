@@ -20,9 +20,12 @@ type PostBody = {
 
 const route = getRouteApi("/progress/")
 const ProgressBookForm = () => {
-    const { bookArray } = useLoaderData({ from: "/progress/" })
+    const { extendedSyllabusArray } = useLoaderData({ from: "/progress/" })
     const { student_id, classroom_id } = route.useSearch()
-    const optionArray: ValueLabel[] = bookArray.map((book) => ({ value: book.id, label: book.title }))
+    const optionArray: ValueLabel[] = extendedSyllabusArray.map((extendedSyllabus) => ({
+        value: extendedSyllabus.id,
+        label: extendedSyllabus.book.title,
+    }))
 
     const postMutation = useSimpleMutation({
         method: "post",
