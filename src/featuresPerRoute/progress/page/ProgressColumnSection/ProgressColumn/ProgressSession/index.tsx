@@ -5,25 +5,15 @@ type ProgressSessionLabelProps = {
     conciseSession: ConciseSession
 }
 const ProgressSessionLabel = ({ conciseSession }: ProgressSessionLabelProps) => {
-    if (conciseSession.end.topic) {
-        return (
-            <>
-                <p>{conciseSession.start.step}</p>
-                <p> ~</p>
-                <p className="text-fg-muted">{conciseSession.end.topic}</p>
-                <p>{conciseSession.end.step}</p>
-            </>
-        )
-    }
-    if (conciseSession.end.step) {
-        return (
-            <>
-                <p>{conciseSession.start.step}</p>
-                <p>~ {conciseSession.end.step}</p>
-            </>
-        )
-    }
-    return <p>{conciseSession.start.step}</p>
+    return (
+        <>
+            <p>{conciseSession.start.step}</p>
+            {conciseSession.end.topic && (
+                <p className="text-fg-muted text-my-sm pl-[14px]">{conciseSession.end.topic}</p>
+            )}
+            {conciseSession.end.step && <p>~ {conciseSession.end.step}</p>}
+        </>
+    )
 }
 
 type ProgressSessionProps = {

@@ -11,7 +11,7 @@ const ProgressColumn = ({ conciseSyllabus }: ProgressColumnProps) => {
     return (
         <RoundBox isBordered color="bg0" className="h-full overflow-hidden shrink-0">
             <Vstack className="h-full overflow-hidden w-[300px]">
-                <Title as="h3" isMuted className="px-my-lg pt-my-lg">
+                <Title as="h3" className="px-my-lg pt-my-lg">
                     {conciseSyllabus.book.title}
                 </Title>
                 <FlexOneContainer isYScrollable className="px-my-lg pb-my-lg">
