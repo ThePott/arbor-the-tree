@@ -1,4 +1,4 @@
-import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/progress/loader"
+import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/progress/types"
 import Button from "@/packages/components/Button/Button"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"

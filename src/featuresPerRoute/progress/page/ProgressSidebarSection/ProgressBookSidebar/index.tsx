@@ -1,4 +1,4 @@
-import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/progress/loader"
+import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/progress/types"
 import { instance } from "@/packages/api/axiosInstances"
 import { Vstack } from "@/packages/components/layouts"
 import Title from "@/packages/components/Title/Title"
