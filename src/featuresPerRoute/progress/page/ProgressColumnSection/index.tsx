@@ -23,7 +23,7 @@ const ProgressColumnSection = () => {
         <FlexOneContainer className="pt-my-lg pl-my-lg" isXScrollable>
             <Hstack className="h-full">
                 {data.map((conciseSyllabus) => (
-                    <ProgressColumn conciseSyllabus={conciseSyllabus} />
+                    <ProgressColumn key={conciseSyllabus.id} conciseSyllabus={conciseSyllabus} />
                 ))}
             </Hstack>
         </FlexOneContainer>
