@@ -1,16 +1,38 @@
 import type { ConciseSession } from "@/featuresPerRoute/progress/types"
 import RoundBox from "@/packages/components/RoundBox"
 
-type ProgressSession = {
+type ProgressSessionLabelProps = {
     conciseSession: ConciseSession
 }
-const ProgressSession = ({ conciseSession }: ProgressSession) => {
+const ProgressSessionLabel = ({ conciseSession }: ProgressSessionLabelProps) => {
+    if (conciseSession.end.topic) {
+        return (
+            <>
+                <p>{conciseSession.start.step}</p>
+                <p> ~</p>
+                <p className="text-fg-muted">{conciseSession.end.topic}</p>
+                <p>{conciseSession.end.step}</p>
+            </>
+        )
+    }
+    if (conciseSession.end.step) {
+        return (
+            <>
+                <p>{conciseSession.start.step}</p>
+                <p>~ {conciseSession.end.step}</p>
+            </>
+        )
+    }
+    return <p>{conciseSession.start.step}</p>
+}
+
+type ProgressSessionProps = {
+    conciseSession: ConciseSession
+}
+const ProgressSession = ({ conciseSession }: ProgressSessionProps) => {
     return (
         <RoundBox isBordered padding="md" className="w-full">
-            <p>{conciseSession.start.topic}</p>
-            <p>{conciseSession.start.step}</p>
-            <p>{conciseSession.end.topic}</p>
-            <p>{conciseSession.end.step}</p>
+            <ProgressSessionLabel conciseSession={conciseSession} />
         </RoundBox>
     )
 }

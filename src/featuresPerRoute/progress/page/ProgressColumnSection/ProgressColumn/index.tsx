@@ -17,14 +17,14 @@ const ProgressColumn = ({ conciseSyllabus }: ProgressColumnProps) => {
                 <FlexOneContainer isYScrollable className="px-my-lg pb-my-lg">
                     <Vstack gap="md">
                         {conciseSyllabus.sessionsByTopicArray.map((sessionsByTopic) => (
-                            <>
-                                <Title as="h3" className="sticky top-0 bg-bg-0 text-center text-wrap">
+                            <Vstack gap="none">
+                                <Title as="h3" className="sticky top-0 bg-bg-0 text-center text-wrap" isMuted>
                                     {sessionsByTopic.title}
                                 </Title>
                                 {sessionsByTopic.conciseSessionArray.map((conciseSession) => (
                                     <ProgressSession conciseSession={conciseSession} />
                                 ))}
-                            </>
+                            </Vstack>
                         ))}
                     </Vstack>
                 </FlexOneContainer>
