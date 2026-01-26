@@ -1,14 +1,7 @@
 import manageStudentLoaderFn, { type ManageStudentLoaderResponseData } from "@/featuresPerRoute/manage.student/loader"
 import { instance } from "@/packages/api/axiosInstances"
-import type { Book, ClassroomSyllabus, StudentSyllabus, Syllabus } from "@/shared/interfaces"
 import type { QueryClient } from "@tanstack/react-query"
-
-export type ExtendedSyllabus = Syllabus & { book: Book }
-export type AssignedJoinedSyllabus = Omit<ClassroomSyllabus, "classroom_id"> &
-    Omit<StudentSyllabus, "student_id"> & { syllabus: Syllabus & { book: Book } } & {
-        classroom_id?: string
-        student_id?: string
-    }
+import type { ExtendedSyllabus } from "../types"
 
 type ProgressLoaderFnProps = ManageStudentLoaderResponseData & { extendedSyllabusArray: ExtendedSyllabus[] } // TODO: 여기에 syllabus[]라든지 해야
 

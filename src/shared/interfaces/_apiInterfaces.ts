@@ -111,3 +111,39 @@ export type StudentSyllabus = {
     syllabus_id: string
     completed_at: string
 }
+
+export type Session = {
+    id: string
+    order: number
+    syllabus_id: string
+}
+
+export type SessionQuestion = {
+    id: string
+    session_id: string
+    question_id: string
+}
+
+export type Question = {
+    id: string
+    name: string
+    page: number
+    solution_page: number
+    order: number
+    step_id: string
+    sub_question_id?: string
+}
+
+export type Step = {
+    id: string
+    topic_id: string
+    title: string
+    order: number
+}
+
+export type Topic = {
+    id: string
+    book_id: string
+    title: string
+    order: number
+}

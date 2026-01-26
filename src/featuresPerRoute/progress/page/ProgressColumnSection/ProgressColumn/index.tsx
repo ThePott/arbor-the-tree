@@ -1,9 +1,13 @@
+import type { ConciseSyllabus } from "@/featuresPerRoute/progress/types"
 import RoundBox from "@/packages/components/RoundBox"
 
-const ProgressColumn = () => {
+type ProgressColumnProps = {
+    conciseSyllabus: ConciseSyllabus
+}
+const ProgressColumn = ({ conciseSyllabus }: ProgressColumnProps) => {
     return (
-        <RoundBox padding="md" isBordered className="h-full overflow-y-hidden shrink-0">
-            this is single progress column
+        <RoundBox padding="md" isBordered className="h-full overflow-y-hidden shrink-0 w-[200px]">
+            <p>{JSON.stringify(conciseSyllabus)}</p>
         </RoundBox>
     )
 }
