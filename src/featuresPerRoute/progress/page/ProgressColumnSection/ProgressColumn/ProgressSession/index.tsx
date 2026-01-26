@@ -5,10 +5,12 @@ type ProgressSession = {
     conciseSession: ConciseSession
 }
 const ProgressSession = ({ conciseSession }: ProgressSession) => {
-    const label = conciseSession.topic_step.replace(" __", "\n").replace(" ~ ", "\n~ ")
     return (
-        <RoundBox isBordered padding="md" className="w-[200px]">
-            <pre className="text-wrap">{label}</pre>
+        <RoundBox isBordered padding="md" className="w-full">
+            <p>{conciseSession.start.topic}</p>
+            <p>{conciseSession.start.step}</p>
+            <p>{conciseSession.end.topic}</p>
+            <p>{conciseSession.end.step}</p>
         </RoundBox>
     )
 }

@@ -6,12 +6,22 @@ export type AssignedJoinedSyllabus = Omit<ClassroomSyllabus, "classroom_id"> &
         classroom_id?: string
         student_id?: string
     }
+type TopicStep = {
+    topic: string
+    step: string
+}
 export type ConciseSession = {
     id: string
-    topic_step: string
+    start: TopicStep
+    end: Partial<TopicStep>
+}
+type SessionByTopic = {
+    id: string
+    title: string
+    conciseSessionArray: ConciseSession[]
 }
 export type ConciseSyllabus = {
     id: string
     book: Book
-    sessions: ConciseSession[]
+    sessionsByTopicArray: SessionByTopic[]
 }

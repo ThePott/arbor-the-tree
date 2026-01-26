@@ -10,14 +10,21 @@ type ProgressColumnProps = {
 const ProgressColumn = ({ conciseSyllabus }: ProgressColumnProps) => {
     return (
         <RoundBox isBordered color="bg0" className="h-full overflow-hidden shrink-0">
-            <Vstack className="h-full overflow-hidden">
+            <Vstack className="h-full overflow-hidden w-[300px]">
                 <Title as="h3" isMuted className="px-my-lg pt-my-lg">
                     {conciseSyllabus.book.title}
                 </Title>
                 <FlexOneContainer isYScrollable className="px-my-lg pb-my-lg">
                     <Vstack gap="md">
-                        {conciseSyllabus.sessions.map((conciseSession) => (
-                            <ProgressSession conciseSession={conciseSession} />
+                        {conciseSyllabus.sessionsByTopicArray.map((sessionsByTopic) => (
+                            <>
+                                <Title as="h3" className="sticky top-0 bg-bg-0 text-center text-wrap">
+                                    {sessionsByTopic.title}
+                                </Title>
+                                {sessionsByTopic.conciseSessionArray.map((conciseSession) => (
+                                    <ProgressSession conciseSession={conciseSession} />
+                                ))}
+                            </>
                         ))}
                     </Vstack>
                 </FlexOneContainer>
