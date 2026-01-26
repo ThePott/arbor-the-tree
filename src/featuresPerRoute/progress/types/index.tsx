@@ -1,4 +1,4 @@
-import type { Book, ClassroomSyllabus, StudentSyllabus, Syllabus } from "@/shared/interfaces"
+import type { Book, ClassroomSyllabus, SessionStatus, StudentSyllabus, Syllabus } from "@/shared/interfaces"
 
 export type ExtendedSyllabus = Syllabus & { book: Book }
 export type AssignedJoinedSyllabus = Omit<ClassroomSyllabus, "classroom_id"> &
@@ -14,6 +14,7 @@ export type ConciseSession = {
     id: string
     start: TopicStep
     end: Partial<TopicStep>
+    status: SessionStatus | null
 }
 type SessionByTopic = {
     id: string

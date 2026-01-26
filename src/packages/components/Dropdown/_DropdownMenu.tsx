@@ -23,7 +23,7 @@ const DropdownMenu = ({ children, onChange, direction = "bottomLeft" }: Dropdown
 
     return (
         <DropdownContent direction={direction}>
-            <RoundBox radius="md" color="bg3" padding="lg" isShadowed className="text-my-sm">
+            <RoundBox radius="md" color="bg3" padding="lg" isShadowed className="text-my-sm text-fg-vivid">
                 <Vstack>{children}</Vstack>
             </RoundBox>
         </DropdownContent>

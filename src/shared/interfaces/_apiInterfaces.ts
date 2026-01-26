@@ -147,3 +147,5 @@ export type Topic = {
     title: string
     order: number
 }
+
+export type SessionStatus = "HOMEWORK" | "TODAY"
