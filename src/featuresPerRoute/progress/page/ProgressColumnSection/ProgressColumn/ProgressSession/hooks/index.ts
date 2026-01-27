@@ -8,13 +8,16 @@ import type { ProgressSessionProps } from ".."
 
 const route = getRouteApi("/progress/")
 
-type ProgressSessionAdditionalData = {
+type ProgressSessionStatusAdditionalData = {
     syllabus_id: string
     startingTopicTitle: string
     session_id: string
     status: SessionStatus | null
 }
-type ProgressSessionUpdateProps = { previous: ConciseSyllabus[]; additionalData: ProgressSessionAdditionalData }
+type ProgressSessionStatusUpdateProps = {
+    previous: ConciseSyllabus[]
+    additionalData: ProgressSessionStatusAdditionalData
+}
 const useStatusMutation = (session_id?: string) => {
     const searchParams = route.useSearch()
 
@@ -23,7 +26,7 @@ const useStatusMutation = (session_id?: string) => {
         url: `/progress/session/assigned${session_id ? ["/", session_id].join("") : ""}`,
         method: session_id ? "delete" : "post",
         params: searchParams,
-        update: ({ previous, additionalData }: ProgressSessionUpdateProps) => {
+        update: ({ previous, additionalData }: ProgressSessionStatusUpdateProps) => {
             const { session_id, status, syllabus_id, startingTopicTitle } = additionalData
             const newData = [...previous]
             const syllabus = newData.find((elSyllabus) => elSyllabus.id === syllabus_id)
@@ -40,9 +43,47 @@ const useStatusMutation = (session_id?: string) => {
     })
 }
 
+type ProgressSessionCompletedAdditionalData = {
+    syllabus_id: string
+    startingTopicTitle: string
+    session_id: string
+    completed_at: string | null
+}
+type ProgressSessionCompletedUpdateProps = {
+    previous: ConciseSyllabus[]
+    additionalData: ProgressSessionCompletedAdditionalData
+}
+const useCompletedMutation = (session_id?: string) => {
+    const searchParams = route.useSearch()
+
+    return useSimpleMutation({
+        queryKeyWithoutParams: ["progressSession"],
+        url: `/progress/session/completed${session_id ? ["/", session_id].join("") : ""}`,
+        method: session_id ? "delete" : "post",
+        params: searchParams,
+        update: ({ previous, additionalData }: ProgressSessionCompletedUpdateProps) => {
+            const { session_id, completed_at, syllabus_id, startingTopicTitle } = additionalData
+            const newData = [...previous]
+            const syllabus = newData.find((elSyllabus) => elSyllabus.id === syllabus_id)
+            const sessionsByTopic = syllabus?.sessionsByTopicArray.find(
+                (elSessionsByTopic) => elSessionsByTopic.title === startingTopicTitle
+            )
+            const session = sessionsByTopic?.conciseSessionArray.find(
+                (elConciseSession) => elConciseSession.id === session_id
+            )
+            if (!session) throw ClientError.Unexpected("묶음을 찾지 못했어요")
+            session.completed_at = completed_at
+            return newData
+        },
+    })
+}
+
 type UseEventHandlersProps = ProgressSessionProps & {
     mutatePostStatus: ReturnType<typeof useStatusMutation>["mutate"]
     mutateDeleteStatus: ReturnType<typeof useStatusMutation>["mutate"]
+
+    mutatePostCompleted: ReturnType<typeof useCompletedMutation>["mutate"]
+    mutateDeleteCompleted: ReturnType<typeof useCompletedMutation>["mutate"]
 }
 const useEventHandlers = ({
     conciseSession,
@@ -50,6 +91,8 @@ const useEventHandlers = ({
     startingTopicTitle,
     mutatePostStatus,
     mutateDeleteStatus,
+    mutatePostCompleted,
+    mutateDeleteCompleted,
 }: UseEventHandlersProps) => {
     const searchParams = route.useSearch()
     const { classroom_id, student_id } = searchParams
@@ -103,7 +146,30 @@ const useEventHandlers = ({
     const handleClickToComplete = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         const target = event.target as HTMLElement
         if (target.closest("[data-dropdown]")) return
+        // NOTE: 상태 없는 건 끝낼 수 없음
         if (!conciseSession.status) return
+
+        if (conciseSession.completed_at) {
+            mutateDeleteCompleted({
+                body: undefined,
+                additionalData: {
+                    completed_at: null,
+                    session_id: conciseSession.id,
+                    startingTopicTitle,
+                    syllabus_id,
+                },
+            })
+            return
+        }
+        mutatePostCompleted({
+            body: undefined,
+            additionalData: {
+                completed_at: new Date().toISOString(),
+                session_id: conciseSession.id,
+                startingTopicTitle,
+                syllabus_id,
+            },
+        })
 
         await instance.post(`/progress/session/completed/${conciseSession.id}`, undefined, {
             params: searchParams,
@@ -115,13 +181,17 @@ const useEventHandlers = ({
 
 const useProgressSession = (props: ProgressSessionProps) => {
     const { conciseSession } = props
-    const { mutate: mutatePost } = useStatusMutation()
-    const { mutate: mutateDelete } = useStatusMutation(conciseSession.id)
+    const { mutate: mutatePostStatus } = useStatusMutation()
+    const { mutate: mutateDeleteStatus } = useStatusMutation(conciseSession.id)
+    const { mutate: mutatePostCompleted } = useCompletedMutation()
+    const { mutate: mutateDeleteCompleted } = useCompletedMutation(conciseSession.id)
 
     const eventHanderReturns = useEventHandlers({
         ...props,
-        mutatePostStatus: mutatePost,
-        mutateDeleteStatus: mutateDelete,
+        mutatePostStatus,
+        mutateDeleteStatus,
+        mutatePostCompleted,
+        mutateDeleteCompleted,
     })
     return { ...eventHanderReturns }
 }
