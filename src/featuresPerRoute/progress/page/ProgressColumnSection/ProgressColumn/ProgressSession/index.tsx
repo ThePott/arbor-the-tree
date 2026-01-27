@@ -1,4 +1,5 @@
 import type { ConciseSession, ConciseSyllabus } from "@/featuresPerRoute/progress/types"
+import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown/Dropdown"
 import { Hstack, Vstack } from "@/packages/components/layouts"
@@ -121,10 +122,17 @@ const ProgressSession = ({ conciseSession, syllabus_id, startingTopicTitle }: Pr
                 break
         }
     }
+    const handleClickToComplete = async () => {
+        if (!conciseSession.status) return
+        await instance.post(`/progress/session/completed/${conciseSession.id}`, undefined, {
+            params: searchParams,
+        })
+    }
 
     const isInteractable = Boolean(classroom_id) !== Boolean(student_id)
     return (
         <RoundBox
+            onClick={handleClickToComplete}
             isBordered
             padding="md"
             color={

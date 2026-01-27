@@ -54,7 +54,11 @@ const DropdownContent = ({ children, direction = "bottomRight" }: DropdownConten
 
     return (
         <ExpandableDiv className={clsx(dropdownVariants({ width, direction }))}>
-            {isOn && <div ref={contentRef}>{children}</div>}
+            {isOn && (
+                <div ref={contentRef} onClick={(event) => event.stopPropagation()}>
+                    {children}
+                </div>
+            )}
         </ExpandableDiv>
     )
 }
