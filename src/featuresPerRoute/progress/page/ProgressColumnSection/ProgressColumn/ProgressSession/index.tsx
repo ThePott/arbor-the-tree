@@ -1,5 +1,4 @@
 import type { ConciseSession, ConciseSyllabus } from "@/featuresPerRoute/progress/types"
-import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown/Dropdown"
 import { Hstack, Vstack } from "@/packages/components/layouts"
@@ -51,26 +50,29 @@ const ProgressSession = ({ conciseSession, syllabus_id, startingTopicTitle }: Pr
     const searchParams = route.useSearch()
     const { classroom_id, student_id } = searchParams
 
-    const postMutation = useSimpleMutation({
-        queryKeyWithoutParams: ["progressSession"],
-        url: "/progress/session/assigned",
-        method: "post",
-        params: searchParams,
-        update: ({ previous, additionalData }: ProgressSessionUpdateProps) => {
-            const { session_id, status, syllabus_id, startingTopicTitle } = additionalData
-            const newData = [...previous]
-            const syllabus = newData.find((elSyllabus) => elSyllabus.id === syllabus_id)
-            const sessionsByTopic = syllabus?.sessionsByTopicArray.find(
-                (elSessionsByTopic) => elSessionsByTopic.title === startingTopicTitle
-            )
-            const session = sessionsByTopic?.conciseSessionArray.find(
-                (elConciseSession) => elConciseSession.id === session_id
-            )
-            if (!session) throw ClientError.Unexpected("묶음을 찾지 못했어요")
-            session.status = status
-            return newData
-        },
-    })
+    const useSessionMutation = (session_id?: string) =>
+        useSimpleMutation({
+            queryKeyWithoutParams: ["progressSession"],
+            url: `/progress/session/assigned${session_id ? ["/", session_id].join("") : ""}`,
+            method: session_id ? "delete" : "post",
+            params: searchParams,
+            update: ({ previous, additionalData }: ProgressSessionUpdateProps) => {
+                const { session_id, status, syllabus_id, startingTopicTitle } = additionalData
+                const newData = [...previous]
+                const syllabus = newData.find((elSyllabus) => elSyllabus.id === syllabus_id)
+                const sessionsByTopic = syllabus?.sessionsByTopicArray.find(
+                    (elSessionsByTopic) => elSessionsByTopic.title === startingTopicTitle
+                )
+                const session = sessionsByTopic?.conciseSessionArray.find(
+                    (elConciseSession) => elConciseSession.id === session_id
+                )
+                if (!session) throw ClientError.Unexpected("묶음을 찾지 못했어요")
+                session.status = status
+                return newData
+            },
+        })
+    const postMutation = useSessionMutation()
+    const deleteMutation = useSessionMutation(conciseSession.id)
 
     // TODO: dropdown에서 같은 걸 클랙해도 여전히 클릭이 되도록 수정해야
     // TODO: 현재 상태를 제외하고 메뉴가 뜨도록 수정해야
@@ -107,7 +109,15 @@ const ProgressSession = ({ conciseSession, syllabus_id, startingTopicTitle }: Pr
                 break
             }
             case "dismiss":
-                await instance.delete(`/progress/session/assigned/${conciseSession.id}`, { params: searchParams })
+                deleteMutation.mutate({
+                    body: undefined,
+                    additionalData: {
+                        status: null,
+                        session_id: conciseSession.id,
+                        startingTopicTitle,
+                        syllabus_id,
+                    },
+                })
                 break
         }
     }
