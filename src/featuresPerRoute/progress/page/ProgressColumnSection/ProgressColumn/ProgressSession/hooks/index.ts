@@ -38,6 +38,12 @@ const useStatusMutation = (session_id?: string) => {
             )
             if (!session) throw ClientError.Unexpected("묶음을 찾지 못했어요")
             session.status = status
+
+            if (status) {
+                session.assigned_at = new Date().toISOString()
+            } else {
+                session.assigned_at = null
+            }
             return newData
         },
     })

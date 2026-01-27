@@ -25,8 +25,15 @@ const ProgressSessionLabel = ({ conciseSession }: ProgressSessionLabelProps) => 
                 <p className={clsx("text-my-sm pl-3.5", mutedClassName)}>{conciseSession.end.topic}</p>
             )}
             {conciseSession.end.step && <p>~ {conciseSession.end.step}</p>}
+            {conciseSession.assigned_at && (
+                <p
+                    className={clsx("text-my-xs", mutedClassName)}
+                >{`${conciseSession.assigned_at.slice(0, 10)} 할당`}</p>
+            )}
             {conciseSession.completed_at && (
-                <p className={clsx("text-my-xs", mutedClassName)}>{conciseSession.completed_at.slice(0, 10)}</p>
+                <p
+                    className={clsx("text-my-xs", mutedClassName)}
+                >{`${conciseSession.completed_at.slice(0, 10)} 완료`}</p>
             )}
         </Vstack>
     )
