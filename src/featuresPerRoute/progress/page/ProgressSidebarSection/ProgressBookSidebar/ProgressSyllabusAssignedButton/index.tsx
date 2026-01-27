@@ -22,7 +22,7 @@ const ProgressSyllabusAssignedButton = ({ assignedJoinedSyllabus }: ProgressSyll
         method: "delete",
         url: `/progress/syllabus/assigned/${assignedJoinedSyllabus?.syllabus.id}`,
         params,
-        queryKey: ["progressSyllabusAssigned", params],
+        queryKeyWithoutParams: ["progressSyllabusAssigned"],
         update: ({ previous }: { previous: AssignedJoinedSyllabus[] }) =>
             previous.filter((el) => el.syllabus.id !== assignedJoinedSyllabus?.syllabus.id),
     })

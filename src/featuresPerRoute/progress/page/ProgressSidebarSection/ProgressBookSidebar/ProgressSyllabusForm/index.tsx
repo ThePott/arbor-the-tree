@@ -38,7 +38,7 @@ const ProgressBookForm = () => {
     const postMutation = useSimpleMutation({
         method: "post",
         url: "/progress/syllabus/assigned",
-        queryKey: ["progressSyllabusAssigned", { student_id, classroom_id }],
+        queryKeyWithoutParams: ["progressSyllabusAssigned"],
         update: ({
             previous,
             additionalData: book_title,

@@ -1,9 +1,11 @@
-import type { ConciseSession } from "@/featuresPerRoute/progress/types"
-import { instance } from "@/packages/api/axiosInstances"
+import type { ConciseSession, ConciseSyllabus } from "@/featuresPerRoute/progress/types"
 import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown/Dropdown"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
+import { ClientError } from "@/shared/error/clientError"
+import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
+import type { SessionStatus } from "@/shared/interfaces"
 import { getRouteApi } from "@tanstack/react-router"
 import clsx from "clsx"
 import { Ellipsis } from "lucide-react"
@@ -23,12 +25,45 @@ const ProgressSessionLabel = ({ conciseSession }: ProgressSessionLabelProps) => 
     )
 }
 
+type ProgressSessionAdditionalData = {
+    syllabus_id: string
+    startingTopicTitle: string
+    session_id: string
+    status: SessionStatus | null
+}
+type ProgressSessionUpdateProps = { previous: ConciseSyllabus[]; additionalData: ProgressSessionAdditionalData }
+
 const route = getRouteApi("/progress/")
 type ProgressSessionProps = {
     conciseSession: ConciseSession
+    syllabus_id: string
+    startingTopicTitle: string
 }
-const ProgressSession = ({ conciseSession }: ProgressSessionProps) => {
-    const { classroom_id, student_id } = route.useSearch()
+const ProgressSession = ({ conciseSession, syllabus_id, startingTopicTitle }: ProgressSessionProps) => {
+    const searchParams = route.useSearch()
+    const { classroom_id, student_id } = searchParams
+
+    const postMutation = useSimpleMutation({
+        queryKeyWithoutParams: ["progressSession"],
+        url: "/progress/session",
+        method: "post",
+        params: searchParams,
+        update: ({ previous, additionalData }: ProgressSessionUpdateProps) => {
+            const { session_id, status, syllabus_id, startingTopicTitle } = additionalData
+            const newData = [...previous]
+            const syllabus = newData.find((elSyllabus) => elSyllabus.id === syllabus_id)
+            const sessionsByTopic = syllabus?.sessionsByTopicArray.find(
+                (elSessionsByTopic) => elSessionsByTopic.title === startingTopicTitle
+            )
+            const session = sessionsByTopic?.conciseSessionArray.find(
+                (elConciseSession) => elConciseSession.id === session_id
+            )
+            if (!session) throw ClientError.Unexpected("묶음을 찾지 못했어요")
+            session.status = status
+            return newData
+        },
+    })
+
     const isInteractable = Boolean(classroom_id) !== Boolean(student_id)
     return (
         <RoundBox
@@ -57,16 +92,26 @@ const ProgressSession = ({ conciseSession }: ProgressSessionProps) => {
                                 }
                                 switch (value) {
                                     case "homework": {
-                                        const response = await instance.post("/progress/session", {
-                                            ...baseBody,
-                                            session_status: "HOMEWORK",
+                                        postMutation.mutate({
+                                            body: { ...baseBody, session_status: "HOMEWORK" },
+                                            additionalData: {
+                                                status: "HOMEWORK",
+                                                session_id: conciseSession.id,
+                                                startingTopicTitle,
+                                                syllabus_id,
+                                            },
                                         })
                                         break
                                     }
                                     case "today": {
-                                        const response = await instance.post("/progress/session", {
-                                            ...baseBody,
-                                            session_status: "TODAY",
+                                        postMutation.mutate({
+                                            body: { ...baseBody, session_status: "TODAY" },
+                                            additionalData: {
+                                                status: "HOMEWORK",
+                                                session_id: conciseSession.id,
+                                                startingTopicTitle,
+                                                syllabus_id,
+                                            },
                                         })
                                         break
                                     }
