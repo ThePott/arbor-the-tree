@@ -88,7 +88,7 @@ const progressSessionVariants = cva(
             {
                 status: ["HOMEWORK", "TODAY"],
                 completed_at: false,
-                className: "text-fg-inverted-vivid outline-transparent",
+                className: "text-fg-inverted-vivid outline-transparent font-semibold",
             },
             {
                 status: "HOMEWORK",
