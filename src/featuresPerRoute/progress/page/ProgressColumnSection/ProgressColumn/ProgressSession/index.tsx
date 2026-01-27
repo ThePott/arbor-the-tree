@@ -3,6 +3,7 @@ import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown/Dropdown"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
+import { makeFromNow } from "@/shared/utils/dateManipulations"
 import { getRouteApi } from "@tanstack/react-router"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
@@ -28,12 +29,12 @@ const ProgressSessionLabel = ({ conciseSession }: ProgressSessionLabelProps) => 
             {conciseSession.assigned_at && (
                 <p
                     className={clsx("text-my-xs", mutedClassName)}
-                >{`${conciseSession.assigned_at.slice(0, 10)} 할당`}</p>
+                >{`${makeFromNow(conciseSession.assigned_at)} 할당`}</p>
             )}
             {conciseSession.completed_at && (
                 <p
                     className={clsx("text-my-xs", mutedClassName)}
-                >{`${conciseSession.completed_at.slice(0, 10)} 완료`}</p>
+                >{`${makeFromNow(conciseSession.completed_at)} 완료`}</p>
             )}
         </Vstack>
     )
