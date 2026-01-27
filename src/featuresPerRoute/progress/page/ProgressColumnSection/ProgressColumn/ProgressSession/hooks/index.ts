@@ -15,7 +15,7 @@ type ProgressSessionAdditionalData = {
     status: SessionStatus | null
 }
 type ProgressSessionUpdateProps = { previous: ConciseSyllabus[]; additionalData: ProgressSessionAdditionalData }
-const useSessionMutation = (session_id?: string) => {
+const useStatusMutation = (session_id?: string) => {
     const searchParams = route.useSearch()
 
     return useSimpleMutation({
@@ -41,15 +41,15 @@ const useSessionMutation = (session_id?: string) => {
 }
 
 type UseEventHandlersProps = ProgressSessionProps & {
-    mutatePost: ReturnType<typeof useSessionMutation>["mutate"]
-    mutateDelete: ReturnType<typeof useSessionMutation>["mutate"]
+    mutatePostStatus: ReturnType<typeof useStatusMutation>["mutate"]
+    mutateDeleteStatus: ReturnType<typeof useStatusMutation>["mutate"]
 }
 const useEventHandlers = ({
     conciseSession,
     syllabus_id,
     startingTopicTitle,
-    mutatePost,
-    mutateDelete,
+    mutatePostStatus,
+    mutateDeleteStatus,
 }: UseEventHandlersProps) => {
     const searchParams = route.useSearch()
     const { classroom_id, student_id } = searchParams
@@ -64,7 +64,7 @@ const useEventHandlers = ({
 
         switch (value) {
             case "homework": {
-                mutatePost({
+                mutatePostStatus({
                     body: { ...baseBody, session_status: "HOMEWORK" },
                     additionalData: {
                         status: "HOMEWORK",
@@ -76,7 +76,7 @@ const useEventHandlers = ({
                 break
             }
             case "today": {
-                mutatePost({
+                mutatePostStatus({
                     body: { ...baseBody, session_status: "TODAY" },
                     additionalData: {
                         status: "TODAY",
@@ -88,7 +88,7 @@ const useEventHandlers = ({
                 break
             }
             case "dismiss":
-                mutateDelete({
+                mutateDeleteStatus({
                     body: undefined,
                     additionalData: {
                         status: null,
@@ -115,10 +115,14 @@ const useEventHandlers = ({
 
 const useProgressSession = (props: ProgressSessionProps) => {
     const { conciseSession } = props
-    const { mutate: mutatePost } = useSessionMutation()
-    const { mutate: mutateDelete } = useSessionMutation(conciseSession.id)
+    const { mutate: mutatePost } = useStatusMutation()
+    const { mutate: mutateDelete } = useStatusMutation(conciseSession.id)
 
-    const eventHanderReturns = useEventHandlers({ ...props, mutatePost, mutateDelete })
+    const eventHanderReturns = useEventHandlers({
+        ...props,
+        mutatePostStatus: mutatePost,
+        mutateDeleteStatus: mutateDelete,
+    })
     return { ...eventHanderReturns }
 }
 export default useProgressSession
