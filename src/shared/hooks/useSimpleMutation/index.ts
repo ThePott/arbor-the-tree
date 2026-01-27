@@ -8,6 +8,7 @@ type UseDeleteMutationProps<TAdditionalData, TParams, TQueryKeyElement, TPreviou
     url: string
     params?: TParams
     queryKeyWithoutParams: TQueryKeyElement[]
+    additionalInvalidatingQueryKeyArray?: TQueryKeyElement[][]
     update: ({ previous, additionalData }: { previous: TPrevious; additionalData: TAdditionalData }) => TPrevious
 }
 const useSimpleMutation = <TBody, TAdditionalData, TParams, TQueryKey, TPrevious>({
@@ -15,6 +16,7 @@ const useSimpleMutation = <TBody, TAdditionalData, TParams, TQueryKey, TPrevious
     url,
     params,
     queryKeyWithoutParams,
+    additionalInvalidatingQueryKeyArray = [],
     update,
 }: UseDeleteMutationProps<TAdditionalData, TParams, TQueryKey, TPrevious>) => {
     const queryKey = params ? [...queryKeyWithoutParams, params] : queryKeyWithoutParams
@@ -36,6 +38,9 @@ const useSimpleMutation = <TBody, TAdditionalData, TParams, TQueryKey, TPrevious
         },
         onSettled: (_data, _error, _variables, _onMutateResult, context) => {
             context.client.invalidateQueries({ queryKey })
+            additionalInvalidatingQueryKeyArray.forEach((invalidatingQueryKey) => {
+                context.client.invalidateQueries({ queryKey: invalidatingQueryKey })
+            })
         },
     })
     return mutation

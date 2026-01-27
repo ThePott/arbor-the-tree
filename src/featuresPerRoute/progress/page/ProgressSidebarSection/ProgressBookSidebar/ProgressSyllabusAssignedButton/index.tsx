@@ -13,6 +13,7 @@ type ProgressSyllabusAssignedButtonProps = {
 const ProgressSyllabusAssignedButton = ({ assignedJoinedSyllabus }: ProgressSyllabusAssignedButtonProps) => {
     const navigate = useNavigate({ from: "/progress/" })
     const searchParams = route.useSearch()
+    const { classroom_id, student_id } = searchParams
 
     const params = {
         student_id: assignedJoinedSyllabus?.student_id,
@@ -23,6 +24,7 @@ const ProgressSyllabusAssignedButton = ({ assignedJoinedSyllabus }: ProgressSyll
         url: `/progress/syllabus/assigned/${assignedJoinedSyllabus?.syllabus.id}`,
         params,
         queryKeyWithoutParams: ["progressSyllabusAssigned"],
+        additionalInvalidatingQueryKeyArray: [["progressSession", { classroom_id, student_id }]],
         update: ({ previous }: { previous: AssignedJoinedSyllabus[] }) =>
             previous.filter((el) => el.syllabus.id !== assignedJoinedSyllabus?.syllabus.id),
     })
