@@ -1,4 +1,5 @@
 import type { ConciseSession, ConciseSyllabus } from "@/featuresPerRoute/progress/types"
+import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown/Dropdown"
 import { Hstack, Vstack } from "@/packages/components/layouts"
@@ -52,7 +53,7 @@ const ProgressSession = ({ conciseSession, syllabus_id, startingTopicTitle }: Pr
 
     const postMutation = useSimpleMutation({
         queryKeyWithoutParams: ["progressSession"],
-        url: "/progress/session",
+        url: "/progress/session/assigned",
         method: "post",
         params: searchParams,
         update: ({ previous, additionalData }: ProgressSessionUpdateProps) => {
@@ -70,6 +71,46 @@ const ProgressSession = ({ conciseSession, syllabus_id, startingTopicTitle }: Pr
             return newData
         },
     })
+
+    // TODO: dropdown에서 같은 걸 클랙해도 여전히 클릭이 되도록 수정해야
+    // TODO: 현재 상태를 제외하고 메뉴가 뜨도록 수정해야
+    const handleDropdownMenuChange = async (value: string) => {
+        const baseBody = {
+            session_id: conciseSession.id,
+            classroom_id,
+            student_id,
+        }
+
+        switch (value) {
+            case "homework": {
+                postMutation.mutate({
+                    body: { ...baseBody, session_status: "HOMEWORK" },
+                    additionalData: {
+                        status: "HOMEWORK",
+                        session_id: conciseSession.id,
+                        startingTopicTitle,
+                        syllabus_id,
+                    },
+                })
+                break
+            }
+            case "today": {
+                postMutation.mutate({
+                    body: { ...baseBody, session_status: "TODAY" },
+                    additionalData: {
+                        status: "TODAY",
+                        session_id: conciseSession.id,
+                        startingTopicTitle,
+                        syllabus_id,
+                    },
+                })
+                break
+            }
+            case "dismiss":
+                await instance.delete(`/progress/session/assigned/${conciseSession.id}`, { params: searchParams })
+                break
+        }
+    }
 
     const isInteractable = Boolean(classroom_id) !== Boolean(student_id)
     return (
@@ -90,43 +131,7 @@ const ProgressSession = ({ conciseSession, syllabus_id, startingTopicTitle }: Pr
                                 <Ellipsis size={16} />
                             </Button>
                         </Dropdown.Trigger>
-                        <Dropdown.Menu
-                            onChange={async (value) => {
-                                const baseBody = {
-                                    session_id: conciseSession.id,
-                                    classroom_id,
-                                    student_id,
-                                }
-                                switch (value) {
-                                    case "homework": {
-                                        postMutation.mutate({
-                                            body: { ...baseBody, session_status: "HOMEWORK" },
-                                            additionalData: {
-                                                status: "HOMEWORK",
-                                                session_id: conciseSession.id,
-                                                startingTopicTitle,
-                                                syllabus_id,
-                                            },
-                                        })
-                                        break
-                                    }
-                                    case "today": {
-                                        postMutation.mutate({
-                                            body: { ...baseBody, session_status: "TODAY" },
-                                            additionalData: {
-                                                status: "TODAY",
-                                                session_id: conciseSession.id,
-                                                startingTopicTitle,
-                                                syllabus_id,
-                                            },
-                                        })
-                                        break
-                                    }
-                                    case "dismiss":
-                                        break
-                                }
-                            }}
-                        >
+                        <Dropdown.Menu onChange={handleDropdownMenuChange}>
                             <Dropdown.MenuItem value="homework">숙제</Dropdown.MenuItem>
                             <Dropdown.MenuItem value="today">오늘</Dropdown.MenuItem>
                             <Dropdown.MenuItem value="dismiss">해제</Dropdown.MenuItem>
