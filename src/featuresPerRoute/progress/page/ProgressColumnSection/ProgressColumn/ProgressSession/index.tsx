@@ -18,7 +18,14 @@ const ProgressSessionLabel = ({ conciseSession }: ProgressSessionLabelProps) => 
         <Vstack className="grow">
             <p>{conciseSession.start.step}</p>
             {conciseSession.end.topic && (
-                <p className="text-fg-muted text-my-sm pl-[14px]">{conciseSession.end.topic}</p>
+                <p
+                    className={clsx(
+                        "text-my-sm pl-3.5",
+                        conciseSession.status ? "text-fg-inverted-muted" : "text-fg-muted"
+                    )}
+                >
+                    {conciseSession.end.topic}
+                </p>
             )}
             {conciseSession.end.step && <p>~ {conciseSession.end.step}</p>}
         </Vstack>
@@ -107,7 +114,7 @@ const ProgressSession = ({ conciseSession, syllabus_id, startingTopicTitle }: Pr
                                         postMutation.mutate({
                                             body: { ...baseBody, session_status: "TODAY" },
                                             additionalData: {
-                                                status: "HOMEWORK",
+                                                status: "TODAY",
                                                 session_id: conciseSession.id,
                                                 startingTopicTitle,
                                                 syllabus_id,
