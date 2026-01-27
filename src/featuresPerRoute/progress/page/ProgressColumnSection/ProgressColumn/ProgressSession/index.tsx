@@ -9,34 +9,28 @@ import clsx from "clsx"
 import { Ellipsis } from "lucide-react"
 import useProgressSession from "./hooks"
 
+const route = getRouteApi("/progress/")
+
 type ProgressSessionLabelProps = {
     conciseSession: ConciseSession
 }
 const ProgressSessionLabel = ({ conciseSession }: ProgressSessionLabelProps) => {
+    // NOTE: muted의 스타일만 지정하면 된다
+    const isBgColored = conciseSession.status && !conciseSession.completed_at
+    const mutedClassName = clsx(isBgColored ? "text-fg-inverted-muted" : "text-fg-muted")
     return (
         <Vstack className="grow" gap="none">
             <p>{conciseSession.start.step}</p>
             {conciseSession.end.topic && (
-                <p
-                    className={clsx(
-                        "text-my-sm pl-3.5",
-                        conciseSession.status ? "text-fg-inverted-muted" : "text-fg-muted"
-                    )}
-                >
-                    {conciseSession.end.topic}
-                </p>
+                <p className={clsx("text-my-sm pl-3.5", mutedClassName)}>{conciseSession.end.topic}</p>
             )}
             {conciseSession.end.step && <p>~ {conciseSession.end.step}</p>}
             {conciseSession.completed_at && (
-                <p className={clsx("text-my-xs", conciseSession.status ? "text-fg-inverted-muted" : "text-fg-muted")}>
-                    {conciseSession.completed_at.slice(0, 10)}
-                </p>
+                <p className={clsx("text-my-xs", mutedClassName)}>{conciseSession.completed_at.slice(0, 10)}</p>
             )}
         </Vstack>
     )
 }
-
-const route = getRouteApi("/progress/")
 
 type ProgressSessionDropdownProps = {
     handleDropdownMenuChange: (value: string) => void
