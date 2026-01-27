@@ -4,6 +4,7 @@ import Dropdown from "@/packages/components/Dropdown/Dropdown"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import { getRouteApi } from "@tanstack/react-router"
+import { cva } from "class-variance-authority"
 import clsx from "clsx"
 import { Ellipsis } from "lucide-react"
 import useProgressSession from "./hooks"
@@ -62,6 +63,56 @@ const ProgressSessionDropdown = ({ handleDropdownMenuChange }: ProgressSessionDr
     )
 }
 
+const progressSessionVariants = cva(
+    "w-full outline -outline-offset-1 hover:outline-4 hover:-outline-offset-4 my-transition",
+    {
+        variants: {
+            status: {
+                HOMEWORK: "",
+                TODAY: "",
+                default: "outline-fg-dim",
+            },
+            completed_at: {
+                true: "",
+                false: "",
+            },
+            // NOTE: assigned_at 추가한 다음 지난날은 연하게 표시하는 데에 사용
+            // TODO: assigned_at 받고나면 갱신
+            isOld: {
+                true: "",
+                false: "",
+            },
+        },
+        // TODO: assigned_at 받고나면 갱신
+        compoundVariants: [
+            {
+                status: ["HOMEWORK", "TODAY"],
+                completed_at: false,
+                className: "text-fg-inverted-vivid outline-transparent",
+            },
+            {
+                status: "HOMEWORK",
+                completed_at: false,
+                isOld: false,
+                className: "bg-washed-red hover:outline-fg-vivid",
+            },
+            { status: "HOMEWORK", completed_at: true, isOld: false, className: "outline-washed-red" },
+            {
+                status: "TODAY",
+                completed_at: false,
+                isOld: false,
+                className: "bg-washed-blue hover:outline-fg-vivid",
+            },
+            { status: "TODAY", completed_at: true, isOld: false, className: "outline-washed-blue" },
+            {
+                status: "default",
+                completed_at: true,
+                className: "outline-fg-vivid over:outline-fg-vivid",
+            },
+        ],
+    }
+)
+
 export type ProgressSessionProps = {
     conciseSession: ConciseSession
     syllabus_id: string
@@ -69,21 +120,20 @@ export type ProgressSessionProps = {
 }
 const ProgressSession = (props: ProgressSessionProps) => {
     const { conciseSession } = props
+    const { status, completed_at } = conciseSession
 
     const { handleClickToComplete, handleDropdownMenuChange } = useProgressSession(props)
 
     return (
         <RoundBox
             onClick={handleClickToComplete}
-            isBordered
             padding="md"
-            color={
-                conciseSession.status === "HOMEWORK" ? "red" : conciseSession.status === "TODAY" ? "blue" : undefined
-            }
             className={clsx(
-                "w-full",
-                conciseSession.status && "text-fg-inverted-vivid",
-                conciseSession.completed_at && "border-4 border-white"
+                progressSessionVariants({
+                    completed_at: Boolean(completed_at),
+                    status: status ?? "default",
+                    isOld: false,
+                })
             )}
         >
             <Hstack className="items-start" gap="none">

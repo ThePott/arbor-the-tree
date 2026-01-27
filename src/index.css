@@ -38,15 +38,17 @@ input::-webkit-inner-spin-button {
     --color-dark-yellow: #d3c6aa;
     --color-dark-green: #3c4841;
     --color-washed-red-neg-1: rgba(from var(--color-washed-red) r g b / 0.8);
-    --color-washed-red: #e57e80;
-    --color-washed-red-1: #c35f63;
-    --color-washed-red-2: #a14147;
+    --color-washed-red: oklch(0.7073 0.1273 19.58);
+    /* NOTE: + 0.5 for chroma */
+    --color-washed-red-1: oklch(0.7073 0.1773 19.58);
+    --color-washed-red-2: oklch(0.7073 0.2273 19.58);
     --color-washed-blue: #7fbbb3;
     --color-washed-yellow: #dabc7f;
     --color-washed-green-neg-1: rgba(from var(--color-washed-green) r g b / 0.8);
-    --color-washed-green: #a7c080;
-    --color-washed-green-1: #88a062;
-    --color-washed-green-2: #6b8244;
+    --color-washed-green: oklch(0.7732 0.0906 125.78);
+    /* NOTE: + 0.5 for chroma */
+    --color-washed-green-1: oklch(0.7732 0.1406 125.78);
+    --color-washed-green-2: oklch(0.7732 0.1906 125.78);
 
     --color-fg-vivid: var(--color-washed-white);
     --color-fg-muted: rgba(from var(--color-fg-vivid) r g b / 0.6);
