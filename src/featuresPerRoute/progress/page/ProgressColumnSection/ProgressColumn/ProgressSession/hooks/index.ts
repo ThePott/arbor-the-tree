@@ -100,8 +100,11 @@ const useEventHandlers = ({
                 break
         }
     }
-    const handleClickToComplete = async () => {
+    const handleClickToComplete = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        const target = event.target as HTMLElement
+        if (target.closest("[data-dropdown]")) return
         if (!conciseSession.status) return
+
         await instance.post(`/progress/session/completed/${conciseSession.id}`, undefined, {
             params: searchParams,
         })

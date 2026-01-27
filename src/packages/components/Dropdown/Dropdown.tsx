@@ -29,7 +29,9 @@ const Dropdown = ({ width = "xs", children, className }: DropdownProps) => {
                 setSelectedMenuValue,
             }}
         >
-            <div className={clsx("relative w-fit", className)}>{children}</div>
+            <div data-dropdown className={clsx("relative w-fit", className)}>
+                {children}
+            </div>
         </DropdownContext.Provider>
     )
 }

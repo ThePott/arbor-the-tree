@@ -45,6 +45,7 @@ const ProgressSessionDropdown = ({ handleDropdownMenuChange }: ProgressSessionDr
     const { classroom_id, student_id } = searchParams
     const isInteractable = Boolean(classroom_id) !== Boolean(student_id)
     if (!isInteractable) return null
+
     return (
         <Dropdown>
             <Dropdown.Trigger>
