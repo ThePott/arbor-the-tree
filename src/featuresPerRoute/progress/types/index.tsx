@@ -15,6 +15,7 @@ export type ConciseSession = {
     start: TopicStep
     end: Partial<TopicStep>
     status: SessionStatus | null
+    completed_at: string | null
 }
 type SessionByTopic = {
     id: string

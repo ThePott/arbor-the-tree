@@ -16,7 +16,7 @@ type ProgressSessionLabelProps = {
 }
 const ProgressSessionLabel = ({ conciseSession }: ProgressSessionLabelProps) => {
     return (
-        <Vstack className="grow">
+        <Vstack className="grow" gap="none">
             <p>{conciseSession.start.step}</p>
             {conciseSession.end.topic && (
                 <p
@@ -29,6 +29,11 @@ const ProgressSessionLabel = ({ conciseSession }: ProgressSessionLabelProps) => 
                 </p>
             )}
             {conciseSession.end.step && <p>~ {conciseSession.end.step}</p>}
+            {conciseSession.completed_at && (
+                <p className={clsx("text-my-xs", conciseSession.status ? "text-fg-inverted-muted" : "text-fg-muted")}>
+                    {conciseSession.completed_at.slice(0, 10)}
+                </p>
+            )}
         </Vstack>
     )
 }
@@ -138,9 +143,13 @@ const ProgressSession = ({ conciseSession, syllabus_id, startingTopicTitle }: Pr
             color={
                 conciseSession.status === "HOMEWORK" ? "red" : conciseSession.status === "TODAY" ? "blue" : undefined
             }
-            className={clsx("w-full", conciseSession.status && "text-fg-inverted-vivid")}
+            className={clsx(
+                "w-full",
+                conciseSession.status && "text-fg-inverted-vivid",
+                conciseSession.completed_at && "border-4 border-white"
+            )}
         >
-            <Hstack className="items-start">
+            <Hstack className="items-start" gap="none">
                 <ProgressSessionLabel conciseSession={conciseSession} />
                 {isInteractable && (
                     <Dropdown>
