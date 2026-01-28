@@ -9,7 +9,7 @@ import ProgressColumn from "./ProgressColumn"
 
 const route = getRouteApi("/progress/")
 const ProgressColumnSection = () => {
-    const [isOn, setIsOn] = useState(true)
+    const [isSummarized, setIsSummarized] = useState(false)
     const searchParams = route.useSearch()
     // TODO: 여기서 data 이용해서 session들 보여줘야
     const { data } = useQuery({
@@ -24,7 +24,10 @@ const ProgressColumnSection = () => {
 
     return (
         <FlexOneContainer className="pt-my-lg pl-my-lg" isXScrollable>
-            <Toggle onChange={(value) => setIsOn(value)} defaultIsOn={isOn} />
+            <Hstack className="items-center">
+                <p className="font-semibold">요약</p>
+                <Toggle onChange={(value) => setIsSummarized(value)} defaultIsOn={isSummarized} />
+            </Hstack>
             <Hstack className="h-full">
                 {data.map((conciseSyllabus) => (
                     <ProgressColumn key={conciseSyllabus.id} conciseSyllabus={conciseSyllabus} />
