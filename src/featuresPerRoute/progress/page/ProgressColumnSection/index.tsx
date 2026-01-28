@@ -6,6 +6,7 @@ import { getRouteApi } from "@tanstack/react-router"
 import { useState } from "react"
 import type { ConciseSyllabus } from "../../types"
 import ProgressColumn from "./ProgressColumn"
+import ProgressColumnSummarizedMany from "./ProgressColumnSummarizedMany"
 
 const route = getRouteApi("/progress/")
 const ProgressColumnSection = () => {
@@ -29,9 +30,14 @@ const ProgressColumnSection = () => {
                 <Toggle onChange={(value) => setIsSummarized(value)} defaultIsOn={isSummarized} />
             </Hstack>
             <Hstack className="h-full">
-                {data.map((conciseSyllabus) => (
-                    <ProgressColumn key={conciseSyllabus.id} conciseSyllabus={conciseSyllabus} />
-                ))}
+                {!isSummarized && (
+                    <>
+                        {data.map((conciseSyllabus) => (
+                            <ProgressColumn key={conciseSyllabus.id} conciseSyllabus={conciseSyllabus} />
+                        ))}
+                    </>
+                )}
+                {isSummarized && <ProgressColumnSummarizedMany conciseSyllabusArray={data} />}
             </Hstack>
         </FlexOneContainer>
     )
