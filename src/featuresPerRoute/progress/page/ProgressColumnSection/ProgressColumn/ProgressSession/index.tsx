@@ -112,13 +112,13 @@ const progressSessionVariants = cva(
                 status: "HOMEWORK",
                 completed_at: false,
                 isOld: false,
-                className: "bg-washed-yellow outline-transparent hover:outline-fg-vivid",
+                className: "bg-washed-yellow outline-washed-yellow hover:outline-fg-vivid",
             },
             {
                 status: "TODAY",
                 completed_at: false,
                 isOld: false,
-                className: "bg-washed-blue hover:outline-fg-vivid",
+                className: "bg-washed-blue outline-washed-blue hover:outline-fg-vivid",
             },
 
             // NOTE: 부여만 되고 안 끝남, 오래 됨
@@ -126,13 +126,13 @@ const progressSessionVariants = cva(
                 status: "HOMEWORK",
                 completed_at: false,
                 isOld: true,
-                className: "bg-washed-red hover:outline-fg-vivid outline-transparent",
+                className: "bg-washed-red hover:outline-fg-vivid outline-washed-red",
             },
             {
                 status: "TODAY",
                 completed_at: false,
                 isOld: true,
-                className: "bg-dark-blue hover:outline-fg-vivid outline-transparent",
+                className: "bg-dark-blue hover:outline-fg-vivid outline-dark-blue",
             },
 
             // NOTE: 부여되고 끝남, 새 것

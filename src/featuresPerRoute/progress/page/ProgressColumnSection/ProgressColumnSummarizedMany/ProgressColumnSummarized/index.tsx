@@ -19,7 +19,7 @@ const ProgressColumnSummarized = ({ conciseSyllabusArray, title }: ProgressColum
                     <Vstack gap="md">
                         {conciseSyllabusArray.map((conciseSyllabus) => (
                             <Vstack key={conciseSyllabus.id} gap="none">
-                                <Title as="h3" className="sticky top-0 bg-bg-0 text-center text-wrap" isMuted>
+                                <Title as="h3" className="sticky top-0 bg-bg-0 text-center text-wrap">
                                     {conciseSyllabus.book.title}
                                 </Title>
                                 {conciseSyllabus.sessionsByTopicArray.map((sessionsByTopic) => (
