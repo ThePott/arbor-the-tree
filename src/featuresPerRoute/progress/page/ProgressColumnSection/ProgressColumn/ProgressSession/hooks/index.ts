@@ -5,6 +5,7 @@ import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import type { SessionStatus } from "@/shared/interfaces"
 import { getRouteApi } from "@tanstack/react-router"
 import type { Method } from "axios"
+import { produce } from "immer"
 import type { ProgressSessionProps } from ".."
 
 const route = getRouteApi("/progress/")
@@ -30,22 +31,23 @@ const useStatusMutation = (session_id?: string) => {
         update: ({ previous, additionalData }: ProgressSessionStatusUpdateProps) => {
             debugMutation("useStatusMutation update", { additionalData })
             const { session_id, status, syllabus_id, startingTopicTitle } = additionalData
-            const newData = [...previous]
-            const syllabus = newData.find((elSyllabus) => elSyllabus.id === syllabus_id)
-            const sessionsByTopic = syllabus?.sessionsByTopicArray.find(
-                (elSessionsByTopic) => elSessionsByTopic.title === startingTopicTitle
-            )
-            const session = sessionsByTopic?.conciseSessionArray.find(
-                (elConciseSession) => elConciseSession.id === session_id
-            )
-            if (!session) throw ClientError.Unexpected("묶음을 찾지 못했어요")
-            session.status = status
+            const newData = produce(previous, (draft) => {
+                const syllabus = draft.find((elSyllabus) => elSyllabus.id === syllabus_id)
+                const sessionsByTopic = syllabus?.sessionsByTopicArray.find(
+                    (elSessionsByTopic) => elSessionsByTopic.title === startingTopicTitle
+                )
+                const session = sessionsByTopic?.conciseSessionArray.find(
+                    (elConciseSession) => elConciseSession.id === session_id
+                )
+                if (!session) throw ClientError.Unexpected("묶음을 찾지 못했어요")
+                session.status = status
 
-            if (status) {
-                session.assigned_at = new Date().toISOString()
-            } else {
-                session.assigned_at = null
-            }
+                if (status) {
+                    session.assigned_at = new Date().toISOString()
+                } else {
+                    session.assigned_at = null
+                }
+            })
             debugMutation("useStatusMutation update result", { newData })
             return newData
         },
@@ -77,16 +79,18 @@ const useCompletedMutation = ({ session_id, method }: UseCompletedMutationProps)
         update: ({ previous, additionalData }: ProgressSessionCompletedUpdateProps) => {
             debugMutation("useCompletedMutation update", { additionalData })
             const { session_id, completed_at, syllabus_id, startingTopicTitle } = additionalData
-            const newData = [...previous]
-            const syllabus = newData.find((elSyllabus) => elSyllabus.id === syllabus_id)
-            const sessionsByTopic = syllabus?.sessionsByTopicArray.find(
-                (elSessionsByTopic) => elSessionsByTopic.title === startingTopicTitle
-            )
-            const session = sessionsByTopic?.conciseSessionArray.find(
-                (elConciseSession) => elConciseSession.id === session_id
-            )
-            if (!session) throw ClientError.Unexpected("묶음을 찾지 못했어요")
-            session.completed_at = completed_at
+
+            const newData = produce(previous, (draft) => {
+                const syllabus = draft.find((elSyllabus) => elSyllabus.id === syllabus_id)
+                const sessionsByTopic = syllabus?.sessionsByTopicArray.find(
+                    (elSessionsByTopic) => elSessionsByTopic.title === startingTopicTitle
+                )
+                const session = sessionsByTopic?.conciseSessionArray.find(
+                    (elConciseSession) => elConciseSession.id === session_id
+                )
+                if (!session) throw ClientError.Unexpected("묶음을 찾지 못했어요")
+                session.completed_at = completed_at
+            })
             debugMutation("useCompletedMutation update result", { newData })
             return newData
         },
