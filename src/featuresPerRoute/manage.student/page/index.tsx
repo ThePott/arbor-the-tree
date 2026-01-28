@@ -1,7 +1,7 @@
 import { Container, Vstack } from "@/packages/components/layouts"
 import TabBar, { type Tab } from "@/packages/components/TabBar/TabBar"
 import Title from "@/packages/components/Title/Title"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import { getRouteApi, useNavigate } from "@tanstack/react-router"
 import type { ManageStudentSearch } from "../types"
 import ByClassroomSection from "./ByClassroomSection"

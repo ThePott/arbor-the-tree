@@ -1,4 +1,4 @@
-import { debugStore } from "@/shared/config/debug/debug"
+import { debugStore } from "@/shared/config/debug/"
 import type { Classroom } from "@/shared/interfaces"
 import { create } from "zustand"
 

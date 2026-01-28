@@ -1,7 +1,7 @@
 import KakaoIcon from "@/assets/kakao.svg"
 import Loader from "@/packages/components/Loader/Loader"
 import { Hstack } from "@/packages/components/layouts"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import useGlobalStore from "@/shared/store/globalStore"
 import { checkEnvVar } from "@/shared/utils/checkEnvVar"
 import { cva } from "class-variance-authority"

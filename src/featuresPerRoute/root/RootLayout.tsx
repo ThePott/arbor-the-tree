@@ -1,5 +1,5 @@
 import { FlexOneContainer, FullScreen, Vstack } from "@/packages/components/layouts"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import useGlobalStore from "@/shared/store/globalStore"
 import { Outlet } from "@tanstack/react-router"
 import Header from "./Header"

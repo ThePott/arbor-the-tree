@@ -1,4 +1,5 @@
 import type { ConciseSyllabus } from "@/featuresPerRoute/progress/types"
+import { debugMutation } from "@/shared/config/debug/"
 import { ClientError } from "@/shared/error/clientError"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import type { SessionStatus } from "@/shared/interfaces"
@@ -27,6 +28,7 @@ const useStatusMutation = (session_id?: string) => {
         method: session_id ? "delete" : "post",
         params: searchParams,
         update: ({ previous, additionalData }: ProgressSessionStatusUpdateProps) => {
+            debugMutation("useStatusMutation update", { additionalData })
             const { session_id, status, syllabus_id, startingTopicTitle } = additionalData
             const newData = [...previous]
             const syllabus = newData.find((elSyllabus) => elSyllabus.id === syllabus_id)
@@ -44,6 +46,7 @@ const useStatusMutation = (session_id?: string) => {
             } else {
                 session.assigned_at = null
             }
+            debugMutation("useStatusMutation update result", { newData })
             return newData
         },
     })
@@ -72,6 +75,7 @@ const useCompletedMutation = ({ session_id, method }: UseCompletedMutationProps)
         method,
         params: searchParams,
         update: ({ previous, additionalData }: ProgressSessionCompletedUpdateProps) => {
+            debugMutation("useCompletedMutation update", { additionalData })
             const { session_id, completed_at, syllabus_id, startingTopicTitle } = additionalData
             const newData = [...previous]
             const syllabus = newData.find((elSyllabus) => elSyllabus.id === syllabus_id)
@@ -83,6 +87,7 @@ const useCompletedMutation = ({ session_id, method }: UseCompletedMutationProps)
             )
             if (!session) throw ClientError.Unexpected("묶음을 찾지 못했어요")
             session.completed_at = completed_at
+            debugMutation("useCompletedMutation update result", { newData })
             return newData
         },
     })

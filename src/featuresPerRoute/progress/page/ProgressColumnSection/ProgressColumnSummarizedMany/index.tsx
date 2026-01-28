@@ -1,4 +1,5 @@
 import type { ConciseSession, ConciseSyllabus } from "@/featuresPerRoute/progress/types"
+import { debugRender } from "@/shared/config/debug/"
 import { checkIsBeforeToday } from "@/shared/utils/dateManipulations"
 import ProgressColumnSummarized from "./ProgressColumnSummarized"
 
@@ -33,6 +34,7 @@ type ProgressColumnSummarizedProps = {
     conciseSyllabusArray: ConciseSyllabus[]
 }
 const ProgressColumnSummarizedMany = ({ conciseSyllabusArray }: ProgressColumnSummarizedProps) => {
+    debugRender("ProgressColumnSummarizedMany")
     const importantSyllabusArray = filterSyllabusArray({ conciseSyllabusArray, checkCondition: checkIsImportant })
     const previousHomeworkSyllabusArray = filterSyllabusArray({
         conciseSyllabusArray: importantSyllabusArray,
@@ -48,7 +50,6 @@ const ProgressColumnSummarizedMany = ({ conciseSyllabusArray }: ProgressColumnSu
         checkCondition: (session) =>
             Boolean(session.status === "HOMEWORK" && session.assigned_at && !checkIsBeforeToday(session.assigned_at)),
     })
-    console.log("rerendered")
 
     return (
         <>

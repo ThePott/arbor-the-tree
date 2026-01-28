@@ -1,7 +1,7 @@
 import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import TanstackTable from "@/packages/components/TanstackTable"
-import { debugCache, debugMutation, debugRender } from "@/shared/config/debug/debug"
+import { debugCache, debugMutation, debugRender } from "@/shared/config/debug/"
 import type { AppUser } from "@/shared/interfaces"
 import { roleToText } from "@/shared/utils/apiTypeToLabel"
 import { useMutation, useQuery } from "@tanstack/react-query"

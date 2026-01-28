@@ -1,4 +1,4 @@
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import BWErrorModal from "./_BWErrorModal"
 import BWSuccessModal from "./_BWSuccessModal"
 

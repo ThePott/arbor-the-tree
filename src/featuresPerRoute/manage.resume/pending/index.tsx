@@ -1,4 +1,4 @@
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 
 const ManageResumePending = () => {
     debugRender("ManageResumePending")

@@ -1,7 +1,7 @@
 import type { ManageStudentLoaderResponseData } from "@/featuresPerRoute/manage.student/loader"
 import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
-import { debugCache, debugMutation, debugRender } from "@/shared/config/debug/debug"
+import { debugCache, debugMutation, debugRender } from "@/shared/config/debug/"
 import type { ClassroomStudent } from "@/shared/interfaces"
 import { useMutation } from "@tanstack/react-query"
 import { X } from "lucide-react"

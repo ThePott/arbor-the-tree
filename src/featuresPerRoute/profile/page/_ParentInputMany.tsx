@@ -2,7 +2,7 @@ import Button from "@/packages/components/Button/Button"
 import Labeled from "@/packages/components/Labeled/Labeled"
 import { Hstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import { Plus, Trash } from "lucide-react"
 import { useState } from "react"
 

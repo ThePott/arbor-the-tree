@@ -1,5 +1,5 @@
 import Modal from "@/packages/Modal"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import { makeUlLul } from "@/shared/utils/stringManipulation"
 import { useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"

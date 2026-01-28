@@ -1,6 +1,7 @@
 import { instance } from "@/packages/api/axiosInstances"
 import { FlexOneContainer, Hstack } from "@/packages/components/layouts"
 import Toggle from "@/packages/components/Toggle"
+import { debugCache, debugRender } from "@/shared/config/debug/"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
 import { useState } from "react"
@@ -10,6 +11,7 @@ import ProgressColumnSummarizedMany from "./ProgressColumnSummarizedMany"
 
 const route = getRouteApi("/progress/")
 const ProgressColumnSection = () => {
+    debugRender("ProgressColumnSection")
     const [isSummarized, setIsSummarized] = useState(false)
     const searchParams = route.useSearch()
     // TODO: 여기서 data 이용해서 session들 보여줘야
@@ -20,6 +22,7 @@ const ProgressColumnSection = () => {
             return response.data as ConciseSyllabus[]
         },
     })
+    debugCache("ProgressColumnSection data", data)
 
     if (!data) return null
 

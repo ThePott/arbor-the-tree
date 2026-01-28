@@ -1,4 +1,4 @@
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import { useQuery } from "@tanstack/react-query"
 import { useLoaderData } from "@tanstack/react-router"
 import { ManageStudentLoaderQueryOptions } from "../../loader"

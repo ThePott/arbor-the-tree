@@ -1,6 +1,6 @@
 import Button from "@/packages/components/Button/Button"
 import { Container, Hstack, Vstack } from "@/packages/components/layouts"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import { useNavigate } from "@tanstack/react-router"
 import BookListDeleteModal from "./_BookListDeleteModal"
 import useBookListStore from "./_bookListStore"

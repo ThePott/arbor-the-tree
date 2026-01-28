@@ -4,7 +4,7 @@ import {
 } from "@/featuresPerRoute/manage.student/loader"
 import useManageStudentStore from "@/featuresPerRoute/manage.student/store"
 import { instance } from "@/packages/api/axiosInstances"
-import { debugCache, debugForm, debugMutation } from "@/shared/config/debug/debug"
+import { debugCache, debugForm, debugMutation } from "@/shared/config/debug/"
 import type { Classroom, ClassroomStudent, ValueLabel } from "@/shared/interfaces"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"

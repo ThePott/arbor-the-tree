@@ -1,6 +1,6 @@
 import Button from "@/packages/components/Button/Button"
 import { Hstack } from "@/packages/components/layouts"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import useGlobalStore from "@/shared/store/globalStore"
 import { PanelLeft } from "lucide-react"
 import KakaoLoginButton from "./_KakaoLoginButton"

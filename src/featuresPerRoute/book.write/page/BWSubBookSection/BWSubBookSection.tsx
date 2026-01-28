@@ -2,7 +2,7 @@ import { instance } from "@/packages/api/axiosInstances"
 import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import type { Book } from "@/shared/interfaces"
 import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 

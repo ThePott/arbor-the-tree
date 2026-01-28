@@ -3,6 +3,7 @@ import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown/Dropdown"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
+import { debugRender } from "@/shared/config/debug/"
 import { checkIsBeforeToday, makeFromNow } from "@/shared/utils/dateManipulations"
 import { getRouteApi } from "@tanstack/react-router"
 import { cva } from "class-variance-authority"
@@ -160,6 +161,12 @@ export type ProgressSessionProps = {
     startingTopicTitle: string
 }
 const ProgressSession = (props: ProgressSessionProps) => {
+    debugRender(
+        "ProgressSession %s status=%s completed_at=%s",
+        props.conciseSession.id,
+        props.conciseSession.status,
+        props.conciseSession.completed_at
+    )
     const { conciseSession } = props
     const { status, completed_at, assigned_at } = conciseSession
 

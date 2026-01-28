@@ -5,7 +5,7 @@ import {
     type ManageResumeRow,
 } from "@/featuresPerRoute/manage.resume/types"
 import TanstackTable from "@/packages/components/TanstackTable"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import { roleToText } from "@/shared/utils/apiTypeToLabel"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import { useMemo } from "react"

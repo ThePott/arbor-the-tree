@@ -1,5 +1,5 @@
 import { Hstack, Vstack } from "@/packages/components/layouts"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import BWMetaInfoSection from "./BWMetaInfoSection/BWMetaInfoSection"
 import BWModalMany from "./BWModalMany"
 import BWTable from "./BWTable/BWTable"

@@ -1,6 +1,6 @@
 import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown/Dropdown"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import { ClientError } from "@/shared/error/clientError"
 import useGlobalStore from "@/shared/store/globalStore"
 import { useNavigate } from "@tanstack/react-router"
