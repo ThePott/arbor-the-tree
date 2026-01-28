@@ -19,7 +19,7 @@ const ToggleWrapper = ({ defaultIsOn, onChange }: ToggleProps) => {
         <div className="p-my-md" onClick={handleClick}>
             <div className={clsx("rounded-full relative p-my-xs bg-fg-muted w-[34px] h-[14px]")}>
                 <motion.div
-                    layout
+                    layoutId="toggle"
                     transition={motionTransition}
                     className={clsx(
                         "size-[20px] rounded-full absolute top-1/2 -translate-y-1/2",
