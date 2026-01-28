@@ -3,7 +3,7 @@ import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown/Dropdown"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
-import { makeFromNow } from "@/shared/utils/dateManipulations"
+import { checkIsBeforeToday, makeFromNow } from "@/shared/utils/dateManipulations"
 import { getRouteApi } from "@tanstack/react-router"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
@@ -87,29 +87,61 @@ const progressSessionVariants = cva(
         },
         // TODO: assigned_at 받고나면 갱신
         compoundVariants: [
+            // NOTE: 상태 있을 때의 공통 속성: 글씨 관련
             {
                 status: ["HOMEWORK", "TODAY"],
                 completed_at: false,
-                className: "text-fg-inverted-vivid outline-transparent font-semibold",
+                className: "font-semibold text-fg-inverted-vivid",
             },
+            {
+                status: "TODAY",
+                completed_at: false,
+                isOld: true,
+                className: "font-semibold text-fg-vivid",
+            },
+
+            // NOTE: 부여만 되고 안 끝남, 새 것
             {
                 status: "HOMEWORK",
                 completed_at: false,
                 isOld: false,
-                className: "bg-washed-red hover:outline-fg-vivid",
+                className: "bg-washed-yellow outline-transparent hover:outline-fg-vivid",
             },
-            { status: "HOMEWORK", completed_at: true, isOld: false, className: "outline-washed-red" },
             {
                 status: "TODAY",
                 completed_at: false,
                 isOld: false,
                 className: "bg-washed-blue hover:outline-fg-vivid",
             },
+
+            // NOTE: 부여만 되고 안 끝남, 오래 됨
+            {
+                status: "HOMEWORK",
+                completed_at: false,
+                isOld: true,
+                className: "bg-washed-red hover:outline-fg-vivid outline-transparent",
+            },
+            {
+                status: "TODAY",
+                completed_at: false,
+                isOld: true,
+                className: "bg-dark-blue hover:outline-fg-vivid outline-transparent",
+            },
+
+            // NOTE: 부여되고 끝남, 새 것
+            { status: "HOMEWORK", completed_at: true, isOld: false, className: "outline-washed-yellow" },
             { status: "TODAY", completed_at: true, isOld: false, className: "outline-washed-blue" },
+
+            // NOTE: 부여되고 끝남, 오래된 것
+            { status: "HOMEWORK", completed_at: true, isOld: true, className: "outline-washed-red-neg-1" },
+            { status: "TODAY", completed_at: true, isOld: true, className: "outline-washed-blue-neg-1" },
+
+            // NOTE: 부여 안 했는데 끝남
+            // NOTE: 이게 보여서는 안 된다.
             {
                 status: "default",
                 completed_at: true,
-                className: "outline-fg-vivid over:outline-fg-vivid",
+                className: "bg-red-400",
             },
         ],
     }
@@ -122,7 +154,7 @@ export type ProgressSessionProps = {
 }
 const ProgressSession = (props: ProgressSessionProps) => {
     const { conciseSession } = props
-    const { status, completed_at } = conciseSession
+    const { status, completed_at, assigned_at } = conciseSession
 
     const { handleClickToComplete, handleDropdownMenuChange } = useProgressSession(props)
 
@@ -134,7 +166,7 @@ const ProgressSession = (props: ProgressSessionProps) => {
                 progressSessionVariants({
                     completed_at: Boolean(completed_at),
                     status: status ?? "default",
-                    isOld: false,
+                    isOld: assigned_at ? checkIsBeforeToday(assigned_at) : false,
                 })
             )}
         >

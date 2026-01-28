@@ -42,6 +42,7 @@ input::-webkit-inner-spin-button {
     /* NOTE: + 0.5 for chroma */
     --color-washed-red-1: oklch(0.7073 0.1773 19.58);
     --color-washed-red-2: oklch(0.7073 0.2273 19.58);
+    --color-washed-blue-neg-1: rgba(from var(--color-washed-blue) r g b / 0.8);
     --color-washed-blue: #7fbbb3;
     --color-washed-yellow: #dabc7f;
     --color-washed-green-neg-1: rgba(from var(--color-washed-green) r g b / 0.8);
