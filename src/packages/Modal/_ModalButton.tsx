@@ -1,6 +1,6 @@
+import type { ReactNode } from "react"
 import Button from "../components/Button/Button"
 import type { ButtonColor } from "../components/Button/buttonInterfaces"
-import type { ReactNode } from "react"
 
 type ModalButtonRole = "cancel" | "destruct" | "confirm"
 

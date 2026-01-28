@@ -12,11 +12,17 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ReviewCheckIndexRouteImport } from './routes/review-check.index'
+import { Route as ProgressIndexRouteImport } from './routes/progress.index'
 import { Route as BookIndexRouteImport } from './routes/book.index'
+import { Route as ProgressSummarizedRouteImport } from './routes/progress.summarized'
 import { Route as ManageStudentRouteImport } from './routes/manage.student'
 import { Route as ManageResumeRouteImport } from './routes/manage.resume'
 import { Route as ManageDeleteRouteImport } from './routes/manage.delete'
 import { Route as BookWriteRouteImport } from './routes/book.write'
+import { Route as ReviewCheckCreateIndexRouteImport } from './routes/review-check.create.index'
+import { Route as ReviewCheckBookIndexRouteImport } from './routes/review-check.book.index'
+import { Route as ReviewCheckBookBookTitleRouteImport } from './routes/review-check.book.$bookTitle'
 import { Route as OauthKakaoCallbackRouteImport } from './routes/oauth.kakao.callback'
 
 const ProfileRoute = ProfileRouteImport.update({
@@ -34,9 +40,24 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReviewCheckIndexRoute = ReviewCheckIndexRouteImport.update({
+  id: '/review-check/',
+  path: '/review-check/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgressIndexRoute = ProgressIndexRouteImport.update({
+  id: '/progress/',
+  path: '/progress/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BookIndexRoute = BookIndexRouteImport.update({
   id: '/book/',
   path: '/book/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgressSummarizedRoute = ProgressSummarizedRouteImport.update({
+  id: '/progress/summarized',
+  path: '/progress/summarized',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ManageStudentRoute = ManageStudentRouteImport.update({
@@ -59,6 +80,22 @@ const BookWriteRoute = BookWriteRouteImport.update({
   path: '/book/write',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReviewCheckCreateIndexRoute = ReviewCheckCreateIndexRouteImport.update({
+  id: '/review-check/create/',
+  path: '/review-check/create/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewCheckBookIndexRoute = ReviewCheckBookIndexRouteImport.update({
+  id: '/review-check/book/',
+  path: '/review-check/book/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewCheckBookBookTitleRoute =
+  ReviewCheckBookBookTitleRouteImport.update({
+    id: '/review-check/book/$bookTitle',
+    path: '/review-check/book/$bookTitle',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const OauthKakaoCallbackRoute = OauthKakaoCallbackRouteImport.update({
   id: '/oauth/kakao/callback',
   path: '/oauth/kakao/callback',
@@ -73,8 +110,14 @@ export interface FileRoutesByFullPath {
   '/manage/delete': typeof ManageDeleteRoute
   '/manage/resume': typeof ManageResumeRoute
   '/manage/student': typeof ManageStudentRoute
-  '/book': typeof BookIndexRoute
+  '/progress/summarized': typeof ProgressSummarizedRoute
+  '/book/': typeof BookIndexRoute
+  '/progress/': typeof ProgressIndexRoute
+  '/review-check/': typeof ReviewCheckIndexRoute
   '/oauth/kakao/callback': typeof OauthKakaoCallbackRoute
+  '/review-check/book/$bookTitle': typeof ReviewCheckBookBookTitleRoute
+  '/review-check/book/': typeof ReviewCheckBookIndexRoute
+  '/review-check/create/': typeof ReviewCheckCreateIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -84,8 +127,14 @@ export interface FileRoutesByTo {
   '/manage/delete': typeof ManageDeleteRoute
   '/manage/resume': typeof ManageResumeRoute
   '/manage/student': typeof ManageStudentRoute
+  '/progress/summarized': typeof ProgressSummarizedRoute
   '/book': typeof BookIndexRoute
+  '/progress': typeof ProgressIndexRoute
+  '/review-check': typeof ReviewCheckIndexRoute
   '/oauth/kakao/callback': typeof OauthKakaoCallbackRoute
+  '/review-check/book/$bookTitle': typeof ReviewCheckBookBookTitleRoute
+  '/review-check/book': typeof ReviewCheckBookIndexRoute
+  '/review-check/create': typeof ReviewCheckCreateIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -96,8 +145,14 @@ export interface FileRoutesById {
   '/manage/delete': typeof ManageDeleteRoute
   '/manage/resume': typeof ManageResumeRoute
   '/manage/student': typeof ManageStudentRoute
+  '/progress/summarized': typeof ProgressSummarizedRoute
   '/book/': typeof BookIndexRoute
+  '/progress/': typeof ProgressIndexRoute
+  '/review-check/': typeof ReviewCheckIndexRoute
   '/oauth/kakao/callback': typeof OauthKakaoCallbackRoute
+  '/review-check/book/$bookTitle': typeof ReviewCheckBookBookTitleRoute
+  '/review-check/book/': typeof ReviewCheckBookIndexRoute
+  '/review-check/create/': typeof ReviewCheckCreateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -109,8 +164,14 @@ export interface FileRouteTypes {
     | '/manage/delete'
     | '/manage/resume'
     | '/manage/student'
-    | '/book'
+    | '/progress/summarized'
+    | '/book/'
+    | '/progress/'
+    | '/review-check/'
     | '/oauth/kakao/callback'
+    | '/review-check/book/$bookTitle'
+    | '/review-check/book/'
+    | '/review-check/create/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -120,8 +181,14 @@ export interface FileRouteTypes {
     | '/manage/delete'
     | '/manage/resume'
     | '/manage/student'
+    | '/progress/summarized'
     | '/book'
+    | '/progress'
+    | '/review-check'
     | '/oauth/kakao/callback'
+    | '/review-check/book/$bookTitle'
+    | '/review-check/book'
+    | '/review-check/create'
   id:
     | '__root__'
     | '/'
@@ -131,8 +198,14 @@ export interface FileRouteTypes {
     | '/manage/delete'
     | '/manage/resume'
     | '/manage/student'
+    | '/progress/summarized'
     | '/book/'
+    | '/progress/'
+    | '/review-check/'
     | '/oauth/kakao/callback'
+    | '/review-check/book/$bookTitle'
+    | '/review-check/book/'
+    | '/review-check/create/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -143,8 +216,14 @@ export interface RootRouteChildren {
   ManageDeleteRoute: typeof ManageDeleteRoute
   ManageResumeRoute: typeof ManageResumeRoute
   ManageStudentRoute: typeof ManageStudentRoute
+  ProgressSummarizedRoute: typeof ProgressSummarizedRoute
   BookIndexRoute: typeof BookIndexRoute
+  ProgressIndexRoute: typeof ProgressIndexRoute
+  ReviewCheckIndexRoute: typeof ReviewCheckIndexRoute
   OauthKakaoCallbackRoute: typeof OauthKakaoCallbackRoute
+  ReviewCheckBookBookTitleRoute: typeof ReviewCheckBookBookTitleRoute
+  ReviewCheckBookIndexRoute: typeof ReviewCheckBookIndexRoute
+  ReviewCheckCreateIndexRoute: typeof ReviewCheckCreateIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -170,11 +249,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/review-check/': {
+      id: '/review-check/'
+      path: '/review-check'
+      fullPath: '/review-check/'
+      preLoaderRoute: typeof ReviewCheckIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/progress/': {
+      id: '/progress/'
+      path: '/progress'
+      fullPath: '/progress/'
+      preLoaderRoute: typeof ProgressIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/book/': {
       id: '/book/'
       path: '/book'
-      fullPath: '/book'
+      fullPath: '/book/'
       preLoaderRoute: typeof BookIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/progress/summarized': {
+      id: '/progress/summarized'
+      path: '/progress/summarized'
+      fullPath: '/progress/summarized'
+      preLoaderRoute: typeof ProgressSummarizedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/manage/student': {
@@ -205,6 +305,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BookWriteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/review-check/create/': {
+      id: '/review-check/create/'
+      path: '/review-check/create'
+      fullPath: '/review-check/create/'
+      preLoaderRoute: typeof ReviewCheckCreateIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/review-check/book/': {
+      id: '/review-check/book/'
+      path: '/review-check/book'
+      fullPath: '/review-check/book/'
+      preLoaderRoute: typeof ReviewCheckBookIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/review-check/book/$bookTitle': {
+      id: '/review-check/book/$bookTitle'
+      path: '/review-check/book/$bookTitle'
+      fullPath: '/review-check/book/$bookTitle'
+      preLoaderRoute: typeof ReviewCheckBookBookTitleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/oauth/kakao/callback': {
       id: '/oauth/kakao/callback'
       path: '/oauth/kakao/callback'
@@ -223,8 +344,14 @@ const rootRouteChildren: RootRouteChildren = {
   ManageDeleteRoute: ManageDeleteRoute,
   ManageResumeRoute: ManageResumeRoute,
   ManageStudentRoute: ManageStudentRoute,
+  ProgressSummarizedRoute: ProgressSummarizedRoute,
   BookIndexRoute: BookIndexRoute,
+  ProgressIndexRoute: ProgressIndexRoute,
+  ReviewCheckIndexRoute: ReviewCheckIndexRoute,
   OauthKakaoCallbackRoute: OauthKakaoCallbackRoute,
+  ReviewCheckBookBookTitleRoute: ReviewCheckBookBookTitleRoute,
+  ReviewCheckBookIndexRoute: ReviewCheckBookIndexRoute,
+  ReviewCheckCreateIndexRoute: ReviewCheckCreateIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

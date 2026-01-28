@@ -1,7 +1,9 @@
 import Modal from "@/packages/Modal"
+import { debugRender } from "@/shared/config/debug/debug"
 import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 
 const BWErrorModal = () => {
+    debugRender("BWErrorModal")
     const setModalKey = useBookWriteStore((state) => state.setModalKey)
     const modalKey = useBookWriteStore((state) => state.modalKey)
     const mutationError = useBookWriteStore((state) => state.mutationError)

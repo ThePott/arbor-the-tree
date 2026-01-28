@@ -1,8 +1,9 @@
 import { headlessInstance } from "@/packages/api/axiosInstances"
 import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
+import { debugRender } from "@/shared/config/debug/debug"
 import type { Hagwon } from "@/shared/interfaces"
-import type { ManualError } from "./_mypageInterfaces"
 import type { FieldError } from "react-hook-form"
+import type { ManualError } from "./_mypageInterfaces"
 
 const getHagwonMany = async (name: string) => {
     const response = await headlessInstance.get(`/hagwon?name=${name}`)
@@ -26,6 +27,7 @@ const HagwonAutoComplete = ({
     isForPrincipal,
     defaultValue,
 }: HagwonAutoCompleteProps) => {
+    debugRender("HagwonAutoComplete")
     const handleErrorChange = (isError: boolean) => {
         if (!isError) {
             onErrorChange(null)

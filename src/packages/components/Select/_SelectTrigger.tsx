@@ -1,5 +1,5 @@
-import useSelectContext from "./_useSelectContext"
 import Button from "../Button/Button"
+import useSelectContext from "./_useSelectContext"
 
 interface SelectTriggerProps {
     children: string

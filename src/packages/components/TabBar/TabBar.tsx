@@ -1,7 +1,7 @@
+import { makeTransition } from "@/shared/utils/animation"
 import { motion } from "motion/react"
 import { useState } from "react"
 import { Hstack } from "../layouts"
-import { makeTransition } from "@/shared/utils/animation"
 
 export interface Tab<T extends string> {
     label: string

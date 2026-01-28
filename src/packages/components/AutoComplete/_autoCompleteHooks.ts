@@ -1,6 +1,6 @@
+import { useQuery } from "@tanstack/react-query"
 import { createContext, useContext, useEffect } from "react"
 import { useStore, type StoreApi } from "zustand"
-import { useQuery } from "@tanstack/react-query"
 import type { AutoCompleteStoreState } from "./_AutoCompleteContextProvider"
 
 export const AutoCompleteStoreContext = createContext<StoreApi<AutoCompleteStoreState> | null>(null)

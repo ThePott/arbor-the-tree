@@ -1,9 +1,9 @@
 import { useEffect, type ReactNode } from "react"
-import useDropdownContext from "./_useDropdownContext"
-import DropdownContent from "./_DropdownContent"
 import RoundBox from "../RoundBox"
 import { Vstack } from "../layouts"
+import DropdownContent from "./_DropdownContent"
 import type { DropdownDirection } from "./_dropdownInterfaces"
+import useDropdownContext from "./_useDropdownContext"
 
 interface DropdownMenuInterface {
     onChange: (value: string) => void
@@ -23,7 +23,7 @@ const DropdownMenu = ({ children, onChange, direction = "bottomLeft" }: Dropdown
 
     return (
         <DropdownContent direction={direction}>
-            <RoundBox radius="md" color="bg3" padding="lg" isShadowed className="text-my-sm">
+            <RoundBox radius="md" color="bg3" padding="lg" isShadowed className="text-my-sm text-fg-vivid">
                 <Vstack>{children}</Vstack>
             </RoundBox>
         </DropdownContent>

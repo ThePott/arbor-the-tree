@@ -1,21 +1,28 @@
+import { debugStore } from "@/shared/config/debug/debug"
+import type { Classroom } from "@/shared/interfaces"
 import { create } from "zustand"
-import type { ExtendedClassroom } from "../types"
 
 type ModalKey = "deleteClassroom"
 type ManageStudentStoreState = {
     modalKey: ModalKey | null
     setModalKey: (modalKey: ModalKey | null) => void
 
-    selectedClassroom: ExtendedClassroom | null
-    setSelectedClassroom: (selectedClassroom: ExtendedClassroom | null) => void
+    selectedClassroom: Classroom | null
+    setSelectedClassroom: (selectedClassroom: Classroom | null) => void
 }
 
 const useManageStudentStore = create<ManageStudentStoreState>()((set, _get) => ({
     modalKey: null,
-    setModalKey: (modalKey) => set({ modalKey }),
+    setModalKey: (modalKey) => {
+        debugStore("ManageStudentStore:setModalKey %o", modalKey)
+        set({ modalKey })
+    },
 
     selectedClassroom: null,
-    setSelectedClassroom: (selectedClassroom) => set({ selectedClassroom }),
+    setSelectedClassroom: (selectedClassroom) => {
+        debugStore("ManageStudentStore:setSelectedClassroom %o", selectedClassroom)
+        set({ selectedClassroom })
+    },
 }))
 
 export default useManageStudentStore

@@ -1,10 +1,10 @@
 import { AnimatePresence } from "motion/react"
 import ModalBackdrop, { type ModalBackdropProps } from "./_ModalBackdrop"
+import ModalBody from "./_ModalBody"
+import ModalButton from "./_ModalButton"
+import ModalButtonSection from "./_ModalButtonSection"
 import ModalContent, { type ModalContentProps } from "./_ModalContent"
 import ModalTitle from "./_ModalTitle"
-import ModalBody from "./_ModalBody"
-import ModalButtonSection from "./_ModalButtonSection"
-import ModalButton from "./_ModalButton"
 
 type ModalProps = {
     isOn: boolean

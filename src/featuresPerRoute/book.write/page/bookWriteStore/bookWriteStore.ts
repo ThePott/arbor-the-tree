@@ -1,28 +1,39 @@
-import { create } from "zustand"
-import type { BookWriteStoreState } from "./_bookWriteStoreState"
+import { debugStore } from "@/shared/config/debug/debug"
 import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
+import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
-import { BW_TOPIC_STEP_TAB_ARRAY, BW_DEFAULT_ROW_COUNT } from "../_bookWriteConstants"
+import { BW_DEFAULT_ROW_COUNT, BW_TOPIC_STEP_TAB_ARRAY } from "../_bookWriteConstants"
 import type { BookWriteRow } from "../_bookWriteInterfaces"
-import { handleQuestionMutation } from "./bookWriteStoreOperations/handleMutateQuestion"
-import { updateOverlayingColumn } from "./bookWriteStoreOperations/handleMutateOtherColumn/updateOverlayings"
+import type { BookWriteStoreState } from "./_bookWriteStoreState"
 import { calculateDash } from "./bookWriteStoreOperations/calculateDash"
+import { updateOverlayingColumn } from "./bookWriteStoreOperations/handleMutateOtherColumn/updateOverlayings"
+import { handleQuestionMutation } from "./bookWriteStoreOperations/handleMutateQuestion"
 
 const useBookWriteStore = create<BookWriteStoreState>()(
     persist(
         (set, get) => ({
             title: "",
-            setTitle: (title) => set({ title }),
+            setTitle: (title) => {
+                debugStore("BookWriteStore:setTitle %o", title)
+                set({ title })
+            },
             publishedYear: undefined,
-            setPublishedYear: (publishedYear) => set({ publishedYear: publishedYear }),
+            setPublishedYear: (publishedYear) => {
+                debugStore("BookWriteStore:setPublishedYear %o", publishedYear)
+                set({ publishedYear: publishedYear })
+            },
 
             selectedTab: BW_TOPIC_STEP_TAB_ARRAY[0],
-            setSelectedTab: (selectedTab) => set({ selectedTab }),
+            setSelectedTab: (selectedTab) => {
+                debugStore("BookWriteStore:setSelectedTab %o", selectedTab)
+                set({ selectedTab })
+            },
 
             topicArray: [],
             stepArray: [],
             topicInfo: "",
             setTopicInfo: (topicInfo) => {
+                debugStore("BookWriteStore:setTopicInfo %o", topicInfo)
                 const topicArray = splitByLineBreakThenTrim(topicInfo)
                 set({ topicInfo, topicArray })
 
@@ -32,6 +43,7 @@ const useBookWriteStore = create<BookWriteStoreState>()(
             },
             stepInfo: "",
             setStepInfo: (stepInfo) => {
+                debugStore("BookWriteStore:setStepInfo %o", stepInfo)
                 const stepArray = splitByLineBreakThenTrim(stepInfo)
                 set({ stepInfo, stepArray })
 
@@ -41,7 +53,10 @@ const useBookWriteStore = create<BookWriteStoreState>()(
             },
 
             subBookTitle: null,
-            setSubBookTitle: (subBookTitle) => set({ subBookTitle }),
+            setSubBookTitle: (subBookTitle) => {
+                debugStore("BookWriteStore:setSubBookTitle %o", subBookTitle)
+                set({ subBookTitle })
+            },
 
             // NOTE: `fill({})`를 하면 같은 reference address를 같는 하나의 {}로 채우게 됨
             rowArray: Array(BW_DEFAULT_ROW_COUNT)
@@ -58,6 +73,7 @@ const useBookWriteStore = create<BookWriteStoreState>()(
                         }) as BookWriteRow
                 ),
             updateRowArray: (rowIndex, columnKey, value) => {
+                debugStore("BookWriteStore:updateRowArray row:%d col:%s val:%o", rowIndex, columnKey, value)
                 const rowArray = [...get().rowArray]
                 const row = rowArray[rowIndex]
                 const cell = row[columnKey]
@@ -84,18 +100,33 @@ const useBookWriteStore = create<BookWriteStoreState>()(
             },
 
             register: null,
-            setRegister: (register) => set({ register }),
+            setRegister: (register) => {
+                debugStore("BookWriteStore:setRegister %o", register)
+                set({ register })
+            },
             errors: null,
-            setErrors: (errors) => set({ errors }),
+            setErrors: (errors) => {
+                debugStore("BookWriteStore:setErrors %o", errors)
+                set({ errors })
+            },
 
             isPending: false,
-            setIsPending: (isPending) => set({ isPending }),
+            setIsPending: (isPending) => {
+                debugStore("BookWriteStore:setIsPending %o", isPending)
+                set({ isPending })
+            },
 
             mutationError: null,
-            setMutationError: (mutationError) => set({ mutationError }),
+            setMutationError: (mutationError) => {
+                debugStore("BookWriteStore:setMutationError %o", mutationError)
+                set({ mutationError })
+            },
 
             modalKey: null,
-            setModalKey: (modalKey) => set({ modalKey }),
+            setModalKey: (modalKey) => {
+                debugStore("BookWriteStore:setModalKey %o", modalKey)
+                set({ modalKey })
+            },
         }),
         {
             name: "book-write-store",

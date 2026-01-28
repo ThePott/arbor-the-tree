@@ -1,16 +1,18 @@
+import Button from "@/packages/components/Button/Button"
 import { FlexOneContainer, Hstack } from "@/packages/components/layouts"
 import { Vstack } from "@/packages/components/layouts/_Vstack"
 import Title from "@/packages/components/Title/Title"
-import clsx from "clsx"
-import Button from "@/packages/components/Button/Button"
-import { useRef } from "react"
+import { debugRender } from "@/shared/config/debug/debug"
+import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import { useVirtualizer } from "@tanstack/react-virtual"
+import clsx from "clsx"
+import { useRef } from "react"
 import { BW_DEFAULT_ROW_COUNT } from "../_bookWriteConstants"
 import useBookWriteStore from "../bookWriteStore/bookWriteStore"
-import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import bookWriteColumnArray from "./_BWTableColumns"
 
 const BWTable = () => {
+    debugRender("BWTable")
     const rowArray = useBookWriteStore((state) => state.rowArray)
     const isPending = useBookWriteStore((state) => state.isPending)
 

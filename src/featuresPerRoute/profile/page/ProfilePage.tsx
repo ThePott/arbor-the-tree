@@ -1,22 +1,24 @@
 import Button from "@/packages/components/Button/Button"
+import ExpandableDiv from "@/packages/components/ExpandableDiv/ExpendableDiv"
 import Labeled from "@/packages/components/Labeled/Labeled"
 import { Container, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Select from "@/packages/components/Select/Select"
+import { debugForm, debugRender } from "@/shared/config/debug/debug"
 import type { Role } from "@/shared/interfaces"
-import { Activity, useState } from "react"
-import { Controller, useForm, type FieldValues } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { profileSchema, type ProfileSchema } from "./_profileSchema"
-import useProfileMutation from "./_useProfileMutation"
-import ExpandableDiv from "@/packages/components/ExpandableDiv/ExpendableDiv"
-import SchoolAutoComplete from "./_SchoolAutoComplete"
-import HagwonAutoComplete from "./_HagwonAutoComplete"
-import useProfileQuery from "./_useProfileQuery"
 import useGlobalStore from "@/shared/store/globalStore"
 import { roleToText } from "@/shared/utils/apiTypeToLabel"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Activity, useState } from "react"
+import { Controller, useForm, type FieldValues } from "react-hook-form"
+import HagwonAutoComplete from "./_HagwonAutoComplete"
+import { profileSchema, type ProfileSchema } from "./_profileSchema"
+import SchoolAutoComplete from "./_SchoolAutoComplete"
+import useProfileMutation from "./_useProfileMutation"
+import useProfileQuery from "./_useProfileQuery"
 
 const ProfilePage = () => {
+    debugRender("ProfilePage")
     const me = useGlobalStore((state) => state.me)
     const resume = useGlobalStore((state) => state.resume)
     const [role, setRole] = useState<Role | null>(resume?.role ?? me?.role ?? null)
@@ -37,6 +39,7 @@ const ProfilePage = () => {
     }
 
     const onSubmit = (data: FieldValues) => {
+        debugForm("ProfilePage:onSubmit %o", data)
         const body = { ...data, id: me.id } as ProfileSchema & { id: number }
         mutate(body)
     }

@@ -1,11 +1,13 @@
-import { useLoaderData } from "@tanstack/react-router"
-import { useQuery } from "@tanstack/react-query"
+import { debugRender } from "@/shared/config/debug/debug"
 import useGlobalStore from "@/shared/store/globalStore"
+import { useQuery } from "@tanstack/react-query"
+import { useLoaderData } from "@tanstack/react-router"
 import { manageResumeQueryOptions } from "../../loader"
 import MaintainerTable from "./MaintainerTable"
 import PrincipalTable from "./PrincipalTable"
 
 const ManageResumeTable = () => {
+    debugRender("ManageResumeTable")
     const extendedResumeArray = useLoaderData({ from: "/manage/resume" })
     const { data } = useQuery(manageResumeQueryOptions)
 

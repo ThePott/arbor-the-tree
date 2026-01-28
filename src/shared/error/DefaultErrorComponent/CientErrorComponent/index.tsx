@@ -2,8 +2,8 @@ import Button from "@/packages/components/Button/Button"
 import { Container } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
-import type { ClientError } from "../../clientError"
 import { useNavigate } from "@tanstack/react-router"
+import type { ClientError } from "../../clientError"
 
 type ClientErrorComponenetProps = {
     error: ClientError

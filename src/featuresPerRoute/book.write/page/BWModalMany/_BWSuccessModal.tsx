@@ -1,10 +1,12 @@
 import Modal from "@/packages/Modal"
-import useBookWriteStore from "../bookWriteStore/bookWriteStore"
+import { debugRender } from "@/shared/config/debug/debug"
 import { makeUlLul } from "@/shared/utils/stringManipulation"
 import { useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
+import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 
 const BWSuccessModal = () => {
+    debugRender("BWSuccessModal")
     const setModalKey = useBookWriteStore((state) => state.setModalKey)
     const modalKey = useBookWriteStore((state) => state.modalKey)
     const title = useBookWriteStore((state) => state.title)

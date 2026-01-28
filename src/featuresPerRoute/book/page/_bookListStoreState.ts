@@ -1,6 +1,6 @@
 import type { Tab } from "@/packages/components/TabBar/TabBar"
-import type { BookActivity, BookListModalKey } from "./_bookListInterfaces"
 import type { Book } from "@/shared/interfaces"
+import type { BookActivity, BookListModalKey } from "./_bookListInterfaces"
 
 export interface BookListStoreState {
     selectedTab: Tab<BookActivity>

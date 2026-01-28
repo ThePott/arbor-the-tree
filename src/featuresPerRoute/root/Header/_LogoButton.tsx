@@ -1,5 +1,8 @@
+import { debugRender } from "@/shared/config/debug/debug"
 import { useNavigate } from "@tanstack/react-router"
+
 const Logo = () => {
+    debugRender("Logo")
     const navigate = useNavigate()
     const handleClick = () => {
         navigate({ to: "/" })

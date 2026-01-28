@@ -1,9 +1,9 @@
+import clsx from "clsx"
 import { useCallback, useEffect, useRef, type ReactNode } from "react"
-import useSelectContext from "./_useSelectContext"
+import ExpandableDiv from "../ExpandableDiv/ExpendableDiv"
 import { Vstack } from "../layouts"
 import RoundBox from "../RoundBox"
-import ExpandableDiv from "../ExpandableDiv/ExpendableDiv"
-import clsx from "clsx"
+import useSelectContext from "./_useSelectContext"
 
 const SelectContent = ({ children }: { children: ReactNode }) => {
     const { isOpened, setIsOpened, triggerRef } = useSelectContext()

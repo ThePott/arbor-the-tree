@@ -11,6 +11,7 @@ const bookListLoaderFn = async ({ queryClient }: BookListLoaderFnProps) => {
     })
     const bookArray = response.data as Book[]
     useBookListStore.getState().setBookArray(bookArray)
+    return { bookArray }
 }
 
 export default bookListLoaderFn

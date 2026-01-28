@@ -1,17 +1,28 @@
+import { debugStore } from "@/shared/config/debug/debug"
 import { create } from "zustand"
-import type { GlobalStoreState } from "./globalStoreState"
 import { createJSONStorage, persist } from "zustand/middleware"
+import type { GlobalStoreState } from "./globalStoreState"
 
 const useGlobalStore = create<GlobalStoreState>()(
     persist(
         (set, get) => ({
             accessToken: null,
-            setAccessToken: (accessToken) => set({ accessToken }),
+            setAccessToken: (accessToken) => {
+                debugStore("GlobalStore:setAccessToken %o", accessToken)
+                set({ accessToken })
+            },
             refreshToken: null,
-            setRefreshToken: (refreshToken) => set({ refreshToken }),
+            setRefreshToken: (refreshToken) => {
+                debugStore("GlobalStore:setRefreshToken %o", refreshToken)
+                set({ refreshToken })
+            },
             me: null,
-            setMe: (me) => set({ me }),
+            setMe: (me) => {
+                debugStore("GlobalStore:setMe %o", me)
+                set({ me })
+            },
             logout: () => {
+                debugStore("GlobalStore:logout")
                 const { setAccessToken, setRefreshToken, setMe } = get()
                 setAccessToken(null)
                 setRefreshToken(null)
@@ -19,13 +30,25 @@ const useGlobalStore = create<GlobalStoreState>()(
             },
 
             resume: null,
-            setResume: (resume) => set({ resume }),
+            setResume: (resume) => {
+                debugStore("GlobalStore:setResume %o", resume)
+                set({ resume })
+            },
 
             isPendingLogin: false,
-            setIsPendingLogin: (isPendingLogin) => set({ isPendingLogin }),
+            setIsPendingLogin: (isPendingLogin) => {
+                debugStore("GlobalStore:setIsPendingLogin %o", isPendingLogin)
+                set({ isPendingLogin })
+            },
 
             isBodyScrollable: true,
-            setIsBodyScrollable: (isBodyScrollable) => set({ isBodyScrollable }),
+            setIsBodyScrollable: (isBodyScrollable) => {
+                debugStore("GlobalStore:setIsBodyScrollable %o", isBodyScrollable)
+                set({ isBodyScrollable })
+            },
+
+            isSidebarOn: false,
+            setIsSidebarOn: (isSidebarOn) => set({ isSidebarOn }),
         }),
         {
             name: "arbor-store",

@@ -1,11 +1,11 @@
-import { useRef, useState, type ReactNode } from "react"
-import DropdownContext from "./_DropdownContext"
-import DropdonwTrigger from "./_DropdownTrigger"
-import DropdownContent from "./_DropdownContent"
-import DropdownMenu from "./_DropdownMenu"
-import DropdownMenuItem from "./_DropdownMenuItem"
 import type { XsToXl } from "@/shared/interfaces"
 import clsx from "clsx"
+import { useRef, useState, type ReactNode } from "react"
+import DropdownContent from "./_DropdownContent"
+import DropdownContext from "./_DropdownContext"
+import DropdownMenu from "./_DropdownMenu"
+import DropdownMenuItem from "./_DropdownMenuItem"
+import DropdonwTrigger from "./_DropdownTrigger"
 
 interface DropdownProps {
     width?: XsToXl
@@ -29,7 +29,9 @@ const Dropdown = ({ width = "xs", children, className }: DropdownProps) => {
                 setSelectedMenuValue,
             }}
         >
-            <div className={clsx("relative w-fit", className)}>{children}</div>
+            <div data-dropdown className={clsx("relative w-fit", className)}>
+                {children}
+            </div>
         </DropdownContext.Provider>
     )
 }

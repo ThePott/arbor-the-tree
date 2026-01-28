@@ -1,8 +1,9 @@
 import { headlessInstance } from "@/packages/api/axiosInstances"
 import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
+import { debugRender } from "@/shared/config/debug/debug"
 import type { School } from "@/shared/interfaces"
-import type { ManualError } from "./_mypageInterfaces"
 import type { FieldError } from "react-hook-form"
+import type { ManualError } from "./_mypageInterfaces"
 
 const getSchoolMany = async (name: string) => {
     const response = await headlessInstance.get(`/school?name=${name}`)
@@ -19,6 +20,7 @@ interface SchoolAutoCompleteProps {
 }
 
 const SchoolAutoComplete = ({ onValueChange, onErrorChange, error, defaultValue }: SchoolAutoCompleteProps) => {
+    debugRender("SchoolAutoComplete")
     const handleErrorChange = (isError: boolean) => {
         if (!isError) {
             onErrorChange(null)

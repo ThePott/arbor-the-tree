@@ -3,10 +3,12 @@ import RoundBox from "@/packages/components/RoundBox"
 import TabBar from "@/packages/components/TabBar/TabBar"
 import Textarea from "@/packages/components/Textarea/Textarea"
 import Title from "@/packages/components/Title/Title"
+import { debugRender } from "@/shared/config/debug/debug"
 import { useEffect, useRef } from "react"
 import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 
 const BWTopicStepSection = () => {
+    debugRender("BWTopicStepSection")
     const textareaRef = useRef<HTMLTextAreaElement>(null)
 
     const selectedTab = useBookWriteStore((state) => state.selectedTab)

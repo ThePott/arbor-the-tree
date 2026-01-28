@@ -1,0 +1,67 @@
+import type { ManageStudentLoaderResponseData } from "@/featuresPerRoute/manage.student/loader"
+import useManageStudentStore from "@/featuresPerRoute/manage.student/store"
+import { instance } from "@/packages/api/axiosInstances"
+import Modal from "@/packages/Modal"
+import { debugCache, debugMutation, debugRender } from "@/shared/config/debug/debug"
+import { makeUlLul } from "@/shared/utils/stringManipulation"
+import { useMutation } from "@tanstack/react-query"
+
+const DeleteClassroomModal = () => {
+    debugRender("DeleteClassroomModal")
+    const modalKey = useManageStudentStore((state) => state.modalKey)
+    const setModalKey = useManageStudentStore((state) => state.setModalKey)
+    const selectedClassroom = useManageStudentStore((state) => state.selectedClassroom)
+    const setSelectedClassroom = useManageStudentStore((state) => state.setSelectedClassroom)
+
+    const deleteMutation = useMutation({
+        mutationFn: (classroom_id: string) => instance.delete(`/manage/classroom/${classroom_id}`),
+        onMutate: async (classroom_id, context) => {
+            debugMutation("DeleteClassroomModal:onMutate - deleting classroom_id: %s", classroom_id)
+            await context.client.cancelQueries({ queryKey: ["manageStudent"] })
+            const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
+
+            const newData: ManageStudentLoaderResponseData = {
+                ...previous,
+                classroomArray: previous.classroomArray.filter((classroom) => classroom.id !== classroom_id),
+            }
+            context.client.setQueryData(["manageStudent"], newData)
+            debugCache("DeleteClassroomModal - cache updated, removed classroom")
+
+            return { previous }
+        },
+        onError: (_error, _variables, onMutateResult, context) => {
+            debugMutation("DeleteClassroomModal:onError - rolling back")
+            context.client.setQueryData(["manageStudent"], onMutateResult?.previous)
+        },
+        onSettled: (_data, _error, _variables, _onMutateResult, context) => {
+            debugMutation("DeleteClassroomModal:onSettled - invalidating queries")
+            context.client.invalidateQueries({ queryKey: ["manageStudent"] })
+        },
+    })
+
+    const handleDelete = () => {
+        const classroom_id = selectedClassroom?.id ?? "-1"
+        setModalKey(null)
+        deleteMutation.mutate(classroom_id)
+        setSelectedClassroom(null)
+    }
+
+    const classroomName = selectedClassroom?.name ?? "알 수 없는 반"
+
+    return (
+        <Modal isOn={modalKey === "deleteClassroom"} onBackdropClick={() => setModalKey(null)}>
+            <Modal.Title>{`"${classroomName}"${makeUlLul(classroomName)} 삭제핧까요?`}</Modal.Title>
+            <Modal.Body>이 작업은 되돌릴 수 없어요</Modal.Body>
+            <Modal.ButtonSection>
+                <Modal.Button role="cancel" onClick={() => setModalKey(null)}>
+                    취소
+                </Modal.Button>
+                <Modal.Button role="destruct" onClick={handleDelete}>
+                    삭제
+                </Modal.Button>
+            </Modal.ButtonSection>
+        </Modal>
+    )
+}
+
+export default DeleteClassroomModal

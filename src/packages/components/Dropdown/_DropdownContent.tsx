@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useRef, type ReactNode } from "react"
-import useDropdownContext from "./_useDropdownContext"
-import { cva } from "class-variance-authority"
 import { widthToCn } from "@/shared/utils/styles"
+import { cva } from "class-variance-authority"
 import clsx from "clsx"
+import { useCallback, useEffect, useRef, type ReactNode } from "react"
 import ExpandableDiv from "../ExpandableDiv/ExpendableDiv"
 import type { DropdownDirection } from "./_dropdownInterfaces"
+import useDropdownContext from "./_useDropdownContext"
 
 const dropdownVariants = cva("absolute z-10 top-full mt-my-sm", {
     variants: {

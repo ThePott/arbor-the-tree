@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react"
+import { useEffect, useRef } from "react"
 
 const useDetectOutsideClick = <T extends HTMLElement>(
     triggerRef: React.RefObject<T | null>,

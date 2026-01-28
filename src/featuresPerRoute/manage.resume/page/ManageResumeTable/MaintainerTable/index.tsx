@@ -1,14 +1,15 @@
 import {
-    type ManageResumeRow,
+    type ExtendedResume,
     MANAGE_RESUME_ROW_KEY_ARRAY,
     MANAGE_RESUME_ROW_KEY_TO_LABEL,
-    type ExtendedResume,
+    type ManageResumeRow,
 } from "@/featuresPerRoute/manage.resume/types"
-import { roleToText } from "@/shared/utils/apiTypeToLabel"
-import AcceptButton from "../AcceptButton"
-import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import TanstackTable from "@/packages/components/TanstackTable"
+import { debugRender } from "@/shared/config/debug/debug"
+import { roleToText } from "@/shared/utils/apiTypeToLabel"
+import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import { useMemo } from "react"
+import AcceptButton from "../AcceptButton"
 
 const columnHelper = createColumnHelper<ManageResumeRow>()
 const columns = [
@@ -43,6 +44,7 @@ const convertDataToRowArray = ({ extendedResumeArray }: convertDataToRowArrayPro
 
 type MaintainerTableProps = { extendedResumeArray: ExtendedResume[] }
 const MaintainerTable = ({ extendedResumeArray }: MaintainerTableProps) => {
+    debugRender("MaintainerTable")
     const rowArray = useMemo(() => convertDataToRowArray({ extendedResumeArray }), [extendedResumeArray])
 
     // eslint-disable-next-line react-hooks/incompatible-library

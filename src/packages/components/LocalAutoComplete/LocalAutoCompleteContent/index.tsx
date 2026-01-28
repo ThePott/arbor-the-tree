@@ -1,14 +1,14 @@
 import useDetectOutsideClick from "@/packages/utils/useDetectOutsideClick"
-import useGlobalStore from "@/shared/store/globalStore"
-import useLocalAutoCompleteStore from "../useLocalAutoCompleteStore"
-import { useEffect } from "react"
-import ExpandableDiv from "../../ExpandableDiv/ExpendableDiv"
-import RoundBox from "../../RoundBox"
-import clsx from "clsx"
-import { Vstack } from "../../layouts"
-import Button from "../../Button/Button"
 import type { ValueLabel } from "@/shared/interfaces"
+import useGlobalStore from "@/shared/store/globalStore"
+import clsx from "clsx"
 import { getRegExp } from "korean-regexp"
+import { useEffect } from "react"
+import Button from "../../Button/Button"
+import ExpandableDiv from "../../ExpandableDiv/ExpendableDiv"
+import { Vstack } from "../../layouts"
+import RoundBox from "../../RoundBox"
+import useLocalAutoCompleteStore from "../useLocalAutoCompleteStore"
 
 type LocalAutoCompleteOptionProps = {
     option: ValueLabel
@@ -44,7 +44,7 @@ const LocalAutoCompleteContent = () => {
     }, [isVisible])
 
     return (
-        <ExpandableDiv className="my-my-sm absolute top-full z-10 w-full">
+        <ExpandableDiv className="my-my-sm absolute top-full z-10 w-[400px]">
             {isVisible && (
                 <RoundBox
                     ref={contentRef}
@@ -55,7 +55,7 @@ const LocalAutoCompleteContent = () => {
                 >
                     <Vstack gap="none">
                         {filteredOptionArray.map((option) => (
-                            <LocalAutoCompleteOption option={option} />
+                            <LocalAutoCompleteOption key={option.value} option={option} />
                         ))}
                     </Vstack>
                 </RoundBox>

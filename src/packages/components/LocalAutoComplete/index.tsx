@@ -21,12 +21,13 @@ const LocalAutoCompleteWrapper = () => {
         }
 
         if (event.key !== "Enter") return
-        inputRef.current?.blur()
 
         const filteredOptionArray = optionArray.filter(({ label }) => label.match(getRegExp(inputValue)))
         if (filteredOptionArray.length === 0) return
 
         setInputValue(filteredOptionArray[0].label)
+        inputRef.current?.blur()
+        inputRef.current?.closest("form")?.requestSubmit()
     }
     return (
         <div className="relative grow">
@@ -46,7 +47,7 @@ const LocalAutoCompleteWrapper = () => {
 
 const LocalAutoComplete = (externalValues: LocalAutoCompleteExternalValues) => {
     return (
-        <LocalAutoCompleteStoreProvider {...externalValues}>
+        <LocalAutoCompleteStoreProvider {...externalValues} key={JSON.stringify(externalValues)}>
             <LocalAutoCompleteWrapper />
         </LocalAutoCompleteStoreProvider>
     )

@@ -27,7 +27,7 @@ const Title = ({ as: Component = "h2", size = "md", isMuted, ...props }: Heading
 
     return (
         <Component {...rest} className={clsx(titleVariants({ size, isMuted }), className)}>
-            {children}
+            <p className="inline-block text-left">{children}</p>
         </Component>
     )
 }
