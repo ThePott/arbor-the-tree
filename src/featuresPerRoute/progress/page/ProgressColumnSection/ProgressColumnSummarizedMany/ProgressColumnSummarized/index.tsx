@@ -23,12 +23,13 @@ const ProgressColumnSummarized = ({ conciseSyllabusArray, title }: ProgressColum
                                     {conciseSyllabus.book.title}
                                 </Title>
                                 {conciseSyllabus.sessionsByTopicArray.map((sessionsByTopic) => (
-                                    <Vstack gap="none">
+                                    <Vstack gap="none" key={`topic_${sessionsByTopic.title}`}>
                                         <Title as="h3" className="bg-bg-0 text-wrap" isMuted>
                                             {sessionsByTopic.title}
                                         </Title>
                                         {sessionsByTopic.conciseSessionArray.map((conciseSession) => (
                                             <ProgressSession
+                                                key={conciseSession.id}
                                                 syllabus_id={conciseSyllabus.id}
                                                 startingTopicTitle={sessionsByTopic.title}
                                                 conciseSession={conciseSession}

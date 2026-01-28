@@ -48,6 +48,7 @@ const ProgressColumnSummarizedMany = ({ conciseSyllabusArray }: ProgressColumnSu
         checkCondition: (session) =>
             Boolean(session.status === "HOMEWORK" && session.assigned_at && !checkIsBeforeToday(session.assigned_at)),
     })
+    console.log("rerendered")
 
     return (
         <>
