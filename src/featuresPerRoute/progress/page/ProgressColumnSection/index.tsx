@@ -1,5 +1,6 @@
 import { instance } from "@/packages/api/axiosInstances"
 import { FlexOneContainer, Hstack } from "@/packages/components/layouts"
+import Toggle from "@/packages/components/Toggle"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
 import type { ConciseSyllabus } from "../../types"
@@ -21,6 +22,7 @@ const ProgressColumnSection = () => {
 
     return (
         <FlexOneContainer className="pt-my-lg pl-my-lg" isXScrollable>
+            <Toggle onChange={() => {}} />
             <Hstack className="h-full">
                 {data.map((conciseSyllabus) => (
                     <ProgressColumn key={conciseSyllabus.id} conciseSyllabus={conciseSyllabus} />
