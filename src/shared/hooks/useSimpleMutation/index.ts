@@ -1,10 +1,10 @@
 import { instance } from "@/packages/api/axiosInstances"
 import { ClientError } from "@/shared/error/clientError"
-import type { RequestMethod } from "@/shared/interfaces"
 import { useMutation } from "@tanstack/react-query"
+import type { Method } from "axios"
 
 type UseDeleteMutationProps<TAdditionalData, TParams, TQueryKeyElement, TPrevious> = {
-    method: RequestMethod
+    method: Method
     url: string
     params?: TParams
     queryKeyWithoutParams: TQueryKeyElement[]

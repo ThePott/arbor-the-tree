@@ -17,8 +17,15 @@ type ProgressSessionLabelProps = {
 }
 const ProgressSessionLabel = ({ conciseSession }: ProgressSessionLabelProps) => {
     // NOTE: muted의 스타일만 지정하면 된다
-    const isBgColored = conciseSession.status && !conciseSession.completed_at
-    const mutedClassName = clsx(isBgColored ? "text-fg-inverted-muted" : "text-fg-muted")
+    const isBgBright =
+        conciseSession.status &&
+        !conciseSession.completed_at &&
+        !(
+            conciseSession.status === "TODAY" &&
+            conciseSession.assigned_at &&
+            checkIsBeforeToday(conciseSession.assigned_at)
+        )
+    const mutedClassName = clsx(isBgBright ? "text-fg-inverted-muted" : "text-fg-muted")
     return (
         <Vstack className="grow" gap="none">
             <p>{conciseSession.start.step}</p>

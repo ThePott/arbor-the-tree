@@ -1,9 +1,9 @@
 import type { ConciseSyllabus } from "@/featuresPerRoute/progress/types"
-import { instance } from "@/packages/api/axiosInstances"
 import { ClientError } from "@/shared/error/clientError"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import type { SessionStatus } from "@/shared/interfaces"
 import { getRouteApi } from "@tanstack/react-router"
+import type { Method } from "axios"
 import type { ProgressSessionProps } from ".."
 
 const route = getRouteApi("/progress/")
@@ -59,13 +59,17 @@ type ProgressSessionCompletedUpdateProps = {
     previous: ConciseSyllabus[]
     additionalData: ProgressSessionCompletedAdditionalData
 }
-const useCompletedMutation = (session_id?: string) => {
+type UseCompletedMutationProps = {
+    session_id: string
+    method: Extract<Method, "post" | "delete">
+}
+const useCompletedMutation = ({ session_id, method }: UseCompletedMutationProps) => {
     const searchParams = route.useSearch()
 
     return useSimpleMutation({
         queryKeyWithoutParams: ["progressSession"],
-        url: `/progress/session/completed${session_id ? ["/", session_id].join("") : ""}`,
-        method: session_id ? "delete" : "post",
+        url: `/progress/session/${session_id}/completed`,
+        method,
         params: searchParams,
         update: ({ previous, additionalData }: ProgressSessionCompletedUpdateProps) => {
             const { session_id, completed_at, syllabus_id, startingTopicTitle } = additionalData
@@ -176,10 +180,6 @@ const useEventHandlers = ({
                 syllabus_id,
             },
         })
-
-        await instance.post(`/progress/session/completed/${conciseSession.id}`, undefined, {
-            params: searchParams,
-        })
     }
 
     return { handleDropdownMenuChange, handleClickToComplete }
@@ -189,8 +189,8 @@ const useProgressSession = (props: ProgressSessionProps) => {
     const { conciseSession } = props
     const { mutate: mutatePostStatus } = useStatusMutation()
     const { mutate: mutateDeleteStatus } = useStatusMutation(conciseSession.id)
-    const { mutate: mutatePostCompleted } = useCompletedMutation()
-    const { mutate: mutateDeleteCompleted } = useCompletedMutation(conciseSession.id)
+    const { mutate: mutatePostCompleted } = useCompletedMutation({ session_id: conciseSession.id, method: "post" })
+    const { mutate: mutateDeleteCompleted } = useCompletedMutation({ session_id: conciseSession.id, method: "delete" })
 
     const eventHanderReturns = useEventHandlers({
         ...props,
