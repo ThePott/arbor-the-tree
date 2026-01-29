@@ -5,11 +5,11 @@ import clsx from "clsx"
 const flexOneContainerVariants = cva("flex-1", {
     variants: {
         isYScrollable: {
-            true: "overflow-y-scroll",
+            true: "overflow-y-auto",
             false: "overflow-y-hidden",
         },
         isXScrollable: {
-            true: "overflow-x-scroll",
+            true: "overflow-x-auto",
             false: "overflow-x-hidden",
         },
     },
