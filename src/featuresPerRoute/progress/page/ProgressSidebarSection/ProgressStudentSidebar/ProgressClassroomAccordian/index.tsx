@@ -6,15 +6,25 @@ import Title from "@/packages/components/Title/Title"
 import { getRouteApi, useNavigate } from "@tanstack/react-router"
 import type { ClassroomWithStudent } from ".."
 
+const route = getRouteApi("/progress/")
+
 type StudentButtonProps = {
     classroomId?: string
     student: ExtendedStudent
 }
 const StudentButton = ({ student, classroomId }: StudentButtonProps) => {
     const navigate = useNavigate({ from: "/progress/" })
+
+    const searchParams = route.useSearch()
+
     const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.stopPropagation()
-        navigate({ search: { student_id: student.id, classroom_id: classroomId } })
+        const overridingParams = { student_id: student.id, classroom_id: classroomId }
+        const newSearchParams =
+            classroomId === searchParams.classroom_id ? { ...searchParams, ...overridingParams } : overridingParams
+        navigate({
+            search: newSearchParams,
+        })
     }
 
     const { classroom_id: classroomInSearch, student_id: studentInSearch } = route.useSearch()
@@ -27,7 +37,6 @@ const StudentButton = ({ student, classroomId }: StudentButtonProps) => {
     )
 }
 
-const route = getRouteApi("/progress/")
 type ProgressClassroomAccordianProps = {
     classroomWithStudent: ClassroomWithStudent
 }
