@@ -53,7 +53,7 @@ const ProgressStudentSidebar = () => {
     const { classroomWithStudentArray, isolatedStudentArray } = groupByClassroom(loaderData)
 
     return (
-        <Vstack>
+        <Vstack className="overflow-y-scroll p-my-md w-[200px] pr-0">
             {classroomWithStudentArray.map((classroomWithStudent) => (
                 <ProgressClassroomAccordian
                     key={classroomWithStudent.classroomId}

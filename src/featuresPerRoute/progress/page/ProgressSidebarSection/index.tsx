@@ -4,7 +4,7 @@ import ProgressStudentSidebar from "./ProgressStudentSidebar"
 
 const ProgressSidebarSection = () => {
     return (
-        <Hstack className="border-r border-r-border-dim p-my-lg">
+        <Hstack className="border-r border-r-border-dim">
             <ProgressStudentSidebar />
             <ProgressSyllabusSidebar />
         </Hstack>
