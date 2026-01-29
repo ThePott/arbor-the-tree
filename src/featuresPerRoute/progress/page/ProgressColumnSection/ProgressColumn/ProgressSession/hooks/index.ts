@@ -10,15 +10,16 @@ import type { ProgressSessionProps } from ".."
 
 const route = getRouteApi("/progress/")
 
-type ProgressSessionStatusAdditionalData = {
+// NOTE: for status post
+type StatusAdditionalData = {
     syllabus_id: string
     startingTopicTitle: string
     session_id: string
     status: SessionStatus | null
 }
-type ProgressSessionStatusUpdateProps = {
+type StatusUpdateProps = {
     previous: ConciseSyllabus[]
-    additionalData: ProgressSessionStatusAdditionalData
+    additionalData: StatusAdditionalData
 }
 const useStatusMutation = (session_id?: string) => {
     const searchParams = route.useSearch()
@@ -28,7 +29,7 @@ const useStatusMutation = (session_id?: string) => {
         url: `/progress/session/assigned${session_id ? ["/", session_id].join("") : ""}`,
         method: session_id ? "delete" : "post",
         params: searchParams,
-        update: ({ previous, additionalData }: ProgressSessionStatusUpdateProps) => {
+        update: ({ previous, additionalData }: StatusUpdateProps) => {
             debugMutation("useStatusMutation update", { additionalData })
             const { session_id, status, syllabus_id, startingTopicTitle } = additionalData
             const newData = produce(previous, (draft) => {
@@ -54,15 +55,16 @@ const useStatusMutation = (session_id?: string) => {
     })
 }
 
-type ProgressSessionCompletedAdditionalData = {
+// NOTE: for completed post, delete
+type CompletedAdditionalData = {
     syllabus_id: string
     startingTopicTitle: string
     session_id: string
     completed_at: string | null
 }
-type ProgressSessionCompletedUpdateProps = {
+type CompletedUpdateProps = {
     previous: ConciseSyllabus[]
-    additionalData: ProgressSessionCompletedAdditionalData
+    additionalData: CompletedAdditionalData
 }
 type UseCompletedMutationProps = {
     session_id: string
@@ -76,7 +78,7 @@ const useCompletedMutation = ({ session_id, method }: UseCompletedMutationProps)
         url: `/progress/session/${session_id}/completed`,
         method,
         params: searchParams,
-        update: ({ previous, additionalData }: ProgressSessionCompletedUpdateProps) => {
+        update: ({ previous, additionalData }: CompletedUpdateProps) => {
             debugMutation("useCompletedMutation update", { additionalData })
             const { session_id, completed_at, syllabus_id, startingTopicTitle } = additionalData
 
