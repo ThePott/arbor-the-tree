@@ -99,7 +99,7 @@ const ProgressSessionDropdown = ({
     }
 
     return (
-        <Dropdown>
+        <Dropdown direction="left">
             <Dropdown.Trigger>
                 <Button color="black" isBorderedOnHover>
                     <Ellipsis size={16} />
