@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react"
 
-const useDebounce = <T>(value: T, delay: number) => {
-    const [debouncedValue, setDebouncedValue] = useState<T>(value)
+type UseDebounceProps<TValue> = {
+    value: TValue
+    delay: number
+}
+const useDebounce = <TValue>({ value, delay }: UseDebounceProps<TValue>) => {
+    const [debouncedValue, setDebouncedValue] = useState<TValue>(value)
     const timeoutRef = useRef<number>(null)
 
     const cancel = () => {
