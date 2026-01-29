@@ -1,4 +1,5 @@
 import type { ConciseSyllabus } from "@/featuresPerRoute/progress/types"
+import { useDebouncingToggle } from "@/packages/utils/useDebouncingToggle"
 import { debugMutation } from "@/shared/config/debug/"
 import { ClientError } from "@/shared/error/clientError"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
@@ -6,6 +7,7 @@ import type { SessionStatus } from "@/shared/interfaces"
 import { getRouteApi } from "@tanstack/react-router"
 import type { Method } from "axios"
 import { produce } from "immer"
+import { useEffect } from "react"
 import type { ProgressSessionProps } from ".."
 
 const route = getRouteApi("/progress/")
@@ -117,6 +119,38 @@ const useEventHandlers = ({
 }: UseEventHandlersProps) => {
     const searchParams = route.useSearch()
     const { classroom_id, student_id } = searchParams
+
+    const { debouncedBoolValue, realTimeValue, toggle } = useDebouncingToggle({
+        value: Boolean(conciseSession.completed_at),
+    })
+
+    useEffect(() => {
+        if (debouncedBoolValue === Boolean(conciseSession.completed_at)) return
+
+        if (debouncedBoolValue) {
+            mutatePostCompleted({
+                body: undefined,
+                additionalData: {
+                    completed_at: new Date().toISOString(),
+                    session_id: conciseSession.id,
+                    startingTopicTitle,
+                    syllabus_id,
+                },
+            })
+            return
+        }
+
+        mutateDeleteCompleted({
+            body: undefined,
+            additionalData: {
+                completed_at: null,
+                session_id: conciseSession.id,
+                startingTopicTitle,
+                syllabus_id,
+            },
+        })
+    }, [debouncedBoolValue])
+
     // TODO: dropdown에서 같은 걸 클랙해도 여전히 클릭이 되도록 수정해야
     // TODO: 현재 상태를 제외하고 메뉴가 뜨도록 수정해야
     const handleDropdownMenuChange = async (value: string) => {
@@ -164,36 +198,17 @@ const useEventHandlers = ({
                 break
         }
     }
+
     const handleClickToComplete = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         const target = event.target as HTMLElement
         if (target.closest("[data-dropdown]")) return
         // NOTE: 상태 없는 건 끝낼 수 없음
         if (!conciseSession.status) return
 
-        if (conciseSession.completed_at) {
-            mutateDeleteCompleted({
-                body: undefined,
-                additionalData: {
-                    completed_at: null,
-                    session_id: conciseSession.id,
-                    startingTopicTitle,
-                    syllabus_id,
-                },
-            })
-            return
-        }
-        mutatePostCompleted({
-            body: undefined,
-            additionalData: {
-                completed_at: new Date().toISOString(),
-                session_id: conciseSession.id,
-                startingTopicTitle,
-                syllabus_id,
-            },
-        })
+        toggle()
     }
 
-    return { handleDropdownMenuChange, handleClickToComplete }
+    return { handleDropdownMenuChange, handleClickToComplete, isCompleted: realTimeValue }
 }
 
 const useProgressSession = (props: ProgressSessionProps) => {

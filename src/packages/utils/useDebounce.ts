@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react"
 
+export const DEFAULT_DELAY = 500
+
 type UseDebounceProps<TValue> = {
     value: TValue
-    delay: number
+    delay?: number
 }
-const useDebounce = <TValue>({ value, delay }: UseDebounceProps<TValue>) => {
+const useDebounce = <TValue>({ value, delay = DEFAULT_DELAY }: UseDebounceProps<TValue>) => {
     const [debouncedValue, setDebouncedValue] = useState<TValue>(value)
     const timeoutRef = useRef<number>(null)
 
