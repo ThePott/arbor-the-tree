@@ -1,6 +1,6 @@
 import type { ConciseSession } from "@/featuresPerRoute/progress/types"
 import Button from "@/packages/components/Button/Button"
-import Dropdown from "@/packages/components/Dropdown/Dropdown"
+import Dropdown from "@/packages/components/Dropdown"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import { debugRender } from "@/shared/config/debug/"
@@ -9,7 +9,7 @@ import { getRouteApi } from "@tanstack/react-router"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
 import { Ellipsis } from "lucide-react"
-import useProgressSession from "./hooks"
+import useProgressSession, { type MutateSessionStatus } from "./hooks"
 
 const route = getRouteApi("/progress/")
 
@@ -43,14 +43,60 @@ const ProgressSessionLabel = ({ conciseSession }: ProgressSessionLabelProps) => 
     )
 }
 
-type ProgressSessionDropdownProps = {
-    handleDropdownMenuChange: (value: string) => void
+type ProgressSessionDropdownProps = ProgressSessionProps & {
+    mutatePostStatus: MutateSessionStatus
+    mutateDeleteStatus: MutateSessionStatus
 }
-const ProgressSessionDropdown = ({ handleDropdownMenuChange }: ProgressSessionDropdownProps) => {
+const ProgressSessionDropdown = ({
+    startingTopicTitle,
+    syllabus_id,
+    conciseSession,
+    mutatePostStatus,
+    mutateDeleteStatus,
+}: ProgressSessionDropdownProps) => {
     const searchParams = route.useSearch()
     const { classroom_id, student_id } = searchParams
     const isInteractable = Boolean(classroom_id) !== Boolean(student_id)
     if (!isInteractable) return null
+
+    const baseBody = {
+        session_id: conciseSession.id,
+        classroom_id,
+        student_id,
+    }
+    const handleHomeworkClick = () => {
+        mutatePostStatus({
+            body: { ...baseBody, session_status: "HOMEWORK" },
+            additionalData: {
+                status: "HOMEWORK",
+                session_id: conciseSession.id,
+                startingTopicTitle,
+                syllabus_id,
+            },
+        })
+    }
+    const handleTodayClick = () => {
+        mutatePostStatus({
+            body: { ...baseBody, session_status: "TODAY" },
+            additionalData: {
+                status: "TODAY",
+                session_id: conciseSession.id,
+                startingTopicTitle,
+                syllabus_id,
+            },
+        })
+    }
+    const handleDismissClick = () => {
+        mutateDeleteStatus({
+            body: undefined,
+            additionalData: {
+                status: null,
+                session_id: conciseSession.id,
+                startingTopicTitle,
+                syllabus_id,
+            },
+        })
+    }
 
     return (
         <Dropdown>
@@ -59,10 +105,10 @@ const ProgressSessionDropdown = ({ handleDropdownMenuChange }: ProgressSessionDr
                     <Ellipsis size={16} />
                 </Button>
             </Dropdown.Trigger>
-            <Dropdown.Menu onChange={handleDropdownMenuChange}>
-                <Dropdown.MenuItem value="homework">숙제</Dropdown.MenuItem>
-                <Dropdown.MenuItem value="today">오늘</Dropdown.MenuItem>
-                <Dropdown.MenuItem value="dismiss">해제</Dropdown.MenuItem>
+            <Dropdown.Menu>
+                <Dropdown.MenuItem onClick={handleHomeworkClick}>숙제</Dropdown.MenuItem>
+                <Dropdown.MenuItem onClick={handleTodayClick}>오늘</Dropdown.MenuItem>
+                <Dropdown.MenuItem onClick={handleDismissClick}>해제</Dropdown.MenuItem>
             </Dropdown.Menu>
         </Dropdown>
     )
@@ -165,7 +211,7 @@ const ProgressSession = (props: ProgressSessionProps) => {
     const { conciseSession } = props
     const { status, assigned_at } = conciseSession
 
-    const { handleClickToComplete, handleDropdownMenuChange, isCompleted } = useProgressSession(props)
+    const { handleClickToComplete, mutatePostStatus, mutateDeleteStatus, isCompleted } = useProgressSession(props)
 
     return (
         <RoundBox
