@@ -14,7 +14,7 @@ const DropdownMenuItem = ({ children, onClick }: DropdownMenuItemProps) => {
     }
 
     return (
-        <Button color="bg2" isBorderedOnHover onClick={handleClick}>
+        <Button isOnLeft color="bg2" isBorderedOnHover onClick={handleClick}>
             {children}
         </Button>
     )

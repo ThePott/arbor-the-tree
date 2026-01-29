@@ -4,6 +4,9 @@ import { createStore, type StoreApi } from "zustand"
 
 export type DropdownExternalValues = {
     width?: XsToXl
+    direction?: "left" | "right"
+    // NOTE: inline block 등 레이아웃 바꾸는 데에 사용
+    className?: string
 }
 type InternalStoreState = {
     isOn: boolean

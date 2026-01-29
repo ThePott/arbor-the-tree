@@ -1,3 +1,4 @@
+import clsx from "clsx"
 import type { ReactNode } from "react"
 import DropdownContent from "./DropdownContent"
 import DropdownMenu from "./DropdownMenu"
@@ -8,8 +9,15 @@ import DropdownTrigger from "./DropdownTrigger"
 type DropdownProps = DropdownExternalValues & {
     children: ReactNode
 }
-const Dropdown = ({ children, ...externalValues }: DropdownProps) => {
-    return <DropdownStoreProvider {...externalValues}>{children}</DropdownStoreProvider>
+const Dropdown = ({ children, width = "xs", direction = "right", ...rest }: DropdownProps) => {
+    const { className } = rest
+    return (
+        <DropdownStoreProvider {...{ width, direction, ...rest }}>
+            <div data-dropdown className={clsx("relative", className)}>
+                {children}
+            </div>
+        </DropdownStoreProvider>
+    )
 }
 
 Dropdown.Trigger = DropdownTrigger

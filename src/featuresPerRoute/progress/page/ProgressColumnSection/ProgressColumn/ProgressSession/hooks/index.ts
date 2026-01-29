@@ -67,7 +67,7 @@ const useStatusMutation = (session_id?: string) => {
             }),
     })
 }
-export type MutateSessionStatus = ReturnType<typeof useSimpleMutation>["mutate"]
+export type MutateSessionStatus = ReturnType<typeof useStatusMutation>["mutate"]
 
 // NOTE: for completed post, delete
 type CompletedAdditionalData = {
@@ -115,9 +115,6 @@ const useCompletedMutation = ({ session_id, method }: UseCompletedMutationProps)
 }
 
 type UseEventHandlersProps = ProgressSessionProps & {
-    mutatePostStatus: ReturnType<typeof useStatusMutation>["mutate"]
-    mutateDeleteStatus: ReturnType<typeof useStatusMutation>["mutate"]
-
     mutatePostCompleted: ReturnType<typeof useCompletedMutation>["mutate"]
     mutateDeleteCompleted: ReturnType<typeof useCompletedMutation>["mutate"]
 }
@@ -125,14 +122,9 @@ const useEventHandlers = ({
     conciseSession,
     syllabus_id,
     startingTopicTitle,
-    mutatePostStatus,
-    mutateDeleteStatus,
     mutatePostCompleted,
     mutateDeleteCompleted,
 }: UseEventHandlersProps) => {
-    const searchParams = route.useSearch()
-    const { classroom_id, student_id } = searchParams
-
     const { debouncedBoolValue, realTimeValue, toggle } = useDebouncingToggle({
         value: Boolean(conciseSession.completed_at),
     })
@@ -233,8 +225,6 @@ const useProgressSession = (props: ProgressSessionProps) => {
 
     const eventHanderReturns = useEventHandlers({
         ...props,
-        mutatePostStatus,
-        mutateDeleteStatus,
         mutatePostCompleted,
         mutateDeleteCompleted,
     })

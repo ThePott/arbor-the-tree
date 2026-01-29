@@ -1,11 +1,11 @@
 import type { DivProps } from "@/shared/interfaces"
-import { widthToCn } from "@/shared/utils/styles"
+import { wideWidthToCn } from "@/shared/utils/styles"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
 
 const containerVariants = cva("mx-auto", {
     variants: {
-        width: widthToCn,
+        width: wideWidthToCn,
         isPadded: {
             true: "p-my-xl",
             false: "",

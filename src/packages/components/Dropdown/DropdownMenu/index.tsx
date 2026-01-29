@@ -1,18 +1,16 @@
 import { type ReactNode } from "react"
 import { Vstack } from "../../layouts"
 import RoundBox from "../../RoundBox"
-import DropdownContent, { type DropdownDirection } from "../DropdownContent"
+import DropdownContent from "../DropdownContent"
 
 type DropdownMenuProps = {
     children: ReactNode
-    direction?: DropdownDirection
 }
-
-const DropdownMenu = ({ children, direction = "bottomLeft" }: DropdownMenuProps) => {
+const DropdownMenu = ({ children }: DropdownMenuProps) => {
     return (
-        <DropdownContent direction={direction}>
-            <RoundBox radius="md" color="bg3" padding="lg" isShadowed className="text-my-sm text-fg-vivid">
-                <Vstack>{children}</Vstack>
+        <DropdownContent>
+            <RoundBox radius="md" color="bg3" padding="md" isShadowed className="text-my-sm text-fg-vivid">
+                <Vstack gap="none">{children}</Vstack>
             </RoundBox>
         </DropdownContent>
     )

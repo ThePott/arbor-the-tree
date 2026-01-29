@@ -1,5 +1,5 @@
 import { instance } from "@/packages/api/axiosInstances"
-import { FlexOneContainer, Hstack } from "@/packages/components/layouts"
+import { Hstack, Vstack } from "@/packages/components/layouts"
 import Toggle from "@/packages/components/Toggle"
 import { debugCache, debugRender } from "@/shared/config/debug/"
 import { useQuery } from "@tanstack/react-query"
@@ -33,22 +33,24 @@ const ProgressColumnSection = () => {
         : data
 
     return (
-        <FlexOneContainer className="pt-my-lg pl-my-lg" isXScrollable>
-            <Hstack className="items-center">
-                <p className="font-semibold">요약</p>
-                <Toggle onChange={(value) => setIsSummarized(value)} defaultIsOn={isSummarized} />
-            </Hstack>
-            <Hstack className="h-full">
-                {!isSummarized && (
-                    <>
-                        {conciseSyllabusArray.map((conciseSyllabus) => (
-                            <ProgressColumn key={conciseSyllabus.id} conciseSyllabus={conciseSyllabus} />
-                        ))}
-                    </>
-                )}
-                {isSummarized && <ProgressColumnSummarizedMany conciseSyllabusArray={conciseSyllabusArray} />}
-            </Hstack>
-        </FlexOneContainer>
+        <div className="pt-my-lg pl-my-lg flex-1">
+            <Vstack gap="none" className="h-full">
+                <Hstack className="items-center">
+                    <p className="font-semibold">요약</p>
+                    <Toggle onChange={(value) => setIsSummarized(value)} defaultIsOn={isSummarized} />
+                </Hstack>
+                <Hstack className="flex-1 overflow-hidden pb-my-lg">
+                    {!isSummarized && (
+                        <>
+                            {conciseSyllabusArray.map((conciseSyllabus) => (
+                                <ProgressColumn key={conciseSyllabus.id} conciseSyllabus={conciseSyllabus} />
+                            ))}
+                        </>
+                    )}
+                    {isSummarized && <ProgressColumnSummarizedMany conciseSyllabusArray={conciseSyllabusArray} />}
+                </Hstack>
+            </Vstack>
+        </div>
     )
 }
 

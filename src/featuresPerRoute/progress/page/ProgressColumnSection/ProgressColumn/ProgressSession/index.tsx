@@ -208,7 +208,7 @@ const ProgressSession = (props: ProgressSessionProps) => {
         props.conciseSession.status,
         props.conciseSession.completed_at
     )
-    const { conciseSession } = props
+    const { conciseSession, startingTopicTitle, syllabus_id } = props
     const { status, assigned_at } = conciseSession
 
     const { handleClickToComplete, mutatePostStatus, mutateDeleteStatus, isCompleted } = useProgressSession(props)
@@ -227,7 +227,13 @@ const ProgressSession = (props: ProgressSessionProps) => {
         >
             <Hstack className="items-start" gap="none">
                 <ProgressSessionLabel conciseSession={conciseSession} />
-                <ProgressSessionDropdown handleDropdownMenuChange={handleDropdownMenuChange} />
+                <ProgressSessionDropdown
+                    startingTopicTitle={startingTopicTitle}
+                    syllabus_id={syllabus_id}
+                    conciseSession={conciseSession}
+                    mutatePostStatus={mutatePostStatus}
+                    mutateDeleteStatus={mutateDeleteStatus}
+                />
             </Hstack>
         </RoundBox>
     )

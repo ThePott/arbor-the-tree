@@ -1,4 +1,4 @@
-import { widthToCn } from "@/shared/utils/styles"
+import { wideWidthToCn } from "@/shared/utils/styles"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
 import { useCallback, useEffect, useRef, type ReactNode } from "react"
@@ -8,7 +8,7 @@ import useDropdownContext from "./_useDropdownContext"
 
 const dropdownVariants = cva("absolute z-10 top-full mt-my-sm", {
     variants: {
-        width: widthToCn,
+        width: wideWidthToCn,
         direction: {
             bottomLeft: "right-0",
             bottomRight: "left-0",
