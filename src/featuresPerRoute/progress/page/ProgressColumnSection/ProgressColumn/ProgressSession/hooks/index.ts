@@ -55,6 +55,16 @@ const useStatusMutation = (session_id?: string) => {
             debugMutation("useStatusMutation update result", { newData })
             return newData
         },
+        ...(classroom_id &&
+            !student_id && {
+                addtionalOnSetteled: (client) =>
+                    client.invalidateQueries({
+                        predicate: (query) => {
+                            const objectQueryKey = query.queryKey[1] as { classroom_id: string }
+                            return objectQueryKey.classroom_id === classroom_id
+                        },
+                    }),
+            }),
     })
 }
 
