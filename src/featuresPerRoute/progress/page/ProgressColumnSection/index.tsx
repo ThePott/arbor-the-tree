@@ -13,18 +13,23 @@ const route = getRouteApi("/progress/")
 const ProgressColumnSection = () => {
     debugRender("ProgressColumnSection")
     const [isSummarized, setIsSummarized] = useState(false)
-    const searchParams = route.useSearch()
+    const { classroom_id, student_id, syllabus_id } = route.useSearch()
+    const params = { classroom_id, student_id }
     // TODO: 여기서 data 이용해서 session들 보여줘야
     const { data } = useQuery({
-        queryKey: ["progressSession", searchParams],
+        queryKey: ["progressSession", params],
         queryFn: async () => {
-            const response = await instance.get("/progress/syllabus-with-sessions", { params: searchParams })
+            const response = await instance.get("/progress/syllabus-with-sessions", { params })
             return response.data as ConciseSyllabus[]
         },
     })
     debugCache("ProgressColumnSection data", data)
 
     if (!data) return null
+
+    const conciseSyllabusArray = syllabus_id
+        ? data.filter((conciseSyllabus) => conciseSyllabus.id === syllabus_id)
+        : data
 
     return (
         <FlexOneContainer className="pt-my-lg pl-my-lg" isXScrollable>
@@ -35,12 +40,12 @@ const ProgressColumnSection = () => {
             <Hstack className="h-full">
                 {!isSummarized && (
                     <>
-                        {data.map((conciseSyllabus) => (
+                        {conciseSyllabusArray.map((conciseSyllabus) => (
                             <ProgressColumn key={conciseSyllabus.id} conciseSyllabus={conciseSyllabus} />
                         ))}
                     </>
                 )}
-                {isSummarized && <ProgressColumnSummarizedMany conciseSyllabusArray={data} />}
+                {isSummarized && <ProgressColumnSummarizedMany conciseSyllabusArray={conciseSyllabusArray} />}
             </Hstack>
         </FlexOneContainer>
     )

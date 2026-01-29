@@ -24,13 +24,14 @@ type StatusUpdateProps = {
     additionalData: StatusAdditionalData
 }
 const useStatusMutation = (session_id?: string) => {
-    const searchParams = route.useSearch()
+    const { classroom_id, student_id } = route.useSearch()
+    const params = { classroom_id, student_id }
 
     return useSimpleMutation({
         queryKeyWithoutParams: ["progressSession"],
         url: `/progress/session/assigned${session_id ? ["/", session_id].join("") : ""}`,
         method: session_id ? "delete" : "post",
-        params: searchParams,
+        params,
         update: ({ previous, additionalData }: StatusUpdateProps) => {
             debugMutation("useStatusMutation update", { additionalData })
             const { session_id, status, syllabus_id, startingTopicTitle } = additionalData
@@ -73,13 +74,14 @@ type UseCompletedMutationProps = {
     method: Extract<Method, "post" | "delete">
 }
 const useCompletedMutation = ({ session_id, method }: UseCompletedMutationProps) => {
-    const searchParams = route.useSearch()
+    const { classroom_id, student_id } = route.useSearch()
+    const params = { classroom_id, student_id }
 
     return useSimpleMutation({
         queryKeyWithoutParams: ["progressSession"],
         url: `/progress/session/${session_id}/completed`,
         method,
-        params: searchParams,
+        params: params,
         update: ({ previous, additionalData }: CompletedUpdateProps) => {
             debugMutation("useCompletedMutation update", { additionalData })
             const { session_id, completed_at, syllabus_id, startingTopicTitle } = additionalData

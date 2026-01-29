@@ -22,8 +22,8 @@ const route = getRouteApi("/progress/")
 const ProgressBookForm = () => {
     const { extendedSyllabusArray } = useLoaderData({ from: "/progress/" })
     const queryClient = useQueryClient()
-    const searchParams = route.useSearch()
-    const { student_id, classroom_id } = searchParams
+    const { student_id, classroom_id } = route.useSearch()
+    const params = { student_id, classroom_id }
     const data = queryClient.getQueryData(["progressSyllabusAssigned", { student_id, classroom_id }]) as
         | AssignedJoinedSyllabus[]
         | null
@@ -43,7 +43,7 @@ const ProgressBookForm = () => {
         method: "post",
         url: "/progress/syllabus/assigned",
         queryKeyWithoutParams: ["progressSyllabusAssigned"],
-        additionalInvalidatingQueryKeyArray: [["progressSession", searchParams]],
+        additionalInvalidatingQueryKeyArray: [["progressSession", params]],
         params: { classroom_id, student_id },
         update: ({
             previous,

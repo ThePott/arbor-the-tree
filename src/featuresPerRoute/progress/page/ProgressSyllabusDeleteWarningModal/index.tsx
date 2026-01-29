@@ -13,7 +13,7 @@ const ProgressSyllabusDeleteWarningModal = () => {
     const selectedSyllabus = useProgressStore((state) => state.selectedSyllabus)
     const setSelectedSyllabus = useProgressStore((state) => state.setSelectedSyllabus)
 
-    const searchParams = route.useSearch()
+    const { classroom_id, student_id } = route.useSearch()
 
     const params = {
         student_id: selectedSyllabus?.student_id,
@@ -25,7 +25,7 @@ const ProgressSyllabusDeleteWarningModal = () => {
         url: `/progress/syllabus/assigned/${selectedSyllabus?.syllabus.id}`,
         params,
         queryKeyWithoutParams: ["progressSyllabusAssigned"],
-        additionalInvalidatingQueryKeyArray: [["progressSession", searchParams]],
+        additionalInvalidatingQueryKeyArray: [["progressSession", { classroom_id, student_id }]],
         update: ({ previous }: { previous: AssignedJoinedSyllabus[] }) =>
             previous.filter((el) => el.syllabus.id !== selectedSyllabus?.syllabus.id),
     })
