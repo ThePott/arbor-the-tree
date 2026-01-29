@@ -22,6 +22,7 @@ const ProgressColumnSection = () => {
             const response = await instance.get("/progress/syllabus-with-sessions", { params })
             return response.data as ConciseSyllabus[]
         },
+        enabled: Boolean(classroom_id || student_id),
     })
     debugCache("ProgressColumnSection data", data)
 
