@@ -17,6 +17,10 @@ type ProgressSessionLabelProps = {
     conciseSession: ConciseSession
 }
 const ProgressSessionLabel = ({ conciseSession }: ProgressSessionLabelProps) => {
+    const assignedText = conciseSession.assigned_at ? `${makeFromNow(conciseSession.assigned_at)} 할당` : ""
+    const completedText = conciseSession.completed_at ? ` __${makeFromNow(conciseSession.completed_at)} 완료` : ""
+    const dateInfoText = `${assignedText}${completedText}`
+
     // NOTE: muted의 스타일만 지정하면 된다
     const isBgBright =
         conciseSession.status &&
@@ -34,16 +38,7 @@ const ProgressSessionLabel = ({ conciseSession }: ProgressSessionLabelProps) => 
                 <p className={clsx("text-my-sm pl-3.5", mutedClassName)}>{conciseSession.end.topic}</p>
             )}
             {conciseSession.end.step && <p>~ {conciseSession.end.step}</p>}
-            {conciseSession.assigned_at && (
-                <p
-                    className={clsx("text-my-xs", mutedClassName)}
-                >{`${makeFromNow(conciseSession.assigned_at)} 할당`}</p>
-            )}
-            {conciseSession.completed_at && (
-                <p
-                    className={clsx("text-my-xs", mutedClassName)}
-                >{`${makeFromNow(conciseSession.completed_at)} 완료`}</p>
-            )}
+            <p className={clsx("text-my-xs", mutedClassName)}>{dateInfoText}</p>
         </Vstack>
     )
 }
