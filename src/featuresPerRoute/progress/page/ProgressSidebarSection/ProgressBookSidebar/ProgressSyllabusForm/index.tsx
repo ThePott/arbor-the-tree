@@ -43,7 +43,7 @@ const ProgressBookForm = () => {
         method: "post",
         url: "/progress/syllabus/assigned",
         queryKeyWithoutParams: ["progressSyllabusAssigned"],
-        additionalInvalidatingQueryKeyArray: [["progressSession", params]],
+        addtionalOnSetteled: (client) => client.invalidateQueries({ queryKey: ["progressSession", params] }),
         params: { classroom_id, student_id },
         update: ({
             previous,

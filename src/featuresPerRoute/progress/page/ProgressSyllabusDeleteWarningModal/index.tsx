@@ -25,7 +25,8 @@ const ProgressSyllabusDeleteWarningModal = () => {
         url: `/progress/syllabus/assigned/${selectedSyllabus?.syllabus.id}`,
         params,
         queryKeyWithoutParams: ["progressSyllabusAssigned"],
-        additionalInvalidatingQueryKeyArray: [["progressSession", { classroom_id, student_id }]],
+        addtionalOnSetteled: (client) =>
+            client.invalidateQueries({ queryKey: ["progressSession", { classroom_id, student_id }] }),
         update: ({ previous }: { previous: AssignedJoinedSyllabus[] }) =>
             previous.filter((el) => el.syllabus.id !== selectedSyllabus?.syllabus.id),
     })

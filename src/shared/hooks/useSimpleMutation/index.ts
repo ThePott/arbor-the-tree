@@ -1,7 +1,7 @@
 import { instance } from "@/packages/api/axiosInstances"
 import { debugMutation } from "@/shared/config/debug/"
 import { ClientError } from "@/shared/error/clientError"
-import { useMutation } from "@tanstack/react-query"
+import { QueryClient, useMutation } from "@tanstack/react-query"
 import type { Method } from "axios"
 
 type UseDeleteMutationProps<TAdditionalData, TParams, TQueryKeyElement, TPrevious> = {
@@ -9,7 +9,7 @@ type UseDeleteMutationProps<TAdditionalData, TParams, TQueryKeyElement, TPreviou
     url: string
     params?: TParams
     queryKeyWithoutParams: TQueryKeyElement[]
-    additionalInvalidatingQueryKeyArray?: TQueryKeyElement[][]
+    addtionalOnSetteled?: (client: QueryClient) => void
     update: ({ previous, additionalData }: { previous: TPrevious; additionalData: TAdditionalData }) => TPrevious
 }
 const useSimpleMutation = <TBody, TAdditionalData, TParams, TQueryKey, TPrevious>({
@@ -17,7 +17,7 @@ const useSimpleMutation = <TBody, TAdditionalData, TParams, TQueryKey, TPrevious
     url,
     params,
     queryKeyWithoutParams,
-    additionalInvalidatingQueryKeyArray = [],
+    addtionalOnSetteled,
     update,
 }: UseDeleteMutationProps<TAdditionalData, TParams, TQueryKey, TPrevious>) => {
     const queryKey = params ? [...queryKeyWithoutParams, params] : queryKeyWithoutParams
@@ -43,9 +43,7 @@ const useSimpleMutation = <TBody, TAdditionalData, TParams, TQueryKey, TPrevious
         onSettled: (_data, _error, _variables, _onMutateResult, context) => {
             debugMutation("useSimpleMutation onSettled", { url, queryKey })
             context.client.invalidateQueries({ queryKey })
-            additionalInvalidatingQueryKeyArray.forEach((invalidatingQueryKey) => {
-                context.client.invalidateQueries({ queryKey: invalidatingQueryKey })
-            })
+            addtionalOnSetteled?.(context.client)
         },
     })
     return mutation
