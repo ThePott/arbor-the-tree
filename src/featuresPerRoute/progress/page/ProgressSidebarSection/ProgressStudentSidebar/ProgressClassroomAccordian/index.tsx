@@ -19,6 +19,7 @@ const StudentButton = ({ student, classroomId }: StudentButtonProps) => {
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.stopPropagation()
+
         const overridingParams = { student_id: student.id, classroom_id: classroomId }
         const newSearchParams =
             classroomId === searchParams.classroom_id ? { ...searchParams, ...overridingParams } : overridingParams
@@ -46,13 +47,19 @@ const ProgressClassroomAccordian = ({ classroomWithStudent }: ProgressClassroomA
 
     const isSelected = classroom_id && classroom_id === classroomWithStudent.classroomId && !student_id
 
+    const handleClick = () => {
+        if (!classroomWithStudent.classroomId) return
+
+        navigate({ search: { classroom_id: classroomWithStudent.classroomId } })
+    }
+
     // NOTE: color="black"은 스타일 설정이 안 되어 있어서 투명한 색으로 나온다
     return (
         <RoundBox
             color={isSelected ? "bg2" : undefined}
             padding="md"
             isBordered
-            onClick={() => navigate({ search: { classroom_id: classroomWithStudent.classroomId } })}
+            onClick={handleClick}
             className="my-transition hover:outline-2 cursor-pointer"
         >
             <Vstack gap="none">
