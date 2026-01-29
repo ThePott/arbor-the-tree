@@ -18,7 +18,7 @@ const ProgressColumnSection = () => {
     const { data } = useQuery({
         queryKey: ["progressSession", searchParams],
         queryFn: async () => {
-            const response = await instance.get("/progress/session", { params: searchParams })
+            const response = await instance.get("/progress/syllabus-with-sessions", { params: searchParams })
             return response.data as ConciseSyllabus[]
         },
     })
