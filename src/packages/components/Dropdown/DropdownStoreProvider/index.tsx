@@ -1,6 +1,9 @@
 import type { XsToXl } from "@/shared/interfaces"
+import type { useFloating } from "@floating-ui/react"
 import { createContext, useCallback, useRef, useState, type ReactNode } from "react"
 import { createStore, type StoreApi } from "zustand"
+
+type FloatingReturns = ReturnType<typeof useFloating>
 
 export type DropdownExternalValues = {
     width?: XsToXl
@@ -12,6 +15,9 @@ type InternalStoreState = {
     isOn: boolean
     setIsOn: (isOn: boolean) => void
     triggerRef: React.RefObject<HTMLDivElement | null>
+
+    floatingReturns: FloatingReturns | null
+    setFloatingReturns: (floatingReturns: FloatingReturns | null) => void
 }
 export type DropdownStoreState = DropdownExternalValues & InternalStoreState
 const DropdownStoreContext = createContext<StoreApi<DropdownStoreState> | null>(null)
@@ -28,6 +34,9 @@ const DropdownStoreProvider = ({ children, ...externalValues }: StoreProviderPro
                 isOn: false,
                 setIsOn: (isOn) => set({ isOn }),
                 triggerRef,
+
+                floatingReturns: null,
+                setFloatingReturns: (floatingReturns) => set({ floatingReturns }),
             })),
         [externalValues]
     )

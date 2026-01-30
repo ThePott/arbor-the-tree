@@ -3,16 +3,12 @@ import { narrowWidthToCn } from "@/shared/utils/styles"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
 import { type ReactNode } from "react"
-import ExpandableDiv from "../../ExpandableDiv/ExpendableDiv"
+import { createPortal } from "react-dom"
 import useDropdownStore from "../useDropdownStore"
 
-const dropdownVariants = cva("absolute z-100 top-full mt-my-xs", {
+const dropdownVariants = cva("", {
     variants: {
         width: narrowWidthToCn,
-        direction: {
-            left: "right-0",
-            right: "left-0",
-        },
     },
 })
 
@@ -24,14 +20,20 @@ const DropdownContent = ({ children }: DropdownContentProps) => {
     const triggerRef = useDropdownStore((state) => state.triggerRef)
     const isOn = useDropdownStore((state) => state.isOn)
     const setIsOn = useDropdownStore((state) => state.setIsOn)
-    const direction = useDropdownStore((state) => state.direction)
+    const floatingReturns = useDropdownStore((state) => state.floatingReturns)
 
     const { contentRef } = useDetectOutsideClick({ triggerRef, isOn, onOutsideClick: () => setIsOn(false) })
 
-    return (
-        <ExpandableDiv className={clsx(dropdownVariants({ direction, width }))}>
-            {isOn && <div ref={contentRef}>{children}</div>}
-        </ExpandableDiv>
+    const refCallback = (node: HTMLDivElement | null) => {
+        contentRef.current = node
+        floatingReturns?.refs.setFloating(node)
+    }
+    if (!isOn) return
+    return createPortal(
+        <div ref={refCallback} style={floatingReturns?.floatingStyles} className={clsx(dropdownVariants({ width }))}>
+            {children}
+        </div>,
+        document.body
     )
 }
 
