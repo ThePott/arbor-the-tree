@@ -1,5 +1,4 @@
 import { motionTransition } from "@/shared/utils/framerMotionAnimations"
-import clsx from "clsx"
 import { ChevronRight } from "lucide-react"
 import { motion } from "motion/react"
 import Button from "../Button/Button"
@@ -16,8 +15,8 @@ const ChevronButton = ({ isOpened, setIsOpened }: ChevronButtonProps) => {
 
     // TODO: 투명한 색 (complete ghost) 하기 위해서 black 씀. 나중에 바꿔야
     return (
-        <Button color="black" isBorderedOnHover onClick={handleClick}>
-            <motion.div transition={motionTransition} className={clsx(isOpened && "rotate-90")}>
+        <Button space="tight" color="black" onClick={handleClick} isBorderedOnHover>
+            <motion.div transition={motionTransition} animate={{ rotate: isOpened ? 90 : 0 }}>
                 <ChevronRight size={16} />
             </motion.div>
         </Button>

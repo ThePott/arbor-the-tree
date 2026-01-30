@@ -7,7 +7,7 @@ import Loader from "../Loader/Loader"
 import { Hstack } from "../layouts"
 import type { ButtonColor } from "./buttonInterfaces"
 
-const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm my-transition", {
+const buttonVariants = cva("rounded-my-sm my-transition", {
     variants: {
         color: buttonColorToCn,
         status: {
@@ -15,9 +15,10 @@ const buttonVariants = cva("py-my-sm px-my-md rounded-my-sm my-transition", {
             disabled: "",
             pending: "",
         },
-        isWide: {
-            true: "w-full",
-            false: "",
+        space: {
+            normal: "py-my-sm px-my-md",
+            wide: "w-full",
+            tight: "p-my-xs",
         },
         isShadowed: {
             false: "",
@@ -58,10 +59,11 @@ interface WithButtonProps<T extends ElementType = "button"> {
     as?: T
     color?: Extract<Color, ButtonColor>
     status?: "enabled" | "disabled" | "pending"
-    isWide?: boolean
+    // isWide?: boolean
     isShadowed?: boolean
     isBorderedOnHover?: boolean
     isOnLeft?: boolean
+    space?: "wide" | "tight" | "normal"
 }
 type ButtonProps<T extends ElementType> = WithButtonProps<T> & Omit<ComponentPropsWithRef<T>, keyof WithButtonProps<T>>
 
@@ -71,7 +73,7 @@ const Button = <T extends ElementType>({
     as,
     color = "bg1",
     status = "enabled",
-    isWide,
+    space = "normal",
     isShadowed = false,
     isBorderedOnHover = false,
     isOnLeft = false,
@@ -86,7 +88,7 @@ const Button = <T extends ElementType>({
         <Component
             {...rest}
             disabled={status !== "enabled"}
-            className={clsx(buttonVariants({ color, status, isWide, isBorderedOnHover, isShadowed }), className)}
+            className={clsx(buttonVariants({ color, status, space, isBorderedOnHover, isShadowed }), className)}
         >
             <Hstack className={clsx("items-center", isOnLeft ? "text-left" : "justify-center")}>
                 {status === "pending" && <Loader isDark={isLoaderDark} />}

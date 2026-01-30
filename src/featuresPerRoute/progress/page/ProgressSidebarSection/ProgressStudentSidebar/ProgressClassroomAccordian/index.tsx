@@ -1,9 +1,11 @@
 import type { ExtendedStudent } from "@/featuresPerRoute/manage.student/types"
 import Button from "@/packages/components/Button/Button"
-import { Vstack } from "@/packages/components/layouts"
+import ChevronButton from "@/packages/components/ChevronButton"
+import { Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
 import { getRouteApi, useNavigate } from "@tanstack/react-router"
+import { useState } from "react"
 import type { ClassroomWithStudent } from ".."
 
 const route = getRouteApi("/progress/")
@@ -52,6 +54,7 @@ const ProgressClassroomAccordian = ({ classroomWithStudent }: ProgressClassroomA
 
         navigate({ search: { classroom_id: classroomWithStudent.classroomId } })
     }
+    const [isOpened, setIsOpened] = useState(false)
 
     // NOTE: color="black"은 스타일 설정이 안 되어 있어서 투명한 색으로 나온다
     return (
@@ -63,7 +66,11 @@ const ProgressClassroomAccordian = ({ classroomWithStudent }: ProgressClassroomA
             className="my-transition hover:outline-2 cursor-pointer"
         >
             <Vstack gap="none">
-                <Title as="h2">{classroomWithStudent.classroomName}</Title>
+                <Hstack gap="xs" className="items-start">
+                    <ChevronButton isOpened={isOpened} setIsOpened={setIsOpened} />
+                    <Title as="h2">{classroomWithStudent.classroomName}</Title>
+                </Hstack>
+
                 {classroomWithStudent.studentArray.map((student) => (
                     <StudentButton key={student.id} classroomId={classroomWithStudent.classroomId} student={student} />
                 ))}
