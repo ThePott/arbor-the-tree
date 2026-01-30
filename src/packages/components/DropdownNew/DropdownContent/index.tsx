@@ -10,17 +10,18 @@ const DropdownContent = ({ children }: DropdownContentProps) => {
     const isOn = useDropdownStore((state) => state.isOn)
     const setIsOn = useDropdownStore((state) => state.setIsOn)
     const setFloating = useDropdownStore((state) => state.setFloating)
+    const floatingStyles = useDropdownStore((state) => state.floatingStyles)
 
     const { contentRef } = useDetectOutsideClick({ triggerRef, isOn, onOutsideClick: () => setIsOn(false) })
 
     if (!isOn) return null
     return (
         <div
+            style={floatingStyles}
             ref={(node) => {
                 setFloating(node)
                 contentRef.current = node
             }}
-            className="absolute left-0 top-0"
         >
             {children}
         </div>
