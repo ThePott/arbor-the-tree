@@ -1,6 +1,7 @@
 import type { ExtendedStudent } from "@/featuresPerRoute/manage.student/types"
 import Button from "@/packages/components/Button/Button"
 import ChevronButton from "@/packages/components/ChevronButton"
+import ExpandableDiv from "@/packages/components/ExpandableDiv/ExpendableDiv"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
@@ -71,9 +72,19 @@ const ProgressClassroomAccordian = ({ classroomWithStudent }: ProgressClassroomA
                     <Title as="h2">{classroomWithStudent.classroomName}</Title>
                 </Hstack>
 
-                {classroomWithStudent.studentArray.map((student) => (
-                    <StudentButton key={student.id} classroomId={classroomWithStudent.classroomId} student={student} />
-                ))}
+                <ExpandableDiv>
+                    {isOpened && (
+                        <>
+                            {classroomWithStudent.studentArray.map((student) => (
+                                <StudentButton
+                                    key={student.id}
+                                    classroomId={classroomWithStudent.classroomId}
+                                    student={student}
+                                />
+                            ))}
+                        </>
+                    )}
+                </ExpandableDiv>
             </Vstack>
         </RoundBox>
     )
