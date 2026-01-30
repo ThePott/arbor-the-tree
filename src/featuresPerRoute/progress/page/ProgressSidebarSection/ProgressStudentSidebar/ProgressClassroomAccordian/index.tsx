@@ -72,7 +72,7 @@ const ProgressClassroomAccordian = ({ classroomWithStudent }: ProgressClassroomA
                     <Title as="h2">{classroomWithStudent.classroomName}</Title>
                 </Hstack>
 
-                <ExpandableDiv>
+                <ExpandableDiv animation="center">
                     {isOpened && (
                         <>
                             {classroomWithStudent.studentArray.map((student) => (
