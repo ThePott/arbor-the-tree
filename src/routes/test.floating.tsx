@@ -1,4 +1,5 @@
 import Button from "@/packages/components/Button/Button"
+import MinimalDropdown from "@/packages/components/DropdownNew"
 import { Container } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import { flip, FloatingPortal, shift, useFloating } from "@floating-ui/react"
@@ -31,10 +32,26 @@ const TestDropdown = () => {
     )
 }
 
+const TestingMinimalDropdown = () => {
+    return (
+        <MinimalDropdown>
+            <MinimalDropdown.Trigger>
+                <Button>minimal</Button>
+            </MinimalDropdown.Trigger>
+            <MinimalDropdown.Content>
+                <RoundBox color="bg2" padding="xl">
+                    this is content
+                </RoundBox>
+            </MinimalDropdown.Content>
+        </MinimalDropdown>
+    )
+}
+
 function RouteComponent() {
     return (
         <Container isPadded>
             <RoundBox color="bg0" padding="xl" isBordered className="size-100 overflow-scroll flex flex-col items-end">
+                <TestingMinimalDropdown />
                 <TestDropdown />
                 <TestDropdown />
                 <TestDropdown />

@@ -12,7 +12,11 @@ const DropdownContent = ({ children }: DropdownContentProps) => {
 
     const { contentRef } = useDetectOutsideClick({ triggerRef, isOn, onOutsideClick: () => setIsOn(false) })
 
-    return <>{isOn && <div ref={contentRef}>{children}</div>}</>
+    if (!isOn) return null
+    return (
+        <div ref={contentRef} className="absolute left-0 top-0">
+            {children}
+        </div>
+    )
 }
-
 export default DropdownContent
