@@ -26,7 +26,7 @@ const DropdownContent = ({ children }: DropdownContentProps) => {
     const setIsOn = useDropdownStore((state) => state.setIsOn)
     const direction = useDropdownStore((state) => state.direction)
 
-    const { contentRef } = useDetectOutsideClick(triggerRef, isOn, () => setIsOn(false))
+    const { contentRef } = useDetectOutsideClick({ triggerRef, isOn, onOutsideClick: () => setIsOn(false) })
 
     return (
         <ExpandableDiv className={clsx(dropdownVariants({ direction, width }))}>

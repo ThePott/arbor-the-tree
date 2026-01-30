@@ -1,10 +1,15 @@
 import { useEffect, useRef } from "react"
 
-const useDetectOutsideClick = <T extends HTMLElement>(
-    triggerRef: React.RefObject<T | null>,
-    isOn: boolean,
+type UseDetectOutsideClickProps<T extends HTMLElement> = {
+    triggerRef: React.RefObject<T | null>
+    isOn: boolean
     onOutsideClick: () => void
-) => {
+}
+const useDetectOutsideClick = <T extends HTMLElement>({
+    triggerRef,
+    isOn,
+    onOutsideClick,
+}: UseDetectOutsideClickProps<T>) => {
     const contentRef = useRef<HTMLDivElement>(null)
 
     const handleClick = (event: MouseEvent) => {

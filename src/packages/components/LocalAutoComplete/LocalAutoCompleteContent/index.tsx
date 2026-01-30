@@ -33,7 +33,11 @@ const LocalAutoCompleteContent = () => {
     const isContentOn = useLocalAutoCompleteStore((state) => state.isContentOn)
     const setIsContentOn = useLocalAutoCompleteStore((state) => state.setIsContentOn)
 
-    const { contentRef } = useDetectOutsideClick(inputRef, isContentOn, () => setIsContentOn(false))
+    const { contentRef } = useDetectOutsideClick({
+        triggerRef: inputRef,
+        isOn: isContentOn,
+        onOutsideClick: () => setIsContentOn(false),
+    })
 
     const filteredOptionArray = optionArray.filter(({ label }) => label.match(getRegExp(inputValue)))
 
