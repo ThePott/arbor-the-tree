@@ -7,9 +7,10 @@ type DropdownTriggerProps = {
 const DropdownTrigger = ({ children }: DropdownTriggerProps) => {
     const triggerRef = useDropdownStore((state) => state.triggerRef)
     const setIsOn = useDropdownStore((state) => state.setIsOn)
+    const isOn = useDropdownStore((state) => state.isOn)
 
     return (
-        <div ref={triggerRef} onClick={() => setIsOn(true)}>
+        <div ref={triggerRef} onClick={() => setIsOn(!isOn)}>
             {children}
         </div>
     )

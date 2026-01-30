@@ -1,7 +1,8 @@
+import useDetectOutsideClick from "@/packages/utils/useDetectOutsideClick"
 import { narrowWidthToCn } from "@/shared/utils/styles"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
-import { useCallback, useEffect, useRef, type ReactNode } from "react"
+import { type ReactNode } from "react"
 import ExpandableDiv from "../../ExpandableDiv/ExpendableDiv"
 import useDropdownStore from "../useDropdownStore"
 
@@ -23,35 +24,9 @@ const DropdownContent = ({ children }: DropdownContentProps) => {
     const triggerRef = useDropdownStore((state) => state.triggerRef)
     const isOn = useDropdownStore((state) => state.isOn)
     const setIsOn = useDropdownStore((state) => state.setIsOn)
-    const contentRef = useRef<HTMLDivElement>(null)
     const direction = useDropdownStore((state) => state.direction)
 
-    const handleClick = useCallback(
-        (event: MouseEvent) => {
-            if (!contentRef.current) {
-                return
-            }
-
-            if (
-                contentRef.current.contains(event.target as Node) ||
-                triggerRef.current?.contains(event.target as Node)
-            ) {
-                return
-            }
-
-            setIsOn(false)
-        },
-        [setIsOn, triggerRef]
-    )
-
-    useEffect(() => {
-        if (!isOn) {
-            return
-        }
-
-        window.addEventListener("click", handleClick)
-        return () => window.removeEventListener("click", handleClick)
-    }, [isOn])
+    const { contentRef } = useDetectOutsideClick(triggerRef, isOn, () => setIsOn(false))
 
     return (
         <ExpandableDiv className={clsx(dropdownVariants({ direction, width }))}>
