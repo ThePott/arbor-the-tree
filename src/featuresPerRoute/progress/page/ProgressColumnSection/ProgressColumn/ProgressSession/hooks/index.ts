@@ -156,54 +156,6 @@ const useEventHandlers = ({
         })
     }, [debouncedBoolValue])
 
-    // TODO: dropdown에서 같은 걸 클랙해도 여전히 클릭이 되도록 수정해야
-    // TODO: 현재 상태를 제외하고 메뉴가 뜨도록 수정해야
-    // const handleDropdownMenuChange = async (value: string) => {
-    //     const baseBody = {
-    //         session_id: conciseSession.id,
-    //         classroom_id,
-    //         student_id,
-    //     }
-    //
-    //     switch (value) {
-    //         case "homework": {
-    //             mutatePostStatus({
-    //                 body: { ...baseBody, session_status: "HOMEWORK" },
-    //                 additionalData: {
-    //                     status: "HOMEWORK",
-    //                     session_id: conciseSession.id,
-    //                     startingTopicTitle,
-    //                     syllabus_id,
-    //                 },
-    //             })
-    //             break
-    //         }
-    //         case "today": {
-    //             mutatePostStatus({
-    //                 body: { ...baseBody, session_status: "TODAY" },
-    //                 additionalData: {
-    //                     status: "TODAY",
-    //                     session_id: conciseSession.id,
-    //                     startingTopicTitle,
-    //                     syllabus_id,
-    //                 },
-    //             })
-    //             break
-    //         }
-    //         case "dismiss":
-    //             mutateDeleteStatus({
-    //                 body: undefined,
-    //                 additionalData: {
-    //                     status: null,
-    //                     session_id: conciseSession.id,
-    //                     startingTopicTitle,
-    //                     syllabus_id,
-    //                 },
-    //             })
-    //             break
-    //     }
-    // }
-
     const handleClickToComplete = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         const target = event.target as HTMLElement
         if (target.closest("[data-dropdown]")) return

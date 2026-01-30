@@ -14,23 +14,24 @@ import useProgressSession, { type MutateSessionStatus } from "./hooks"
 const route = getRouteApi("/progress/")
 
 type ProgressSessionLabelProps = {
+    isCompleted: boolean
     conciseSession: ConciseSession
 }
-const ProgressSessionLabel = ({ conciseSession }: ProgressSessionLabelProps) => {
+const ProgressSessionLabel = ({ isCompleted, conciseSession }: ProgressSessionLabelProps) => {
     const assignedText = conciseSession.assigned_at ? `${makeFromNow(conciseSession.assigned_at)} 할당` : ""
     const completedText = conciseSession.completed_at ? ` __${makeFromNow(conciseSession.completed_at)} 완료` : ""
     const dateInfoText = `${assignedText}${completedText}`
 
     // NOTE: muted의 스타일만 지정하면 된다
-    const isBgBright =
-        conciseSession.status &&
-        !conciseSession.completed_at &&
-        !(
-            conciseSession.status === "TODAY" &&
-            conciseSession.assigned_at &&
-            checkIsBeforeToday(conciseSession.assigned_at)
-        )
+    const isHomework = conciseSession.status === "HOMEWORK"
+    const isNewToday =
+        conciseSession.status === "TODAY" &&
+        conciseSession.assigned_at &&
+        !checkIsBeforeToday(conciseSession.assigned_at)
+
+    const isBgBright = !isCompleted && (isHomework || isNewToday)
     const mutedClassName = clsx(isBgBright ? "text-fg-inverted-muted" : "text-fg-muted")
+
     return (
         <Vstack className="grow" gap="none">
             <p>{conciseSession.start.step}</p>
@@ -232,7 +233,7 @@ const ProgressSession = (props: ProgressSessionProps) => {
             )}
         >
             <Hstack className="items-start" gap="none">
-                <ProgressSessionLabel conciseSession={conciseSession} />
+                <ProgressSessionLabel isCompleted={isCompleted} conciseSession={conciseSession} />
                 <ProgressSessionDropdown
                     startingTopicTitle={startingTopicTitle}
                     syllabus_id={syllabus_id}
