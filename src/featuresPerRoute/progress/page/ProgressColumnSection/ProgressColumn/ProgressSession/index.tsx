@@ -106,9 +106,15 @@ const ProgressSessionDropdown = ({
                 </Button>
             </Dropdown.Trigger>
             <Dropdown.Menu>
-                <Dropdown.MenuItem onClick={handleHomeworkClick}>숙제</Dropdown.MenuItem>
-                <Dropdown.MenuItem onClick={handleTodayClick}>오늘</Dropdown.MenuItem>
-                <Dropdown.MenuItem onClick={handleDismissClick}>해제</Dropdown.MenuItem>
+                {conciseSession.status !== "HOMEWORK" && (
+                    <Dropdown.MenuItem onClick={handleHomeworkClick}>숙제</Dropdown.MenuItem>
+                )}
+                {conciseSession.status !== "TODAY" && (
+                    <Dropdown.MenuItem onClick={handleTodayClick}>오늘</Dropdown.MenuItem>
+                )}
+                {!conciseSession.completed_at && (
+                    <Dropdown.MenuItem onClick={handleDismissClick}>해제</Dropdown.MenuItem>
+                )}
             </Dropdown.Menu>
         </Dropdown>
     )
