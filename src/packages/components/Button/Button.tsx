@@ -17,7 +17,7 @@ const buttonVariants = cva("rounded-my-sm my-transition", {
         },
         space: {
             normal: "py-my-sm px-my-md",
-            wide: "w-full",
+            wide: "py-my-sm px-my-md w-full",
             tight: "p-my-xs",
         },
         isShadowed: {
