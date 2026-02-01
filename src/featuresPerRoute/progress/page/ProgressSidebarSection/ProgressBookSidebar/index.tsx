@@ -31,7 +31,7 @@ const ProgressSyllabusSidebar = () => {
 
     if (!student_id && !classroom_id) return null
     return (
-        <Vstack className="w-[300px] p-my-md overflow-y-scroll pl-0">
+        <Vstack className="w-[300px] p-my-md pl-1.5 overflow-y-scroll pl-0">
             <Title as="h3">{title}</Title>
             <ProgressBookForm />
 
