@@ -29,9 +29,9 @@ const ProgressSyllabusSidebar = () => {
     const student = studentArray.find((el) => el.id === student_id)
     const title = [classroom?.name, student?.users.name].filter((value) => value).join(" / ")
 
-    if (!student_id && !classroom_id) return <p>학생 또는 반을 선택해주세요 ---- 이거 더 예쁘게 만들어야</p>
+    if (!student_id && !classroom_id) return null
     return (
-        <Vstack>
+        <Vstack className="w-[300px] p-my-md pl-1.5 overflow-y-scroll pl-0">
             <Title as="h3">{title}</Title>
             <ProgressBookForm />
 

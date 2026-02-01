@@ -3,7 +3,7 @@ import Labeled from "@/packages/components/Labeled/Labeled"
 import { Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 
 const BWMetaInfoSection = () => {

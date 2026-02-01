@@ -2,7 +2,7 @@ import type { ManageStudentLoaderResponseData } from "@/featuresPerRoute/manage.
 import useManageStudentStore from "@/featuresPerRoute/manage.student/store"
 import { instance } from "@/packages/api/axiosInstances"
 import Modal from "@/packages/Modal"
-import { debugCache, debugMutation, debugRender } from "@/shared/config/debug/debug"
+import { debugCache, debugMutation, debugRender } from "@/shared/config/debug/"
 import { makeUlLul } from "@/shared/utils/stringManipulation"
 import { useMutation } from "@tanstack/react-query"
 

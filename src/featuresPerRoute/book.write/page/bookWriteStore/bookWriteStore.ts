@@ -1,4 +1,4 @@
-import { debugStore } from "@/shared/config/debug/debug"
+import { debugStore } from "@/shared/config/debug/"
 import { splitByLineBreakThenTrim } from "@/shared/utils/stringManipulation"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"

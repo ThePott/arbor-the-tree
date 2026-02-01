@@ -2,14 +2,14 @@ import type { DivProps } from "@/shared/interfaces"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
 
-const flexOneContainerVariants = cva("flex-1", {
+const flexOneContainerVariants = cva("flex-1 [scrollbar-gutter:stable]", {
     variants: {
         isYScrollable: {
-            true: "overflow-y-scroll",
+            true: "overflow-y-auto",
             false: "overflow-y-hidden",
         },
         isXScrollable: {
-            true: "overflow-x-scroll",
+            true: "overflow-x-auto",
             false: "overflow-x-hidden",
         },
     },

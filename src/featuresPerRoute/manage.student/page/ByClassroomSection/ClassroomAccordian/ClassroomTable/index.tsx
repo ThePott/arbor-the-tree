@@ -2,7 +2,7 @@ import { ManageStudentLoaderQueryOptions } from "@/featuresPerRoute/manage.stude
 import type { ExtendedStudent } from "@/featuresPerRoute/manage.student/types"
 import { Vstack } from "@/packages/components/layouts"
 import TanstackTable from "@/packages/components/TanstackTable"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import { ClientError } from "@/shared/error/clientError"
 import type { Classroom, ClassroomStudent } from "@/shared/interfaces"
 import { useQuery } from "@tanstack/react-query"

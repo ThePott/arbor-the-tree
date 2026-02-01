@@ -9,8 +9,8 @@ type ProgressColumnProps = {
 }
 const ProgressColumn = ({ conciseSyllabus }: ProgressColumnProps) => {
     return (
-        <RoundBox isBordered color="bg0" className="h-full overflow-hidden shrink-0">
-            <Vstack className="h-full overflow-hidden w-[300px]">
+        <RoundBox isBordered color="bg0" className="h-full shrink-0 overflow-hidden">
+            <Vstack className="h-full w-[300px]">
                 <Title as="h3" className="px-my-lg pt-my-lg">
                     {conciseSyllabus.book.title}
                 </Title>

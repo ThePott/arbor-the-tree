@@ -1,7 +1,9 @@
 import type { ValueLabel } from "@/shared/interfaces"
+import type { useFloating } from "@floating-ui/react"
 import { createContext, useCallback, useRef, useState, type ReactNode } from "react"
 import { createStore, type StoreApi } from "zustand"
 
+type FloatingReturns = ReturnType<typeof useFloating>
 export type LocalAutoCompleteExternalValues = {
     placeholder: string
     optionArray: ValueLabel[]
@@ -17,6 +19,9 @@ type InternalStoreState = {
     setInputValue: (inputValue: string) => void
 
     inputRef: React.RefObject<HTMLInputElement | null>
+
+    floatingReturns: FloatingReturns | null
+    setFloatingReturns: (floatingReturns: FloatingReturns | null) => void
 }
 
 export type LocalAutoCompleteStoreState = LocalAutoCompleteExternalValues & InternalStoreState
@@ -40,6 +45,9 @@ const LocalAutoCompleteStoreProvider = ({ children, ...initialValues }: StorePro
                     get().onChange(inputValue)
                 },
                 inputRef,
+
+                floatingReturns: null,
+                setFloatingReturns: (floatingReturns) => set({ floatingReturns }),
             })),
         [initialValues]
     )

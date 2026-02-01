@@ -17,7 +17,7 @@ const AutoCompleteInput = ({ outerIsRed }: { outerIsRed: boolean }) => {
     const varaint = useAutoCompleteStore((state) => state.variant)
     const colorChangeIn = useAutoCompleteStore((state) => state.colorChangeIn)
 
-    const { debouncedValue, cancel } = useDebounce(inputValue, 500)
+    const { debouncedValue, cancel } = useDebounce({ value: inputValue })
 
     const { isFetching } = useAutoCompleteQuery(debouncedValue)
     const { handleBlur, handleKeyDown, handleChange } = useAutoCompleteEventHandler({ cancel })

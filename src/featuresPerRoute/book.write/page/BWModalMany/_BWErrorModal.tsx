@@ -1,5 +1,5 @@
 import Modal from "@/packages/Modal"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 
 const BWErrorModal = () => {

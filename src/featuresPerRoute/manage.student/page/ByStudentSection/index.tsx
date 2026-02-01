@@ -1,6 +1,6 @@
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 
 const ByStudentSection = () => {
     debugRender("ByStudentSection")

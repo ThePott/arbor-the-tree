@@ -1,4 +1,6 @@
+import { flip, offset, shift, useFloating } from "@floating-ui/react"
 import { getRegExp } from "korean-regexp"
+import { useEffect } from "react"
 import Input from "../Input/Input"
 import LocalAutoCompleteContent from "./LocalAutoCompleteContent"
 import { LocalAutoCompleteStoreProvider, type LocalAutoCompleteExternalValues } from "./LocalAutoCompleteStoreProvider"
@@ -11,6 +13,21 @@ const LocalAutoCompleteWrapper = () => {
     const setIsContentOn = useLocalAutoCompleteStore((state) => state.setIsContentOn)
     const placeholder = useLocalAutoCompleteStore((state) => state.placeholder)
     const optionArray = useLocalAutoCompleteStore((state) => state.optionArray)
+    const setFloatingReturns = useLocalAutoCompleteStore((state) => state.setFloatingReturns)
+
+    const floatingReturns = useFloating({
+        middleware: [flip(), shift(), offset(4)],
+        placement: "bottom-start",
+    })
+
+    useEffect(() => {
+        setFloatingReturns(floatingReturns)
+    }, [floatingReturns])
+
+    const refCallback = (node: HTMLInputElement | null) => {
+        inputRef.current = node
+        floatingReturns.refs.setReference(node)
+    }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value)
@@ -32,7 +49,7 @@ const LocalAutoCompleteWrapper = () => {
     return (
         <div className="relative grow">
             <Input
-                ref={inputRef}
+                ref={refCallback}
                 value={inputValue}
                 onChange={handleChange}
                 onFocus={() => setIsContentOn(true)}

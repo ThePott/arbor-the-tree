@@ -1,7 +1,7 @@
+import useProgressStore from "@/featuresPerRoute/progress/store"
 import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/progress/types"
 import Button from "@/packages/components/Button/Button"
 import { Hstack, Vstack } from "@/packages/components/layouts"
-import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import { getRouteApi, useNavigate } from "@tanstack/react-router"
 import { X } from "lucide-react"
 
@@ -14,26 +14,16 @@ const ProgressSyllabusAssignedButton = ({ assignedJoinedSyllabus }: ProgressSyll
     const navigate = useNavigate({ from: "/progress/" })
     const searchParams = route.useSearch()
 
-    const params = {
-        student_id: assignedJoinedSyllabus?.student_id,
-        classroom_id: assignedJoinedSyllabus?.classroom_id,
-    }
-    const deleteMutation = useSimpleMutation({
-        method: "delete",
-        url: `/progress/syllabus/assigned/${assignedJoinedSyllabus?.syllabus.id}`,
-        params,
-        queryKeyWithoutParams: ["progressSyllabusAssigned"],
-        additionalInvalidatingQueryKeyArray: [["progressSession", searchParams]],
-        update: ({ previous }: { previous: AssignedJoinedSyllabus[] }) =>
-            previous.filter((el) => el.syllabus.id !== assignedJoinedSyllabus?.syllabus.id),
-    })
+    const setModalKey = useProgressStore((state) => state.setModalKey)
+    const setSelectedSyllabus = useProgressStore((state) => state.setSelectedSyllabus)
 
     const handleBodyClick = () => {
         navigate({ search: { ...searchParams, syllabus_id: assignedJoinedSyllabus?.syllabus.id } })
     }
     const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.stopPropagation()
-        deleteMutation.mutate({ body: undefined, additionalData: undefined })
+        setSelectedSyllabus(assignedJoinedSyllabus)
+        setModalKey("deleteAssginedSyllabus")
     }
 
     const isDeleteButtonVisible =

@@ -1,5 +1,5 @@
 import { FlexOneContainer, FullScreen, Vstack } from "@/packages/components/layouts"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import useGlobalStore from "@/shared/store/globalStore"
 import { Outlet } from "@tanstack/react-router"
 import Header from "./Header"
@@ -14,7 +14,7 @@ const RootLayout = () => {
             <Sidebar />
             <Vstack className="grow h-full" gap="none">
                 <Header />
-                <FlexOneContainer isYScrollable={isBodyScrollable} className="[scrollbar-gutter:stable]">
+                <FlexOneContainer isYScrollable={isBodyScrollable}>
                     <Outlet />
                 </FlexOneContainer>
             </Vstack>

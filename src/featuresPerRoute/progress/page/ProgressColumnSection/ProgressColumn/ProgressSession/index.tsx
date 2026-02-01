@@ -1,31 +1,37 @@
 import type { ConciseSession } from "@/featuresPerRoute/progress/types"
 import Button from "@/packages/components/Button/Button"
-import Dropdown from "@/packages/components/Dropdown/Dropdown"
+import Dropdown from "@/packages/components/Dropdown"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
+import { debugRender } from "@/shared/config/debug/"
 import { checkIsBeforeToday, makeFromNow } from "@/shared/utils/dateManipulations"
 import { getRouteApi } from "@tanstack/react-router"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
 import { Ellipsis } from "lucide-react"
-import useProgressSession from "./hooks"
+import useProgressSession, { type MutateSessionStatus } from "./hooks"
 
 const route = getRouteApi("/progress/")
 
 type ProgressSessionLabelProps = {
+    isCompleted: boolean
     conciseSession: ConciseSession
 }
-const ProgressSessionLabel = ({ conciseSession }: ProgressSessionLabelProps) => {
+const ProgressSessionLabel = ({ isCompleted, conciseSession }: ProgressSessionLabelProps) => {
+    const assignedText = conciseSession.assigned_at ? `${makeFromNow(conciseSession.assigned_at)} 할당` : ""
+    const completedText = conciseSession.completed_at ? ` __${makeFromNow(conciseSession.completed_at)} 완료` : ""
+    const dateInfoText = `${assignedText}${completedText}`
+
     // NOTE: muted의 스타일만 지정하면 된다
-    const isBgBright =
-        conciseSession.status &&
-        !conciseSession.completed_at &&
-        !(
-            conciseSession.status === "TODAY" &&
-            conciseSession.assigned_at &&
-            checkIsBeforeToday(conciseSession.assigned_at)
-        )
+    const isHomework = conciseSession.status === "HOMEWORK"
+    const isNewToday =
+        conciseSession.status === "TODAY" &&
+        conciseSession.assigned_at &&
+        !checkIsBeforeToday(conciseSession.assigned_at)
+
+    const isBgBright = !isCompleted && (isHomework || isNewToday)
     const mutedClassName = clsx(isBgBright ? "text-fg-inverted-muted" : "text-fg-muted")
+
     return (
         <Vstack className="grow" gap="none">
             <p>{conciseSession.start.step}</p>
@@ -33,28 +39,65 @@ const ProgressSessionLabel = ({ conciseSession }: ProgressSessionLabelProps) => 
                 <p className={clsx("text-my-sm pl-3.5", mutedClassName)}>{conciseSession.end.topic}</p>
             )}
             {conciseSession.end.step && <p>~ {conciseSession.end.step}</p>}
-            {conciseSession.assigned_at && (
-                <p
-                    className={clsx("text-my-xs", mutedClassName)}
-                >{`${makeFromNow(conciseSession.assigned_at)} 할당`}</p>
-            )}
-            {conciseSession.completed_at && (
-                <p
-                    className={clsx("text-my-xs", mutedClassName)}
-                >{`${makeFromNow(conciseSession.completed_at)} 완료`}</p>
-            )}
+            <p className={clsx("text-my-xs", mutedClassName)}>{dateInfoText}</p>
         </Vstack>
     )
 }
 
-type ProgressSessionDropdownProps = {
-    handleDropdownMenuChange: (value: string) => void
+type ProgressSessionDropdownProps = ProgressSessionProps & {
+    mutatePostStatus: MutateSessionStatus
+    mutateDeleteStatus: MutateSessionStatus
 }
-const ProgressSessionDropdown = ({ handleDropdownMenuChange }: ProgressSessionDropdownProps) => {
+const ProgressSessionDropdown = ({
+    startingTopicTitle,
+    syllabus_id,
+    conciseSession,
+    mutatePostStatus,
+    mutateDeleteStatus,
+}: ProgressSessionDropdownProps) => {
     const searchParams = route.useSearch()
     const { classroom_id, student_id } = searchParams
     const isInteractable = Boolean(classroom_id) !== Boolean(student_id)
     if (!isInteractable) return null
+
+    const baseBody = {
+        session_id: conciseSession.id,
+        classroom_id,
+        student_id,
+    }
+    const handleHomeworkClick = () => {
+        mutatePostStatus({
+            body: { ...baseBody, session_status: "HOMEWORK" },
+            additionalData: {
+                status: "HOMEWORK",
+                session_id: conciseSession.id,
+                startingTopicTitle,
+                syllabus_id,
+            },
+        })
+    }
+    const handleTodayClick = () => {
+        mutatePostStatus({
+            body: { ...baseBody, session_status: "TODAY" },
+            additionalData: {
+                status: "TODAY",
+                session_id: conciseSession.id,
+                startingTopicTitle,
+                syllabus_id,
+            },
+        })
+    }
+    const handleDismissClick = () => {
+        mutateDeleteStatus({
+            body: undefined,
+            additionalData: {
+                status: null,
+                session_id: conciseSession.id,
+                startingTopicTitle,
+                syllabus_id,
+            },
+        })
+    }
 
     return (
         <Dropdown>
@@ -63,10 +106,16 @@ const ProgressSessionDropdown = ({ handleDropdownMenuChange }: ProgressSessionDr
                     <Ellipsis size={16} />
                 </Button>
             </Dropdown.Trigger>
-            <Dropdown.Menu onChange={handleDropdownMenuChange}>
-                <Dropdown.MenuItem value="homework">숙제</Dropdown.MenuItem>
-                <Dropdown.MenuItem value="today">오늘</Dropdown.MenuItem>
-                <Dropdown.MenuItem value="dismiss">해제</Dropdown.MenuItem>
+            <Dropdown.Menu>
+                {conciseSession.status !== "HOMEWORK" && (
+                    <Dropdown.MenuItem onClick={handleHomeworkClick}>숙제</Dropdown.MenuItem>
+                )}
+                {conciseSession.status !== "TODAY" && (
+                    <Dropdown.MenuItem onClick={handleTodayClick}>오늘</Dropdown.MenuItem>
+                )}
+                {!conciseSession.completed_at && (
+                    <Dropdown.MenuItem onClick={handleDismissClick}>해제</Dropdown.MenuItem>
+                )}
             </Dropdown.Menu>
         </Dropdown>
     )
@@ -81,7 +130,7 @@ const progressSessionVariants = cva(
                 TODAY: "",
                 default: "outline-fg-dim",
             },
-            completed_at: {
+            isCompleted: {
                 true: "",
                 false: "",
             },
@@ -97,12 +146,12 @@ const progressSessionVariants = cva(
             // NOTE: 상태 있을 때의 공통 속성: 글씨 관련
             {
                 status: ["HOMEWORK", "TODAY"],
-                completed_at: false,
+                isCompleted: false,
                 className: "font-semibold text-fg-inverted-vivid",
             },
             {
                 status: "TODAY",
-                completed_at: false,
+                isCompleted: false,
                 isOld: true,
                 className: "font-semibold text-fg-vivid",
             },
@@ -110,44 +159,44 @@ const progressSessionVariants = cva(
             // NOTE: 부여만 되고 안 끝남, 새 것
             {
                 status: "HOMEWORK",
-                completed_at: false,
+                isCompleted: false,
                 isOld: false,
-                className: "bg-washed-yellow outline-transparent hover:outline-fg-vivid",
+                className: "bg-washed-yellow outline-washed-yellow hover:outline-fg-vivid",
             },
             {
                 status: "TODAY",
-                completed_at: false,
+                isCompleted: false,
                 isOld: false,
-                className: "bg-washed-blue hover:outline-fg-vivid",
+                className: "bg-washed-blue outline-washed-blue hover:outline-fg-vivid",
             },
 
             // NOTE: 부여만 되고 안 끝남, 오래 됨
             {
                 status: "HOMEWORK",
-                completed_at: false,
+                isCompleted: false,
                 isOld: true,
-                className: "bg-washed-red hover:outline-fg-vivid outline-transparent",
+                className: "bg-washed-red hover:outline-fg-vivid outline-washed-red",
             },
             {
                 status: "TODAY",
-                completed_at: false,
+                isCompleted: false,
                 isOld: true,
-                className: "bg-dark-blue hover:outline-fg-vivid outline-transparent",
+                className: "bg-dark-blue hover:outline-fg-vivid outline-dark-blue",
             },
 
             // NOTE: 부여되고 끝남, 새 것
-            { status: "HOMEWORK", completed_at: true, isOld: false, className: "outline-washed-yellow" },
-            { status: "TODAY", completed_at: true, isOld: false, className: "outline-washed-blue" },
+            { status: "HOMEWORK", isCompleted: true, isOld: false, className: "outline-washed-yellow" },
+            { status: "TODAY", isCompleted: true, isOld: false, className: "outline-washed-blue" },
 
             // NOTE: 부여되고 끝남, 오래된 것
-            { status: "HOMEWORK", completed_at: true, isOld: true, className: "outline-washed-red-neg-1" },
-            { status: "TODAY", completed_at: true, isOld: true, className: "outline-washed-blue-neg-1" },
+            { status: "HOMEWORK", isCompleted: true, isOld: true, className: "outline-washed-red-neg-1" },
+            { status: "TODAY", isCompleted: true, isOld: true, className: "outline-washed-blue-neg-1" },
 
             // NOTE: 부여 안 했는데 끝남
             // NOTE: 이게 보여서는 안 된다.
             {
                 status: "default",
-                completed_at: true,
+                isCompleted: true,
                 className: "bg-red-400",
             },
         ],
@@ -160,10 +209,16 @@ export type ProgressSessionProps = {
     startingTopicTitle: string
 }
 const ProgressSession = (props: ProgressSessionProps) => {
-    const { conciseSession } = props
-    const { status, completed_at, assigned_at } = conciseSession
+    debugRender(
+        "ProgressSession %s status=%s completed_at=%s",
+        props.conciseSession.id,
+        props.conciseSession.status,
+        props.conciseSession.completed_at
+    )
+    const { conciseSession, startingTopicTitle, syllabus_id } = props
+    const { status, assigned_at } = conciseSession
 
-    const { handleClickToComplete, handleDropdownMenuChange } = useProgressSession(props)
+    const { handleClickToComplete, mutatePostStatus, mutateDeleteStatus, isCompleted } = useProgressSession(props)
 
     return (
         <RoundBox
@@ -171,15 +226,21 @@ const ProgressSession = (props: ProgressSessionProps) => {
             padding="md"
             className={clsx(
                 progressSessionVariants({
-                    completed_at: Boolean(completed_at),
+                    isCompleted,
                     status: status ?? "default",
                     isOld: assigned_at ? checkIsBeforeToday(assigned_at) : false,
                 })
             )}
         >
             <Hstack className="items-start" gap="none">
-                <ProgressSessionLabel conciseSession={conciseSession} />
-                <ProgressSessionDropdown handleDropdownMenuChange={handleDropdownMenuChange} />
+                <ProgressSessionLabel isCompleted={isCompleted} conciseSession={conciseSession} />
+                <ProgressSessionDropdown
+                    startingTopicTitle={startingTopicTitle}
+                    syllabus_id={syllabus_id}
+                    conciseSession={conciseSession}
+                    mutatePostStatus={mutatePostStatus}
+                    mutateDeleteStatus={mutateDeleteStatus}
+                />
             </Hstack>
         </RoundBox>
     )

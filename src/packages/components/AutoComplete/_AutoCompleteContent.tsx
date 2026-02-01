@@ -16,7 +16,11 @@ const AutoCompleteContent = () => {
     const inputValue = useAutoCompleteStore((state) => state.inputValue)
     const inputRef = useAutoCompleteStore((state) => state.inputRef)
 
-    const { contentRef } = useDetectOutsideClick(inputRef, isContentOn, () => setIsContentOn(false))
+    const { contentRef } = useDetectOutsideClick({
+        triggerRef: inputRef,
+        isOn: isContentOn,
+        onOutsideClick: () => setIsContentOn(false),
+    })
 
     const filteredOptionArray = optionArray.filter((option) => option.includes(inputValue))
 

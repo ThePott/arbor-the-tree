@@ -1,4 +1,4 @@
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import { useNavigate } from "@tanstack/react-router"
 
 const Logo = () => {

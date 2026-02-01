@@ -1,9 +1,15 @@
 import createDebug from "debug"
 
+// NOTE: HOW TO USE
+// NOTE: wind
+// localStorage.debug = '*'
+// localStorage.debug = 'cache:*'
+// localStorage.debug = 'render:*,mutation:*'
+
 // Render debugging - component re-renders
 export const debugRender = createDebug("arbor:render")
 
-// Mutation debugging - React Query mutations
+// Mutation debugging - React Query mutations (onMutate, onError, onSettled)
 export const debugMutation = createDebug("arbor:mutation")
 
 // Cache debugging - optimistic updates, cache changes

@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReviewCheckIndexRouteImport } from './routes/review-check.index'
 import { Route as ProgressIndexRouteImport } from './routes/progress.index'
 import { Route as BookIndexRouteImport } from './routes/book.index'
+import { Route as TestFloatingRouteImport } from './routes/test.floating'
 import { Route as ProgressSummarizedRouteImport } from './routes/progress.summarized'
 import { Route as ManageStudentRouteImport } from './routes/manage.student'
 import { Route as ManageResumeRouteImport } from './routes/manage.resume'
@@ -53,6 +54,11 @@ const ProgressIndexRoute = ProgressIndexRouteImport.update({
 const BookIndexRoute = BookIndexRouteImport.update({
   id: '/book/',
   path: '/book/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TestFloatingRoute = TestFloatingRouteImport.update({
+  id: '/test/floating',
+  path: '/test/floating',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProgressSummarizedRoute = ProgressSummarizedRouteImport.update({
@@ -111,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/manage/resume': typeof ManageResumeRoute
   '/manage/student': typeof ManageStudentRoute
   '/progress/summarized': typeof ProgressSummarizedRoute
+  '/test/floating': typeof TestFloatingRoute
   '/book/': typeof BookIndexRoute
   '/progress/': typeof ProgressIndexRoute
   '/review-check/': typeof ReviewCheckIndexRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByTo {
   '/manage/resume': typeof ManageResumeRoute
   '/manage/student': typeof ManageStudentRoute
   '/progress/summarized': typeof ProgressSummarizedRoute
+  '/test/floating': typeof TestFloatingRoute
   '/book': typeof BookIndexRoute
   '/progress': typeof ProgressIndexRoute
   '/review-check': typeof ReviewCheckIndexRoute
@@ -146,6 +154,7 @@ export interface FileRoutesById {
   '/manage/resume': typeof ManageResumeRoute
   '/manage/student': typeof ManageStudentRoute
   '/progress/summarized': typeof ProgressSummarizedRoute
+  '/test/floating': typeof TestFloatingRoute
   '/book/': typeof BookIndexRoute
   '/progress/': typeof ProgressIndexRoute
   '/review-check/': typeof ReviewCheckIndexRoute
@@ -165,6 +174,7 @@ export interface FileRouteTypes {
     | '/manage/resume'
     | '/manage/student'
     | '/progress/summarized'
+    | '/test/floating'
     | '/book/'
     | '/progress/'
     | '/review-check/'
@@ -182,6 +192,7 @@ export interface FileRouteTypes {
     | '/manage/resume'
     | '/manage/student'
     | '/progress/summarized'
+    | '/test/floating'
     | '/book'
     | '/progress'
     | '/review-check'
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/manage/resume'
     | '/manage/student'
     | '/progress/summarized'
+    | '/test/floating'
     | '/book/'
     | '/progress/'
     | '/review-check/'
@@ -217,6 +229,7 @@ export interface RootRouteChildren {
   ManageResumeRoute: typeof ManageResumeRoute
   ManageStudentRoute: typeof ManageStudentRoute
   ProgressSummarizedRoute: typeof ProgressSummarizedRoute
+  TestFloatingRoute: typeof TestFloatingRoute
   BookIndexRoute: typeof BookIndexRoute
   ProgressIndexRoute: typeof ProgressIndexRoute
   ReviewCheckIndexRoute: typeof ReviewCheckIndexRoute
@@ -268,6 +281,13 @@ declare module '@tanstack/react-router' {
       path: '/book'
       fullPath: '/book/'
       preLoaderRoute: typeof BookIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/test/floating': {
+      id: '/test/floating'
+      path: '/test/floating'
+      fullPath: '/test/floating'
+      preLoaderRoute: typeof TestFloatingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/progress/summarized': {
@@ -345,6 +365,7 @@ const rootRouteChildren: RootRouteChildren = {
   ManageResumeRoute: ManageResumeRoute,
   ManageStudentRoute: ManageStudentRoute,
   ProgressSummarizedRoute: ProgressSummarizedRoute,
+  TestFloatingRoute: TestFloatingRoute,
   BookIndexRoute: BookIndexRoute,
   ProgressIndexRoute: ProgressIndexRoute,
   ReviewCheckIndexRoute: ReviewCheckIndexRoute,

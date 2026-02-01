@@ -1,5 +1,5 @@
 import ExpandableDiv from "@/packages/components/ExpandableDiv/ExpendableDiv"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 
 const ManageDeletePending = () => {
     debugRender("ManageDeletePending")

@@ -1,4 +1,4 @@
-import { debugStore } from "@/shared/config/debug/debug"
+import { debugStore } from "@/shared/config/debug/"
 import { create } from "zustand"
 import { BOOK_LIST_TAB_ARRAY } from "./_bookArrayConstant"
 import type { BookListStoreState } from "./_bookListStoreState"

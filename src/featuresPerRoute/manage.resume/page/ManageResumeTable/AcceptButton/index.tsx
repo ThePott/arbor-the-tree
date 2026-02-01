@@ -1,7 +1,7 @@
 import type { ExtendedResume } from "@/featuresPerRoute/manage.resume/types"
 import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
-import { debugCache, debugMutation, debugRender } from "@/shared/config/debug/debug"
+import { debugCache, debugMutation, debugRender } from "@/shared/config/debug/"
 import { useMutation } from "@tanstack/react-query"
 import { Check } from "lucide-react"
 

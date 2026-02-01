@@ -49,11 +49,63 @@ const Sidebar = () => {
                                 </Hstack>
 
                                 <Labeled>
-                                    <Labeled.Header>진도표</Labeled.Header>
+                                    <Labeled.Header>인원 관리</Labeled.Header>
                                     <RoundBox isBordered padding="md">
                                         <Vstack gap="xs">
                                             <Button
-                                                color="bg2"
+                                                color="black"
+                                                isBorderedOnHover
+                                                isOnLeft
+                                                onClick={() => {
+                                                    setIsSidebarOn(false)
+                                                    navigate({ to: "/manage/resume" })
+                                                }}
+                                            >
+                                                지원 현황
+                                            </Button>
+                                            <Button
+                                                color="black"
+                                                isBorderedOnHover
+                                                isOnLeft
+                                                onClick={() => {
+                                                    setIsSidebarOn(false)
+                                                    navigate({ to: "/manage/delete" })
+                                                }}
+                                            >
+                                                권한 삭제
+                                            </Button>
+                                        </Vstack>
+                                    </RoundBox>
+                                </Labeled>
+
+                                <Labeled>
+                                    <Labeled.Header>수업 관리</Labeled.Header>
+                                    <RoundBox isBordered padding="md">
+                                        <Vstack gap="xs">
+                                            <Button
+                                                color="black"
+                                                isBorderedOnHover
+                                                isOnLeft
+                                                onClick={() => {
+                                                    setIsSidebarOn(false)
+                                                    navigate({ to: "/book" })
+                                                }}
+                                            >
+                                                문제집 목록
+                                            </Button>
+                                            <Button
+                                                color="black"
+                                                isBorderedOnHover
+                                                isOnLeft
+                                                onClick={() => {
+                                                    setIsSidebarOn(false)
+                                                    navigate({ to: "/manage/student" })
+                                                }}
+                                            >
+                                                학생 관리
+                                            </Button>
+                                            <Button
+                                                color="black"
                                                 isBorderedOnHover
                                                 isOnLeft
                                                 onClick={() => {
@@ -61,18 +113,7 @@ const Sidebar = () => {
                                                     navigate({ to: "/progress" })
                                                 }}
                                             >
-                                                전체
-                                            </Button>
-                                            <Button
-                                                color="bg2"
-                                                isBorderedOnHover
-                                                isOnLeft
-                                                onClick={() => {
-                                                    setIsSidebarOn(false)
-                                                    navigate({ to: "/progress/summarized" })
-                                                }}
-                                            >
-                                                요약
+                                                진도표
                                             </Button>
                                         </Vstack>
                                     </RoundBox>

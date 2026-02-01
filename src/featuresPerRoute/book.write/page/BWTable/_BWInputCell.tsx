@@ -1,5 +1,5 @@
 import Input from "@/packages/components/Input/Input"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import type { BookWriteRowFlat } from "../_bookWriteInterfaces"
 import useBookWriteStore from "../bookWriteStore/bookWriteStore"
 import handleKeyDownNavigation from "./_bwInputCellNavigateWithKeydown"

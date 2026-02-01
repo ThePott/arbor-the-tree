@@ -1,6 +1,6 @@
 import { headlessInstance } from "@/packages/api/axiosInstances"
 import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
-import { debugRender } from "@/shared/config/debug/debug"
+import { debugRender } from "@/shared/config/debug/"
 import type { School } from "@/shared/interfaces"
 import type { FieldError } from "react-hook-form"
 import type { ManualError } from "./_mypageInterfaces"
