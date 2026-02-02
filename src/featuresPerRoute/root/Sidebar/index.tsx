@@ -140,7 +140,7 @@ const Sidebar = () => {
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
-                                                    navigate({ to: "/review-check/book" })
+                                                    navigate({ to: "/review-check" })
                                                 }}
                                             >
                                                 오답 체크
