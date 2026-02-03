@@ -2,23 +2,24 @@ import useProgressStore from "@/featuresPerRoute/progress/store"
 import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/progress/types"
 import Button from "@/packages/components/Button/Button"
 import { Hstack, Vstack } from "@/packages/components/layouts"
-import { getRouteApi, useNavigate } from "@tanstack/react-router"
+import { getRouteApi, useLocation, useNavigate } from "@tanstack/react-router"
 import { X } from "lucide-react"
 
-const route = getRouteApi("/progress/")
+const route = getRouteApi("/_sidebar-section")
 
 type SyllabusAssignedButtonProps = {
     assignedJoinedSyllabus: AssignedJoinedSyllabus | null
 }
 const SyllabusAssignedButton = ({ assignedJoinedSyllabus }: SyllabusAssignedButtonProps) => {
-    const navigate = useNavigate({ from: "/progress/" })
+    const { pathname } = useLocation()
+    const navigate = useNavigate()
     const searchParams = route.useSearch()
 
     const setModalKey = useProgressStore((state) => state.setModalKey)
     const setSelectedSyllabus = useProgressStore((state) => state.setSelectedSyllabus)
 
     const handleBodyClick = () => {
-        navigate({ search: { ...searchParams, syllabus_id: assignedJoinedSyllabus?.syllabus.id } })
+        navigate({ to: pathname, search: { ...searchParams, syllabus_id: assignedJoinedSyllabus?.syllabus.id } })
     }
     const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.stopPropagation()

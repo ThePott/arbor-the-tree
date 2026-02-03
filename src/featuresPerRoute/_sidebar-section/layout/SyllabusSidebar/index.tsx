@@ -3,7 +3,7 @@ import { instance } from "@/packages/api/axiosInstances"
 import { Vstack } from "@/packages/components/layouts"
 import Title from "@/packages/components/Title/Title"
 import { useQuery } from "@tanstack/react-query"
-import { getRouteApi, useLoaderData } from "@tanstack/react-router"
+import { getRouteApi, useLoaderData, useLocation } from "@tanstack/react-router"
 import SyllabusAssignedButton from "./SyllabusAssignedButton"
 import SyllabusForm from "./SyllabusForm"
 
@@ -16,6 +16,7 @@ const route = getRouteApi("/_sidebar-section")
 const SyllabusSidebar = () => {
     const { student_id, classroom_id } = route.useSearch()
     const { studentArray, classroomArray } = useLoaderData({ from: "/_sidebar-section" })
+    const { pathname } = useLocation()
 
     const { data } = useQuery({
         queryKey: ["syllabusAssigned", { classroom_id, student_id: classroom_id ? undefined : student_id }],
@@ -36,7 +37,7 @@ const SyllabusSidebar = () => {
     return (
         <Vstack className="w-[300px] p-my-md pl-1.5 overflow-y-scroll pl-0">
             <Title as="h3">{title}</Title>
-            <SyllabusForm />
+            {pathname === "/progress" && <SyllabusForm />}
 
             <Vstack gap="none">
                 {data && data.length > 0 && (

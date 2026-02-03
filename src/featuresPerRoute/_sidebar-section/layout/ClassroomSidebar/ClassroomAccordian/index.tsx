@@ -5,7 +5,7 @@ import ExpandableDiv from "@/packages/components/ExpandableDiv/ExpendableDiv"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
-import { getRouteApi, useNavigate } from "@tanstack/react-router"
+import { getRouteApi, useLocation, useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 import type { ClassroomWithStudent } from ".."
 
@@ -18,8 +18,8 @@ type StudentButtonProps = {
 const StudentButton = ({ student, classroomId }: StudentButtonProps) => {
     const navigate = useNavigate()
 
+    const { pathname } = useLocation()
     const searchParams = route.useSearch()
-    console.log({ searchParams })
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.stopPropagation()
@@ -27,9 +27,10 @@ const StudentButton = ({ student, classroomId }: StudentButtonProps) => {
         const overridingParams = { student_id: student.id, classroom_id: classroomId }
         const newSearchParams =
             classroomId === searchParams.classroom_id ? { ...searchParams, ...overridingParams } : overridingParams
-        // navigate({
-        //     search: newSearchParams,
-        // })
+        navigate({
+            to: pathname,
+            search: newSearchParams,
+        })
     }
 
     const { classroom_id: classroomInSearch, student_id: studentInSearch } = route.useSearch()
@@ -46,7 +47,8 @@ type ClassroomAccordianProps = {
     classroomWithStudent: ClassroomWithStudent
 }
 const ClassroomAccordian = ({ classroomWithStudent }: ClassroomAccordianProps) => {
-    const navigate = useNavigate({ from: "/progress/" })
+    const { pathname } = useLocation()
+    const navigate = useNavigate()
     const { classroom_id, student_id } = route.useSearch()
 
     const isSelected = classroom_id && classroom_id === classroomWithStudent.classroomId && !student_id
@@ -54,7 +56,10 @@ const ClassroomAccordian = ({ classroomWithStudent }: ClassroomAccordianProps) =
     const handleClick = () => {
         if (!classroomWithStudent.classroomId) return
 
-        navigate({ search: { classroom_id: classroomWithStudent.classroomId } })
+        navigate({
+            to: pathname,
+            search: { classroom_id: classroomWithStudent.classroomId },
+        })
     }
     const [isOpened, setIsOpened] = useState(false)
 
