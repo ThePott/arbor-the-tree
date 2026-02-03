@@ -2,7 +2,7 @@ import ReviewCheckSyllabusCreatePage from "@/featuresPerRoute/review-check.sylla
 import ReviewCheckSyllabusCreatePending from "@/featuresPerRoute/review-check.syllabus.$syllbus_id/pending"
 import { createFileRoute } from "@tanstack/react-router"
 
-export const Route = createFileRoute("/review-check/syllabus/$syllabus_id")({
+export const Route = createFileRoute("/_sidebar-section/review-check/syllabus/$syllabus_id/")({
     component: ReviewCheckSyllabusCreatePage,
     pendingComponent: ReviewCheckSyllabusCreatePending,
 })

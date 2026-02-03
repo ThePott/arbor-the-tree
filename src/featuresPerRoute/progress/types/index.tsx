@@ -1,6 +1,5 @@
 import type { Book, ClassroomSyllabus, SessionStatus, StudentSyllabus, Syllabus } from "@/shared/interfaces"
 
-export type ExtendedSyllabus = Syllabus & { book: Book }
 export type AssignedJoinedSyllabus = Omit<ClassroomSyllabus, "classroom_id"> &
     Omit<StudentSyllabus, "student_id"> & { syllabus: Syllabus & { book: Book } } & {
         classroom_id?: string
