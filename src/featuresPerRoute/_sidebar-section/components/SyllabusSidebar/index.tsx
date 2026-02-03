@@ -5,8 +5,7 @@ import Title from "@/packages/components/Title/Title"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import type { JSX, ReactNode } from "react"
-import type { SyllabusAssignedButtonProps } from "./SyllabusAssignedButton"
-import SyllabusAssignedButton from "./SyllabusAssignedButton"
+import SyllabusAssignedButton, { type SyllabusAssignedButtonProps } from "./SyllabusAssignedButton"
 
 const route = getRouteApi("/_sidebar-section")
 

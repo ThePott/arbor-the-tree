@@ -5,7 +5,7 @@ import { getRouteApi } from "@tanstack/react-router"
 import useProgressStore from "../../store"
 import type { AssignedJoinedSyllabus } from "../../types"
 
-const route = getRouteApi("/_sidebar-section/progress/")
+const route = getRouteApi("/_sidebar-section")
 
 const ProgressSyllabusDeleteWarningModal = () => {
     const modalKey = useProgressStore((state) => state.modalKey)

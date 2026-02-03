@@ -11,7 +11,7 @@ import clsx from "clsx"
 import { Ellipsis } from "lucide-react"
 import useProgressSession, { type MutateSessionStatus } from "./hooks"
 
-const route = getRouteApi("/_sidebar-section/progress/")
+const route = getRouteApi("/_sidebar-section")
 
 type ProgressSessionLabelProps = {
     isCompleted: boolean

@@ -10,7 +10,7 @@ import { produce } from "immer"
 import { useEffect } from "react"
 import type { ProgressSessionProps } from ".."
 
-const route = getRouteApi("/_sidebar-section/progress/")
+const route = getRouteApi("/_sidebar-section")
 
 // NOTE: for status post
 type StatusAdditionalData = {
