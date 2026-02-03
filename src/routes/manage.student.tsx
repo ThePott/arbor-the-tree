@@ -1,7 +1,7 @@
-import manageStudentLoaderFn from "@/featuresPerRoute/manage.student/loader"
-import ManageStudentPage from "@/featuresPerRoute/manage.student/page"
-import ManageStudentPending from "@/featuresPerRoute/manage.student/pending"
-import { manageStudentSearchSchema } from "@/featuresPerRoute/manage.student/types"
+import manageStudentLoaderFn from "@/features/manage.student/loader"
+import ManageStudentPage from "@/features/manage.student/page"
+import ManageStudentPending from "@/features/manage.student/pending"
+import { manageStudentSearchSchema } from "@/features/manage.student/types"
 import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/manage/student")({

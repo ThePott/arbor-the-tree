@@ -1,14 +1,12 @@
-# 같은 쿼리의 낙관적 업데이트가 일부만 실패함
+# file path가 너무 장황해짐
 
-- 발생 시각: 2026-01-28 17:17
-- 문제: 같은 쿼리에서 낙관적 업데이트가 성공했는데 반영이 안 되는 곳이 있음
+- 발생 시각: 2026-02-03 19:40
+- 문제: pathless layout을 사용하니 파일 경로가 너무 길어져서 telescope에서 해당 경로가 잘려 보임
 - 해결 시각:
 
 ## 배경
 
-- ColumnSection 에서 useQuery
-- ColumnSection -> Column -> Session
-- Session에서 낙관적 업데이트 -> Session 스타일이 즉각적으로 바뀜 -> 그러나 해당 Session이 다른 Column으로 이동하지 않음
+- flat file route 사용중
 
 ## 분석
 
