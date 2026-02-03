@@ -13,7 +13,6 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as SidebarSectionRouteImport } from './routes/_sidebar-section'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ProgressIndexRouteImport } from './routes/progress.index'
 import { Route as BookIndexRouteImport } from './routes/book.index'
 import { Route as TestFloatingRouteImport } from './routes/test.floating'
 import { Route as ReviewCheckSyllabusRouteImport } from './routes/review-check.syllabus'
@@ -22,6 +21,7 @@ import { Route as ManageResumeRouteImport } from './routes/manage.resume'
 import { Route as ManageDeleteRouteImport } from './routes/manage.delete'
 import { Route as BookWriteRouteImport } from './routes/book.write'
 import { Route as SidebarSectionReviewCheckIndexRouteImport } from './routes/_sidebar-section.review-check.index'
+import { Route as SidebarSectionProgressIndexRouteImport } from './routes/_sidebar-section.progress.index'
 import { Route as OauthKakaoCallbackRouteImport } from './routes/oauth.kakao.callback'
 import { Route as SidebarSectionReviewCheckSyllabusSyllabus_idIndexRouteImport } from './routes/_sidebar-section.review-check.syllabus.$syllabus_id.index'
 
@@ -42,11 +42,6 @@ const SidebarSectionRoute = SidebarSectionRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProgressIndexRoute = ProgressIndexRouteImport.update({
-  id: '/progress/',
-  path: '/progress/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookIndexRoute = BookIndexRouteImport.update({
@@ -90,6 +85,12 @@ const SidebarSectionReviewCheckIndexRoute =
     path: '/review-check/',
     getParentRoute: () => SidebarSectionRoute,
   } as any)
+const SidebarSectionProgressIndexRoute =
+  SidebarSectionProgressIndexRouteImport.update({
+    id: '/progress/',
+    path: '/progress/',
+    getParentRoute: () => SidebarSectionRoute,
+  } as any)
 const OauthKakaoCallbackRoute = OauthKakaoCallbackRouteImport.update({
   id: '/oauth/kakao/callback',
   path: '/oauth/kakao/callback',
@@ -113,8 +114,8 @@ export interface FileRoutesByFullPath {
   '/review-check/syllabus': typeof ReviewCheckSyllabusRoute
   '/test/floating': typeof TestFloatingRoute
   '/book/': typeof BookIndexRoute
-  '/progress/': typeof ProgressIndexRoute
   '/oauth/kakao/callback': typeof OauthKakaoCallbackRoute
+  '/progress/': typeof SidebarSectionProgressIndexRoute
   '/review-check/': typeof SidebarSectionReviewCheckIndexRoute
   '/review-check/syllabus/$syllabus_id/': typeof SidebarSectionReviewCheckSyllabusSyllabus_idIndexRoute
 }
@@ -129,8 +130,8 @@ export interface FileRoutesByTo {
   '/review-check/syllabus': typeof ReviewCheckSyllabusRoute
   '/test/floating': typeof TestFloatingRoute
   '/book': typeof BookIndexRoute
-  '/progress': typeof ProgressIndexRoute
   '/oauth/kakao/callback': typeof OauthKakaoCallbackRoute
+  '/progress': typeof SidebarSectionProgressIndexRoute
   '/review-check': typeof SidebarSectionReviewCheckIndexRoute
   '/review-check/syllabus/$syllabus_id': typeof SidebarSectionReviewCheckSyllabusSyllabus_idIndexRoute
 }
@@ -147,8 +148,8 @@ export interface FileRoutesById {
   '/review-check/syllabus': typeof ReviewCheckSyllabusRoute
   '/test/floating': typeof TestFloatingRoute
   '/book/': typeof BookIndexRoute
-  '/progress/': typeof ProgressIndexRoute
   '/oauth/kakao/callback': typeof OauthKakaoCallbackRoute
+  '/_sidebar-section/progress/': typeof SidebarSectionProgressIndexRoute
   '/_sidebar-section/review-check/': typeof SidebarSectionReviewCheckIndexRoute
   '/_sidebar-section/review-check/syllabus/$syllabus_id/': typeof SidebarSectionReviewCheckSyllabusSyllabus_idIndexRoute
 }
@@ -165,8 +166,8 @@ export interface FileRouteTypes {
     | '/review-check/syllabus'
     | '/test/floating'
     | '/book/'
-    | '/progress/'
     | '/oauth/kakao/callback'
+    | '/progress/'
     | '/review-check/'
     | '/review-check/syllabus/$syllabus_id/'
   fileRoutesByTo: FileRoutesByTo
@@ -181,8 +182,8 @@ export interface FileRouteTypes {
     | '/review-check/syllabus'
     | '/test/floating'
     | '/book'
-    | '/progress'
     | '/oauth/kakao/callback'
+    | '/progress'
     | '/review-check'
     | '/review-check/syllabus/$syllabus_id'
   id:
@@ -198,8 +199,8 @@ export interface FileRouteTypes {
     | '/review-check/syllabus'
     | '/test/floating'
     | '/book/'
-    | '/progress/'
     | '/oauth/kakao/callback'
+    | '/_sidebar-section/progress/'
     | '/_sidebar-section/review-check/'
     | '/_sidebar-section/review-check/syllabus/$syllabus_id/'
   fileRoutesById: FileRoutesById
@@ -216,7 +217,6 @@ export interface RootRouteChildren {
   ReviewCheckSyllabusRoute: typeof ReviewCheckSyllabusRoute
   TestFloatingRoute: typeof TestFloatingRoute
   BookIndexRoute: typeof BookIndexRoute
-  ProgressIndexRoute: typeof ProgressIndexRoute
   OauthKakaoCallbackRoute: typeof OauthKakaoCallbackRoute
 }
 
@@ -248,13 +248,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/progress/': {
-      id: '/progress/'
-      path: '/progress'
-      fullPath: '/progress/'
-      preLoaderRoute: typeof ProgressIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/book/': {
@@ -313,6 +306,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SidebarSectionReviewCheckIndexRouteImport
       parentRoute: typeof SidebarSectionRoute
     }
+    '/_sidebar-section/progress/': {
+      id: '/_sidebar-section/progress/'
+      path: '/progress'
+      fullPath: '/progress/'
+      preLoaderRoute: typeof SidebarSectionProgressIndexRouteImport
+      parentRoute: typeof SidebarSectionRoute
+    }
     '/oauth/kakao/callback': {
       id: '/oauth/kakao/callback'
       path: '/oauth/kakao/callback'
@@ -331,11 +331,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface SidebarSectionRouteChildren {
+  SidebarSectionProgressIndexRoute: typeof SidebarSectionProgressIndexRoute
   SidebarSectionReviewCheckIndexRoute: typeof SidebarSectionReviewCheckIndexRoute
   SidebarSectionReviewCheckSyllabusSyllabus_idIndexRoute: typeof SidebarSectionReviewCheckSyllabusSyllabus_idIndexRoute
 }
 
 const SidebarSectionRouteChildren: SidebarSectionRouteChildren = {
+  SidebarSectionProgressIndexRoute: SidebarSectionProgressIndexRoute,
   SidebarSectionReviewCheckIndexRoute: SidebarSectionReviewCheckIndexRoute,
   SidebarSectionReviewCheckSyllabusSyllabus_idIndexRoute:
     SidebarSectionReviewCheckSyllabusSyllabus_idIndexRoute,
@@ -357,7 +359,6 @@ const rootRouteChildren: RootRouteChildren = {
   ReviewCheckSyllabusRoute: ReviewCheckSyllabusRoute,
   TestFloatingRoute: TestFloatingRoute,
   BookIndexRoute: BookIndexRoute,
-  ProgressIndexRoute: ProgressIndexRoute,
   OauthKakaoCallbackRoute: OauthKakaoCallbackRoute,
 }
 export const routeTree = rootRouteImport

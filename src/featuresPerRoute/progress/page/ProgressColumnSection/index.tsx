@@ -9,7 +9,7 @@ import type { ConciseSyllabus } from "../../types"
 import ProgressColumn from "./ProgressColumn"
 import ProgressColumnSummarizedMany from "./ProgressColumnSummarizedMany"
 
-const route = getRouteApi("/progress/")
+const route = getRouteApi("/_sidebar-section/progress/")
 const ProgressColumnSection = () => {
     debugRender("ProgressColumnSection")
     const [isSummarized, setIsSummarized] = useState(false)

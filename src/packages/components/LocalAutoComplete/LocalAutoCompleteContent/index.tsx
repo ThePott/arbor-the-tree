@@ -15,8 +15,10 @@ type LocalAutoCompleteOptionProps = {
 }
 const LocalAutoCompleteOption = ({ option }: LocalAutoCompleteOptionProps) => {
     const setInputValue = useLocalAutoCompleteStore((state) => state.setInputValue)
+    const setIsContentOn = useLocalAutoCompleteStore((state) => state.setIsContentOn)
     const handleClick = () => {
         setInputValue(option.label)
+        setIsContentOn(false)
     }
     return (
         <Button isOnLeft color="black" isBorderedOnHover onClick={handleClick}>
