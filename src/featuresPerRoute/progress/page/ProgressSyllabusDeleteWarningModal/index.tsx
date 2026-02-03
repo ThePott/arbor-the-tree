@@ -31,14 +31,14 @@ const ProgressSyllabusDeleteWarningModal = () => {
             previous.filter((el) => el.syllabus.id !== selectedSyllabus?.syllabus.id),
     })
 
-    const dismiss = () => {
+    const handleCancel = () => {
         setSelectedSyllabus(null)
         setModalKey(null)
     }
-    const handleCancel = dismiss
     const handleDestruct = () => {
         deleteMutation.mutate({ body: undefined, additionalData: undefined })
-        dismiss()
+        // NOTE: 여기서 setSelectedSyllabus(null)하면 mutate할 때 selectedSyllabus가 undefined로 나옴
+        setModalKey(null)
     }
 
     return (
