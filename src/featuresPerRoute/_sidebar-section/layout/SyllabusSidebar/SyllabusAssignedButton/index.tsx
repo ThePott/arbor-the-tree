@@ -28,7 +28,9 @@ const SyllabusAssignedButton = ({ assignedJoinedSyllabus }: SyllabusAssignedButt
     }
 
     const isDeleteButtonVisible =
-        Boolean(searchParams.classroom_id) !== Boolean(searchParams.student_id) && assignedJoinedSyllabus?.syllabus.id
+        Boolean(searchParams.classroom_id) !== Boolean(searchParams.student_id) &&
+        assignedJoinedSyllabus?.syllabus.id &&
+        pathname === "/progress"
 
     const isSelected = searchParams.syllabus_id === assignedJoinedSyllabus?.syllabus.id
 

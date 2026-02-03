@@ -19,7 +19,8 @@ const SyllabusSidebar = () => {
     const { pathname } = useLocation()
 
     const { data } = useQuery({
-        queryKey: ["syllabusAssigned", { classroom_id, student_id: classroom_id ? undefined : student_id }],
+        // NOTE: 이 쿼리 데이터의 뮤데이션은 progress route 에서만 한다.
+        queryKey: ["progressSyllabusAssigned", { classroom_id, student_id: classroom_id ? undefined : student_id }],
         queryFn: async () => {
             const response = await instance.get("/progress/syllabus/assigned", {
                 params: { classroom_id, student_id: classroom_id ? undefined : student_id },

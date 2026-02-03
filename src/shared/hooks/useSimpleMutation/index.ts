@@ -30,6 +30,7 @@ const useSimpleMutation = <TBody, TAdditionalData, TParams, TQueryKey, TPrevious
             debugMutation("useSimpleMutation onMutate", { url, queryKey, additionalData })
             context.client.cancelQueries({ queryKey })
             const previous = context.client.getQueryData(queryKey) as TPrevious
+            debugger
             const newData = update({ previous, additionalData })
             debugMutation("useSimpleMutation onMutate setQueryData", { queryKey, newData })
             context.client.setQueryData(queryKey, newData)
