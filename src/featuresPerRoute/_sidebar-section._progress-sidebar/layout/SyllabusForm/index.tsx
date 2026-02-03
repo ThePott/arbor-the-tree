@@ -18,6 +18,7 @@ type PostBody = {
     student_id?: string
 }
 
+// NOTE: 이거는 progress layout으로 뺀다
 const route = getRouteApi("/_sidebar-section")
 const SyllabusForm = () => {
     const { extendedSyllabusArray } = useLoaderData({ from: "/_sidebar-section" })

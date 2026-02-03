@@ -4,7 +4,7 @@ import ProgressPending from "@/featuresPerRoute/progress/pending"
 import { createFileRoute } from "@tanstack/react-router"
 import z from "zod/v3"
 
-export const Route = createFileRoute("/_sidebar-section/progress/")({
+export const Route = createFileRoute("/_sidebar-section/_progress-sidebar/progress/")({
     component: ProgressPage,
     pendingComponent: ProgressPending,
     loader: ({ context: { queryClient } }) => progressLoaderFn(queryClient),

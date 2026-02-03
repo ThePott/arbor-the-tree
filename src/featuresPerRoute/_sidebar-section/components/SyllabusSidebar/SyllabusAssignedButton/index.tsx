@@ -1,36 +1,23 @@
-import useProgressStore from "@/featuresPerRoute/progress/store"
 import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/progress/types"
 import Button from "@/packages/components/Button/Button"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import { getRouteApi, useLocation, useNavigate } from "@tanstack/react-router"
-import { X } from "lucide-react"
+import type { ReactNode } from "react"
 
 const route = getRouteApi("/_sidebar-section")
 
-type SyllabusAssignedButtonProps = {
+export type SyllabusAssignedButtonProps = {
     assignedJoinedSyllabus: AssignedJoinedSyllabus | null
+    children?: ReactNode
 }
-const SyllabusAssignedButton = ({ assignedJoinedSyllabus }: SyllabusAssignedButtonProps) => {
+const SyllabusAssignedButton = ({ assignedJoinedSyllabus, children }: SyllabusAssignedButtonProps) => {
     const { pathname } = useLocation()
     const navigate = useNavigate()
     const searchParams = route.useSearch()
 
-    const setModalKey = useProgressStore((state) => state.setModalKey)
-    const setSelectedSyllabus = useProgressStore((state) => state.setSelectedSyllabus)
-
     const handleBodyClick = () => {
         navigate({ to: pathname, search: { ...searchParams, syllabus_id: assignedJoinedSyllabus?.syllabus.id } })
     }
-    const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        event.stopPropagation()
-        setSelectedSyllabus(assignedJoinedSyllabus)
-        setModalKey("deleteAssginedSyllabus")
-    }
-
-    const isDeleteButtonVisible =
-        Boolean(searchParams.classroom_id) !== Boolean(searchParams.student_id) &&
-        assignedJoinedSyllabus?.syllabus.id &&
-        pathname === "/progress"
 
     const isSelected = searchParams.syllabus_id === assignedJoinedSyllabus?.syllabus.id
 
@@ -48,12 +35,7 @@ const SyllabusAssignedButton = ({ assignedJoinedSyllabus }: SyllabusAssignedButt
                     <p>{assignedJoinedSyllabus ? assignedJoinedSyllabus.syllabus.book.title : "전체"}</p>
                     <p className="text-fg-dim text-my-xs">{assignedJoinedSyllabus?.syllabus.created_at.slice(0, 10)}</p>
                 </Vstack>
-
-                {isDeleteButtonVisible && (
-                    <Button color="black" isBorderedOnHover onClick={handleDeleteClick}>
-                        <X size={16} />
-                    </Button>
-                )}
+                {children}
             </Hstack>
         </Button>
     )

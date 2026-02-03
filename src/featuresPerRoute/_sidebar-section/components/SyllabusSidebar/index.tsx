@@ -3,23 +3,22 @@ import { instance } from "@/packages/api/axiosInstances"
 import { Vstack } from "@/packages/components/layouts"
 import Title from "@/packages/components/Title/Title"
 import { useQuery } from "@tanstack/react-query"
-import { getRouteApi, useLoaderData, useLocation } from "@tanstack/react-router"
-import SyllabusAssignedButton from "./SyllabusAssignedButton"
-import SyllabusForm from "./SyllabusForm"
+import { getRouteApi, useLoaderData } from "@tanstack/react-router"
+import type { JSX, ReactNode } from "react"
+import type { SyllabusAssignedButtonProps } from "./SyllabusAssignedButton"
 
-// TODO: 이거 어떻게 해야하지??
 const route = getRouteApi("/_sidebar-section")
 
-// NOTE: syllabus 목록은 syllabus form 에서만 사용하므로 여기선 가져올 필요 없다
-// NOTE: 여기서 필요한 것: 학생 목록
-// NOTE: 여기서 필요한 것: 학생에게 부여된 실라버스 목록 (syllabus assigned)
-const SyllabusSidebar = () => {
+type SyllabusSidebarProps = {
+    children?: ReactNode
+    SyllabusAssignedButton: (props: SyllabusAssignedButtonProps) => JSX.Element
+}
+const SyllabusSidebar = ({ SyllabusAssignedButton, children }: SyllabusSidebarProps) => {
     const { student_id, classroom_id } = route.useSearch()
     const { studentArray, classroomArray } = useLoaderData({ from: "/_sidebar-section" })
-    const { pathname } = useLocation()
 
     const { data } = useQuery({
-        // NOTE: 이 쿼리 데이터의 뮤데이션은 progress route 에서만 한다.
+        // NOTE: progress에서만 mutate을 하므로 progress prefix 사용
         queryKey: ["progressSyllabusAssigned", { classroom_id, student_id: classroom_id ? undefined : student_id }],
         queryFn: async () => {
             const response = await instance.get("/progress/syllabus/assigned", {
@@ -38,7 +37,8 @@ const SyllabusSidebar = () => {
     return (
         <Vstack className="w-[300px] p-my-md pl-1.5 overflow-y-scroll pl-0">
             <Title as="h3">{title}</Title>
-            {pathname === "/progress" && <SyllabusForm />}
+
+            {children}
 
             <Vstack gap="none">
                 {data && data.length > 0 && (
