@@ -1,6 +1,6 @@
-import progressLoaderFn from "@/featuresPerRoute/progress/loader"
-import ProgressPage from "@/featuresPerRoute/progress/page"
-import ProgressPending from "@/featuresPerRoute/progress/pending"
+import progressLoaderFn from "@/featuresPerRoute/_sidebar-section._progress-sidebar.progress/loader"
+import ProgressPage from "@/featuresPerRoute/_sidebar-section._progress-sidebar.progress/page"
+import ProgressPending from "@/featuresPerRoute/_sidebar-section._progress-sidebar.progress/pending"
 import { createFileRoute } from "@tanstack/react-router"
 import z from "zod/v3"
 

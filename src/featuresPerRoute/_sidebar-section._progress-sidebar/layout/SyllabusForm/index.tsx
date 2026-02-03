@@ -1,4 +1,4 @@
-import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/progress/types"
+import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/_sidebar-section._progress-sidebar.progress/types"
 import Button from "@/packages/components/Button/Button"
 import Labeled from "@/packages/components/Labeled/Labeled"
 import { Hstack } from "@/packages/components/layouts"

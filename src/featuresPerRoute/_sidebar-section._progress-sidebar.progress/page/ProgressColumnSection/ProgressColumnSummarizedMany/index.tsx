@@ -1,4 +1,7 @@
-import type { ConciseSession, ConciseSyllabus } from "@/featuresPerRoute/progress/types"
+import type {
+    ConciseSession,
+    ConciseSyllabus,
+} from "@/featuresPerRoute/_sidebar-section._progress-sidebar.progress/types"
 import { debugRender } from "@/shared/config/debug/"
 import { checkIsBeforeToday } from "@/shared/utils/dateManipulations"
 import ProgressColumnSummarized from "./ProgressColumnSummarized"

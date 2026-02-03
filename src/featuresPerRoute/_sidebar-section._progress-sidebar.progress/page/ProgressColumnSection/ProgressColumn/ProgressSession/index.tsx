@@ -1,4 +1,4 @@
-import type { ConciseSession } from "@/featuresPerRoute/progress/types"
+import type { ConciseSession } from "@/featuresPerRoute/_sidebar-section._progress-sidebar.progress/types"
 import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown"
 import { Hstack, Vstack } from "@/packages/components/layouts"

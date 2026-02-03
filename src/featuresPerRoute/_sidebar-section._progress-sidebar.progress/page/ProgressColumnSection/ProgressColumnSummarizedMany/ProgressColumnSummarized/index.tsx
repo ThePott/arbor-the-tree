@@ -1,4 +1,4 @@
-import type { ConciseSyllabus } from "@/featuresPerRoute/progress/types"
+import type { ConciseSyllabus } from "@/featuresPerRoute/_sidebar-section._progress-sidebar.progress/types"
 import { FlexOneContainer, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"

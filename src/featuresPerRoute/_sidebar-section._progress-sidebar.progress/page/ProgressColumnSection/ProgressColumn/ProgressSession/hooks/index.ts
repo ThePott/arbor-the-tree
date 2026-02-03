@@ -1,4 +1,4 @@
-import type { ConciseSyllabus } from "@/featuresPerRoute/progress/types"
+import type { ConciseSyllabus } from "@/featuresPerRoute/_sidebar-section._progress-sidebar.progress/types"
 import { useDebouncingToggle } from "@/packages/utils/useDebouncingToggle"
 import { debugMutation } from "@/shared/config/debug/"
 import { ClientError } from "@/shared/error/clientError"

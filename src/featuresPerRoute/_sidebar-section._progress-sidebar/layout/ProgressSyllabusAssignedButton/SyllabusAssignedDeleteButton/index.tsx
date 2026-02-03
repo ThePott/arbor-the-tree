@@ -1,5 +1,5 @@
-import useProgressStore from "@/featuresPerRoute/progress/store"
-import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/progress/types"
+import useProgressStore from "@/featuresPerRoute/_sidebar-section._progress-sidebar.progress/store"
+import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/_sidebar-section._progress-sidebar.progress/types"
 import Button from "@/packages/components/Button/Button"
 import { getRouteApi } from "@tanstack/react-router"
 import { X } from "lucide-react"

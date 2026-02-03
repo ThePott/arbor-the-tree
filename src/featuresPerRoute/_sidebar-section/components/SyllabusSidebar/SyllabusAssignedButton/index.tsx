@@ -1,4 +1,4 @@
-import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/progress/types"
+import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/_sidebar-section._progress-sidebar.progress/types"
 import Button from "@/packages/components/Button/Button"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import { getRouteApi, useLocation, useNavigate } from "@tanstack/react-router"

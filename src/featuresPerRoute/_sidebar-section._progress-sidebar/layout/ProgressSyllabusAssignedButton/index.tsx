@@ -1,5 +1,5 @@
+import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/_sidebar-section._progress-sidebar.progress/types"
 import SyllabusAssignedButton from "@/featuresPerRoute/_sidebar-section/components/SyllabusSidebar/SyllabusAssignedButton"
-import type { AssignedJoinedSyllabus } from "@/featuresPerRoute/progress/types"
 import SyllabusAssignedDeleteButton from "./SyllabusAssignedDeleteButton"
 
 type ProgressSyllabusAssignedButtonProps = {
