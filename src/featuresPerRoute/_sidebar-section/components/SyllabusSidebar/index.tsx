@@ -6,16 +6,19 @@ import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import type { JSX, ReactNode } from "react"
 import type { SyllabusAssignedButtonProps } from "./SyllabusAssignedButton"
+import SyllabusAssignedButton from "./SyllabusAssignedButton"
 
 const route = getRouteApi("/_sidebar-section")
 
 type SyllabusSidebarProps = {
     children?: ReactNode
-    SyllabusAssignedButton: (props: SyllabusAssignedButtonProps) => JSX.Element
+    syllabusAssignedButton?: (props: SyllabusAssignedButtonProps) => JSX.Element
 }
-const SyllabusSidebar = ({ SyllabusAssignedButton, children }: SyllabusSidebarProps) => {
+const SyllabusSidebar = ({ syllabusAssignedButton, children }: SyllabusSidebarProps) => {
     const { student_id, classroom_id } = route.useSearch()
     const { studentArray, classroomArray } = useLoaderData({ from: "/_sidebar-section" })
+
+    const ResolvedSyllabusAssignedButton = syllabusAssignedButton ?? SyllabusAssignedButton
 
     const { data } = useQuery({
         // NOTE: progress에서만 mutate을 하므로 progress prefix 사용
@@ -43,9 +46,9 @@ const SyllabusSidebar = ({ SyllabusAssignedButton, children }: SyllabusSidebarPr
             <Vstack gap="none">
                 {data && data.length > 0 && (
                     <>
-                        <SyllabusAssignedButton assignedJoinedSyllabus={null} />
+                        <ResolvedSyllabusAssignedButton assignedJoinedSyllabus={null} />
                         {data.map((assignedJoinedSyllabus) => (
-                            <SyllabusAssignedButton
+                            <ResolvedSyllabusAssignedButton
                                 key={assignedJoinedSyllabus.syllabus.id}
                                 assignedJoinedSyllabus={assignedJoinedSyllabus}
                             />

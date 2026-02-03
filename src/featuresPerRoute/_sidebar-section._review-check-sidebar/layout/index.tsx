@@ -1,12 +1,14 @@
+import SidebarSection from "@/featuresPerRoute/_sidebar-section/components"
 import { Outlet } from "@tanstack/react-router"
-import ReviewCheckClassroomSidebar from "./ReviewCheckClassroomSidebar"
-import ReviewCheckSyllabusSidebar from "./ReviewCheckSyllabusSidebar"
 
 const ReviewCheckSidebarLayout = () => {
     return (
         <>
-            <ReviewCheckClassroomSidebar />
-            <ReviewCheckSyllabusSidebar />
+            <SidebarSection>
+                <SidebarSection.ClassroomSidebar />
+                <SidebarSection.SyllabusSidebar />
+            </SidebarSection>
+
             <Outlet />
         </>
     )
