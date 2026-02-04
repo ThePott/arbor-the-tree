@@ -10,6 +10,7 @@ import Toggle from "@/packages/components/Toggle"
 import type { Book, Question, Step, Topic } from "@/shared/interfaces"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
+import useReviewCheckCreateStore from "../store"
 
 const route = getRouteApi("/_sidebar")
 
@@ -93,12 +94,16 @@ const ReviewCheckTopic = ({ topic }: ReviewCheckTopicProps) => {
 }
 
 const ReviewCheckCreateToolbar = () => {
+    const status = useReviewCheckCreateStore((state) => state.status)
+    const setStatus = useReviewCheckCreateStore((state) => state.setStatus)
+
     return (
         <Hstack className="p-my-md border-b border-b-border-dim justify-between">
             <Hstack>
-                <Button>정답</Button>
-                <Button>복습</Button>
-                <Button>해제</Button>
+                <Button onClick={() => setStatus("CORRECT")}>정답</Button>
+                <Button onClick={() => setStatus("WRONG")}>복습</Button>
+                <Button onClick={() => setStatus(null)}>해제</Button>
+                <p>{`selected: ${status}`}</p>
 
                 <Toggle onChange={() => {}}>다중 선택</Toggle>
             </Hstack>
