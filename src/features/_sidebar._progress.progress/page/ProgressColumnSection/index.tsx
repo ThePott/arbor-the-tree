@@ -35,10 +35,9 @@ const ProgressColumnSection = () => {
     return (
         <FlexOneContainer isXScrollable className="pt-my-lg pl-my-lg">
             <Vstack gap="none" className="h-full">
-                <Hstack className="items-center">
-                    <p className="font-semibold">요약</p>
-                    <Toggle onChange={(value) => setIsSummarized(value)} defaultIsOn={isSummarized} />
-                </Hstack>
+                <Toggle onChange={(value) => setIsSummarized(value)} defaultIsOn={isSummarized}>
+                    요약
+                </Toggle>
                 <Hstack className="flex-1 overflow-y-hidden pb-my-lg">
                     {!isSummarized && (
                         <>

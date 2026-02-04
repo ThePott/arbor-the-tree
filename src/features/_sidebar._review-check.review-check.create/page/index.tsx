@@ -2,9 +2,11 @@
 // NOTE: student MUST BE selected to render here.
 
 import { instance } from "@/packages/api/axiosInstances"
+import Button from "@/packages/components/Button/Button"
 import { Container, FlexOneContainer, Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
+import Toggle from "@/packages/components/Toggle"
 import type { Book, Question, Step, Topic } from "@/shared/interfaces"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
@@ -90,6 +92,21 @@ const ReviewCheckTopic = ({ topic }: ReviewCheckTopicProps) => {
     )
 }
 
+const ReviewCheckCreateToolbar = () => {
+    return (
+        <Hstack className="p-my-md border-b border-b-border-dim justify-between">
+            <Hstack>
+                <Button>정답</Button>
+                <Button>복습</Button>
+                <Button>해제</Button>
+
+                <Toggle onChange={() => {}}>다중 선택</Toggle>
+            </Hstack>
+            <Button>제출</Button>
+        </Hstack>
+    )
+}
+
 // NOTE: nothing gets rendered if only classroom is selected
 const ReviewCheckCreatePage = () => {
     const searchParams = route.useSearch()
@@ -111,7 +128,7 @@ const ReviewCheckCreatePage = () => {
 
     return (
         <Vstack gap="none" className="h-full overflow-hidden">
-            <div className="p-my-xl border-b border-b-border-dim">this is tab bar</div>
+            <ReviewCheckCreateToolbar />
             <FlexOneContainer isYScrollable>
                 <Container isPadded width="md">
                     <Title as="h1" className="text-center">{`${bookResult.title} 오답체크`}</Title>
