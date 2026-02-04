@@ -21,7 +21,11 @@ type ReviewCheckQuestionProps = {
     question: ConciseQuestion
 }
 const ReviewCheckQuestion = ({ question }: ReviewCheckQuestionProps) => {
-    return <RoundBox isBordered className="size-12" />
+    return (
+        <RoundBox isBordered className="size-12 flex justify-center items-center">
+            {question.name}
+        </RoundBox>
+    )
 }
 
 type ReviewCheckStepProps = { step: ConciseStep }
