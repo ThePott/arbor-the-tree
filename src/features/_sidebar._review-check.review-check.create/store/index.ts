@@ -1,8 +1,9 @@
+import type { ReviewCheckStatus } from "@/shared/interfaces"
 import { create } from "zustand"
 
 type ReviewCheckCreateStoreState = {
-    status: "CORRECT" | "WRONG" | null
-    setStatus: (status: "CORRECT" | "WRONG" | null) => void
+    status: ReviewCheckStatus | null
+    setStatus: (status: ReviewCheckStatus | null) => void
 }
 const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, _get) => ({
     status: null,

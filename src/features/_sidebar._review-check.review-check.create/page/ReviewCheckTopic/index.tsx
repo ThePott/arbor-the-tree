@@ -1,25 +1,98 @@
+import Button from "@/packages/components/Button/Button"
 import { Hstack, Vstack } from "@/packages/components/layouts"
-import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
-import type { Book, Question, Step, Topic } from "@/shared/interfaces"
+import { ClientError } from "@/shared/error/clientError"
+import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
+import type { ReviewCheckStatus } from "@/shared/interfaces"
+import { getRouteApi } from "@tanstack/react-router"
+import { cva } from "class-variance-authority"
+import clsx from "clsx"
+import { produce } from "immer"
+import useReviewCheckCreateStore from "../../store"
+import type { ExtendedStep, ExtendedTopic, JoinedQuestion, ReviewCheckCreateResponseData } from "../../types"
 
-type ConciseQuestion = Pick<Question, "id" | "name" | "page">
-type ConciseStep = Omit<Step, "id"> & { questions: ConciseQuestion[] }
-type ConciseTopic = Omit<Topic, "id"> & { steps: ConciseStep[] }
-export type ConciseBook = Omit<Book, "id"> & { topics: ConciseTopic[] }
+const questionVariants = cva("border border-border-dim size-12 flex justify-center items-center", {
+    variants: {
+        status: {
+            CORRECT: "bg-washed-blue",
+            WRONG: "bg-washed-red",
+        },
+    },
+})
+
+const route = getRouteApi("/_sidebar")
 
 type ReviewCheckQuestionProps = {
-    question: ConciseQuestion
+    topic_id: string
+    step_id: string
+    question: JoinedQuestion
 }
-const ReviewCheckQuestion = ({ question }: ReviewCheckQuestionProps) => {
+const ReviewCheckQuestion = ({ topic_id, step_id, question }: ReviewCheckQuestionProps) => {
+    const status = useReviewCheckCreateStore((state) => state.status)
+    const searchParams = route.useSearch()
+
+    const { mutate } = useSimpleMutation({
+        method: "post",
+        url: "/review-check/create",
+        queryKeyWithoutParams: ["reviewCheckCreate", searchParams],
+        update: ({
+            previous,
+            additionalData,
+        }: {
+            previous: ReviewCheckCreateResponseData
+            additionalData: ReviewCheckStatus | null
+        }) => {
+            const newData = produce(previous, (draft) => {
+                const targetTopic = draft.bookResult.topics.find((elTopic) => elTopic.id === topic_id)
+                if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
+                const targetStep = targetTopic.steps.find((elStep) => elStep.id === step_id)
+                if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
+                const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question.id)
+                if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
+                targetQuestion.status = additionalData
+            })
+
+            return newData
+        },
+    })
+
+    const handleClick = () => {
+        const body = {
+            syllabus_id: searchParams.syllabus_id,
+            student_id: searchParams.student_id,
+            question_id: question.id,
+            status,
+        }
+        mutate({ body, additionalData: status })
+    }
+
+    // TODO: 정답은 파란색으로 바꿔야 함
+    const statusToColor = {
+        CORRECT: "green",
+        WRONG: "red",
+        null: "black",
+    } as const
+
+    // TODO: 버튼 색상 더 추가해야 함
+    // TODO: 버튼 옵션 바꿔야 함
     return (
-        <RoundBox isBordered className="size-12 flex justify-center items-center">
+        <Button
+            color={statusToColor[question.status ?? "null"]}
+            isBorderedOnHover
+            onClick={handleClick}
+            className={clsx("size-12 flex justify-center items-center")}
+        >
             {question.name}
-        </RoundBox>
+        </Button>
     )
 }
 
-type PagenatedQuestions = { page: number; questions: ConciseQuestion[] }
+type PagenatedQuestions = {
+    topic_id: string
+    step_id: string
+    page: number
+    questions: JoinedQuestion[]
+}
 type ReviewCheckPagenatedProps = { pagenated: PagenatedQuestions }
 const ReviewCheckPagenated = ({ pagenated }: ReviewCheckPagenatedProps) => {
     return (
@@ -34,8 +107,11 @@ const ReviewCheckPagenated = ({ pagenated }: ReviewCheckPagenatedProps) => {
     )
 }
 
-type ReviewCheckStepProps = { step: ConciseStep }
-const makePagenated = (questions: ConciseQuestion[]): PagenatedQuestions[] => {
+type ReviewCheckStepProps = {
+    topic_id: string
+    step: ExtendedStep
+}
+const makePagenated = (questions: JoinedQuestion[]): PagenatedQuestions[] => {
     const result = questions.reduce((acc: PagenatedQuestions[], cur) => {
         const pagenated = acc.find((el) => el.page === cur.page)
 
@@ -67,7 +143,7 @@ const ReviewCheckStep = ({ step }: ReviewCheckStepProps) => {
     )
 }
 
-type ReviewCheckTopicProps = { topic: ConciseTopic }
+type ReviewCheckTopicProps = { topic: ExtendedTopic }
 const ReviewCheckTopic = ({ topic }: ReviewCheckTopicProps) => {
     return (
         <Vstack>
@@ -75,7 +151,7 @@ const ReviewCheckTopic = ({ topic }: ReviewCheckTopicProps) => {
                 {topic.title}
             </Title>
             {topic.steps.map((step) => (
-                <ReviewCheckStep key={step.title} step={step} />
+                <ReviewCheckStep key={step.title} topic_id={topic.id} step={step} />
             ))}
         </Vstack>
     )

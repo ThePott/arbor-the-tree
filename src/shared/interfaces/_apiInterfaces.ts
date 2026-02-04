@@ -149,3 +149,5 @@ export type Topic = {
 }
 
 export type SessionStatus = "HOMEWORK" | "TODAY"
+
+export type ReviewCheckStatus = "CORRECT" | "WRONG"
