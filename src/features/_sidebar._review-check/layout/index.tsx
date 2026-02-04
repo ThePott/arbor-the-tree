@@ -1,4 +1,5 @@
 import SidebarSection from "@/features/_sidebar/components"
+import { FlexOneContainer } from "@/packages/components/layouts"
 import { Outlet } from "@tanstack/react-router"
 
 const ReviewCheckSidebarLayout = () => {
@@ -9,7 +10,9 @@ const ReviewCheckSidebarLayout = () => {
                 <SidebarSection.SyllabusSidebar />
             </SidebarSection>
 
-            <Outlet />
+            <FlexOneContainer isYScrollable>
+                <Outlet />
+            </FlexOneContainer>
         </>
     )
 }
