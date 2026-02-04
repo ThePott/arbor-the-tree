@@ -110,7 +110,7 @@ const ReviewCheckCreatePage = () => {
     const { bookResult } = data
 
     return (
-        <Container isPadded>
+        <Container isPadded width="md">
             <Title as="h1" className="text-center">{`${bookResult.title} 오답체크`}</Title>
             <Vstack>
                 {bookResult.topics.map((topic) => (
