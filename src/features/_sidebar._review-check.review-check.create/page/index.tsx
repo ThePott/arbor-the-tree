@@ -34,7 +34,7 @@ const ReviewCheckPagenated = ({ pagenated }: ReviewCheckPagenatedProps) => {
     return (
         <Hstack gap="xs">
             <p className="size-12 flex justify-center items-center text-fg-muted">{`p.${pagenated.page}`}</p>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(48px,1fr))] gap-my-xs grow">
+            <div className="grid grid-cols-[repeat(auto-fill,48px)] gap-my-xs grow">
                 {pagenated.questions.map((question) => (
                     <ReviewCheckQuestion key={question.id} question={question} />
                 ))}
@@ -65,7 +65,7 @@ const makePagenated = (questions: ConciseQuestion[]): PagenatedQuestions[] => {
 const ReviewCheckStep = ({ step }: ReviewCheckStepProps) => {
     const pagenatedQuestionsArray = makePagenated(step.questions)
     return (
-        <Vstack gap="xs">
+        <Vstack gap="sm">
             <Title as="h3" className="mt-my-md">
                 {step.title}
             </Title>
@@ -79,7 +79,7 @@ const ReviewCheckStep = ({ step }: ReviewCheckStepProps) => {
 type ReviewCheckTopicProps = { topic: ConciseTopic }
 const ReviewCheckTopic = ({ topic }: ReviewCheckTopicProps) => {
     return (
-        <Vstack gap="none">
+        <Vstack>
             <Title as="h2" isMuted className="text-center mt-my-lg">
                 {topic.title}
             </Title>
