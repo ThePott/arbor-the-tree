@@ -5,20 +5,10 @@ import { ClientError } from "@/shared/error/clientError"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import type { ReviewCheckStatus } from "@/shared/interfaces"
 import { getRouteApi } from "@tanstack/react-router"
-import { cva } from "class-variance-authority"
 import clsx from "clsx"
 import { produce } from "immer"
 import useReviewCheckCreateStore from "../../store"
 import type { ExtendedStep, ExtendedTopic, JoinedQuestion, ReviewCheckCreateResponseData } from "../../types"
-
-const questionVariants = cva("border border-border-dim size-12 flex justify-center items-center", {
-    variants: {
-        status: {
-            CORRECT: "bg-washed-blue",
-            WRONG: "bg-washed-red",
-        },
-    },
-})
 
 const route = getRouteApi("/_sidebar")
 
