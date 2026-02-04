@@ -2,7 +2,7 @@
 // NOTE: student MUST BE selected to render here.
 
 import { instance } from "@/packages/api/axiosInstances"
-import { Container, Hstack, Vstack } from "@/packages/components/layouts"
+import { Container, FlexOneContainer, Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
 import type { Book, Question, Step, Topic } from "@/shared/interfaces"
@@ -110,14 +110,19 @@ const ReviewCheckCreatePage = () => {
     const { bookResult } = data
 
     return (
-        <Container isPadded width="md">
-            <Title as="h1" className="text-center">{`${bookResult.title} 오답체크`}</Title>
-            <Vstack>
-                {bookResult.topics.map((topic) => (
-                    <ReviewCheckTopic key={topic.title} topic={topic} />
-                ))}
-            </Vstack>
-        </Container>
+        <Vstack gap="none" className="h-full overflow-hidden">
+            <div className="p-my-xl border-b border-b-border-dim">this is tab bar</div>
+            <FlexOneContainer isYScrollable>
+                <Container isPadded width="md">
+                    <Title as="h1" className="text-center">{`${bookResult.title} 오답체크`}</Title>
+                    <Vstack>
+                        {bookResult.topics.map((topic) => (
+                            <ReviewCheckTopic key={topic.title} topic={topic} />
+                        ))}
+                    </Vstack>
+                </Container>
+            </FlexOneContainer>
+        </Vstack>
     )
 }
 
