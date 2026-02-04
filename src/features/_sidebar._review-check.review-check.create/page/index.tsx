@@ -2,7 +2,7 @@
 // NOTE: student MUST BE selected to render here.
 
 import { instance } from "@/packages/api/axiosInstances"
-import { Container, Vstack } from "@/packages/components/layouts"
+import { Container, Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
 import type { Book, Question, Step, Topic } from "@/shared/interfaces"
@@ -28,16 +28,48 @@ const ReviewCheckQuestion = ({ question }: ReviewCheckQuestionProps) => {
     )
 }
 
-type ReviewCheckStepProps = { step: ConciseStep }
-const ReviewCheckStep = ({ step }: ReviewCheckStepProps) => {
+type PagenatedQuestions = { page: number; questions: ConciseQuestion[] }
+type ReviewCheckPagenatedProps = { pagenated: PagenatedQuestions }
+const ReviewCheckPagenated = ({ pagenated }: ReviewCheckPagenatedProps) => {
     return (
-        <Vstack gap="none">
-            <Title as="h3">{step.title}</Title>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(48px,1fr))] gap-my-xs">
-                {step.questions.map((question) => (
+        <Hstack gap="none">
+            <p className="size-12 flex justify-center items-center text-fg-muted">{`p.${pagenated.page}`}</p>
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(48px,1fr))] gap-my-xs grow">
+                {pagenated.questions.map((question) => (
                     <ReviewCheckQuestion key={question.id} question={question} />
                 ))}
             </div>
+        </Hstack>
+    )
+}
+
+type ReviewCheckStepProps = { step: ConciseStep }
+const makePagenated = (questions: ConciseQuestion[]): PagenatedQuestions[] => {
+    const result = questions.reduce((acc: PagenatedQuestions[], cur) => {
+        const pagenated = acc.find((el) => (el.page = cur.page))
+
+        if (pagenated) {
+            pagenated.questions.push(cur)
+            return acc
+        }
+
+        const newPagenated: PagenatedQuestions = {
+            page: cur.page,
+            questions: [cur],
+        }
+        acc.push(newPagenated)
+        return acc
+    }, [])
+    return result
+}
+const ReviewCheckStep = ({ step }: ReviewCheckStepProps) => {
+    const pagenatedQuestionsArray = makePagenated(step.questions)
+    return (
+        <Vstack gap="none">
+            <Title as="h3">{step.title}</Title>
+            {pagenatedQuestionsArray.map((pagenated) => (
+                <ReviewCheckPagenated key={pagenated.page} pagenated={pagenated} />
+            ))}
         </Vstack>
     )
 }
