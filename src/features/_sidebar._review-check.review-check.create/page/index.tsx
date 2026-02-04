@@ -32,7 +32,7 @@ type PagenatedQuestions = { page: number; questions: ConciseQuestion[] }
 type ReviewCheckPagenatedProps = { pagenated: PagenatedQuestions }
 const ReviewCheckPagenated = ({ pagenated }: ReviewCheckPagenatedProps) => {
     return (
-        <Hstack gap="none">
+        <Hstack gap="xs">
             <p className="size-12 flex justify-center items-center text-fg-muted">{`p.${pagenated.page}`}</p>
             <div className="grid grid-cols-[repeat(auto-fill,minmax(48px,1fr))] gap-my-xs grow">
                 {pagenated.questions.map((question) => (
@@ -46,7 +46,7 @@ const ReviewCheckPagenated = ({ pagenated }: ReviewCheckPagenatedProps) => {
 type ReviewCheckStepProps = { step: ConciseStep }
 const makePagenated = (questions: ConciseQuestion[]): PagenatedQuestions[] => {
     const result = questions.reduce((acc: PagenatedQuestions[], cur) => {
-        const pagenated = acc.find((el) => (el.page = cur.page))
+        const pagenated = acc.find((el) => el.page === cur.page)
 
         if (pagenated) {
             pagenated.questions.push(cur)
@@ -65,8 +65,10 @@ const makePagenated = (questions: ConciseQuestion[]): PagenatedQuestions[] => {
 const ReviewCheckStep = ({ step }: ReviewCheckStepProps) => {
     const pagenatedQuestionsArray = makePagenated(step.questions)
     return (
-        <Vstack gap="none">
-            <Title as="h3">{step.title}</Title>
+        <Vstack gap="xs">
+            <Title as="h3" className="mt-my-md">
+                {step.title}
+            </Title>
             {pagenatedQuestionsArray.map((pagenated) => (
                 <ReviewCheckPagenated key={pagenated.page} pagenated={pagenated} />
             ))}
@@ -77,8 +79,8 @@ const ReviewCheckStep = ({ step }: ReviewCheckStepProps) => {
 type ReviewCheckTopicProps = { topic: ConciseTopic }
 const ReviewCheckTopic = ({ topic }: ReviewCheckTopicProps) => {
     return (
-        <Vstack>
-            <Title as="h2" isMuted className="text-center">
+        <Vstack gap="none">
+            <Title as="h2" isMuted className="text-center mt-my-lg">
                 {topic.title}
             </Title>
             {topic.steps.map((step) => (
