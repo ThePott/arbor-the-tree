@@ -66,7 +66,7 @@ const ReviewCheckStep = ({ step }: ReviewCheckStepProps) => {
     const pagenatedQuestionsArray = makePagenated(step.questions)
     return (
         <Vstack gap="sm">
-            <Title as="h3" className="mt-my-md">
+            <Title as="h3" className="mt-my-md sticky top-[24px] bg-bg-neg-1">
                 {step.title}
             </Title>
             {pagenatedQuestionsArray.map((pagenated) => (
@@ -80,7 +80,7 @@ type ReviewCheckTopicProps = { topic: ConciseTopic }
 const ReviewCheckTopic = ({ topic }: ReviewCheckTopicProps) => {
     return (
         <Vstack>
-            <Title as="h2" isMuted className="text-center mt-my-lg">
+            <Title as="h2" isMuted className="text-center mt-my-lg sticky top-0 bg-bg-neg-1 z-10">
                 {topic.title}
             </Title>
             {topic.steps.map((step) => (
