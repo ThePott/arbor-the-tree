@@ -78,19 +78,21 @@ const ReviewCheckQuestion = ({ topic_id, step_id, question }: ReviewCheckQuestio
 }
 
 type PagenatedQuestions = {
-    topic_id: string
-    step_id: string
     page: number
     questions: JoinedQuestion[]
 }
-type ReviewCheckPagenatedProps = { pagenated: PagenatedQuestions }
-const ReviewCheckPagenated = ({ pagenated }: ReviewCheckPagenatedProps) => {
+type ReviewCheckPagenatedProps = {
+    topic_id: string
+    step_id: string
+    pagenated: PagenatedQuestions
+}
+const ReviewCheckPagenated = ({ topic_id, step_id, pagenated }: ReviewCheckPagenatedProps) => {
     return (
         <Hstack gap="xs">
             <p className="size-12 flex justify-center items-center text-fg-muted">{`p.${pagenated.page}`}</p>
             <div className="grid grid-cols-[repeat(auto-fill,48px)] gap-my-xs grow">
                 {pagenated.questions.map((question) => (
-                    <ReviewCheckQuestion key={question.id} question={question} />
+                    <ReviewCheckQuestion key={question.id} topic_id={topic_id} step_id={step_id} question={question} />
                 ))}
             </div>
         </Hstack>
@@ -119,7 +121,7 @@ const makePagenated = (questions: JoinedQuestion[]): PagenatedQuestions[] => {
     }, [])
     return result
 }
-const ReviewCheckStep = ({ step }: ReviewCheckStepProps) => {
+const ReviewCheckStep = ({ topic_id, step }: ReviewCheckStepProps) => {
     const pagenatedQuestionsArray = makePagenated(step.questions)
     return (
         <Vstack gap="sm">
@@ -127,7 +129,12 @@ const ReviewCheckStep = ({ step }: ReviewCheckStepProps) => {
                 {step.title}
             </Title>
             {pagenatedQuestionsArray.map((pagenated) => (
-                <ReviewCheckPagenated key={pagenated.page} pagenated={pagenated} />
+                <ReviewCheckPagenated
+                    key={pagenated.page}
+                    topic_id={topic_id}
+                    step_id={step.id}
+                    pagenated={pagenated}
+                />
             ))}
         </Vstack>
     )
