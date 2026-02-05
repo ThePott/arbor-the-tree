@@ -21,7 +21,7 @@ const ReviewCheckQuestion = ({ topic_id, step_id, question }: ReviewCheckQuestio
     const status = useReviewCheckCreateStore((state) => state.status)
     const searchParams = route.useSearch()
 
-    const { mutate } = useSimpleMutation({
+    const { mutate: postMuate } = useSimpleMutation({
         method: "post",
         url: "/review-check/create",
         queryKeyWithoutParams: ["reviewCheckCreate", searchParams],
@@ -30,7 +30,7 @@ const ReviewCheckQuestion = ({ topic_id, step_id, question }: ReviewCheckQuestio
             additionalData,
         }: {
             previous: ReviewCheckCreateResponseData
-            additionalData: ReviewCheckStatus | null
+            additionalData: ReviewCheckStatus
         }) => {
             const newData = produce(previous, (draft) => {
                 const targetTopic = draft.topics.find((elTopic) => elTopic.id === topic_id)
@@ -45,15 +45,69 @@ const ReviewCheckQuestion = ({ topic_id, step_id, question }: ReviewCheckQuestio
             return newData
         },
     })
+    const { mutate: patchMutate } = useSimpleMutation({
+        method: "patch",
+        url: `/review-check/create/${question.review_check_id}`,
+        queryKeyWithoutParams: ["reviewCheckCreate", searchParams],
+        update: ({
+            previous,
+            additionalData,
+        }: {
+            previous: ReviewCheckCreateResponseData
+            additionalData: ReviewCheckStatus
+        }) => {
+            const newData = produce(previous, (draft) => {
+                const targetTopic = draft.topics.find((elTopic) => elTopic.id === topic_id)
+                if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
+                const targetStep = targetTopic.steps.find((elStep) => elStep.id === step_id)
+                if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
+                const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question.id)
+                if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
+                targetQuestion.status = additionalData
+            })
+
+            return newData
+        },
+    })
+    const { mutate: deleteMutate } = useSimpleMutation({
+        method: "delete",
+        url: `/review-check/create/${question.review_check_id}`,
+        queryKeyWithoutParams: ["reviewCheckCreate", searchParams],
+        update: ({ previous }: { previous: ReviewCheckCreateResponseData }) => {
+            const newData = produce(previous, (draft) => {
+                const targetTopic = draft.topics.find((elTopic) => elTopic.id === topic_id)
+                if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
+                const targetStep = targetTopic.steps.find((elStep) => elStep.id === step_id)
+                if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
+                const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question.id)
+                if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
+                targetQuestion.status = null
+            })
+
+            return newData
+        },
+    })
 
     const handleClick = () => {
+        if (question.status === status) return
+        if (!status) {
+            deleteMutate({ body: undefined, additionalData: undefined })
+            return
+        }
+        if (question.status) {
+            const body = {
+                status,
+            }
+            patchMutate({ body, additionalData: status })
+            return
+        }
         const body = {
             syllabus_id: searchParams.syllabus_id,
             student_id: searchParams.student_id,
             question_id: question.id,
             status,
         }
-        mutate({ body, additionalData: status })
+        postMuate({ body, additionalData: status })
     }
 
     // TODO: 정답은 파란색으로 바꿔야 함

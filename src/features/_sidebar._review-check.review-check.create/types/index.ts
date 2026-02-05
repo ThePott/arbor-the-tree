@@ -3,6 +3,7 @@ import type { Book, Question, ReviewCheckStatus, SessionStatus, Step, Topic } fr
 export type JoinedQuestion = Pick<Question, "id" | "name" | "page"> & {
     status: ReviewCheckStatus | null
     session_status: SessionStatus | null
+    review_check_id: string | null
 }
 export type ExtendedStep = Step & { questions: JoinedQuestion[] }
 export type ExtendedTopic = Topic & { steps: ExtendedStep[] }
