@@ -5,4 +5,4 @@ export type ExtendedStep = Step & { questions: JoinedQuestion[] }
 export type ExtendedTopic = Topic & { steps: ExtendedStep[] }
 export type ExtendedBook = Pick<Book, "title"> & { topics: ExtendedTopic[] }
 
-export type ReviewCheckCreateResponseData = { bookResult: ExtendedBook }
+export type ReviewCheckCreateResponseData = ExtendedBook

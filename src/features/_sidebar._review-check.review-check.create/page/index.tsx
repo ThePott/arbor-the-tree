@@ -30,16 +30,14 @@ const ReviewCheckCreatePage = () => {
             </RoundBox>
         )
 
-    const { bookResult } = data
-
     return (
         <Vstack gap="none" className="h-full overflow-hidden">
             <ReviewCheckCreateToolbar />
             <FlexOneContainer isYScrollable>
                 <Container isPadded width="md">
-                    <Title as="h1" className="text-center">{`${bookResult.title} 오답체크`}</Title>
+                    <Title as="h1" className="text-center">{`${data.title} 오답체크`}</Title>
                     <Vstack>
-                        {bookResult.topics.map((topic) => (
+                        {data.topics.map((topic) => (
                             <ReviewCheckTopic key={topic.title} topic={topic} />
                         ))}
                     </Vstack>
