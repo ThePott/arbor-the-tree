@@ -1,4 +1,3 @@
-import type { Color } from "@/shared/interfaces"
 import { buttonColorToCn } from "@/shared/utils/styles"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
@@ -15,23 +14,25 @@ const buttonVariants = cva("rounded-my-sm my-transition", {
             disabled: "",
             pending: "",
         },
-        space: {
+        padding: {
             normal: "py-my-sm px-my-md",
             wide: "py-my-xs px-my-md w-full",
             tight: "p-my-xs",
+            none: "",
         },
         isShadowed: {
             false: "",
             true: "shadow-my-sm",
         },
-        isBorderedOnHover: {
-            false: "",
-            true: "",
+        border: {
+            always: "",
+            onHover: "",
+            none: "",
         },
     },
     compoundVariants: [
         // NOTE: text colors
-        { color: ["bg0", "bg1", "bg2"], className: "text-fg-vivid disabled:text-fg-muted" },
+        { color: ["bg0", "bg1", "bg2", "transparent"], className: "text-fg-vivid disabled:text-fg-muted" },
         { color: ["green", "red"], className: "text-fg-inverted-vivid disabled:text-fg-inverted-muted" },
 
         // NOTE: background colors
@@ -47,23 +48,19 @@ const buttonVariants = cva("rounded-my-sm my-transition", {
         { color: "red", status: "disabled", className: "bg-washed-red-neg-1" },
         { color: "red", status: "pending", className: "bg-washed-red-neg-1" },
 
-        {
-            isBorderedOnHover: true,
-            status: "enabled",
-            className: "border border-transparent hover:border-border-muted",
-        },
+        { border: "onHover", status: "enabled", className: "border border-transparent hover:border-border-muted" },
+        { border: "always", status: "enabled", className: "border border-border-dim hover:border-border-muted" },
     ],
 })
 
 interface WithButtonProps<T extends ElementType = "button"> {
     as?: T
-    color?: Extract<Color, ButtonColor>
+    color?: ButtonColor
     status?: "enabled" | "disabled" | "pending"
-    // isWide?: boolean
+    border?: "onHover" | "always" | "none"
+    padding?: "wide" | "tight" | "normal" | "none"
     isShadowed?: boolean
-    isBorderedOnHover?: boolean
     isOnLeft?: boolean
-    space?: "wide" | "tight" | "normal"
 }
 type ButtonProps<T extends ElementType> = WithButtonProps<T> & Omit<ComponentPropsWithRef<T>, keyof WithButtonProps<T>>
 
@@ -71,11 +68,11 @@ const lightBgArray: ButtonColor[] = ["green", "red"]
 
 const Button = <T extends ElementType>({
     as,
-    color = "bg1",
+    color = "transparent",
     status = "enabled",
-    space = "normal",
+    border = "none",
+    padding = "normal",
     isShadowed = false,
-    isBorderedOnHover = false,
     isOnLeft = false,
     ...props
 }: ButtonProps<T>) => {
@@ -88,7 +85,7 @@ const Button = <T extends ElementType>({
         <Component
             {...rest}
             disabled={status !== "enabled"}
-            className={clsx(buttonVariants({ color, status, space, isBorderedOnHover, isShadowed }), className)}
+            className={clsx(buttonVariants({ color, status, padding, border, isShadowed }), className)}
         >
             <Hstack className={clsx("items-center", isOnLeft ? "text-left" : "justify-center")}>
                 {status === "pending" && <Loader isDark={isLoaderDark} />}
