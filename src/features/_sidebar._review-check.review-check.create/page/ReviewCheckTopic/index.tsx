@@ -13,11 +13,11 @@ import type { ExtendedStep, ExtendedTopic, JoinedQuestion, ReviewCheckCreateResp
 const route = getRouteApi("/_sidebar")
 
 type ReviewCheckQuestionProps = {
-    topic_id: string
-    step_id: string
+    topic_order: number
+    step_order: number
     question: JoinedQuestion
 }
-const ReviewCheckQuestion = ({ topic_id, step_id, question }: ReviewCheckQuestionProps) => {
+const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQuestionProps) => {
     const status = useReviewCheckCreateStore((state) => state.status)
     const searchParams = route.useSearch()
 
@@ -33,9 +33,9 @@ const ReviewCheckQuestion = ({ topic_id, step_id, question }: ReviewCheckQuestio
             additionalData: ReviewCheckStatus
         }) => {
             const newData = produce(previous, (draft) => {
-                const targetTopic = draft.topics.find((elTopic) => elTopic.id === topic_id)
+                const targetTopic = draft.topics.find((elTopic) => elTopic.order === topic_order)
                 if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
-                const targetStep = targetTopic.steps.find((elStep) => elStep.id === step_id)
+                const targetStep = targetTopic.steps.find((elStep) => elStep.order === step_order)
                 if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
                 const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question.id)
                 if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
@@ -138,17 +138,22 @@ type PagenatedQuestions = {
     questions: JoinedQuestion[]
 }
 type ReviewCheckPagenatedProps = {
-    topic_id: string
-    step_id: string
+    topic_order: number
+    step_order: number
     pagenated: PagenatedQuestions
 }
-const ReviewCheckPagenated = ({ topic_id, step_id, pagenated }: ReviewCheckPagenatedProps) => {
+const ReviewCheckPagenated = ({ topic_order, step_order, pagenated }: ReviewCheckPagenatedProps) => {
     return (
         <Hstack gap="xs">
             <p className="size-12 flex justify-center items-center text-fg-muted">{`p.${pagenated.page}`}</p>
             <div className="grid grid-cols-[repeat(auto-fill,48px)] gap-my-xs grow">
                 {pagenated.questions.map((question) => (
-                    <ReviewCheckQuestion key={question.id} topic_id={topic_id} step_id={step_id} question={question} />
+                    <ReviewCheckQuestion
+                        key={question.id}
+                        topic_order={topic_order}
+                        step_order={step_order}
+                        question={question}
+                    />
                 ))}
             </div>
         </Hstack>
@@ -156,7 +161,7 @@ const ReviewCheckPagenated = ({ topic_id, step_id, pagenated }: ReviewCheckPagen
 }
 
 type ReviewCheckStepProps = {
-    topic_id: string
+    topic_order: number
     step: ExtendedStep
 }
 const makePagenated = (questions: JoinedQuestion[]): PagenatedQuestions[] => {
@@ -177,7 +182,7 @@ const makePagenated = (questions: JoinedQuestion[]): PagenatedQuestions[] => {
     }, [])
     return result
 }
-const ReviewCheckStep = ({ topic_id, step }: ReviewCheckStepProps) => {
+const ReviewCheckStep = ({ topic_order, step }: ReviewCheckStepProps) => {
     const pagenatedQuestionsArray = makePagenated(step.questions)
     return (
         <Vstack gap="sm">
@@ -187,8 +192,8 @@ const ReviewCheckStep = ({ topic_id, step }: ReviewCheckStepProps) => {
             {pagenatedQuestionsArray.map((pagenated) => (
                 <ReviewCheckPagenated
                     key={pagenated.page}
-                    topic_id={topic_id}
-                    step_id={step.id}
+                    topic_order={topic_order}
+                    step_order={step.order}
                     pagenated={pagenated}
                 />
             ))}
@@ -204,7 +209,7 @@ const ReviewCheckTopic = ({ topic }: ReviewCheckTopicProps) => {
                 {topic.title}
             </Title>
             {topic.steps.map((step) => (
-                <ReviewCheckStep key={step.title} topic_id={topic.id} step={step} />
+                <ReviewCheckStep key={step.title} topic_order={topic.order} step={step} />
             ))}
         </Vstack>
     )

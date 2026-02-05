@@ -1,6 +1,6 @@
 import type { Book, Question, ReviewCheckStatus, SessionStatus, Step, Topic } from "@/shared/interfaces"
 
-export type JoinedQuestion = Pick<Question, "id" | "name" | "page"> & {
+export type JoinedQuestion = Pick<Question, "id" | "name" | "page" | "order"> & {
     status: ReviewCheckStatus | null
     session_status: SessionStatus | null
     review_check_id: string | null
