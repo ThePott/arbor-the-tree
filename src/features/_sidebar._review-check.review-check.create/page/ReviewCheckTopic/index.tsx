@@ -33,7 +33,7 @@ const ReviewCheckQuestion = ({ topic_id, step_id, question }: ReviewCheckQuestio
             additionalData: ReviewCheckStatus | null
         }) => {
             const newData = produce(previous, (draft) => {
-                const targetTopic = draft.bookResult.topics.find((elTopic) => elTopic.id === topic_id)
+                const targetTopic = draft.topics.find((elTopic) => elTopic.id === topic_id)
                 if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
                 const targetStep = targetTopic.steps.find((elStep) => elStep.id === step_id)
                 if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
