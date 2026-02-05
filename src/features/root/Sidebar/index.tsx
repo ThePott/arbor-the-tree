@@ -43,7 +43,7 @@ const Sidebar = () => {
                         >
                             <Vstack gap="md">
                                 <Hstack className="justify-end">
-                                    <Button color="bg2" isBorderedOnHover onClick={() => setIsSidebarOn(false)}>
+                                    <Button color="bg2" border="onHover" onClick={() => setIsSidebarOn(false)}>
                                         <X size={16} />
                                     </Button>
                                 </Hstack>
@@ -53,8 +53,8 @@ const Sidebar = () => {
                                     <RoundBox isBordered padding="md">
                                         <Vstack gap="xs">
                                             <Button
-                                                color="black"
-                                                isBorderedOnHover
+                                                color="transparent"
+                                                border="onHover"
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
@@ -64,8 +64,8 @@ const Sidebar = () => {
                                                 지원 현황
                                             </Button>
                                             <Button
-                                                color="black"
-                                                isBorderedOnHover
+                                                color="transparent"
+                                                border="onHover"
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
@@ -83,8 +83,8 @@ const Sidebar = () => {
                                     <RoundBox isBordered padding="md">
                                         <Vstack gap="xs">
                                             <Button
-                                                color="black"
-                                                isBorderedOnHover
+                                                color="transparent"
+                                                border="onHover"
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
@@ -94,8 +94,8 @@ const Sidebar = () => {
                                                 문제집 목록
                                             </Button>
                                             <Button
-                                                color="black"
-                                                isBorderedOnHover
+                                                color="transparent"
+                                                border="onHover"
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
@@ -105,8 +105,8 @@ const Sidebar = () => {
                                                 학생 관리
                                             </Button>
                                             <Button
-                                                color="black"
-                                                isBorderedOnHover
+                                                color="transparent"
+                                                border="onHover"
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
@@ -125,7 +125,7 @@ const Sidebar = () => {
                                         <Vstack gap="xs">
                                             <Button
                                                 color="bg2"
-                                                isBorderedOnHover
+                                                border="onHover"
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
@@ -136,7 +136,7 @@ const Sidebar = () => {
                                             </Button>
                                             <Button
                                                 color="bg2"
-                                                isBorderedOnHover
+                                                border="onHover"
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)

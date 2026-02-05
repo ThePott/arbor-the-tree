@@ -4,7 +4,7 @@ import clsx from "clsx"
 import type { ComponentPropsWithRef, ElementType } from "react"
 import Loader from "../Loader/Loader"
 import { Hstack } from "../layouts"
-import type { ButtonColor } from "./buttonInterfaces"
+import type { ButtonBorder, ButtonColor } from "./buttonInterfaces"
 
 const buttonVariants = cva("rounded-my-sm my-transition", {
     variants: {
@@ -57,7 +57,7 @@ interface WithButtonProps<T extends ElementType = "button"> {
     as?: T
     color?: ButtonColor
     status?: "enabled" | "disabled" | "pending"
-    border?: "onHover" | "always" | "none"
+    border?: ButtonBorder
     padding?: "wide" | "tight" | "normal" | "none"
     isShadowed?: boolean
     isOnLeft?: boolean

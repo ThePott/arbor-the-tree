@@ -21,7 +21,7 @@ const LocalAutoCompleteOption = ({ option }: LocalAutoCompleteOptionProps) => {
         setIsContentOn(false)
     }
     return (
-        <Button isOnLeft color="black" isBorderedOnHover onClick={handleClick}>
+        <Button isOnLeft color="transparent" border="onHover" onClick={handleClick}>
             {option.label}
         </Button>
     )

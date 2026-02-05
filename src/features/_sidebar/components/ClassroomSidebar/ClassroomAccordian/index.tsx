@@ -37,7 +37,13 @@ const StudentButton = ({ student, classroomId }: StudentButtonProps) => {
     const isSelected = classroomInSearch === classroomId && studentInSearch === student.id
 
     return (
-        <Button color={isSelected ? "bg2" : "black"} isBorderedOnHover isOnLeft onClick={handleClick} space="wide">
+        <Button
+            color={isSelected ? "bg2" : "transparent"}
+            border="onHover"
+            isOnLeft
+            onClick={handleClick}
+            padding="wide"
+        >
             {student.users.name}
         </Button>
     )

@@ -41,10 +41,10 @@ export const buttonColorToTextCn: Record<ButtonColor, string> = {
     bg0: "",
     bg1: "",
     bg2: "",
-    black: "",
+    transparent: "",
 }
 
-export const buttonColorToCn = squashObject(buttonColorArray, boxColorToCn, buttonColorToTextCn)
+export const buttonColorToCn = squashObject(buttonColorArray, { ...boxColorToCn, transparent: "" }, buttonColorToTextCn)
 
 export const wideWidthToCn: Record<XsToXl, string> = {
     xs: "w-[200px]",

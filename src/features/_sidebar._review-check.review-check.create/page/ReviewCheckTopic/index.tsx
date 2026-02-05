@@ -60,7 +60,7 @@ const ReviewCheckQuestion = ({ topic_id, step_id, question }: ReviewCheckQuestio
     const statusToColor = {
         CORRECT: "green",
         WRONG: "red",
-        null: "black",
+        null: "transparent",
     } as const
 
     // TODO: 버튼 색상 더 추가해야 함 -> 투명일 때도 disabled는 만들어야 함
@@ -69,7 +69,7 @@ const ReviewCheckQuestion = ({ topic_id, step_id, question }: ReviewCheckQuestio
         <Button
             color={statusToColor[question.status ?? "null"]}
             status={question.session_status ? "enabled" : "disabled"}
-            isBorderedOnHover
+            border="onHover"
             onClick={handleClick}
             className={clsx("size-12 flex justify-center items-center")}
         >

@@ -24,8 +24,8 @@ const SyllabusAssignedButton = ({ assignedJoinedSyllabus, children }: SyllabusAs
     return (
         <Button
             as="div"
-            isBorderedOnHover
-            color={isSelected ? "bg2" : "black"}
+            border="onHover"
+            color={isSelected ? "bg2" : "transparent"}
             isOnLeft
             onClick={handleBodyClick}
             className="grow"

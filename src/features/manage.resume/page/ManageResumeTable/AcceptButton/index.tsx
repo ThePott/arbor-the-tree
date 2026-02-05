@@ -36,7 +36,7 @@ const AcceptButton = ({ resume_id }: AcceptButtonProps) => {
     }
 
     return (
-        <Button isBorderedOnHover onClick={handleClick}>
+        <Button border="onHover" onClick={handleClick}>
             <Check />
         </Button>
     )

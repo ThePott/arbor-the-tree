@@ -34,7 +34,7 @@ const ParentInputMany = () => {
                     </Hstack>
                 </RoundBox>
             ))}
-            <Button isShadowed onClick={handleClick} isWide>
+            <Button isShadowed onClick={handleClick} padding="wide">
                 <Plus size={16} />
             </Button>
         </>

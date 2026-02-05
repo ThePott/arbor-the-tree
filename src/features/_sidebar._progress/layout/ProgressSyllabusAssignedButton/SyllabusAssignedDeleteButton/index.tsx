@@ -25,7 +25,7 @@ const SyllabusAssignedDeleteButton = ({ assignedJoinedSyllabus }: SyllabusAssign
 
     if (!isVisible) return null
     return (
-        <Button color="black" isBorderedOnHover onClick={handleDeleteClick}>
+        <Button color="transparent" border="onHover" onClick={handleDeleteClick}>
             <X size={16} />
         </Button>
     )

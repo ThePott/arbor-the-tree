@@ -24,9 +24,9 @@ const SelectOption = ({ value, isDisabled = false, children }: SelectOptionProps
 
     return (
         <Button
-            color="black"
+            color="transparent"
             onClick={handleClick}
-            isBorderedOnHover
+            border="onHover"
             type="button"
             status={isDisabled ? "disabled" : "enabled"}
         >

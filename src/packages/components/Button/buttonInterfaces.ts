@@ -3,3 +3,4 @@ export type ButtonColor = (typeof buttonColorArray)[number]
 
 export const buttonStatusArray = ["enabled", "disabled", "pending"] as const
 export type ButtonStatus = (typeof buttonStatusArray)[number]
+export type ButtonBorder = "onHover" | "always" | "none"

@@ -15,7 +15,7 @@ const ChevronButton = ({ isOpened, setIsOpened }: ChevronButtonProps) => {
 
     // TODO: 투명한 색 (complete ghost) 하기 위해서 black 씀. 나중에 바꿔야
     return (
-        <Button space="tight" color="black" onClick={handleClick} isBorderedOnHover>
+        <Button space="tight" color="transparent" onClick={handleClick} border="onHover">
             <motion.div transition={motionTransition} animate={{ rotate: isOpened ? 90 : 0 }}>
                 <ChevronRight size={16} />
             </motion.div>
