@@ -57,9 +57,9 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
             additionalData: ReviewCheckStatus
         }) => {
             const newData = produce(previous, (draft) => {
-                const targetTopic = draft.topics.find((elTopic) => elTopic.id === topic_id)
+                const targetTopic = draft.topics.find((elTopic) => elTopic.order === topic_order)
                 if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
-                const targetStep = targetTopic.steps.find((elStep) => elStep.id === step_id)
+                const targetStep = targetTopic.steps.find((elStep) => elStep.order === step_order)
                 if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
                 const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question.id)
                 if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
@@ -75,9 +75,9 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
         queryKeyWithoutParams: ["reviewCheckCreate", searchParams],
         update: ({ previous }: { previous: ReviewCheckCreateResponseData }) => {
             const newData = produce(previous, (draft) => {
-                const targetTopic = draft.topics.find((elTopic) => elTopic.id === topic_id)
+                const targetTopic = draft.topics.find((elTopic) => elTopic.order === topic_order)
                 if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
-                const targetStep = targetTopic.steps.find((elStep) => elStep.id === step_id)
+                const targetStep = targetTopic.steps.find((elStep) => elStep.order === step_order)
                 if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
                 const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question.id)
                 if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
