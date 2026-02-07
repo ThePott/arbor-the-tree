@@ -16,8 +16,7 @@ const route = getRouteApi("/_sidebar")
 // NOTE: nothing gets rendered if only classroom is selected
 const ReviewCheckCreatePage = () => {
     // const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
-    // const recentReviewCheckInfoArray = useReviewCheckCreateStore((state) => state.recentReviewCheckInfoArray)
-    // console.log({ changedReviewChecks, recentReviewCheckInfoArray })
+    // console.log({ changedReviewChecks })
     const searchParams = route.useSearch()
     const { data } = useQuery({
         queryKey: ["reviewCheckCreate", searchParams],

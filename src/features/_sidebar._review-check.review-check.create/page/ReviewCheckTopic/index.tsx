@@ -142,25 +142,20 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
         const isMultiSelected = checkIsMultiSelected({ topic_order, step_order, question_order: question.order })
         if (!isMultiSelected) return
 
-        if (question.status === status) return
-        if (!status) {
-            deleteMutate({ body: undefined, additionalData: undefined })
+        // NOTE: 다중선택 됐으면 상황에 맞게 저장
+        // NOTE: 기존 상황과 똑같게 돌아왔으면 변경 내역에서 제외
+        const copiedChangedReviewChecks = { ...changedReviewChecks }
+
+        if (question.status === status) {
+            delete copiedChangedReviewChecks[question.id]
+            setChangedReviewChecks(copiedChangedReviewChecks)
+            // console.log({ message: "delete", id: question.id, copiedChangedReviewChecks })
             return
         }
-        if (question.status) {
-            const body = {
-                status,
-            }
-            patchMutate({ body, additionalData: status })
-            return
-        }
-        const body = {
-            syllabus_id: searchParams.syllabus_id,
-            student_id: searchParams.student_id,
-            question_id: question.id,
-            status,
-        }
-        postMuate({ body, additionalData: status })
+
+        copiedChangedReviewChecks[question.id] = status
+        setChangedReviewChecks(copiedChangedReviewChecks)
+        // console.log({ message: "upsert", id: question.id, copiedChangedReviewChecks })
     }, [recentReviewCheckInfoArray])
 
     const handleClick = () => {

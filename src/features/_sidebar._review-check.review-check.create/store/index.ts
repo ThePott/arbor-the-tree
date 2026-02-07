@@ -19,8 +19,8 @@ type ReviewCheckCreateStoreState = {
     resetRecentReviewCheckInfoArray: () => void
 
     // NOTE: question_id: review_check_status
-    changedReviewChecks: Record<number, ReviewCheckStatus>
-    setChangedReviewChecks: (changedReviewChecks: Record<number, ReviewCheckStatus>) => void
+    changedReviewChecks: Record<string, ReviewCheckStatus | null>
+    setChangedReviewChecks: (changedReviewChecks: Record<number, ReviewCheckStatus | null>) => void
 }
 const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, get) => ({
     status: null,
