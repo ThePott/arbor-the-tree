@@ -7,7 +7,6 @@ import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
-import useReviewCheckCreateStore from "../store"
 import type { ReviewCheckCreateResponseData } from "../types"
 import ReviewCheckCreateToolbar from "./ReviewCheckCreateToolbar"
 import ReviewCheckTopic from "./ReviewCheckTopic"
@@ -16,9 +15,9 @@ const route = getRouteApi("/_sidebar")
 
 // NOTE: nothing gets rendered if only classroom is selected
 const ReviewCheckCreatePage = () => {
-    const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
-    const recentReviewCheckInfoArray = useReviewCheckCreateStore((state) => state.recentReviewCheckInfoArray)
-    console.log({ changedReviewChecks, recentReviewCheckInfoArray })
+    // const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
+    // const recentReviewCheckInfoArray = useReviewCheckCreateStore((state) => state.recentReviewCheckInfoArray)
+    // console.log({ changedReviewChecks, recentReviewCheckInfoArray })
     const searchParams = route.useSearch()
     const { data } = useQuery({
         queryKey: ["reviewCheckCreate", searchParams],
