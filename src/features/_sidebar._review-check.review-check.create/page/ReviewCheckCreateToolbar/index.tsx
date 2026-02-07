@@ -6,6 +6,8 @@ import useReviewCheckCreateStore from "../../store"
 const ReviewCheckCreateToolbar = () => {
     const status = useReviewCheckCreateStore((state) => state.status)
     const setStatus = useReviewCheckCreateStore((state) => state.setStatus)
+    const isMultiSelecting = useReviewCheckCreateStore((state) => state.isMultiSelecting)
+    const setIsMultiSelecting = useReviewCheckCreateStore((state) => state.setIsMultiSelecting)
 
     return (
         <Hstack className="p-my-md border-b border-b-border-dim justify-between">
@@ -15,7 +17,9 @@ const ReviewCheckCreateToolbar = () => {
                 <Button onClick={() => setStatus(null)}>해제</Button>
                 <p>{`selected: ${status}`}</p>
 
-                <Toggle onChange={() => {}}>다중 선택</Toggle>
+                <Toggle defaultIsOn={isMultiSelecting} onChange={(isOn) => setIsMultiSelecting(isOn)}>
+                    다중 선택
+                </Toggle>
             </Hstack>
             <Button>제출</Button>
         </Hstack>
