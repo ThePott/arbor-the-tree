@@ -1,7 +1,7 @@
 import type { ReviewCheckStatus } from "@/shared/interfaces"
 import { create } from "zustand"
 
-type ReviewCheckInfo = {
+export type ReviewCheckInfo = {
     topic_order: number
     step_order: number
     question_order: number
@@ -17,6 +17,10 @@ type ReviewCheckCreateStoreState = {
     recentReviewCheckInfoArray: ReviewCheckInfo[]
     insertRecentReviewCheckInfo: (reviewCheckInfo: ReviewCheckInfo) => void
     resetRecentReviewCheckInfoArray: () => void
+
+    // NOTE: question_id: review_check_status
+    changedReviewChecks: Record<number, ReviewCheckStatus>
+    setChangedReviewChecks: (changedReviewChecks: Record<number, ReviewCheckStatus>) => void
 }
 const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, get) => ({
     status: null,
@@ -36,6 +40,9 @@ const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, ge
         set({ recentReviewCheckInfoArray: [lastReviewCheck, reviewCheckInfo] })
     },
     resetRecentReviewCheckInfoArray: () => set({ recentReviewCheckInfoArray: [] }),
+
+    changedReviewChecks: {},
+    setChangedReviewChecks: (changedReviewChecks) => set({ changedReviewChecks }),
 }))
 
 export default useReviewCheckCreateStore

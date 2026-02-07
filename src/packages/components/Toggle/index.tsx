@@ -27,7 +27,7 @@ const ToggleWrapper = ({ defaultIsOn, onChange, children }: ToggleProps) => {
                         transition={motionTransition}
                         className={clsx(
                             "size-[20px] rounded-full absolute top-1/2 -translate-y-1/2",
-                            isOn ? "right-[0px] bg-washed-blue" : "left-[0px] bg-fg-vivid"
+                            isOn ? "right-[0px] bg-washed-green" : "left-[0px] bg-fg-vivid"
                         )}
                     />
                 </div>

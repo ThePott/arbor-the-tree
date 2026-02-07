@@ -12,6 +12,30 @@ import type { ExtendedStep, ExtendedTopic, JoinedQuestion, ReviewCheckCreateResp
 
 const route = getRouteApi("/_sidebar")
 
+// type CheckIsMultiSelectedProps = {
+//     topic_order: number
+//     step_order: number
+//     question_order: number
+// }
+// const checkIsMultiSelected = ({ topic_order, step_order, question_order }: CheckIsMultiSelectedProps): boolean => {
+//     const recentReviewCheckInfoArray = useReviewCheckCreateStore.getState().recentReviewCheckInfoArray
+//     const sortedRecentReviewCheckInfoArray = recentReviewCheckInfoArray.sort((a, b) => {
+//         if (a.topic_order != b.topic_order) return a.topic_order - b.topic_order
+//         if (a.step_order != b.step_order) return a.step_order - b.step_order
+//         return a.question_order - b.question_order
+//     })
+//
+//     const length = recentReviewCheckInfoArray.length
+//     if (length === 0) return false
+//     if (length === 1) {
+//         // TODO: 선택된 게 나면 선택됐다.
+//         // if (recentReviewCehckInfoArray[0].
+//         // TODO: 여기 채워야 함
+//         return false
+//     }
+//     return false
+// }
+
 type ReviewCheckQuestionProps = {
     topic_order: number
     step_order: number
@@ -19,7 +43,11 @@ type ReviewCheckQuestionProps = {
 }
 const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQuestionProps) => {
     const status = useReviewCheckCreateStore((state) => state.status)
+    const isMultiSelecting = useReviewCheckCreateStore((state) => state.isMultiSelecting)
+    const insertRecentReviewCheckInfo = useReviewCheckCreateStore((state) => state.insertRecentReviewCheckInfo)
     const searchParams = route.useSearch()
+    // const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
+    // const setChangedReviewChecks = useReviewCheckCreateStore((state) => state.setChangedReviewChecks)
 
     const { mutate: postMuate } = useSimpleMutation({
         method: "post",
@@ -89,6 +117,11 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
     })
 
     const handleClick = () => {
+        if (isMultiSelecting) {
+            insertRecentReviewCheckInfo({ topic_order, step_order, question_order: question.order })
+            return
+        }
+
         if (question.status === status) return
         if (!status) {
             deleteMutate({ body: undefined, additionalData: undefined })
