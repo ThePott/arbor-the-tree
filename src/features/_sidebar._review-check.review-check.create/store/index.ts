@@ -21,13 +21,27 @@ type ReviewCheckCreateStoreState = {
     // NOTE: question_id: review_check_status
     changedReviewChecks: Record<string, ReviewCheckStatus | null>
     setChangedReviewChecks: (changedReviewChecks: Record<number, ReviewCheckStatus | null>) => void
+    // NOTE: this function is only called internally
+    _applyChangedReviewChecksFromMultiSelect: () => void
+
+    // TODO: 이전에 선택해둔 게 multi select 한다고 없어져서는 안 된다
+    // TODO: multi select -> single select: staged change -> real change로 이관
+    changedReviewChecksByMultiSelect: Record<string, ReviewCheckStatus | null>
+    setChangedReviewChecksByMultiSelect: (
+        changedReviewChecksByMultiSelect: Record<number, ReviewCheckStatus | null>
+    ) => void
 }
 const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, get) => ({
     status: null,
     setStatus: (status) => set({ status }),
 
     isMultiSelecting: true,
-    setIsMultiSelecting: (isMultiSelecting) => set({ isMultiSelecting }),
+    setIsMultiSelecting: (isMultiSelecting) => {
+        if (!isMultiSelecting) {
+            get()._applyChangedReviewChecksFromMultiSelect()
+        }
+        set({ isMultiSelecting })
+    },
 
     recentReviewCheckInfoArray: [],
     insertRecentReviewCheckInfo: (reviewCheckInfo) => {
@@ -43,6 +57,20 @@ const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, ge
 
     changedReviewChecks: {},
     setChangedReviewChecks: (changedReviewChecks) => set({ changedReviewChecks }),
+    _applyChangedReviewChecksFromMultiSelect: () => {
+        const state = get()
+        const changedReviewChecksByMultiSelect = state.changedReviewChecksByMultiSelect
+        const changedReviewChecks = { ...state.changedReviewChecks }
+        const entryArray = Object.entries(changedReviewChecksByMultiSelect)
+        entryArray.forEach(([key, value]) => {
+            changedReviewChecks[key] = value
+        })
+        set({ changedReviewChecks, changedReviewChecksByMultiSelect: {}, recentReviewCheckInfoArray: [] })
+    },
+
+    changedReviewChecksByMultiSelect: {},
+    setChangedReviewChecksByMultiSelect: (changedReviewChecksByMultiSelect) =>
+        set({ changedReviewChecksByMultiSelect }),
 }))
 
 export default useReviewCheckCreateStore

@@ -62,8 +62,12 @@ const checkIsMultiSelected = ({ topic_order, step_order, question_order }: Check
 
 // NOTE: nothing gets rendered if only classroom is selected
 const ReviewCheckCreatePage = () => {
-    const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
-    const setChangedReviewChecks = useReviewCheckCreateStore((state) => state.setChangedReviewChecks)
+    const changedReviewChecksByMultiSelect = useReviewCheckCreateStore(
+        (state) => state.changedReviewChecksByMultiSelect
+    )
+    const setChangedReviewChecksByMultiSelect = useReviewCheckCreateStore(
+        (state) => state.setChangedReviewChecksByMultiSelect
+    )
     const status = useReviewCheckCreateStore((state) => state.status)
     const recentReviewCheckInfoArray = useReviewCheckCreateStore((state) => state.recentReviewCheckInfoArray)
     const searchParams = route.useSearch()
@@ -82,7 +86,7 @@ const ReviewCheckCreatePage = () => {
 
         if (recentReviewCheckInfoArray.length === 0) return
 
-        const copiedChanged = { ...changedReviewChecks }
+        const copiedChanged = { ...changedReviewChecksByMultiSelect }
         if (recentReviewCheckInfoArray.length === 1) {
             const recentRevieCheckInfo = recentReviewCheckInfoArray[0]
             const targetTopic = data?.topics.find((topic) => topic.order === recentRevieCheckInfo.topic_order)
@@ -97,7 +101,7 @@ const ReviewCheckCreatePage = () => {
             if (targetQuestion.status === status) return
 
             copiedChanged[targetQuestion.id] = status
-            setChangedReviewChecks(copiedChanged)
+            setChangedReviewChecksByMultiSelect(copiedChanged)
             return
         }
 
@@ -123,7 +127,7 @@ const ReviewCheckCreatePage = () => {
             )
         )
 
-        setChangedReviewChecks(copiedChanged)
+        setChangedReviewChecksByMultiSelect(copiedChanged)
     }, [recentReviewCheckInfoArray])
 
     if (!data)
