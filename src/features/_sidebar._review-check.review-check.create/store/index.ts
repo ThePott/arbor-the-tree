@@ -11,6 +11,7 @@ type QuestionIdToInfo = Record<
     {
         status: ReviewCheckStatus | null // NOTE: use to delete if null
         review_check_id: string | null // NOTE: use to patch if exists
+        question_id: string
     }
 >
 type ReviewCheckCreateStoreState = {

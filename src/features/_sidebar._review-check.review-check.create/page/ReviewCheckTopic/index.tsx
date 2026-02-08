@@ -105,6 +105,7 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
         copiedReviewChecks[question.id] = {
             status,
             review_check_id: question.review_check_id,
+            question_id: question.id,
         }
 
         setChangedReviewChecks(copiedReviewChecks)

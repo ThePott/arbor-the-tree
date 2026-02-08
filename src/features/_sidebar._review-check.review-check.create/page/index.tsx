@@ -123,6 +123,7 @@ const ReviewCheckCreatePage = () => {
             copiedChanged[targetQuestion.id] = {
                 status,
                 review_check_id: targetQuestion.review_check_id,
+                question_id: targetQuestion.id,
             }
             setChangedReviewChecksByMultiSelect(copiedChanged)
             return
@@ -148,6 +149,7 @@ const ReviewCheckCreatePage = () => {
                     copiedChanged[question.id] = {
                         status,
                         review_check_id: question.review_check_id,
+                        question_id: question.id,
                     }
                 })
             )
