@@ -6,7 +6,13 @@ export type ReviewCheckInfo = {
     step_order: number
     question_order: number
 }
-
+type QuestionIdToInfo = Record<
+    string, // NOTE: question_id
+    {
+        status: ReviewCheckStatus | null // NOTE: use to delete if null
+        review_check_id: string | null // NOTE: use to patch if exists
+    }
+>
 type ReviewCheckCreateStoreState = {
     status: ReviewCheckStatus | null
     setStatus: (status: ReviewCheckStatus | null) => void
@@ -19,17 +25,15 @@ type ReviewCheckCreateStoreState = {
     resetRecentReviewCheckInfoArray: () => void
 
     // NOTE: question_id: review_check_status
-    changedReviewChecks: Record<string, ReviewCheckStatus | null>
-    setChangedReviewChecks: (changedReviewChecks: Record<number, ReviewCheckStatus | null>) => void
+    changedReviewChecks: QuestionIdToInfo
+    setChangedReviewChecks: (changedReviewChecks: QuestionIdToInfo) => void
     // NOTE: this function is only called internally
     _applyChangedReviewChecksFromMultiSelect: () => void
 
     // TODO: 이전에 선택해둔 게 multi select 한다고 없어져서는 안 된다
     // TODO: multi select -> single select: staged change -> real change로 이관
-    changedReviewChecksByMultiSelect: Record<string, ReviewCheckStatus | null>
-    setChangedReviewChecksByMultiSelect: (
-        changedReviewChecksByMultiSelect: Record<number, ReviewCheckStatus | null>
-    ) => void
+    changedReviewChecksByMultiSelect: QuestionIdToInfo
+    setChangedReviewChecksByMultiSelect: (changedReviewChecksByMultiSelect: QuestionIdToInfo) => void
 }
 const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, get) => ({
     status: null,

@@ -1,16 +1,11 @@
 import Button from "@/packages/components/Button/Button"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import Title from "@/packages/components/Title/Title"
-import { ClientError } from "@/shared/error/clientError"
-import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
-import type { ReviewCheckStatus } from "@/shared/interfaces"
-import { getRouteApi } from "@tanstack/react-router"
 import clsx from "clsx"
-import { produce } from "immer"
 import useReviewCheckCreateStore from "../../store"
-import type { ExtendedStep, ExtendedTopic, JoinedQuestion, ReviewCheckCreateResponseData } from "../../types"
+import type { ExtendedStep, ExtendedTopic, JoinedQuestion } from "../../types"
 
-const route = getRouteApi("/_sidebar")
+// const route = getRouteApi("/_sidebar")
 
 type ReviewCheckQuestionProps = {
     topic_order: number
@@ -21,100 +16,106 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
     const status = useReviewCheckCreateStore((state) => state.status)
     const isMultiSelecting = useReviewCheckCreateStore((state) => state.isMultiSelecting)
     const insertRecentReviewCheckInfo = useReviewCheckCreateStore((state) => state.insertRecentReviewCheckInfo)
-    const searchParams = route.useSearch()
+    // const searchParams = route.useSearch()
+    const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
+    const setChangedReviewChecks = useReviewCheckCreateStore((state) => state.setChangedReviewChecks)
 
-    const { mutate: postMuate } = useSimpleMutation({
-        method: "post",
-        url: "/review-check/create",
-        queryKeyWithoutParams: ["reviewCheckCreate", searchParams],
-        update: ({
-            previous,
-            additionalData,
-        }: {
-            previous: ReviewCheckCreateResponseData
-            additionalData: ReviewCheckStatus
-        }) => {
-            const newData = produce(previous, (draft) => {
-                const targetTopic = draft.topics.find((elTopic) => elTopic.order === topic_order)
-                if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
-                const targetStep = targetTopic.steps.find((elStep) => elStep.order === step_order)
-                if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
-                const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question.id)
-                if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
-                targetQuestion.status = additionalData
-            })
-
-            return newData
-        },
-    })
-    const { mutate: patchMutate } = useSimpleMutation({
-        method: "patch",
-        url: `/review-check/create/${question.review_check_id}`,
-        queryKeyWithoutParams: ["reviewCheckCreate", searchParams],
-        update: ({
-            previous,
-            additionalData,
-        }: {
-            previous: ReviewCheckCreateResponseData
-            additionalData: ReviewCheckStatus
-        }) => {
-            const newData = produce(previous, (draft) => {
-                const targetTopic = draft.topics.find((elTopic) => elTopic.order === topic_order)
-                if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
-                const targetStep = targetTopic.steps.find((elStep) => elStep.order === step_order)
-                if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
-                const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question.id)
-                if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
-                targetQuestion.status = additionalData
-            })
-
-            return newData
-        },
-    })
-    const { mutate: deleteMutate } = useSimpleMutation({
-        method: "delete",
-        url: `/review-check/create/${question.review_check_id}`,
-        queryKeyWithoutParams: ["reviewCheckCreate", searchParams],
-        update: ({ previous }: { previous: ReviewCheckCreateResponseData }) => {
-            const newData = produce(previous, (draft) => {
-                const targetTopic = draft.topics.find((elTopic) => elTopic.order === topic_order)
-                if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
-                const targetStep = targetTopic.steps.find((elStep) => elStep.order === step_order)
-                if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
-                const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question.id)
-                if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
-                targetQuestion.status = null
-            })
-
-            return newData
-        },
-    })
+    // const { mutate: postMuate } = useSimpleMutation({
+    //     method: "post",
+    //     url: "/review-check/create",
+    //     queryKeyWithoutParams: ["reviewCheckCreate", searchParams],
+    //     update: ({
+    //         previous,
+    //         additionalData,
+    //     }: {
+    //         previous: ReviewCheckCreateResponseData
+    //         additionalData: ReviewCheckStatus
+    //     }) => {
+    //         const newData = produce(previous, (draft) => {
+    //             const targetTopic = draft.topics.find((elTopic) => elTopic.order === topic_order)
+    //             if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
+    //             const targetStep = targetTopic.steps.find((elStep) => elStep.order === step_order)
+    //             if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
+    //             const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question.id)
+    //             if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
+    //             targetQuestion.status = additionalData
+    //         })
+    //
+    //         return newData
+    //     },
+    // })
+    // const { mutate: patchMutate } = useSimpleMutation({
+    //     method: "patch",
+    //     url: `/review-check/create/${question.review_check_id}`,
+    //     queryKeyWithoutParams: ["reviewCheckCreate", searchParams],
+    //     update: ({
+    //         previous,
+    //         additionalData,
+    //     }: {
+    //         previous: ReviewCheckCreateResponseData
+    //         additionalData: ReviewCheckStatus
+    //     }) => {
+    //         const newData = produce(previous, (draft) => {
+    //             const targetTopic = draft.topics.find((elTopic) => elTopic.order === topic_order)
+    //             if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
+    //             const targetStep = targetTopic.steps.find((elStep) => elStep.order === step_order)
+    //             if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
+    //             const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question.id)
+    //             if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
+    //             targetQuestion.status = additionalData
+    //         })
+    //
+    //         return newData
+    //     },
+    // })
+    // const { mutate: deleteMutate } = useSimpleMutation({
+    //     method: "delete",
+    //     url: `/review-check/create/${question.review_check_id}`,
+    //     queryKeyWithoutParams: ["reviewCheckCreate", searchParams],
+    //     update: ({ previous }: { previous: ReviewCheckCreateResponseData }) => {
+    //         const newData = produce(previous, (draft) => {
+    //             const targetTopic = draft.topics.find((elTopic) => elTopic.order === topic_order)
+    //             if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
+    //             const targetStep = targetTopic.steps.find((elStep) => elStep.order === step_order)
+    //             if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
+    //             const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question.id)
+    //             if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
+    //             targetQuestion.status = null
+    //         })
+    //
+    //         return newData
+    //     },
+    // })
 
     const handleClick = () => {
         if (isMultiSelecting) {
+            // NOTE: multi select일 때 구체적인 선택 로직은 page에서 이뤄진다
+            // NOTE: 여기서는 recent에 추가하기만 한다
             insertRecentReviewCheckInfo({ topic_order, step_order, question_order: question.order })
             return
         }
 
-        if (question.status === status) return
-        if (!status) {
-            deleteMutate({ body: undefined, additionalData: undefined })
+        const copiedReviewChecks = { ...changedReviewChecks }
+        if (question.status === status) {
+            delete copiedReviewChecks[question.id]
+            setChangedReviewChecks(copiedReviewChecks)
             return
         }
-        if (question.status) {
-            const body = {
-                status,
-            }
-            patchMutate({ body, additionalData: status })
-            return
-        }
-        const body = {
-            syllabus_id: searchParams.syllabus_id,
-            student_id: searchParams.student_id,
-            question_id: question.id,
-            status,
-        }
-        postMuate({ body, additionalData: status })
+
+        copiedReviewChecks[question.id].status = status
+        copiedReviewChecks[question.id].review_check_id = question.review_check_id
+
+        setChangedReviewChecks(copiedReviewChecks)
+
+        // TODO: debounce mutate 적용하고 나면 아래 노트 삭제
+        // NOTE: upsert를 하려면 post, patch, delete에 필요한 모든 정보를 다 가지고 있어야 하겠다 <-- 결론: 아님
+        // NOTE: post:
+        //     syllabus_id: searchParams.syllabus_id, <- search params에 들어있음
+        //     student_id: searchParams.student_id, <- search params에 들어있음
+        //     question_id: question.id, <- question에 들어있음
+        // NOTE: patch: review_check_id <- question에 들어있음
+        // NOTE: delete: review_check_id <- question에 들어있음
+        // NOTE: 따로 굳이 더 넣지 않아도 된다
     }
 
     // TODO: 정답은 파란색으로 바꿔야 함

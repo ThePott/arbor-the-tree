@@ -62,6 +62,7 @@ const checkIsMultiSelected = ({ topic_order, step_order, question_order }: Check
 
 // NOTE: nothing gets rendered if only classroom is selected
 const ReviewCheckCreatePage = () => {
+    const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
     const changedReviewChecksByMultiSelect = useReviewCheckCreateStore(
         (state) => state.changedReviewChecksByMultiSelect
     )
@@ -78,6 +79,25 @@ const ReviewCheckCreatePage = () => {
             return response.data as ReviewCheckCreateResponseData
         },
     })
+
+    // TODO: debounce를 어떻게 만들지? useEffect, timeout, cleanup, callback
+    useEffect(() => {
+        if (Object.entries(changedReviewChecks).length === 0) return
+
+        const timeout = setTimeout(async () => {
+            // TODO: /review-check/create -> /review/check
+            // TODO: /review-check -> /review/assignment
+            // TODO: /review-check 과제 제작 -> /review/assignment/create
+            const body = {
+                student_id: searchParams.student_id,
+                syllabus_id: searchParams.syllabus_id,
+                changedReviewChecks,
+            }
+            const response = await instance.post("/review-check", body)
+            console.log({ data: response.data })
+        }, 500)
+        return () => clearTimeout(timeout)
+    }, [changedReviewChecks])
 
     useEffect(() => {
         // TODO: 여기서 뭘 해야 하나
@@ -100,7 +120,8 @@ const ReviewCheckCreatePage = () => {
 
             if (targetQuestion.status === status) return
 
-            copiedChanged[targetQuestion.id] = status
+            copiedChanged[targetQuestion.id].status = status
+            copiedChanged[targetQuestion.id].review_check_id = targetQuestion.review_check_id
             setChangedReviewChecksByMultiSelect(copiedChanged)
             return
         }
@@ -122,7 +143,8 @@ const ReviewCheckCreatePage = () => {
                         delete copiedChanged[question.id]
                         return
                     }
-                    copiedChanged[question.id] = status
+                    copiedChanged[question.id].status = status
+                    copiedChanged[question.id].review_check_id = question.review_check_id
                 })
             )
         )
