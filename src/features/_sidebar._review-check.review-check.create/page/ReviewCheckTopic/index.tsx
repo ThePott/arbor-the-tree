@@ -7,55 +7,10 @@ import type { ReviewCheckStatus } from "@/shared/interfaces"
 import { getRouteApi } from "@tanstack/react-router"
 import clsx from "clsx"
 import { produce } from "immer"
-import { useEffect } from "react"
 import useReviewCheckCreateStore from "../../store"
 import type { ExtendedStep, ExtendedTopic, JoinedQuestion, ReviewCheckCreateResponseData } from "../../types"
 
 const route = getRouteApi("/_sidebar")
-
-type CheckIsMultiSelectedProps = {
-    topic_order: number
-    step_order: number
-    question_order: number
-}
-const checkIsMultiSelected = ({ topic_order, step_order, question_order }: CheckIsMultiSelectedProps): boolean => {
-    const recentReviewCheckInfoArray = useReviewCheckCreateStore.getState().recentReviewCheckInfoArray
-    const sortedRecentReviewCheckInfoArray = recentReviewCheckInfoArray.sort((a, b) => {
-        if (a.topic_order != b.topic_order) return a.topic_order - b.topic_order
-        if (a.step_order != b.step_order) return a.step_order - b.step_order
-        return a.question_order - b.question_order
-    })
-
-    const length = recentReviewCheckInfoArray.length
-    if (length === 0) return false
-    if (length === 1) {
-        // TODO: 선택된 게 나면 선택됐다.
-        const reviewCheckInfo = recentReviewCheckInfoArray[0]
-        if (
-            reviewCheckInfo.topic_order === topic_order &&
-            reviewCheckInfo.step_order === step_order &&
-            reviewCheckInfo.question_order === question_order
-        ) {
-            return true
-        }
-        return false
-    }
-
-    const first = sortedRecentReviewCheckInfoArray[0]
-    const second = sortedRecentReviewCheckInfoArray[1]
-
-    if (
-        first.topic_order <= topic_order &&
-        topic_order <= second.topic_order &&
-        first.step_order <= step_order &&
-        step_order <= second.step_order &&
-        first.question_order <= question_order &&
-        question_order <= second.question_order
-    ) {
-        return true
-    }
-    return false
-}
 
 type ReviewCheckQuestionProps = {
     topic_order: number
@@ -137,26 +92,6 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
             return newData
         },
     })
-
-    useEffect(() => {
-        const isMultiSelected = checkIsMultiSelected({ topic_order, step_order, question_order: question.order })
-        if (!isMultiSelected) return
-
-        // NOTE: 다중선택 됐으면 상황에 맞게 저장
-        // NOTE: 기존 상황과 똑같게 돌아왔으면 변경 내역에서 제외
-        const copiedChangedReviewChecks = { ...changedReviewChecks }
-
-        if (question.status === status) {
-            delete copiedChangedReviewChecks[question.id]
-            setChangedReviewChecks(copiedChangedReviewChecks)
-            // console.log({ message: "delete", id: question.id, copiedChangedReviewChecks })
-            return
-        }
-
-        copiedChangedReviewChecks[question.id] = status
-        setChangedReviewChecks(copiedChangedReviewChecks)
-        // console.log({ message: "upsert", id: question.id, copiedChangedReviewChecks })
-    }, [recentReviewCheckInfoArray])
 
     const handleClick = () => {
         if (isMultiSelecting) {
