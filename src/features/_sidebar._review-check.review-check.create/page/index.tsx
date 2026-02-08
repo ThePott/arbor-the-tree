@@ -73,9 +73,9 @@ const ReviewCheckCreatePage = () => {
     const recentReviewCheckInfoArray = useReviewCheckCreateStore((state) => state.recentReviewCheckInfoArray)
     const searchParams = route.useSearch()
     const { data } = useQuery({
-        queryKey: ["reviewCheckCreate", searchParams],
+        queryKey: ["reviewCheck", searchParams],
         queryFn: async () => {
-            const response = await instance.get("/review-check/create", { params: searchParams })
+            const response = await instance.get("/review/check", { params: searchParams })
             return response.data as ReviewCheckCreateResponseData
         },
     })
@@ -93,7 +93,7 @@ const ReviewCheckCreatePage = () => {
                 syllabus_id: searchParams.syllabus_id,
                 changedReviewChecks,
             }
-            const response = await instance.post("/review-check", body)
+            const response = await instance.post("/review/check", body)
             console.log({ data: response.data })
         }, 500)
         return () => clearTimeout(timeout)
@@ -120,8 +120,10 @@ const ReviewCheckCreatePage = () => {
 
             if (targetQuestion.status === status) return
 
-            copiedChanged[targetQuestion.id].status = status
-            copiedChanged[targetQuestion.id].review_check_id = targetQuestion.review_check_id
+            copiedChanged[targetQuestion.id] = {
+                status,
+                review_check_id: targetQuestion.review_check_id,
+            }
             setChangedReviewChecksByMultiSelect(copiedChanged)
             return
         }
@@ -143,8 +145,10 @@ const ReviewCheckCreatePage = () => {
                         delete copiedChanged[question.id]
                         return
                     }
-                    copiedChanged[question.id].status = status
-                    copiedChanged[question.id].review_check_id = question.review_check_id
+                    copiedChanged[question.id] = {
+                        status,
+                        review_check_id: question.review_check_id,
+                    }
                 })
             )
         )
