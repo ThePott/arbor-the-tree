@@ -98,7 +98,6 @@ const ReviewCheckCreatePage = () => {
 
             copiedChanged[targetQuestion.id] = status
             setChangedReviewChecks(copiedChanged)
-            console.log({ copiedChanged, recentReviewCheckInfoArray })
             return
         }
 
@@ -125,7 +124,6 @@ const ReviewCheckCreatePage = () => {
         )
 
         setChangedReviewChecks(copiedChanged)
-        console.log({ copiedChanged, recentReviewCheckInfoArray })
     }, [recentReviewCheckInfoArray])
 
     if (!data)

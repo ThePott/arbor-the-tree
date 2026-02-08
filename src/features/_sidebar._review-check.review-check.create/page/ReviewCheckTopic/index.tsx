@@ -20,11 +20,8 @@ type ReviewCheckQuestionProps = {
 const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQuestionProps) => {
     const status = useReviewCheckCreateStore((state) => state.status)
     const isMultiSelecting = useReviewCheckCreateStore((state) => state.isMultiSelecting)
-    const recentReviewCheckInfoArray = useReviewCheckCreateStore((state) => state.recentReviewCheckInfoArray)
     const insertRecentReviewCheckInfo = useReviewCheckCreateStore((state) => state.insertRecentReviewCheckInfo)
     const searchParams = route.useSearch()
-    const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
-    const setChangedReviewChecks = useReviewCheckCreateStore((state) => state.setChangedReviewChecks)
 
     const { mutate: postMuate } = useSimpleMutation({
         method: "post",
