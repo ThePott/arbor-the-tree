@@ -149,7 +149,6 @@ const ReviewCheckCreatePage = () => {
                         question_order: question.order,
                     })
                     if (!isMultiSelected) return
-                    if (question.review_check_status_visual === status) return
 
                     newChangedReviewChecks[question.id] = {
                         status,
