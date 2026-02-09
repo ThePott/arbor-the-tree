@@ -2,16 +2,7 @@ import queryClient from "@/packages/api/queryClient"
 import type { SidebarSearchParams } from "@/routes/_sidebar"
 import { ClientError } from "@/shared/error/clientError"
 import { produce } from "immer"
-import useReviewCheckCreateStore from "../store"
-import type { JoinedQuestion, QuestionIdToInfo, ReviewCheckCreateResponseData } from "../types"
-
-type FindJoinedQuestionFromQueryDataProps = {
-    searchParams: SidebarSearchParams
-    questionIdToInfo: QuestionIdToInfo
-}
-const findJoinedQuestionFromQueryData = (): JoinedQuestion | null => {
-    return null
-}
+import type { QuestionIdToInfo, ReviewCheckCreateResponseData } from "../types"
 
 // TODO: 이름이 별로인 것 같은데??
 type UpdateReviewCheckCacheProps = {
@@ -56,22 +47,29 @@ export const updateReviewCheckCacheVisual = ({
     storeCallback()
 }
 
-type RevertReviewChecksByMultiSelectProps = {
-    newChangedReviewChecksByMultiSelect: QuestionIdToInfo
-    searchParams: SidebarSearchParams
-}
-export const revertReviewChangedreviewChecksByMultiSelect = ({
-    newChangedReviewChecksByMultiSelect,
-    searchParams,
-}: RevertReviewChecksByMultiSelectProps): ReviewCheckCreateResponseData => {
-    const queryKey = ["reviewCheck", searchParams]
-    const previous = queryClient.getQueryData(queryKey) as ReviewCheckCreateResponseData
-
-    const oldChangedReviewChecksByMultiSelect = {
-        ...useReviewCheckCreateStore.getState().changedReviewChecksByMultiSelect,
-    }
-    Object.entries(newChangedReviewChecksByMultiSelect).forEach(
-        ([question_id, { topic_order, step_order, status }]) => {}
-    )
-    return previous
-}
+// type FindJoinedQuestionFromQueryDataProps = {
+//     searchParams: SidebarSearchParams
+//     questionIdToInfo: QuestionIdToInfo
+// }
+// const findJoinedQuestionFromQueryData = (): JoinedQuestion | null => {
+//     return null
+// }
+// type RevertReviewChecksByMultiSelectProps = {
+//     newChangedReviewChecksByMultiSelect: QuestionIdToInfo
+//     searchParams: SidebarSearchParams
+// }
+// export const revertReviewChangedreviewChecksByMultiSelect = ({
+//     newChangedReviewChecksByMultiSelect,
+//     searchParams,
+// }: RevertReviewChecksByMultiSelectProps): ReviewCheckCreateResponseData => {
+//     const queryKey = ["reviewCheck", searchParams]
+//     const previous = queryClient.getQueryData(queryKey) as ReviewCheckCreateResponseData
+//
+//     const oldChangedReviewChecksByMultiSelect = {
+//         ...useReviewCheckCreateStore.getState().changedReviewChecksByMultiSelect,
+//     }
+//     Object.entries(newChangedReviewChecksByMultiSelect).forEach(
+//         ([question_id, { topic_order, step_order, status }]) => {}
+//     )
+//     return previous
+// }
