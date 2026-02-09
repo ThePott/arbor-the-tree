@@ -1,19 +1,7 @@
 import type { ReviewCheckStatus } from "@/shared/interfaces"
 import { create } from "zustand"
+import type { QuestionIdToInfo, ReviewCheckInfo } from "../types"
 
-export type ReviewCheckInfo = {
-    topic_order: number
-    step_order: number
-    question_order: number
-}
-type QuestionIdToInfo = Record<
-    string, // NOTE: question_id
-    {
-        status: ReviewCheckStatus | null // NOTE: use to delete if null
-        review_check_id: string | null // NOTE: use to patch if exists
-        assigned_session_student_id: string | null
-    }
->
 type ReviewCheckCreateStoreState = {
     status: ReviewCheckStatus | null
     setStatus: (status: ReviewCheckStatus | null) => void

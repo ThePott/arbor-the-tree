@@ -5,8 +5,6 @@ import clsx from "clsx"
 import useReviewCheckCreateStore from "../../store"
 import type { ExtendedStep, ExtendedTopic, JoinedQuestion } from "../../types"
 
-// const _route = getRouteApi("/_sidebar")
-
 type ReviewCheckQuestionProps = {
     topic_order: number
     step_order: number
@@ -16,76 +14,8 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
     const status = useReviewCheckCreateStore((state) => state.status)
     const isMultiSelecting = useReviewCheckCreateStore((state) => state.isMultiSelecting)
     const insertRecentReviewCheckInfo = useReviewCheckCreateStore((state) => state.insertRecentReviewCheckInfo)
-    // const searchParams = route.useSearch()
     const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
     const setChangedReviewChecks = useReviewCheckCreateStore((state) => state.setChangedReviewChecks)
-
-    // const { mutate: postMuate } = useSimpleMutation({
-    //     method: "post",
-    //     url: "/review-check/create",
-    //     queryKeyWithoutParams: ["reviewCheckCreate", searchParams],
-    //     update: ({
-    //         previous,
-    //         additionalData,
-    //     }: {
-    //         previous: ReviewCheckCreateResponseData
-    //         additionalData: ReviewCheckStatus
-    //     }) => {
-    //         const newData = produce(previous, (draft) => {
-    //             const targetTopic = draft.topics.find((elTopic) => elTopic.order === topic_order)
-    //             if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
-    //             const targetStep = targetTopic.steps.find((elStep) => elStep.order === step_order)
-    //             if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
-    //             const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question.id)
-    //             if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
-    //             targetQuestion.status = additionalData
-    //         })
-    //
-    //         return newData
-    //     },
-    // })
-    // const { mutate: patchMutate } = useSimpleMutation({
-    //     method: "patch",
-    //     url: `/review-check/create/${question.review_check_id}`,
-    //     queryKeyWithoutParams: ["reviewCheckCreate", searchParams],
-    //     update: ({
-    //         previous,
-    //         additionalData,
-    //     }: {
-    //         previous: ReviewCheckCreateResponseData
-    //         additionalData: ReviewCheckStatus
-    //     }) => {
-    //         const newData = produce(previous, (draft) => {
-    //             const targetTopic = draft.topics.find((elTopic) => elTopic.order === topic_order)
-    //             if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
-    //             const targetStep = targetTopic.steps.find((elStep) => elStep.order === step_order)
-    //             if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
-    //             const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question.id)
-    //             if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
-    //             targetQuestion.status = additionalData
-    //         })
-    //
-    //         return newData
-    //     },
-    // })
-    // const { mutate: deleteMutate } = useSimpleMutation({
-    //     method: "delete",
-    //     url: `/review-check/create/${question.review_check_id}`,
-    //     queryKeyWithoutParams: ["reviewCheckCreate", searchParams],
-    //     update: ({ previous }: { previous: ReviewCheckCreateResponseData }) => {
-    //         const newData = produce(previous, (draft) => {
-    //             const targetTopic = draft.topics.find((elTopic) => elTopic.order === topic_order)
-    //             if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
-    //             const targetStep = targetTopic.steps.find((elStep) => elStep.order === step_order)
-    //             if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
-    //             const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question.id)
-    //             if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
-    //             targetQuestion.status = null
-    //         })
-    //
-    //         return newData
-    //     },
-    // })
 
     const handleClick = () => {
         if (isMultiSelecting) {
@@ -105,21 +35,12 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
         copiedReviewChecks[question.id] = {
             status,
             review_check_id: question.review_check_id,
-            question_id: question.id,
+            topic_order,
+            step_order,
             assigned_session_student_id: question.assigned_session_student_id,
         }
 
         setChangedReviewChecks(copiedReviewChecks)
-
-        // TODO: debounce mutate 적용하고 나면 아래 노트 삭제
-        // NOTE: upsert를 하려면 post, patch, delete에 필요한 모든 정보를 다 가지고 있어야 하겠다 <-- 결론: 아님
-        // NOTE: post:
-        //     syllabus_id: searchParams.syllabus_id, <- search params에 들어있음
-        //     student_id: searchParams.student_id, <- search params에 들어있음
-        //     question_id: question.id, <- question에 들어있음
-        // NOTE: patch: review_check_id <- question에 들어있음
-        // NOTE: delete: review_check_id <- question에 들어있음
-        // NOTE: 따로 굳이 더 넣지 않아도 된다
     }
 
     // TODO: 정답은 파란색으로 바꿔야 함
@@ -133,7 +54,7 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
     // TODO: 버튼 옵션 바꿔야 함
     return (
         <Button
-            color={statusToColor[question.review_check_status ?? "null"]}
+            color={statusToColor[question.review_check_status_visual ?? "null"]}
             status={question.session_status ? "enabled" : "disabled"}
             padding="none"
             border="always"

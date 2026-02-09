@@ -1,16 +1,15 @@
-// NOTE: this page shows LIST of review check given by classroom and student from sidebar
-// NOTE: student MUST BE selected to render here.
-
 import { instance } from "@/packages/api/axiosInstances"
 import { Container, FlexOneContainer, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
 import { ClientError } from "@/shared/error/clientError"
-import { useQuery } from "@tanstack/react-query"
+import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
 import { useEffect } from "react"
 import useReviewCheckCreateStore from "../store"
 import type { ReviewCheckCreateResponseData } from "../types"
+import { updateReviewCheckCache } from "../utils"
 import ReviewCheckCreateToolbar from "./ReviewCheckCreateToolbar"
 import ReviewCheckTopic from "./ReviewCheckTopic"
 
@@ -79,6 +78,13 @@ const ReviewCheckCreatePage = () => {
             return response.data as ReviewCheckCreateResponseData
         },
     })
+    const { mutate } = useSimpleMutation({
+        method: "post",
+        url: "/review/check",
+        queryKeyWithoutParams: ["reviewCheck"],
+        params: searchParams,
+        update: updateReviewCheckCache,
+    })
 
     // TODO: debounce를 어떻게 만들지? useEffect, timeout, cleanup, callback
     useEffect(() => {
@@ -93,16 +99,14 @@ const ReviewCheckCreatePage = () => {
                 syllabus_id: searchParams.syllabus_id,
                 changedReviewChecks,
             }
-            await instance.post("/review/check", body)
+            mutate({ body, additionalData: changedReviewChecks })
         }, 500)
         return () => clearTimeout(timeout)
     }, [changedReviewChecks])
 
-    useEffect(() => {
-        // TODO: 여기서 뭘 해야 하나
-        // TODO: 양쪽을 감지 -> 감지된 걸 changed에 반영
-        // TODO: changed에 반영할 때 최초 상태와 비교(data...question), 같으면 remove
+    const queryClient = useQueryClient()
 
+    useEffect(() => {
         if (recentReviewCheckInfoArray.length === 0) return
 
         const copiedChanged = { ...changedReviewChecksByMultiSelect }
@@ -122,10 +126,14 @@ const ReviewCheckCreatePage = () => {
             copiedChanged[targetQuestion.id] = {
                 status,
                 review_check_id: targetQuestion.review_check_id,
-                question_id: targetQuestion.id,
+                topic_order: targetTopic.order,
+                step_order: targetStep.order,
                 assigned_session_student_id: targetQuestion.assigned_session_student_id,
             }
             setChangedReviewChecksByMultiSelect(copiedChanged)
+            const previous = queryClient.getQueryData(["reviewCheck", searchParams]) as ReviewCheckCreateResponseData
+            const newVisual = updateReviewCheckCache({ previous, additionalData: copiedChanged })
+            queryClient.setQueryData(["reviewCheck", searchParams], newVisual)
             return
         }
 
@@ -149,7 +157,8 @@ const ReviewCheckCreatePage = () => {
                     copiedChanged[question.id] = {
                         status,
                         review_check_id: question.review_check_id,
-                        question_id: question.id,
+                        topic_order: topic.order,
+                        step_order: step.order,
                         assigned_session_student_id: question.assigned_session_student_id,
                     }
                 })
@@ -157,6 +166,12 @@ const ReviewCheckCreatePage = () => {
         )
 
         setChangedReviewChecksByMultiSelect(copiedChanged)
+        const previous = queryClient.getQueryData(["reviewCheck", searchParams]) as ReviewCheckCreateResponseData
+        const newVisual = updateReviewCheckCache({ previous, additionalData: copiedChanged })
+        queryClient.setQueryData(["reviewCheck", searchParams], newVisual)
+
+        // NOTE: 이거 리팩토링할 필요 없어보인다... 아님 같은 폴더 utils에 둘까??
+        // TODO: move files
     }, [recentReviewCheckInfoArray])
 
     if (!data)
