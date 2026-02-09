@@ -1,9 +1,14 @@
 import Button from "@/packages/components/Button/Button"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import Title from "@/packages/components/Title/Title"
+import { useQueryClient } from "@tanstack/react-query"
+import { getRouteApi } from "@tanstack/react-router"
 import clsx from "clsx"
 import useReviewCheckCreateStore from "../../store"
-import type { ExtendedStep, ExtendedTopic, JoinedQuestion } from "../../types"
+import type { ExtendedStep, ExtendedTopic, JoinedQuestion, ReviewCheckCreateResponseData } from "../../types"
+import { updateReviewCheckCache } from "../../utils"
+
+const route = getRouteApi("/_sidebar")
 
 type ReviewCheckQuestionProps = {
     topic_order: number
@@ -16,6 +21,9 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
     const insertRecentReviewCheckInfo = useReviewCheckCreateStore((state) => state.insertRecentReviewCheckInfo)
     const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
     const setChangedReviewChecks = useReviewCheckCreateStore((state) => state.setChangedReviewChecks)
+
+    const searchParams = route.useSearch()
+    const queryClient = useQueryClient()
 
     const handleClick = () => {
         if (isMultiSelecting) {
@@ -41,6 +49,9 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
         }
 
         setChangedReviewChecks(copiedReviewChecks)
+        const previous = queryClient.getQueryData(["reviewCheck", searchParams]) as ReviewCheckCreateResponseData
+        const newVisual = updateReviewCheckCache({ previous, additionalData: copiedReviewChecks })
+        queryClient.setQueryData(["reviewCheck", searchParams], newVisual)
     }
 
     // TODO: 정답은 파란색으로 바꿔야 함

@@ -10,7 +10,6 @@ const ReviewCheckCreateToolbar = () => {
     const setIsMultiSelecting = useReviewCheckCreateStore((state) => state.setIsMultiSelecting)
     const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
     const isStagedChanges = Object.entries(changedReviewChecks).length > 0
-    console.log({ changedReviewChecks })
 
     return (
         <Hstack className="p-my-md border-b border-b-border-dim justify-between">
