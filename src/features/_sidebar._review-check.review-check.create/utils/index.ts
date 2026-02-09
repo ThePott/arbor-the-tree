@@ -2,7 +2,47 @@ import queryClient from "@/packages/api/queryClient"
 import type { SidebarSearchParams } from "@/routes/_sidebar"
 import { ClientError } from "@/shared/error/clientError"
 import { produce } from "immer"
-import type { QuestionIdToInfo, ReviewCheckCreateResponseData } from "../types"
+import useReviewCheckCreateStore from "../store"
+import type { QuestionIdToInfo, ReviewCheckCreateResponseData, ReviewCheckOrderInfo } from "../types"
+
+export const checkIsMultiSelected = ({ topic_order, step_order, question_order }: ReviewCheckOrderInfo): boolean => {
+    const recentReviewCheckInfoArray = useReviewCheckCreateStore.getState().recentReviewCheckInfoArray
+    const sortedRecentReviewCheckInfoArray = recentReviewCheckInfoArray.sort((a, b) => {
+        if (a.topic_order != b.topic_order) return a.topic_order - b.topic_order
+        if (a.step_order != b.step_order) return a.step_order - b.step_order
+        return a.question_order - b.question_order
+    })
+
+    const length = recentReviewCheckInfoArray.length
+    if (length === 0) return false
+    if (length === 1) {
+        // TODO: 선택된 게 나면 선택됐다.
+        const reviewCheckInfo = recentReviewCheckInfoArray[0]
+        if (
+            reviewCheckInfo.topic_order === topic_order &&
+            reviewCheckInfo.step_order === step_order &&
+            reviewCheckInfo.question_order === question_order
+        ) {
+            return true
+        }
+        return false
+    }
+
+    const first = sortedRecentReviewCheckInfoArray[0]
+    const second = sortedRecentReviewCheckInfoArray[1]
+
+    if (
+        first.topic_order <= topic_order &&
+        topic_order <= second.topic_order &&
+        first.step_order <= step_order &&
+        step_order <= second.step_order &&
+        first.question_order <= question_order &&
+        question_order <= second.question_order
+    ) {
+        return true
+    }
+    return false
+}
 
 // TODO: 이름이 별로인 것 같은데??
 type UpdateReviewCheckCacheProps = {
