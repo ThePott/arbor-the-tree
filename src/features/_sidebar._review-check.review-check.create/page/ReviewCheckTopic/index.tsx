@@ -96,7 +96,7 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
         }
 
         const copiedReviewChecks = { ...changedReviewChecks }
-        if (question.status === status) {
+        if (question.review_check_status === status) {
             delete copiedReviewChecks[question.id]
             setChangedReviewChecks(copiedReviewChecks)
             return
@@ -133,7 +133,7 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
     // TODO: 버튼 옵션 바꿔야 함
     return (
         <Button
-            color={statusToColor[question.status ?? "null"]}
+            color={statusToColor[question.review_check_status ?? "null"]}
             status={question.session_status ? "enabled" : "disabled"}
             padding="none"
             border="always"

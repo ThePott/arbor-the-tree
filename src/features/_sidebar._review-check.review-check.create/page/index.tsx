@@ -117,7 +117,7 @@ const ReviewCheckCreatePage = () => {
             )
             if (!targetQuestion) throw ClientError.Unexpected("다중 선택 중 오류가 발생했어요")
 
-            if (targetQuestion.status === status) return
+            if (targetQuestion.review_check_status === status) return
 
             copiedChanged[targetQuestion.id] = {
                 status,
@@ -142,7 +142,7 @@ const ReviewCheckCreatePage = () => {
                         return
                     }
 
-                    if (question.status === status) {
+                    if (question.review_check_status === status) {
                         delete copiedChanged[question.id]
                         return
                     }
