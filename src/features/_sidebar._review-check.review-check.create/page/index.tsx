@@ -8,7 +8,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
 import { useEffect } from "react"
 import useReviewCheckCreateStore from "../store"
-import type { ReviewCheckCreateResponseData } from "../types"
+import type { QuestionIdToInfo, ReviewCheckCreateResponseData } from "../types"
 import { updateReviewCheckCache } from "../utils"
 import ReviewCheckCreateToolbar from "./ReviewCheckCreateToolbar"
 import ReviewCheckTopic from "./ReviewCheckTopic"
@@ -93,6 +93,7 @@ const ReviewCheckCreatePage = () => {
     // TODO: debounce를 어떻게 만들지? useEffect, timeout, cleanup, callback
     useEffect(() => {
         if (Object.entries(changedReviewChecks).length === 0) return
+        if (Object.values(changedReviewChecksByMultiSelect).length > 0) return
 
         const timeout = setTimeout(async () => {
             // TODO: /review-check/create -> /review/check
@@ -106,12 +107,12 @@ const ReviewCheckCreatePage = () => {
             mutate({ body, additionalData: changedReviewChecks })
         }, 500)
         return () => clearTimeout(timeout)
-    }, [changedReviewChecks])
+    }, [changedReviewChecks, changedReviewChecksByMultiSelect])
 
     useEffect(() => {
         if (recentReviewCheckInfoArray.length === 0) return
 
-        const copiedChanged = { ...changedReviewChecksByMultiSelect }
+        const newChangedReviewChecks: QuestionIdToInfo = {}
         if (recentReviewCheckInfoArray.length === 1) {
             const recentRevieCheckInfo = recentReviewCheckInfoArray[0]
             const targetTopic = data?.topics.find((topic) => topic.order === recentRevieCheckInfo.topic_order)
@@ -125,16 +126,16 @@ const ReviewCheckCreatePage = () => {
 
             if (targetQuestion.review_check_status === status) return
 
-            copiedChanged[targetQuestion.id] = {
+            newChangedReviewChecks[targetQuestion.id] = {
                 status,
                 review_check_id: targetQuestion.review_check_id,
                 topic_order: targetTopic.order,
                 step_order: targetStep.order,
                 assigned_session_student_id: targetQuestion.assigned_session_student_id,
             }
-            setChangedReviewChecksByMultiSelect(copiedChanged)
+            setChangedReviewChecksByMultiSelect(newChangedReviewChecks)
             const previous = queryClient.getQueryData(["reviewCheck", searchParams]) as ReviewCheckCreateResponseData
-            const newVisual = updateReviewCheckCache({ previous, additionalData: copiedChanged })
+            const newVisual = updateReviewCheckCache({ previous, additionalData: newChangedReviewChecks })
             queryClient.setQueryData(["reviewCheck", searchParams], newVisual)
             return
         }
@@ -147,16 +148,10 @@ const ReviewCheckCreatePage = () => {
                         step_order: step.order,
                         question_order: question.order,
                     })
-                    if (!isMultiSelected) {
-                        delete copiedChanged[question.id]
-                        return
-                    }
+                    if (!isMultiSelected) return
+                    if (question.review_check_status === status) return
 
-                    if (question.review_check_status === status) {
-                        delete copiedChanged[question.id]
-                        return
-                    }
-                    copiedChanged[question.id] = {
+                    newChangedReviewChecks[question.id] = {
                         status,
                         review_check_id: question.review_check_id,
                         topic_order: topic.order,
@@ -167,9 +162,13 @@ const ReviewCheckCreatePage = () => {
             )
         )
 
-        setChangedReviewChecksByMultiSelect(copiedChanged)
+        console.log({
+            recentReviewCheckInfoArray,
+            newChangedReviewChecks,
+        })
+        setChangedReviewChecksByMultiSelect(newChangedReviewChecks)
         const previous = queryClient.getQueryData(["reviewCheck", searchParams]) as ReviewCheckCreateResponseData
-        const newVisual = updateReviewCheckCache({ previous, additionalData: copiedChanged })
+        const newVisual = updateReviewCheckCache({ previous, additionalData: newChangedReviewChecks })
         queryClient.setQueryData(["reviewCheck", searchParams], newVisual)
 
         // NOTE: 이거 리팩토링할 필요 없어보인다... 아님 같은 폴더 utils에 둘까??

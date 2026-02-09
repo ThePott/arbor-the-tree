@@ -39,6 +39,7 @@ const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, ge
     setIsMultiSelecting: (isMultiSelecting) => {
         if (!isMultiSelecting) {
             get()._applyChangedReviewChecksFromMultiSelect()
+            set({ changedReviewChecksByMultiSelect: {} })
         }
         set({ isMultiSelecting })
     },
@@ -57,6 +58,7 @@ const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, ge
 
     changedReviewChecks: {},
     setChangedReviewChecks: (changedReviewChecks) => set({ changedReviewChecks }),
+
     _applyChangedReviewChecksFromMultiSelect: () => {
         const state = get()
         const changedReviewChecksByMultiSelect = state.changedReviewChecksByMultiSelect
@@ -65,7 +67,8 @@ const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, ge
         entryArray.forEach(([key, value]) => {
             changedReviewChecks[key] = value
         })
-        set({ changedReviewChecks, changedReviewChecksByMultiSelect: {}, recentReviewCheckInfoArray: [] })
+        // set({ changedReviewChecks, changedReviewChecksByMultiSelect: {}, recentReviewCheckInfoArray: [] })
+        set({ changedReviewChecks, recentReviewCheckInfoArray: [] })
     },
 
     changedReviewChecksByMultiSelect: {},
