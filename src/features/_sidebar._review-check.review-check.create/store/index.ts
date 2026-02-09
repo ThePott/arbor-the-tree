@@ -28,7 +28,8 @@ const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, ge
     status: null,
     setStatus: (status) => {
         const state = get()
-        if (!state.isMultiSelecting) {
+        if (state.isMultiSelecting) {
+            // NOTE: 다중 선택 중 status 바꾸면 일단 적용함
             state._applyChangedReviewChecksFromMultiSelect()
         }
         set({ status })
