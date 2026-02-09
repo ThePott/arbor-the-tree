@@ -4,13 +4,15 @@ import SidebarSectionPending from "@/features/_sidebar/pending"
 import { createFileRoute } from "@tanstack/react-router"
 import z from "zod/v3"
 
+const validateSearch = z.object({
+    student_id: z.string().optional(),
+    classroom_id: z.string().optional(),
+    syllabus_id: z.string().optional(),
+})
+export type SidebarSearchParams = z.input<typeof validateSearch>
 export const Route = createFileRoute("/_sidebar")({
     component: SidebarSectionLayout,
     loader: ({ context: { queryClient } }) => sidebarSectionLoaderFn(queryClient),
     pendingComponent: SidebarSectionPending,
-    validateSearch: z.object({
-        student_id: z.string().optional(),
-        classroom_id: z.string().optional(),
-        syllabus_id: z.string().optional(),
-    }),
+    validateSearch,
 })

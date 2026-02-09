@@ -1,14 +1,17 @@
+import queryClient from "@/packages/api/queryClient"
+import type { SidebarSearchParams } from "@/routes/_sidebar"
 import { ClientError } from "@/shared/error/clientError"
 import { produce } from "immer"
 import type { QuestionIdToInfo, ReviewCheckCreateResponseData } from "../types"
 
+type UpdateReviewCheckCacheProps = {
+    previous: ReviewCheckCreateResponseData
+    additionalData: QuestionIdToInfo
+}
 export const updateReviewCheckCache = ({
     previous,
     additionalData,
-}: {
-    previous: ReviewCheckCreateResponseData
-    additionalData: QuestionIdToInfo
-}) => {
+}: UpdateReviewCheckCacheProps): ReviewCheckCreateResponseData => {
     const newData = produce(previous, (draft) => {
         const entryArray = Object.entries(additionalData)
         entryArray.forEach(([question_id, { topic_order, step_order, status }]) => {
@@ -22,4 +25,22 @@ export const updateReviewCheckCache = ({
         })
     })
     return newData
+}
+
+type UpdateReviewCheckCacheVisualProps = {
+    changedReviewChecks: QuestionIdToInfo
+    searchParams: SidebarSearchParams
+    storeCallback: () => void
+}
+export const updateReviewCheckCacheVisual = ({
+    changedReviewChecks,
+    searchParams,
+    storeCallback,
+}: UpdateReviewCheckCacheVisualProps): void => {
+    const queryKey = ["reviewCheck", searchParams]
+    const previous = queryClient.getQueryData(queryKey) as ReviewCheckCreateResponseData
+    const newData = updateReviewCheckCache({ previous, additionalData: changedReviewChecks })
+    queryClient.setQueryData(queryKey, newData)
+
+    storeCallback()
 }

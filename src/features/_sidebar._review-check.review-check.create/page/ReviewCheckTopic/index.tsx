@@ -1,18 +1,11 @@
 import Button from "@/packages/components/Button/Button"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import Title from "@/packages/components/Title/Title"
-import { useQueryClient } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
 import clsx from "clsx"
 import useReviewCheckCreateStore from "../../store"
-import type {
-    ExtendedStep,
-    ExtendedTopic,
-    JoinedQuestion,
-    ReviewCheckCreateResponseData,
-    ReviewCheckInfo,
-} from "../../types"
-import { updateReviewCheckCache } from "../../utils"
+import type { ExtendedStep, ExtendedTopic, JoinedQuestion, ReviewCheckInfo } from "../../types"
+import { updateReviewCheckCacheVisual } from "../../utils"
 
 const route = getRouteApi("/_sidebar")
 
@@ -48,9 +41,7 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
     const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
     const setChangedReviewChecks = useReviewCheckCreateStore((state) => state.setChangedReviewChecks)
     const recentReviewCheckInfoArray = useReviewCheckCreateStore((state) => state.recentReviewCheckInfoArray)
-
     const searchParams = route.useSearch()
-    const queryClient = useQueryClient()
 
     const handleClick = () => {
         if (isMultiSelecting) {
@@ -63,7 +54,11 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
         const copiedReviewChecks = { ...changedReviewChecks }
         if (question.review_check_status === status) {
             delete copiedReviewChecks[question.id]
-            setChangedReviewChecks(copiedReviewChecks)
+            updateReviewCheckCacheVisual({
+                changedReviewChecks: copiedReviewChecks,
+                searchParams,
+                storeCallback: () => setChangedReviewChecks(copiedReviewChecks),
+            })
             return
         }
 
@@ -75,10 +70,11 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
             assigned_session_student_id: question.assigned_session_student_id,
         }
 
-        setChangedReviewChecks(copiedReviewChecks)
-        const previous = queryClient.getQueryData(["reviewCheck", searchParams]) as ReviewCheckCreateResponseData
-        const newVisual = updateReviewCheckCache({ previous, additionalData: copiedReviewChecks })
-        queryClient.setQueryData(["reviewCheck", searchParams], newVisual)
+        updateReviewCheckCacheVisual({
+            changedReviewChecks: copiedReviewChecks,
+            searchParams,
+            storeCallback: () => setChangedReviewChecks(copiedReviewChecks),
+        })
     }
 
     // TODO: 정답은 파란색으로 바꿔야 함

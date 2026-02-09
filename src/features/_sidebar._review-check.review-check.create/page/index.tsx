@@ -4,12 +4,12 @@ import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
 import { ClientError } from "@/shared/error/clientError"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
 import { useEffect } from "react"
 import useReviewCheckCreateStore from "../store"
 import type { QuestionIdToInfo, ReviewCheckCreateResponseData } from "../types"
-import { updateReviewCheckCache } from "../utils"
+import { updateReviewCheckCache, updateReviewCheckCacheVisual } from "../utils"
 import ReviewCheckCreateToolbar from "./ReviewCheckCreateToolbar"
 import ReviewCheckTopic from "./ReviewCheckTopic"
 
@@ -73,7 +73,6 @@ const ReviewCheckCreatePage = () => {
     const recentReviewCheckInfoArray = useReviewCheckCreateStore((state) => state.recentReviewCheckInfoArray)
 
     const searchParams = route.useSearch()
-    const queryClient = useQueryClient()
     const { data } = useQuery({
         queryKey: ["reviewCheck", searchParams],
         queryFn: async () => {
@@ -133,10 +132,11 @@ const ReviewCheckCreatePage = () => {
                 step_order: targetStep.order,
                 assigned_session_student_id: targetQuestion.assigned_session_student_id,
             }
-            setChangedReviewChecksByMultiSelect(newChangedReviewChecks)
-            const previous = queryClient.getQueryData(["reviewCheck", searchParams]) as ReviewCheckCreateResponseData
-            const newVisual = updateReviewCheckCache({ previous, additionalData: newChangedReviewChecks })
-            queryClient.setQueryData(["reviewCheck", searchParams], newVisual)
+            updateReviewCheckCacheVisual({
+                changedReviewChecks: newChangedReviewChecks,
+                searchParams,
+                storeCallback: () => setChangedReviewChecksByMultiSelect(newChangedReviewChecks),
+            })
             return
         }
 
@@ -162,13 +162,11 @@ const ReviewCheckCreatePage = () => {
             )
         )
 
-        setChangedReviewChecksByMultiSelect(newChangedReviewChecks)
-        const previous = queryClient.getQueryData(["reviewCheck", searchParams]) as ReviewCheckCreateResponseData
-        const newVisual = updateReviewCheckCache({ previous, additionalData: newChangedReviewChecks })
-        queryClient.setQueryData(["reviewCheck", searchParams], newVisual)
-
-        // NOTE: 이거 리팩토링할 필요 없어보인다... 아님 같은 폴더 utils에 둘까??
-        // TODO: move files
+        updateReviewCheckCacheVisual({
+            changedReviewChecks: newChangedReviewChecks,
+            searchParams,
+            storeCallback: () => setChangedReviewChecksByMultiSelect(newChangedReviewChecks),
+        })
     }, [recentReviewCheckInfoArray])
 
     if (!data)
