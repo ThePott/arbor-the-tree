@@ -1,6 +1,6 @@
 import type { ReviewCheckStatus } from "@/shared/interfaces"
 import { create } from "zustand"
-import type { QuestionIdToInfo, ReviewCheckInfo } from "../types"
+import type { QuestionIdToInfo, ReviewCheckOrderInfo } from "../types"
 
 type ReviewCheckCreateStoreState = {
     status: ReviewCheckStatus | null
@@ -9,8 +9,8 @@ type ReviewCheckCreateStoreState = {
     isMultiSelecting: boolean
     setIsMultiSelecting: (isMultiSelecting: boolean) => void
 
-    recentReviewCheckInfoArray: ReviewCheckInfo[]
-    insertRecentReviewCheckInfo: (reviewCheckInfo: ReviewCheckInfo) => void
+    recentReviewCheckInfoArray: ReviewCheckOrderInfo[]
+    insertRecentReviewCheckInfo: (reviewCheckInfo: ReviewCheckOrderInfo) => void
     resetRecentReviewCheckInfoArray: () => void
 
     // NOTE: question_id: review_check_status

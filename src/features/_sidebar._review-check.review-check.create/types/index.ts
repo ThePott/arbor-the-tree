@@ -13,11 +13,14 @@ export type ExtendedBook = Pick<Book, "title"> & { topics: ExtendedTopic[] }
 
 export type ReviewCheckCreateResponseData = ExtendedBook
 
-export type ReviewCheckInfo = {
+// NOTE: recent에서 사용됨
+export type ReviewCheckOrderInfo = {
     topic_order: number
     step_order: number
     question_order: number
 }
+
+// NOTE: changed, multi changed에 사용됨
 export type QuestionIdToInfo = Record<
     string, // NOTE: question_id
     {

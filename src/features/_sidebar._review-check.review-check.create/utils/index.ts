@@ -2,8 +2,18 @@ import queryClient from "@/packages/api/queryClient"
 import type { SidebarSearchParams } from "@/routes/_sidebar"
 import { ClientError } from "@/shared/error/clientError"
 import { produce } from "immer"
-import type { QuestionIdToInfo, ReviewCheckCreateResponseData } from "../types"
+import useReviewCheckCreateStore from "../store"
+import type { JoinedQuestion, QuestionIdToInfo, ReviewCheckCreateResponseData } from "../types"
 
+type FindJoinedQuestionFromQueryDataProps = {
+    searchParams: SidebarSearchParams
+    questionIdToInfo: QuestionIdToInfo
+}
+const findJoinedQuestionFromQueryData = (): JoinedQuestion | null => {
+    return null
+}
+
+// TODO: 이름이 별로인 것 같은데??
 type UpdateReviewCheckCacheProps = {
     previous: ReviewCheckCreateResponseData
     additionalData: QuestionIdToInfo
@@ -27,6 +37,7 @@ export const updateReviewCheckCache = ({
     return newData
 }
 
+// TODO: 이름이 별로인 것 같은데??
 type UpdateReviewCheckCacheVisualProps = {
     changedReviewChecks: QuestionIdToInfo
     searchParams: SidebarSearchParams
@@ -43,4 +54,24 @@ export const updateReviewCheckCacheVisual = ({
     queryClient.setQueryData(queryKey, newData)
 
     storeCallback()
+}
+
+type RevertReviewChecksByMultiSelectProps = {
+    newChangedReviewChecksByMultiSelect: QuestionIdToInfo
+    searchParams: SidebarSearchParams
+}
+export const revertReviewChangedreviewChecksByMultiSelect = ({
+    newChangedReviewChecksByMultiSelect,
+    searchParams,
+}: RevertReviewChecksByMultiSelectProps): ReviewCheckCreateResponseData => {
+    const queryKey = ["reviewCheck", searchParams]
+    const previous = queryClient.getQueryData(queryKey) as ReviewCheckCreateResponseData
+
+    const oldChangedReviewChecksByMultiSelect = {
+        ...useReviewCheckCreateStore.getState().changedReviewChecksByMultiSelect,
+    }
+    Object.entries(newChangedReviewChecksByMultiSelect).forEach(
+        ([question_id, { topic_order, step_order, status }]) => {}
+    )
+    return previous
 }

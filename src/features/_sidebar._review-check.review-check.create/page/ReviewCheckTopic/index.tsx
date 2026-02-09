@@ -4,13 +4,13 @@ import Title from "@/packages/components/Title/Title"
 import { getRouteApi } from "@tanstack/react-router"
 import clsx from "clsx"
 import useReviewCheckCreateStore from "../../store"
-import type { ExtendedStep, ExtendedTopic, JoinedQuestion, ReviewCheckInfo } from "../../types"
+import type { ExtendedStep, ExtendedTopic, JoinedQuestion, ReviewCheckOrderInfo } from "../../types"
 import { updateReviewCheckCacheVisual } from "../../utils"
 
 const route = getRouteApi("/_sidebar")
 
 type ChecIsInfoMatchingQuestionProps = {
-    reviewCheckInfo?: ReviewCheckInfo
+    reviewCheckInfo?: ReviewCheckOrderInfo
     topic_order: number
     step_order: number
     question_order: number
