@@ -93,8 +93,7 @@ const ReviewCheckCreatePage = () => {
                 syllabus_id: searchParams.syllabus_id,
                 changedReviewChecks,
             }
-            const response = await instance.post("/review/check", body)
-            console.log({ data: response.data })
+            await instance.post("/review/check", body)
         }, 500)
         return () => clearTimeout(timeout)
     }, [changedReviewChecks])
