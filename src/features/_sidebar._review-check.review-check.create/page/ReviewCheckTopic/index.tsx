@@ -101,8 +101,6 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
         question_order: question.order,
     })
 
-    // TODO: 버튼 색상 더 추가해야 함 -> 투명일 때도 disabled는 만들어야 함
-    // TODO: 버튼 옵션 바꿔야 함
     return (
         <Button
             color={statusToColor[question.review_check_status_visual ?? "null"]}
