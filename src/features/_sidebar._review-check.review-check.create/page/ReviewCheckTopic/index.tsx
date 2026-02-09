@@ -5,7 +5,7 @@ import clsx from "clsx"
 import useReviewCheckCreateStore from "../../store"
 import type { ExtendedStep, ExtendedTopic, JoinedQuestion } from "../../types"
 
-// const route = getRouteApi("/_sidebar")
+// const _route = getRouteApi("/_sidebar")
 
 type ReviewCheckQuestionProps = {
     topic_order: number
@@ -106,6 +106,7 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
             status,
             review_check_id: question.review_check_id,
             question_id: question.id,
+            assigned_session_student_id: question.assigned_session_student_id,
         }
 
         setChangedReviewChecks(copiedReviewChecks)

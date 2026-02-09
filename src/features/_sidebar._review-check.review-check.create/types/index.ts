@@ -4,6 +4,7 @@ export type JoinedQuestion = Pick<Question, "id" | "name" | "page" | "order"> & 
     status: ReviewCheckStatus | null
     session_status: SessionStatus | null
     review_check_id: string | null
+    assigned_session_student_id: string | null
 }
 export type ExtendedStep = Step & { questions: JoinedQuestion[] }
 export type ExtendedTopic = Topic & { steps: ExtendedStep[] }

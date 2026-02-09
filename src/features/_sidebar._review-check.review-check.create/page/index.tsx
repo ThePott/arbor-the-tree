@@ -124,6 +124,7 @@ const ReviewCheckCreatePage = () => {
                 status,
                 review_check_id: targetQuestion.review_check_id,
                 question_id: targetQuestion.id,
+                assigned_session_student_id: targetQuestion.assigned_session_student_id,
             }
             setChangedReviewChecksByMultiSelect(copiedChanged)
             return
@@ -150,6 +151,7 @@ const ReviewCheckCreatePage = () => {
                         status,
                         review_check_id: question.review_check_id,
                         question_id: question.id,
+                        assigned_session_student_id: question.assigned_session_student_id,
                     }
                 })
             )
