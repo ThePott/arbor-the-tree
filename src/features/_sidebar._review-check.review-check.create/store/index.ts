@@ -67,7 +67,6 @@ const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, ge
         entryArray.forEach(([key, value]) => {
             changedReviewChecks[key] = value
         })
-        // set({ changedReviewChecks, changedReviewChecksByMultiSelect: {}, recentReviewCheckInfoArray: [] })
         set({ changedReviewChecks, recentReviewCheckInfoArray: [] })
     },
 

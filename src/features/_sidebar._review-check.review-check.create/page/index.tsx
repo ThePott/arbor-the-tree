@@ -149,7 +149,7 @@ const ReviewCheckCreatePage = () => {
                         question_order: question.order,
                     })
                     if (!isMultiSelected) return
-                    if (question.review_check_status === status) return
+                    if (question.review_check_status_visual === status) return
 
                     newChangedReviewChecks[question.id] = {
                         status,
@@ -162,10 +162,6 @@ const ReviewCheckCreatePage = () => {
             )
         )
 
-        console.log({
-            recentReviewCheckInfoArray,
-            newChangedReviewChecks,
-        })
         setChangedReviewChecksByMultiSelect(newChangedReviewChecks)
         const previous = queryClient.getQueryData(["reviewCheck", searchParams]) as ReviewCheckCreateResponseData
         const newVisual = updateReviewCheckCache({ previous, additionalData: newChangedReviewChecks })
