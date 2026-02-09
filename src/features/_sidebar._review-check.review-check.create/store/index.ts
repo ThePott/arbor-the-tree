@@ -26,7 +26,13 @@ type ReviewCheckCreateStoreState = {
 }
 const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, get) => ({
     status: null,
-    setStatus: (status) => set({ status }),
+    setStatus: (status) => {
+        const state = get()
+        if (!state.isMultiSelecting) {
+            state._applyChangedReviewChecksFromMultiSelect()
+        }
+        set({ status })
+    },
 
     isMultiSelecting: true,
     setIsMultiSelecting: (isMultiSelecting) => {

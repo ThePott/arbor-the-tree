@@ -62,6 +62,7 @@ const checkIsMultiSelected = ({ topic_order, step_order, question_order }: Check
 // NOTE: nothing gets rendered if only classroom is selected
 const ReviewCheckCreatePage = () => {
     const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
+    const setChangedReviewChecks = useReviewCheckCreateStore((state) => state.setChangedReviewChecks)
     const changedReviewChecksByMultiSelect = useReviewCheckCreateStore(
         (state) => state.changedReviewChecksByMultiSelect
     )
@@ -70,10 +71,13 @@ const ReviewCheckCreatePage = () => {
     )
     const status = useReviewCheckCreateStore((state) => state.status)
     const recentReviewCheckInfoArray = useReviewCheckCreateStore((state) => state.recentReviewCheckInfoArray)
+
     const searchParams = route.useSearch()
+    const queryClient = useQueryClient()
     const { data } = useQuery({
         queryKey: ["reviewCheck", searchParams],
         queryFn: async () => {
+            setChangedReviewChecks({})
             const response = await instance.get("/review/check", { params: searchParams })
             return response.data as ReviewCheckCreateResponseData
         },
@@ -103,8 +107,6 @@ const ReviewCheckCreatePage = () => {
         }, 500)
         return () => clearTimeout(timeout)
     }, [changedReviewChecks])
-
-    const queryClient = useQueryClient()
 
     useEffect(() => {
         if (recentReviewCheckInfoArray.length === 0) return

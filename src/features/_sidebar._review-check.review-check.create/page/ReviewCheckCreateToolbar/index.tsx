@@ -8,6 +8,9 @@ const ReviewCheckCreateToolbar = () => {
     const setStatus = useReviewCheckCreateStore((state) => state.setStatus)
     const isMultiSelecting = useReviewCheckCreateStore((state) => state.isMultiSelecting)
     const setIsMultiSelecting = useReviewCheckCreateStore((state) => state.setIsMultiSelecting)
+    const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
+    const isStagedChanges = Object.entries(changedReviewChecks).length > 0
+    console.log({ changedReviewChecks })
 
     return (
         <Hstack className="p-my-md border-b border-b-border-dim justify-between">
@@ -21,7 +24,9 @@ const ReviewCheckCreateToolbar = () => {
                     다중 선택
                 </Toggle>
             </Hstack>
-            <Button>제출</Button>
+            <Button color={isStagedChanges ? "green" : "transparent"} border="always">
+                제출
+            </Button>
         </Hstack>
     )
 }
