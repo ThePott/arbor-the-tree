@@ -5,10 +5,36 @@ import { useQueryClient } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
 import clsx from "clsx"
 import useReviewCheckCreateStore from "../../store"
-import type { ExtendedStep, ExtendedTopic, JoinedQuestion, ReviewCheckCreateResponseData } from "../../types"
+import type {
+    ExtendedStep,
+    ExtendedTopic,
+    JoinedQuestion,
+    ReviewCheckCreateResponseData,
+    ReviewCheckInfo,
+} from "../../types"
 import { updateReviewCheckCache } from "../../utils"
 
 const route = getRouteApi("/_sidebar")
+
+type ChecIsInfoMatchingQuestionProps = {
+    reviewCheckInfo?: ReviewCheckInfo
+    topic_order: number
+    step_order: number
+    question_order: number
+}
+const checkIsInfoMatchingQuestion = ({
+    reviewCheckInfo,
+    topic_order,
+    step_order,
+    question_order,
+}: ChecIsInfoMatchingQuestionProps): boolean => {
+    if (!reviewCheckInfo) return false
+    return (
+        reviewCheckInfo.topic_order === topic_order &&
+        reviewCheckInfo.step_order === step_order &&
+        reviewCheckInfo.question_order === question_order
+    )
+}
 
 type ReviewCheckQuestionProps = {
     topic_order: number
@@ -21,6 +47,7 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
     const insertRecentReviewCheckInfo = useReviewCheckCreateStore((state) => state.insertRecentReviewCheckInfo)
     const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
     const setChangedReviewChecks = useReviewCheckCreateStore((state) => state.setChangedReviewChecks)
+    const recentReviewCheckInfoArray = useReviewCheckCreateStore((state) => state.recentReviewCheckInfoArray)
 
     const searchParams = route.useSearch()
     const queryClient = useQueryClient()
@@ -61,6 +88,19 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
         null: "transparent",
     } as const
 
+    const isVeryRecent = checkIsInfoMatchingQuestion({
+        reviewCheckInfo: recentReviewCheckInfoArray[recentReviewCheckInfoArray.length - 1],
+        topic_order,
+        step_order,
+        question_order: question.order,
+    })
+    const isSomewhatRecent = checkIsInfoMatchingQuestion({
+        reviewCheckInfo: recentReviewCheckInfoArray[recentReviewCheckInfoArray.length - 2],
+        topic_order,
+        step_order,
+        question_order: question.order,
+    })
+
     // TODO: 버튼 색상 더 추가해야 함 -> 투명일 때도 disabled는 만들어야 함
     // TODO: 버튼 옵션 바꿔야 함
     return (
@@ -70,7 +110,11 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
             padding="none"
             border="always"
             onClick={handleClick}
-            className={clsx("size-12 flex justify-center items-center")}
+            className={clsx(
+                "size-12 flex justify-center items-center",
+                isVeryRecent && "outline-2 outline-border-vivid hover:outline-4",
+                isSomewhatRecent && "outline-2 outline-border-muted hover:outline-4"
+            )}
         >
             {question.name}
         </Button>
