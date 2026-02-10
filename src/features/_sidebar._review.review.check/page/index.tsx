@@ -29,6 +29,7 @@ const ReviewCheckPage = () => {
             }
         },
         overscan: 5,
+        measureElement: (element, entry, instance) => element.getBoundingClientRect().height,
         paddingStart: 48,
         paddingEnd: 48,
     })
@@ -56,8 +57,9 @@ const ReviewCheckPage = () => {
                     {rowVirtualizer.getVirtualItems().map((virtualItem) => (
                         <div
                             key={virtualItem.key}
+                            ref={rowVirtualizer.measureElement}
+                            data-index={virtualItem.index}
                             style={{
-                                height: `${virtualItem.size}px`,
                                 transform: `translateY(${virtualItem.start}px)`,
                             }}
                             className="absolute top-0 left-my-xl w-full"
