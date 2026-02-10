@@ -1,6 +1,6 @@
 import type { ReviewCheckStatus } from "@/shared/interfaces"
 import { create } from "zustand"
-import type { QuestionIdToInfo, ReviewCheckOrderInfo } from "../types"
+import type { QuestionIdToRequestInfo, ReviewCheckOrderInfo } from "../types"
 
 type ReviewCheckCreateStoreState = {
     status: ReviewCheckStatus | null
@@ -14,15 +14,15 @@ type ReviewCheckCreateStoreState = {
     resetRecentReviewCheckInfoArray: () => void
 
     // NOTE: question_id: review_check_status
-    changedReviewChecks: QuestionIdToInfo
-    setChangedReviewChecks: (changedReviewChecks: QuestionIdToInfo) => void
+    changedReviewChecks: QuestionIdToRequestInfo
+    setChangedReviewChecks: (changedReviewChecks: QuestionIdToRequestInfo) => void
     // NOTE: this function is only called internally
     _applyChangedReviewChecksFromMultiSelect: () => void
 
     // TODO: 이전에 선택해둔 게 multi select 한다고 없어져서는 안 된다
     // TODO: multi select -> single select: staged change -> real change로 이관
-    changedReviewChecksByMultiSelect: QuestionIdToInfo
-    setChangedReviewChecksByMultiSelect: (changedReviewChecksByMultiSelect: QuestionIdToInfo) => void
+    changedReviewChecksByMultiSelect: QuestionIdToRequestInfo
+    setChangedReviewChecksByMultiSelect: (changedReviewChecksByMultiSelect: QuestionIdToRequestInfo) => void
 }
 const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, get) => ({
     status: null,

@@ -21,7 +21,7 @@ export type ReviewCheckOrderInfo = {
 }
 
 // NOTE: changed, multi changed에 사용됨
-export type QuestionIdToInfo = Record<
+export type QuestionIdToRequestInfo = Record<
     string, // NOTE: question_id
     {
         status: ReviewCheckStatus | null // NOTE: use to delete if null

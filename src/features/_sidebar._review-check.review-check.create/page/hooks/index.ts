@@ -1,12 +1,17 @@
 import { instance } from "@/packages/api/axiosInstances"
-import { ClientError } from "@/shared/error/clientError"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
 import { useEffect } from "react"
 import useReviewCheckCreateStore from "../../store"
-import type { QuestionIdToInfo, ReviewCheckCreateResponseData } from "../../types"
-import { checkIsMultiSelected, updateReviewCheckCache, updateReviewCheckCacheVisual } from "../../utils"
+import type { QuestionIdToRequestInfo, ReviewCheckCreateResponseData } from "../../types"
+import {
+    checkIsMultiSelected,
+    findJoinedQuestion,
+    revertReviewCheckCacheVisual,
+    updateReviewCheckCache,
+    updateReviewCheckCacheVisual,
+} from "../../utils"
 
 const route = getRouteApi("/_sidebar")
 
@@ -74,25 +79,17 @@ const useConvertRecentToChanged = (data: ReviewCheckCreateResponseData | undefin
     useEffect(() => {
         if (recentReviewCheckInfoArray.length === 0) return
 
-        const newChangedReviewChecks: QuestionIdToInfo = {}
+        const newChangedReviewChecks: QuestionIdToRequestInfo = {}
         if (recentReviewCheckInfoArray.length === 1) {
-            const recentRevieCheckInfo = recentReviewCheckInfoArray[0]
-            const targetTopic = data?.topics.find((topic) => topic.order === recentRevieCheckInfo.topic_order)
-            if (!targetTopic) throw ClientError.Unexpected("다중 선택 중 오류가 발생했어요")
-            const targetStep = targetTopic?.steps.find((step) => step.order === recentRevieCheckInfo.step_order)
-            if (!targetStep) throw ClientError.Unexpected("다중 선택 중 오류가 발생했어요")
-            const targetQuestion = targetStep.questions.find(
-                (question) => question.order === recentRevieCheckInfo.question_order
-            )
-            if (!targetQuestion) throw ClientError.Unexpected("다중 선택 중 오류가 발생했어요")
-
+            const recentReviewCheckInfo = recentReviewCheckInfoArray[0]
+            const targetQuestion = findJoinedQuestion({ queryData: data, recentReviewCheckInfo })
             if (targetQuestion.review_check_status === status) return
 
             newChangedReviewChecks[targetQuestion.id] = {
                 status,
                 review_check_id: targetQuestion.review_check_id,
-                topic_order: targetTopic.order,
-                step_order: targetStep.order,
+                topic_order: recentReviewCheckInfo.topic_order,
+                step_order: recentReviewCheckInfo.step_order,
                 assigned_session_student_id: targetQuestion.assigned_session_student_id,
             }
             updateReviewCheckCacheVisual({
@@ -124,6 +121,7 @@ const useConvertRecentToChanged = (data: ReviewCheckCreateResponseData | undefin
             )
         )
 
+        revertReviewCheckCacheVisual({ newChangedByMultiSelect: newChangedReviewChecks, searchParams })
         updateReviewCheckCacheVisual({
             changedReviewChecks: newChangedReviewChecks,
             searchParams,

@@ -3,7 +3,12 @@ import type { SidebarSearchParams } from "@/routes/_sidebar"
 import { ClientError } from "@/shared/error/clientError"
 import { produce } from "immer"
 import useReviewCheckCreateStore from "../store"
-import type { QuestionIdToInfo, ReviewCheckCreateResponseData, ReviewCheckOrderInfo } from "../types"
+import type {
+    JoinedQuestion,
+    QuestionIdToRequestInfo,
+    ReviewCheckCreateResponseData,
+    ReviewCheckOrderInfo,
+} from "../types"
 
 export const checkIsMultiSelected = ({ topic_order, step_order, question_order }: ReviewCheckOrderInfo): boolean => {
     const recentReviewCheckInfoArray = useReviewCheckCreateStore.getState().recentReviewCheckInfoArray
@@ -44,10 +49,38 @@ export const checkIsMultiSelected = ({ topic_order, step_order, question_order }
     return false
 }
 
+type QuestionIdToInfoValue = QuestionIdToRequestInfo[string]
+type FindJoinedQuestionProps<T extends ReviewCheckCreateResponseData> = {
+    queryData: T | undefined
+    changedEntry?: [question_id: string, QuestionIdToInfoValue]
+    recentReviewCheckInfo?: ReviewCheckOrderInfo
+}
+export const findJoinedQuestion = <T extends ReviewCheckCreateResponseData>({
+    queryData,
+    changedEntry,
+    recentReviewCheckInfo,
+}: FindJoinedQuestionProps<T>): JoinedQuestion => {
+    const question_id = changedEntry?.[0]
+    const question_order = recentReviewCheckInfo?.question_order
+    const topic_order = changedEntry?.[1].topic_order ?? recentReviewCheckInfo?.topic_order
+    const step_order = changedEntry?.[1].step_order ?? recentReviewCheckInfo?.step_order
+
+    if (!question_id && !question_order) throw ClientError.Unexpected("오답 체크를 실패했어요")
+    if (!topic_order || !step_order) throw ClientError.Unexpected("오답 체크를 실패했어요")
+
+    const targetTopic = queryData?.topics.find((elTopic) => elTopic.order === topic_order)
+    if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
+    const targetStep = targetTopic.steps.find((elStep) => elStep.order === step_order)
+    if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
+    const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question_id)
+    if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
+    return targetQuestion
+}
+
 // TODO: 이름이 별로인 것 같은데??
 type UpdateReviewCheckCacheProps = {
     previous: ReviewCheckCreateResponseData
-    additionalData: QuestionIdToInfo
+    additionalData: QuestionIdToRequestInfo
 }
 export const updateReviewCheckCache = ({
     previous,
@@ -55,13 +88,9 @@ export const updateReviewCheckCache = ({
 }: UpdateReviewCheckCacheProps): ReviewCheckCreateResponseData => {
     const newData = produce(previous, (draft) => {
         const entryArray = Object.entries(additionalData)
-        entryArray.forEach(([question_id, { topic_order, step_order, status }]) => {
-            const targetTopic = draft.topics.find((elTopic) => elTopic.order === topic_order)
-            if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
-            const targetStep = targetTopic.steps.find((elStep) => elStep.order === step_order)
-            if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
-            const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question_id)
-            if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
+        entryArray.forEach((entry) => {
+            const targetQuestion = findJoinedQuestion({ queryData: draft, changedEntry: entry })
+            const [_, { status }] = entry
             targetQuestion.review_check_status_visual = status
         })
     })
@@ -70,7 +99,7 @@ export const updateReviewCheckCache = ({
 
 // TODO: 이름이 별로인 것 같은데??
 type UpdateReviewCheckCacheVisualProps = {
-    changedReviewChecks: QuestionIdToInfo
+    changedReviewChecks: QuestionIdToRequestInfo
     searchParams: SidebarSearchParams
     storeCallback: () => void
 }
@@ -87,29 +116,45 @@ export const updateReviewCheckCacheVisual = ({
     storeCallback()
 }
 
-// type FindJoinedQuestionFromQueryDataProps = {
-//     searchParams: SidebarSearchParams
-//     questionIdToInfo: QuestionIdToInfo
-// }
-// const findJoinedQuestionFromQueryData = (): JoinedQuestion | null => {
-//     return null
-// }
-// type RevertReviewChecksByMultiSelectProps = {
-//     newChangedReviewChecksByMultiSelect: QuestionIdToInfo
-//     searchParams: SidebarSearchParams
-// }
-// export const revertReviewChangedreviewChecksByMultiSelect = ({
-//     newChangedReviewChecksByMultiSelect,
-//     searchParams,
-// }: RevertReviewChecksByMultiSelectProps): ReviewCheckCreateResponseData => {
-//     const queryKey = ["reviewCheck", searchParams]
-//     const previous = queryClient.getQueryData(queryKey) as ReviewCheckCreateResponseData
-//
-//     const oldChangedReviewChecksByMultiSelect = {
-//         ...useReviewCheckCreateStore.getState().changedReviewChecksByMultiSelect,
-//     }
-//     Object.entries(newChangedReviewChecksByMultiSelect).forEach(
-//         ([question_id, { topic_order, step_order, status }]) => {}
-//     )
-//     return previous
-// }
+type RevertReviewChecksByMultiSelectProps = {
+    queryData: ReviewCheckCreateResponseData
+    newChangedByMultiSelect: QuestionIdToRequestInfo
+}
+const revertReviewChangedreviewChecksByMultiSelect = ({
+    queryData,
+    newChangedByMultiSelect,
+}: RevertReviewChecksByMultiSelectProps): QuestionIdToRequestInfo => {
+    const oldChangedByMultiSelect = { ...useReviewCheckCreateStore.getState().changedReviewChecksByMultiSelect }
+    // NOTE: 겹치는 부분은 revert에서 삭제
+    Object.entries(newChangedByMultiSelect).forEach(([question_id, _]) => {
+        delete oldChangedByMultiSelect[question_id]
+    })
+
+    const oldEntryArray = Object.entries(oldChangedByMultiSelect)
+    oldEntryArray.forEach((entry) => {
+        const targetQuestion = findJoinedQuestion({ queryData, changedEntry: entry })
+        entry[1].status = targetQuestion.review_check_status
+    })
+
+    const revertedChangedByMultiSelect = Object.fromEntries(oldEntryArray)
+
+    return revertedChangedByMultiSelect
+}
+
+type RevertReviewCheckCacheVisualProps = {
+    newChangedByMultiSelect: QuestionIdToRequestInfo
+    searchParams: SidebarSearchParams
+}
+export const revertReviewCheckCacheVisual = ({
+    newChangedByMultiSelect,
+    searchParams,
+}: RevertReviewCheckCacheVisualProps) => {
+    const queryKey = ["reviewCheck", searchParams]
+    const previous = queryClient.getQueryData(queryKey) as ReviewCheckCreateResponseData
+    const revertedReviewChecks = revertReviewChangedreviewChecksByMultiSelect({
+        queryData: previous,
+        newChangedByMultiSelect,
+    })
+    const newData = updateReviewCheckCache({ previous, additionalData: revertedReviewChecks })
+    queryClient.setQueryData(queryKey, newData)
+}
