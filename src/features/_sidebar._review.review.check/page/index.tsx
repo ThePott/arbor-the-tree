@@ -21,14 +21,16 @@ const ReviewCheckPage = () => {
             const forWhat = flatItemArray[index].forWhat
             switch (forWhat) {
                 case "topicHeader":
-                    return 24
-                case "stepHeader":
-                    return 24
-                case "pagenatedQuestions":
                     return 48
+                case "stepHeader":
+                    return 36
+                case "pagenatedQuestions":
+                    return 60
             }
         },
         overscan: 5,
+        paddingStart: 48,
+        paddingEnd: 48,
     })
 
     if (flatItemArray.length === 0) {
@@ -55,13 +57,10 @@ const ReviewCheckPage = () => {
                         <div
                             key={virtualItem.key}
                             style={{
-                                position: "absolute",
-                                top: 0,
-                                left: 0,
-                                width: "100%",
                                 height: `${virtualItem.size}px`,
                                 transform: `translateY(${virtualItem.start}px)`,
                             }}
+                            className="absolute top-0 left-my-xl w-full"
                         >
                             <ReviewCheckFlatItemComponent flatItem={flatItemArray[virtualItem.index]} />
                         </div>

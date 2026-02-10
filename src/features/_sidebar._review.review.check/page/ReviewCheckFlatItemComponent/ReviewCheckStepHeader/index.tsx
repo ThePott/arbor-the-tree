@@ -4,7 +4,7 @@ type StepHeaderProps = { title: string }
 const StepHeader = ({ title }: StepHeaderProps) => {
     // TODO: need to adjust margin top bottom
     return (
-        <Title as="h3" className="mt-my-md sticky top-[24px] bg-bg-neg-1">
+        <Title as="h3" className="pt-my-md sticky top-[24px] bg-bg-neg-1">
             {title}
         </Title>
     )
