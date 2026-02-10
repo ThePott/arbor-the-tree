@@ -5,7 +5,7 @@ import { getRouteApi } from "@tanstack/react-router"
 import clsx from "clsx"
 import useReviewCheckCreateStore from "../../store"
 import type { ExtendedStep, ExtendedTopic, JoinedQuestion, ReviewCheckOrderInfo } from "../../types"
-import { updateReviewCheckCacheVisual } from "../../utils"
+import { updateReviewCheckQueryData } from "../../utils"
 
 const route = getRouteApi("/_sidebar")
 
@@ -54,7 +54,7 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
         const copiedReviewChecks = { ...changedReviewChecks }
         if (question.review_check_status === status) {
             delete copiedReviewChecks[question.id]
-            updateReviewCheckCacheVisual({
+            updateReviewCheckQueryData({
                 changedReviewChecks: copiedReviewChecks,
                 searchParams,
                 storeCallback: () => setChangedReviewChecks(copiedReviewChecks),
@@ -70,7 +70,7 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
             assigned_session_student_id: question.assigned_session_student_id,
         }
 
-        updateReviewCheckCacheVisual({
+        updateReviewCheckQueryData({
             changedReviewChecks: copiedReviewChecks,
             searchParams,
             storeCallback: () => setChangedReviewChecks(copiedReviewChecks),

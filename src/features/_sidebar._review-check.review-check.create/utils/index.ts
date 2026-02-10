@@ -80,15 +80,15 @@ export const findJoinedQuestion = <T extends ReviewCheckCreateResponseData>({
     return targetQuestion
 }
 
-// TODO: 이름이 별로인 것 같은데??
-type UpdateReviewCheckCacheProps = {
+// NOTE: useSimpleMutation update에서도 사용되어야 하므로 export 되어야 함
+type MakeUpdatedReviewCheckQueryData = {
     previous: ReviewCheckCreateResponseData
     additionalData: QuestionIdToRequestInfo
 }
-export const updateReviewCheckCache = ({
+export const makeUpdatedReviewCheckQueryData = ({
     previous,
     additionalData,
-}: UpdateReviewCheckCacheProps): ReviewCheckCreateResponseData => {
+}: MakeUpdatedReviewCheckQueryData): ReviewCheckCreateResponseData => {
     const newData = produce(previous, (draft) => {
         const entryArray = Object.entries(additionalData)
         entryArray.forEach((entry) => {
@@ -100,33 +100,32 @@ export const updateReviewCheckCache = ({
     return newData
 }
 
-// TODO: 이름이 별로인 것 같은데??
-type UpdateReviewCheckCacheVisualProps = {
+type UpdateReviewCheckQueryData = {
     changedReviewChecks: QuestionIdToRequestInfo
     searchParams: SidebarSearchParams
     storeCallback: () => void
 }
-export const updateReviewCheckCacheVisual = ({
+export const updateReviewCheckQueryData = ({
     changedReviewChecks,
     searchParams,
     storeCallback,
-}: UpdateReviewCheckCacheVisualProps): void => {
+}: UpdateReviewCheckQueryData): void => {
     const queryKey = ["reviewCheck", searchParams]
     const previous = queryClient.getQueryData(queryKey) as ReviewCheckCreateResponseData
-    const newData = updateReviewCheckCache({ previous, additionalData: changedReviewChecks })
+    const newData = makeUpdatedReviewCheckQueryData({ previous, additionalData: changedReviewChecks })
     queryClient.setQueryData(queryKey, newData)
 
     storeCallback()
 }
 
-type RevertReviewChecksByMultiSelectProps = {
+type MakeRevertedReviewChangedreviewChecksProps = {
     queryData: ReviewCheckCreateResponseData
     newChangedByMultiSelect: QuestionIdToRequestInfo
 }
-const revertReviewChangedreviewChecksByMultiSelect = ({
+const makeRevertedReviewChangedreviewChecks = ({
     queryData,
     newChangedByMultiSelect,
-}: RevertReviewChecksByMultiSelectProps): QuestionIdToRequestInfo => {
+}: MakeRevertedReviewChangedreviewChecksProps): QuestionIdToRequestInfo => {
     const oldChangedByMultiSelect = { ...useReviewCheckCreateStore.getState().changedReviewChecksByMultiSelect }
     // NOTE: 겹치는 부분은 revert에서 삭제
     Object.entries(newChangedByMultiSelect).forEach(([question_id, _]) => {
@@ -144,20 +143,20 @@ const revertReviewChangedreviewChecksByMultiSelect = ({
     return revertedChangedByMultiSelect
 }
 
-type RevertReviewCheckCacheVisualProps = {
+type RevertReviewCheckQueryDataAfterMultiSelectProps = {
     newChangedByMultiSelect: QuestionIdToRequestInfo
     searchParams: SidebarSearchParams
 }
-export const revertReviewCheckCacheVisual = ({
+export const revertReviewCheckQueryDataAfterMultiSelect = ({
     newChangedByMultiSelect,
     searchParams,
-}: RevertReviewCheckCacheVisualProps) => {
+}: RevertReviewCheckQueryDataAfterMultiSelectProps) => {
     const queryKey = ["reviewCheck", searchParams]
     const previous = queryClient.getQueryData(queryKey) as ReviewCheckCreateResponseData
-    const revertedReviewChecks = revertReviewChangedreviewChecksByMultiSelect({
+    const revertedReviewChecks = makeRevertedReviewChangedreviewChecks({
         queryData: previous,
         newChangedByMultiSelect,
     })
-    const newData = updateReviewCheckCache({ previous, additionalData: revertedReviewChecks })
+    const newData = makeUpdatedReviewCheckQueryData({ previous, additionalData: revertedReviewChecks })
     queryClient.setQueryData(queryKey, newData)
 }

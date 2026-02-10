@@ -8,9 +8,9 @@ import type { QuestionIdToRequestInfo, ReviewCheckCreateResponseData } from "../
 import {
     checkIsMultiSelected,
     findJoinedQuestion,
-    revertReviewCheckCacheVisual,
-    updateReviewCheckCache,
-    updateReviewCheckCacheVisual,
+    makeUpdatedReviewCheckQueryData,
+    revertReviewCheckQueryDataAfterMultiSelect,
+    updateReviewCheckQueryData,
 } from "../../utils"
 
 const route = getRouteApi("/_sidebar")
@@ -36,7 +36,7 @@ const useReviewCheckMutate = () => {
         url: "/review/check",
         queryKeyWithoutParams: ["reviewCheck"],
         params: searchParams,
-        update: updateReviewCheckCache,
+        update: makeUpdatedReviewCheckQueryData,
     })
     return { mutate }
 }
@@ -92,7 +92,7 @@ const useConvertRecentToChanged = (data: ReviewCheckCreateResponseData | undefin
                 step_order: recentReviewCheckInfo.step_order,
                 assigned_session_student_id: targetQuestion.assigned_session_student_id,
             }
-            updateReviewCheckCacheVisual({
+            updateReviewCheckQueryData({
                 changedReviewChecks: newChangedReviewChecks,
                 searchParams,
                 storeCallback: () => setChangedReviewChecksByMultiSelect(newChangedReviewChecks),
@@ -121,8 +121,8 @@ const useConvertRecentToChanged = (data: ReviewCheckCreateResponseData | undefin
             )
         )
 
-        revertReviewCheckCacheVisual({ newChangedByMultiSelect: newChangedReviewChecks, searchParams })
-        updateReviewCheckCacheVisual({
+        revertReviewCheckQueryDataAfterMultiSelect({ newChangedByMultiSelect: newChangedReviewChecks, searchParams })
+        updateReviewCheckQueryData({
             changedReviewChecks: newChangedReviewChecks,
             searchParams,
             storeCallback: () => setChangedReviewChecksByMultiSelect(newChangedReviewChecks),
