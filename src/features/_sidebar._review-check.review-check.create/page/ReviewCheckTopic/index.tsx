@@ -37,10 +37,10 @@ type ReviewCheckQuestionProps = {
 const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQuestionProps) => {
     const status = useReviewCheckCreateStore((state) => state.status)
     const isMultiSelecting = useReviewCheckCreateStore((state) => state.isMultiSelecting)
-    const insertRecentReviewCheckInfo = useReviewCheckCreateStore((state) => state.insertRecentReviewCheckInfo)
-    const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
-    const setChangedReviewChecks = useReviewCheckCreateStore((state) => state.setChangedReviewChecks)
-    const recentReviewCheckInfoArray = useReviewCheckCreateStore((state) => state.recentReviewCheckInfoArray)
+    const insertRecentReviewCheckInfo = useReviewCheckCreateStore((state) => state.insertRecentOrderInfo)
+    const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedIdToRequestInfo)
+    const setChangedReviewChecks = useReviewCheckCreateStore((state) => state.setChangedIdToRequestInfo)
+    const recentReviewCheckInfoArray = useReviewCheckCreateStore((state) => state.recentOrderInfoArray)
     const searchParams = route.useSearch()
 
     const handleClick = () => {
@@ -55,7 +55,7 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
         if (question.review_check_status === status) {
             delete copiedReviewChecks[question.id]
             updateReviewCheckQueryData({
-                changedReviewChecks: copiedReviewChecks,
+                questionIdToRequestInfo: copiedReviewChecks,
                 searchParams,
                 storeCallback: () => setChangedReviewChecks(copiedReviewChecks),
             })
@@ -71,7 +71,7 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
         }
 
         updateReviewCheckQueryData({
-            changedReviewChecks: copiedReviewChecks,
+            questionIdToRequestInfo: copiedReviewChecks,
             searchParams,
             storeCallback: () => setChangedReviewChecks(copiedReviewChecks),
         })

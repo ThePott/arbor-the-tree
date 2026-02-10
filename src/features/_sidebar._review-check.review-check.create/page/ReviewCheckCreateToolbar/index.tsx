@@ -8,9 +8,9 @@ const ReviewCheckCreateToolbar = () => {
     const setStatus = useReviewCheckCreateStore((state) => state.setStatus)
     const isMultiSelecting = useReviewCheckCreateStore((state) => state.isMultiSelecting)
     const setIsMultiSelecting = useReviewCheckCreateStore((state) => state.setIsMultiSelecting)
-    const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
+    const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedIdToRequestInfo)
     const changedReviewChecksByMultiSelect = useReviewCheckCreateStore(
-        (state) => state.changedReviewChecksByMultiSelect
+        (state) => state.changedIdToRequestInfoByMultiSelect
     )
 
     const isStagedChanges =

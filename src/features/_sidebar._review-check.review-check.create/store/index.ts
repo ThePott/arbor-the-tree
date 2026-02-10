@@ -9,20 +9,17 @@ type ReviewCheckCreateStoreState = {
     isMultiSelecting: boolean
     setIsMultiSelecting: (isMultiSelecting: boolean) => void
 
-    recentReviewCheckInfoArray: ReviewCheckOrderInfo[]
-    insertRecentReviewCheckInfo: (reviewCheckInfo: ReviewCheckOrderInfo) => void
-    resetRecentReviewCheckInfoArray: () => void
+    recentOrderInfoArray: ReviewCheckOrderInfo[]
+    insertRecentOrderInfo: (reviewOrderInfo: ReviewCheckOrderInfo) => void
+    resetRecentOrderInfoArray: () => void
 
-    // NOTE: question_id: review_check_status
-    changedReviewChecks: QuestionIdToRequestInfo
-    setChangedReviewChecks: (changedReviewChecks: QuestionIdToRequestInfo) => void
+    changedIdToRequestInfo: QuestionIdToRequestInfo
+    setChangedIdToRequestInfo: (changedIdToRequestInfo: QuestionIdToRequestInfo) => void
+
+    changedIdToRequestInfoByMultiSelect: QuestionIdToRequestInfo
+    setChangedIdToRequestInfoByMultiSelect: (changedIdToRequestInfoByMultiSelect: QuestionIdToRequestInfo) => void
     // NOTE: this function is only called internally
     _applyChangedReviewChecksFromMultiSelect: () => void
-
-    // TODO: 이전에 선택해둔 게 multi select 한다고 없어져서는 안 된다
-    // TODO: multi select -> single select: staged change -> real change로 이관
-    changedReviewChecksByMultiSelect: QuestionIdToRequestInfo
-    setChangedReviewChecksByMultiSelect: (changedReviewChecksByMultiSelect: QuestionIdToRequestInfo) => void
 }
 const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, get) => ({
     status: null,
@@ -39,40 +36,40 @@ const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, ge
     setIsMultiSelecting: (isMultiSelecting) => {
         if (!isMultiSelecting) {
             get()._applyChangedReviewChecksFromMultiSelect()
-            set({ changedReviewChecksByMultiSelect: {} })
+            set({ changedIdToRequestInfoByMultiSelect: {} })
         }
         set({ isMultiSelecting })
     },
 
-    recentReviewCheckInfoArray: [],
-    insertRecentReviewCheckInfo: (reviewCheckInfo) => {
-        const lastReviewCheck = get().recentReviewCheckInfoArray.pop()
+    recentOrderInfoArray: [],
+    insertRecentOrderInfo: (reviewCheckInfo) => {
+        const lastReviewCheck = get().recentOrderInfoArray.pop()
         if (!lastReviewCheck) {
-            set({ recentReviewCheckInfoArray: [reviewCheckInfo] })
+            set({ recentOrderInfoArray: [reviewCheckInfo] })
             return
         }
 
-        set({ recentReviewCheckInfoArray: [lastReviewCheck, reviewCheckInfo] })
+        set({ recentOrderInfoArray: [lastReviewCheck, reviewCheckInfo] })
     },
-    resetRecentReviewCheckInfoArray: () => set({ recentReviewCheckInfoArray: [] }),
+    resetRecentOrderInfoArray: () => set({ recentOrderInfoArray: [] }),
 
-    changedReviewChecks: {},
-    setChangedReviewChecks: (changedReviewChecks) => set({ changedReviewChecks }),
+    changedIdToRequestInfo: {},
+    setChangedIdToRequestInfo: (changedReviewChecks) => set({ changedIdToRequestInfo: changedReviewChecks }),
 
     _applyChangedReviewChecksFromMultiSelect: () => {
         const state = get()
-        const changedReviewChecksByMultiSelect = state.changedReviewChecksByMultiSelect
-        const changedReviewChecks = { ...state.changedReviewChecks }
+        const changedReviewChecksByMultiSelect = state.changedIdToRequestInfoByMultiSelect
+        const changedReviewChecks = { ...state.changedIdToRequestInfo }
         const entryArray = Object.entries(changedReviewChecksByMultiSelect)
         entryArray.forEach(([key, value]) => {
             changedReviewChecks[key] = value
         })
-        set({ changedReviewChecks, recentReviewCheckInfoArray: [] })
+        set({ changedIdToRequestInfo: changedReviewChecks, recentOrderInfoArray: [] })
     },
 
-    changedReviewChecksByMultiSelect: {},
-    setChangedReviewChecksByMultiSelect: (changedReviewChecksByMultiSelect) =>
-        set({ changedReviewChecksByMultiSelect }),
+    changedIdToRequestInfoByMultiSelect: {},
+    setChangedIdToRequestInfoByMultiSelect: (changedReviewChecksByMultiSelect) =>
+        set({ changedIdToRequestInfoByMultiSelect: changedReviewChecksByMultiSelect }),
 }))
 
 export default useReviewCheckCreateStore

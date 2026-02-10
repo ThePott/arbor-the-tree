@@ -16,7 +16,7 @@ import {
 const route = getRouteApi("/_sidebar")
 
 const useReviewCheckQuery = () => {
-    const setChangedReviewChecks = useReviewCheckCreateStore((state) => state.setChangedReviewChecks)
+    const setChangedReviewChecks = useReviewCheckCreateStore((state) => state.setChangedIdToRequestInfo)
     const searchParams = route.useSearch()
     const { data } = useQuery({
         queryKey: ["reviewCheck", searchParams],
@@ -42,50 +42,47 @@ const useReviewCheckMutate = () => {
 }
 type ReviewCheckMutate = ReturnType<typeof useReviewCheckMutate>["mutate"]
 
-const useMutateFromChanged = (mutate: ReviewCheckMutate) => {
-    const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedReviewChecks)
-    const changedReviewChecksByMultiSelect = useReviewCheckCreateStore(
-        (state) => state.changedReviewChecksByMultiSelect
+const useDetectChangedIdToRequestInfoThenMutate = (mutate: ReviewCheckMutate) => {
+    const changedIdToRequestInfo = useReviewCheckCreateStore((state) => state.changedIdToRequestInfo)
+    const changedIdToRequestInfoByMultiSelect = useReviewCheckCreateStore(
+        (state) => state.changedIdToRequestInfoByMultiSelect
     )
     const searchParams = route.useSearch()
 
     useEffect(() => {
-        if (Object.entries(changedReviewChecks).length === 0) return
-        if (Object.values(changedReviewChecksByMultiSelect).length > 0) return
+        if (Object.entries(changedIdToRequestInfo).length === 0) return
+        if (Object.values(changedIdToRequestInfoByMultiSelect).length > 0) return
 
         const timeout = setTimeout(async () => {
-            // TODO: /review-check/create -> /review/check
-            // TODO: /review-check -> /review/assignment
-            // TODO: /review-check 과제 제작 -> /review/assignment/create
             const body = {
                 student_id: searchParams.student_id,
                 syllabus_id: searchParams.syllabus_id,
-                changedReviewChecks,
+                changedReviewChecks: changedIdToRequestInfo,
             }
-            mutate({ body, additionalData: changedReviewChecks })
+            mutate({ body, additionalData: changedIdToRequestInfo })
         }, 500)
         return () => clearTimeout(timeout)
-    }, [changedReviewChecks, changedReviewChecksByMultiSelect])
+    }, [changedIdToRequestInfo, changedIdToRequestInfoByMultiSelect])
 }
 
 const useConvertRecentToChanged = (data: ReviewCheckCreateResponseData | undefined) => {
     const setChangedReviewChecksByMultiSelect = useReviewCheckCreateStore(
-        (state) => state.setChangedReviewChecksByMultiSelect
+        (state) => state.setChangedIdToRequestInfoByMultiSelect
     )
     const status = useReviewCheckCreateStore((state) => state.status)
-    const recentReviewCheckInfoArray = useReviewCheckCreateStore((state) => state.recentReviewCheckInfoArray)
+    const recentOrderInfoArray = useReviewCheckCreateStore((state) => state.recentOrderInfoArray)
     const searchParams = route.useSearch()
 
     useEffect(() => {
-        if (recentReviewCheckInfoArray.length === 0) return
+        if (recentOrderInfoArray.length === 0) return
 
-        const newChangedReviewChecks: QuestionIdToRequestInfo = {}
-        if (recentReviewCheckInfoArray.length === 1) {
-            const recentReviewCheckInfo = recentReviewCheckInfoArray[0]
+        const newChangedIdToRequestInfo: QuestionIdToRequestInfo = {}
+        if (recentOrderInfoArray.length === 1) {
+            const recentReviewCheckInfo = recentOrderInfoArray[0]
             const targetQuestion = findJoinedQuestion({ queryData: data, recentReviewCheckInfo })
             if (targetQuestion.review_check_status === status) return
 
-            newChangedReviewChecks[targetQuestion.id] = {
+            newChangedIdToRequestInfo[targetQuestion.id] = {
                 status,
                 review_check_id: targetQuestion.review_check_id,
                 topic_order: recentReviewCheckInfo.topic_order,
@@ -93,9 +90,9 @@ const useConvertRecentToChanged = (data: ReviewCheckCreateResponseData | undefin
                 assigned_session_student_id: targetQuestion.assigned_session_student_id,
             }
             updateReviewCheckQueryData({
-                changedReviewChecks: newChangedReviewChecks,
+                questionIdToRequestInfo: newChangedIdToRequestInfo,
                 searchParams,
-                storeCallback: () => setChangedReviewChecksByMultiSelect(newChangedReviewChecks),
+                storeCallback: () => setChangedReviewChecksByMultiSelect(newChangedIdToRequestInfo),
             })
             return
         }
@@ -110,7 +107,7 @@ const useConvertRecentToChanged = (data: ReviewCheckCreateResponseData | undefin
                     })
                     if (!isMultiSelected) return
 
-                    newChangedReviewChecks[question.id] = {
+                    newChangedIdToRequestInfo[question.id] = {
                         status,
                         review_check_id: question.review_check_id,
                         topic_order: topic.order,
@@ -121,19 +118,22 @@ const useConvertRecentToChanged = (data: ReviewCheckCreateResponseData | undefin
             )
         )
 
-        revertReviewCheckQueryDataAfterMultiSelect({ newChangedByMultiSelect: newChangedReviewChecks, searchParams })
-        updateReviewCheckQueryData({
-            changedReviewChecks: newChangedReviewChecks,
+        revertReviewCheckQueryDataAfterMultiSelect({
+            newChangedIdToRequestInfoByMultiSelect: newChangedIdToRequestInfo,
             searchParams,
-            storeCallback: () => setChangedReviewChecksByMultiSelect(newChangedReviewChecks),
         })
-    }, [recentReviewCheckInfoArray])
+        updateReviewCheckQueryData({
+            questionIdToRequestInfo: newChangedIdToRequestInfo,
+            searchParams,
+            storeCallback: () => setChangedReviewChecksByMultiSelect(newChangedIdToRequestInfo),
+        })
+    }, [recentOrderInfoArray])
 }
 
 const useReviewCheck = () => {
     const { data } = useReviewCheckQuery()
     const { mutate } = useReviewCheckMutate()
-    useMutateFromChanged(mutate)
+    useDetectChangedIdToRequestInfoThenMutate(mutate)
     useConvertRecentToChanged(data)
 
     return { data }

@@ -11,7 +11,7 @@ import type {
 } from "../types"
 
 export const checkIsMultiSelected = ({ topic_order, step_order, question_order }: ReviewCheckOrderInfo): boolean => {
-    const recentReviewCheckInfoArray = useReviewCheckCreateStore.getState().recentReviewCheckInfoArray
+    const recentReviewCheckInfoArray = useReviewCheckCreateStore.getState().recentOrderInfoArray
     const sortedRecentReviewCheckInfoArray = recentReviewCheckInfoArray.sort((a, b) => {
         if (a.topic_order != b.topic_order) return a.topic_order - b.topic_order
         if (a.step_order != b.step_order) return a.step_order - b.step_order
@@ -101,18 +101,18 @@ export const makeUpdatedReviewCheckQueryData = ({
 }
 
 type UpdateReviewCheckQueryData = {
-    changedReviewChecks: QuestionIdToRequestInfo
+    questionIdToRequestInfo: QuestionIdToRequestInfo
     searchParams: SidebarSearchParams
     storeCallback: () => void
 }
 export const updateReviewCheckQueryData = ({
-    changedReviewChecks,
+    questionIdToRequestInfo,
     searchParams,
     storeCallback,
 }: UpdateReviewCheckQueryData): void => {
     const queryKey = ["reviewCheck", searchParams]
     const previous = queryClient.getQueryData(queryKey) as ReviewCheckCreateResponseData
-    const newData = makeUpdatedReviewCheckQueryData({ previous, additionalData: changedReviewChecks })
+    const newData = makeUpdatedReviewCheckQueryData({ previous, additionalData: questionIdToRequestInfo })
     queryClient.setQueryData(queryKey, newData)
 
     storeCallback()
@@ -120,19 +120,21 @@ export const updateReviewCheckQueryData = ({
 
 type MakeRevertedReviewChangedreviewChecksProps = {
     queryData: ReviewCheckCreateResponseData
-    newChangedByMultiSelect: QuestionIdToRequestInfo
+    newChangedIdToRequestInfoByMultiSelect: QuestionIdToRequestInfo
 }
 const makeRevertedReviewChangedreviewChecks = ({
     queryData,
-    newChangedByMultiSelect,
+    newChangedIdToRequestInfoByMultiSelect,
 }: MakeRevertedReviewChangedreviewChecksProps): QuestionIdToRequestInfo => {
-    const oldChangedByMultiSelect = { ...useReviewCheckCreateStore.getState().changedReviewChecksByMultiSelect }
-    // NOTE: 겹치는 부분은 revert에서 삭제
-    Object.entries(newChangedByMultiSelect).forEach(([question_id, _]) => {
-        delete oldChangedByMultiSelect[question_id]
+    // NOTE: old 중 new와 겹치는 부분은 revert에서 제외
+    const oldChangedIdToRequestInfoByMultiSelect = {
+        ...useReviewCheckCreateStore.getState().changedIdToRequestInfoByMultiSelect,
+    }
+    Object.entries(newChangedIdToRequestInfoByMultiSelect).forEach(([question_id, _]) => {
+        delete oldChangedIdToRequestInfoByMultiSelect[question_id]
     })
 
-    const oldEntryArray = Object.entries(oldChangedByMultiSelect)
+    const oldEntryArray = Object.entries(oldChangedIdToRequestInfoByMultiSelect)
     oldEntryArray.forEach((entry) => {
         const targetQuestion = findJoinedQuestion({ queryData, changedEntry: entry })
         entry[1].status = targetQuestion.review_check_status
@@ -144,19 +146,19 @@ const makeRevertedReviewChangedreviewChecks = ({
 }
 
 type RevertReviewCheckQueryDataAfterMultiSelectProps = {
-    newChangedByMultiSelect: QuestionIdToRequestInfo
+    newChangedIdToRequestInfoByMultiSelect: QuestionIdToRequestInfo
     searchParams: SidebarSearchParams
 }
 export const revertReviewCheckQueryDataAfterMultiSelect = ({
-    newChangedByMultiSelect,
+    newChangedIdToRequestInfoByMultiSelect,
     searchParams,
 }: RevertReviewCheckQueryDataAfterMultiSelectProps) => {
     const queryKey = ["reviewCheck", searchParams]
-    const previous = queryClient.getQueryData(queryKey) as ReviewCheckCreateResponseData
-    const revertedReviewChecks = makeRevertedReviewChangedreviewChecks({
-        queryData: previous,
-        newChangedByMultiSelect,
+    const queryData = queryClient.getQueryData(queryKey) as ReviewCheckCreateResponseData
+    const revertedIdToRequestInfo = makeRevertedReviewChangedreviewChecks({
+        queryData,
+        newChangedIdToRequestInfoByMultiSelect,
     })
-    const newData = makeUpdatedReviewCheckQueryData({ previous, additionalData: revertedReviewChecks })
+    const newData = makeUpdatedReviewCheckQueryData({ previous: queryData, additionalData: revertedIdToRequestInfo })
     queryClient.setQueryData(queryKey, newData)
 }
