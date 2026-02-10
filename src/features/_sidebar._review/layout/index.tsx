@@ -2,7 +2,7 @@ import SidebarSection from "@/features/_sidebar/components"
 import { FlexOneContainer } from "@/packages/components/layouts"
 import { Outlet } from "@tanstack/react-router"
 
-const ReviewCheckSidebarLayout = () => {
+const ReviewSidebarLayout = () => {
     return (
         <>
             <SidebarSection>
@@ -17,4 +17,4 @@ const ReviewCheckSidebarLayout = () => {
     )
 }
 
-export default ReviewCheckSidebarLayout
+export default ReviewSidebarLayout

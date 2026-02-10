@@ -5,7 +5,7 @@ import useReviewCheck from "./hooks"
 import ReviewCheckCreateToolbar from "./ReviewCheckCreateToolbar"
 import ReviewCheckTopic from "./ReviewCheckTopic"
 
-const ReviewCheckCreatePage = () => {
+const ReviewCheckPage = () => {
     const { data } = useReviewCheck()
 
     if (!data)
@@ -32,4 +32,4 @@ const ReviewCheckCreatePage = () => {
     )
 }
 
-export default ReviewCheckCreatePage
+export default ReviewCheckPage

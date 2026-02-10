@@ -129,7 +129,7 @@ const Sidebar = () => {
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
-                                                    navigate({ to: "/review-check" })
+                                                    navigate({ to: "/review/assignment" })
                                                 }}
                                             >
                                                 오답 과제 목록
@@ -140,7 +140,7 @@ const Sidebar = () => {
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
-                                                    navigate({ to: "/review-check/create" })
+                                                    navigate({ to: "/review/check" })
                                                 }}
                                             >
                                                 오답 체크
