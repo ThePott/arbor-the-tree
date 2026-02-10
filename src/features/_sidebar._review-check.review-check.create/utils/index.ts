@@ -72,7 +72,10 @@ export const findJoinedQuestion = <T extends ReviewCheckCreateResponseData>({
     if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
     const targetStep = targetTopic.steps.find((elStep) => elStep.order === step_order)
     if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
-    const targetQuestion = targetStep.questions.find((elQuestion) => elQuestion.id === question_id)
+    const targetQuestion = targetStep.questions.find((elQuestion) => {
+        if (question_id) return elQuestion.id === question_id
+        return elQuestion.order === question_order
+    })
     if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
     return targetQuestion
 }
