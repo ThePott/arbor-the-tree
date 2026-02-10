@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
 import { useEffect } from "react"
 import useReviewCheckCreateStore from "../../store"
-import type { QuestionIdToRequestInfo, ReviewCheckCreateResponseData } from "../../types"
+import type { QuestionIdToRequestInfo, ReviewCheckResponseData } from "../../types"
 import {
     checkIsMultiSelected,
     findJoinedQuestion,
@@ -23,7 +23,7 @@ const useReviewCheckQuery = () => {
         queryFn: async () => {
             setChangedReviewChecks({})
             const response = await instance.get("/review/check", { params: searchParams })
-            return response.data as ReviewCheckCreateResponseData
+            return response.data as ReviewCheckResponseData
         },
     })
     return { data }
@@ -65,7 +65,7 @@ const useDetectChangedIdToRequestInfoThenMutate = (mutate: ReviewCheckMutate) =>
     }, [changedIdToRequestInfo, changedIdToRequestInfoByMultiSelect])
 }
 
-const useConvertRecentToChanged = (data: ReviewCheckCreateResponseData | undefined) => {
+const useConvertRecentToChanged = (data: ReviewCheckResponseData | undefined) => {
     const setChangedReviewChecksByMultiSelect = useReviewCheckCreateStore(
         (state) => state.setChangedIdToRequestInfoByMultiSelect
     )

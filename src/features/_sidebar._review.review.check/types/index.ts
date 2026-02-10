@@ -11,7 +11,7 @@ export type ExtendedStep = Step & { questions: JoinedQuestion[] }
 export type ExtendedTopic = Topic & { steps: ExtendedStep[] }
 export type ExtendedBook = Pick<Book, "title"> & { topics: ExtendedTopic[] }
 
-export type ReviewCheckCreateResponseData = ExtendedBook
+export type ReviewCheckResponseData = ExtendedBook
 
 // NOTE: recent에서 사용됨
 export type ReviewCheckOrderInfo = {
@@ -31,3 +31,13 @@ export type QuestionIdToRequestInfo = Record<
         assigned_session_student_id: string | null
     }
 >
+
+export type JoinedQuestionWithOrders = {
+    topic_order: number
+    step_order: number
+    question: JoinedQuestion
+}
+export type PagenatedQuestions = {
+    page: number
+    questions: JoinedQuestionWithOrders[]
+}

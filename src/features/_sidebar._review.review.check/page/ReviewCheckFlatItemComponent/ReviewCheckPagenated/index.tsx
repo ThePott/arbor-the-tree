@@ -1,11 +1,14 @@
+import useReviewCheckCreateStore from "@/features/_sidebar._review.review.check/store"
+import type {
+    JoinedQuestionWithOrders,
+    PagenatedQuestions,
+    ReviewCheckOrderInfo,
+} from "@/features/_sidebar._review.review.check/types"
+import { updateReviewCheckQueryData } from "@/features/_sidebar._review.review.check/utils"
 import Button from "@/packages/components/Button/Button"
-import { Hstack, Vstack } from "@/packages/components/layouts"
-import Title from "@/packages/components/Title/Title"
+import { Hstack } from "@/packages/components/layouts"
 import { getRouteApi } from "@tanstack/react-router"
 import clsx from "clsx"
-import useReviewCheckCreateStore from "../../store"
-import type { ExtendedStep, ExtendedTopic, JoinedQuestion, ReviewCheckOrderInfo } from "../../types"
-import { updateReviewCheckQueryData } from "../../utils"
 
 const route = getRouteApi("/_sidebar")
 
@@ -30,11 +33,11 @@ const checkIsInfoMatchingQuestion = ({
 }
 
 type ReviewCheckQuestionProps = {
-    topic_order: number
-    step_order: number
-    question: JoinedQuestion
+    questionWithOrder: JoinedQuestionWithOrders
 }
-const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQuestionProps) => {
+const ReviewCheckQuestion = ({ questionWithOrder }: ReviewCheckQuestionProps) => {
+    const { topic_order, step_order, question } = questionWithOrder
+
     const status = useReviewCheckCreateStore((state) => state.status)
     const isMultiSelecting = useReviewCheckCreateStore((state) => state.isMultiSelecting)
     const insertRecentReviewCheckInfo = useReviewCheckCreateStore((state) => state.insertRecentOrderInfo)
@@ -43,6 +46,7 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
     const recentReviewCheckInfoArray = useReviewCheckCreateStore((state) => state.recentOrderInfoArray)
     const searchParams = route.useSearch()
 
+    // TODO: use event handler로 리팩터 한다
     const handleClick = () => {
         if (isMultiSelecting) {
             // NOTE: multi select일 때 구체적인 선택 로직은 page에서 이뤄진다
@@ -115,86 +119,19 @@ const ReviewCheckQuestion = ({ topic_order, step_order, question }: ReviewCheckQ
     )
 }
 
-type PagenatedQuestions = {
-    page: number
-    questions: JoinedQuestion[]
-}
-type ReviewCheckPagenatedProps = {
-    topic_order: number
-    step_order: number
-    pagenated: PagenatedQuestions
-}
-const ReviewCheckPagenated = ({ topic_order, step_order, pagenated }: ReviewCheckPagenatedProps) => {
+type ReviewCheckPagenatedProps = { pagenatedQuestions: PagenatedQuestions }
+const ReviewCheckPagenated = ({ pagenatedQuestions }: ReviewCheckPagenatedProps) => {
+    const { page, questions } = pagenatedQuestions
     return (
         <Hstack gap="xs">
-            <p className="size-12 flex justify-center items-center text-fg-muted">{`p.${pagenated.page}`}</p>
+            <p className="size-12 flex justify-center items-center text-fg-muted">{`p.${page}`}</p>
             <div className="grid grid-cols-[repeat(auto-fill,48px)] gap-my-xs grow">
-                {pagenated.questions.map((question) => (
-                    <ReviewCheckQuestion
-                        key={question.id}
-                        topic_order={topic_order}
-                        step_order={step_order}
-                        question={question}
-                    />
+                {questions.map((questionWithOrder) => (
+                    <ReviewCheckQuestion key={questionWithOrder.question.id} questionWithOrder={questionWithOrder} />
                 ))}
             </div>
         </Hstack>
     )
 }
 
-type ReviewCheckStepProps = {
-    topic_order: number
-    step: ExtendedStep
-}
-const makePagenated = (questions: JoinedQuestion[]): PagenatedQuestions[] => {
-    const result = questions.reduce((acc: PagenatedQuestions[], cur) => {
-        const pagenated = acc.find((el) => el.page === cur.page)
-
-        if (pagenated) {
-            pagenated.questions.push(cur)
-            return acc
-        }
-
-        const newPagenated: PagenatedQuestions = {
-            page: cur.page,
-            questions: [cur],
-        }
-        acc.push(newPagenated)
-        return acc
-    }, [])
-    return result
-}
-const ReviewCheckStep = ({ topic_order, step }: ReviewCheckStepProps) => {
-    const pagenatedQuestionsArray = makePagenated(step.questions)
-    return (
-        <Vstack gap="sm">
-            <Title as="h3" className="mt-my-md sticky top-[24px] bg-bg-neg-1">
-                {step.title}
-            </Title>
-            {pagenatedQuestionsArray.map((pagenated) => (
-                <ReviewCheckPagenated
-                    key={pagenated.page}
-                    topic_order={topic_order}
-                    step_order={step.order}
-                    pagenated={pagenated}
-                />
-            ))}
-        </Vstack>
-    )
-}
-
-type ReviewCheckTopicProps = { topic: ExtendedTopic }
-const ReviewCheckTopic = ({ topic }: ReviewCheckTopicProps) => {
-    return (
-        <Vstack>
-            <Title as="h2" isMuted className="text-center mt-my-lg sticky top-0 bg-bg-neg-1 z-10">
-                {topic.title}
-            </Title>
-            {topic.steps.map((step) => (
-                <ReviewCheckStep key={step.title} topic_order={topic.order} step={step} />
-            ))}
-        </Vstack>
-    )
-}
-
-export default ReviewCheckTopic
+export default ReviewCheckPagenated

@@ -3,12 +3,7 @@ import type { SidebarSearchParams } from "@/routes/_sidebar"
 import { ClientError } from "@/shared/error/clientError"
 import { produce } from "immer"
 import useReviewCheckCreateStore from "../store"
-import type {
-    JoinedQuestion,
-    QuestionIdToRequestInfo,
-    ReviewCheckCreateResponseData,
-    ReviewCheckOrderInfo,
-} from "../types"
+import type { JoinedQuestion, QuestionIdToRequestInfo, ReviewCheckOrderInfo, ReviewCheckResponseData } from "../types"
 
 export const checkIsMultiSelected = ({ topic_order, step_order, question_order }: ReviewCheckOrderInfo): boolean => {
     const recentReviewCheckInfoArray = useReviewCheckCreateStore.getState().recentOrderInfoArray
@@ -50,12 +45,12 @@ export const checkIsMultiSelected = ({ topic_order, step_order, question_order }
 }
 
 type QuestionIdToInfoValue = QuestionIdToRequestInfo[string]
-type FindJoinedQuestionProps<T extends ReviewCheckCreateResponseData> = {
+type FindJoinedQuestionProps<T extends ReviewCheckResponseData> = {
     queryData: T | undefined
     changedEntry?: [question_id: string, QuestionIdToInfoValue]
     recentReviewCheckInfo?: ReviewCheckOrderInfo
 }
-export const findJoinedQuestion = <T extends ReviewCheckCreateResponseData>({
+export const findJoinedQuestion = <T extends ReviewCheckResponseData>({
     queryData,
     changedEntry,
     recentReviewCheckInfo,
@@ -82,13 +77,13 @@ export const findJoinedQuestion = <T extends ReviewCheckCreateResponseData>({
 
 // NOTE: useSimpleMutation update에서도 사용되어야 하므로 export 되어야 함
 type MakeUpdatedReviewCheckQueryData = {
-    previous: ReviewCheckCreateResponseData
+    previous: ReviewCheckResponseData
     additionalData: QuestionIdToRequestInfo
 }
 export const makeUpdatedReviewCheckQueryData = ({
     previous,
     additionalData,
-}: MakeUpdatedReviewCheckQueryData): ReviewCheckCreateResponseData => {
+}: MakeUpdatedReviewCheckQueryData): ReviewCheckResponseData => {
     const newData = produce(previous, (draft) => {
         const entryArray = Object.entries(additionalData)
         entryArray.forEach((entry) => {
@@ -111,7 +106,7 @@ export const updateReviewCheckQueryData = ({
     storeCallback,
 }: UpdateReviewCheckQueryData): void => {
     const queryKey = ["reviewCheck", searchParams]
-    const previous = queryClient.getQueryData(queryKey) as ReviewCheckCreateResponseData
+    const previous = queryClient.getQueryData(queryKey) as ReviewCheckResponseData
     const newData = makeUpdatedReviewCheckQueryData({ previous, additionalData: questionIdToRequestInfo })
     queryClient.setQueryData(queryKey, newData)
 
@@ -119,7 +114,7 @@ export const updateReviewCheckQueryData = ({
 }
 
 type MakeRevertedReviewChangedreviewChecksProps = {
-    queryData: ReviewCheckCreateResponseData
+    queryData: ReviewCheckResponseData
     newChangedIdToRequestInfoByMultiSelect: QuestionIdToRequestInfo
 }
 const makeRevertedReviewChangedreviewChecks = ({
@@ -154,7 +149,7 @@ export const revertReviewCheckQueryDataAfterMultiSelect = ({
     searchParams,
 }: RevertReviewCheckQueryDataAfterMultiSelectProps) => {
     const queryKey = ["reviewCheck", searchParams]
-    const queryData = queryClient.getQueryData(queryKey) as ReviewCheckCreateResponseData
+    const queryData = queryClient.getQueryData(queryKey) as ReviewCheckResponseData
     const revertedIdToRequestInfo = makeRevertedReviewChangedreviewChecks({
         queryData,
         newChangedIdToRequestInfoByMultiSelect,
