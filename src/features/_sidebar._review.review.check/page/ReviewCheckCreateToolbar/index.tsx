@@ -1,7 +1,16 @@
 import Button from "@/packages/components/Button/Button"
 import { Hstack } from "@/packages/components/layouts"
+import TabBar, { type Tab } from "@/packages/components/TabBar/TabBar"
 import Toggle from "@/packages/components/Toggle"
+import type { ReviewCheckStatus } from "@/shared/interfaces"
 import useReviewCheckCreateStore from "../../store"
+
+type TabValue = "correct" | "wrong" | "dismiss"
+const tabValueToStatus: Record<TabValue, ReviewCheckStatus | null> = {
+    correct: "CORRECT",
+    wrong: "WRONG",
+    dismiss: null,
+} as const
 
 const ReviewCheckCreateToolbar = () => {
     const status = useReviewCheckCreateStore((state) => state.status)
@@ -16,13 +25,22 @@ const ReviewCheckCreateToolbar = () => {
     const isStagedChanges =
         Object.entries(changedReviewChecks).length > 0 || Object.entries(changedReviewChecksByMultiSelect).length > 0
 
+    const tabArray: Tab<TabValue>[] = [
+        { label: "정답", value: "correct" },
+        { label: "복습", value: "wrong" },
+        { label: "해제", value: "dismiss" },
+    ]
+
     return (
         <Hstack className="p-my-md border-b border-b-border-dim justify-between">
-            <Hstack>
-                <Button onClick={() => setStatus("CORRECT")}>정답</Button>
-                <Button onClick={() => setStatus("WRONG")}>복습</Button>
-                <Button onClick={() => setStatus(null)}>해제</Button>
-                <p>{`selected: ${status}`}</p>
+            <Hstack className="items-center">
+                <TabBar
+                    backgroundProps={{ additionalClassName: "font-bold" }}
+                    onSelect={(tab) => setStatus(tabValueToStatus[tab.value])}
+                    tabArray={tabArray}
+                    variant="pill"
+                    isOutlined
+                />
 
                 <Toggle defaultIsOn={isMultiSelecting} onChange={(isOn) => setIsMultiSelecting(isOn)}>
                     다중 선택
