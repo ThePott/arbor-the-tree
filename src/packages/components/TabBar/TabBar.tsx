@@ -35,15 +35,14 @@ type TabItemProps<T extends string> = {
     tab: Tab<T>
     isSelected: boolean
     onClick: () => void
-    backgroundProps?: BackgroundProps
 }
-const TabItem = <T extends string>({ variant, tab, isSelected, onClick, backgroundProps }: TabItemProps<T>) => {
+const TabItem = <T extends string>({ variant, tab, isSelected, onClick }: TabItemProps<T>) => {
     return (
         <div className="relative cursor-pointer px-4 py-2" onClick={onClick}>
             {isSelected && (
                 <>
-                    {variant === "underline" && <TabBackgroundUnderline {...backgroundProps} />}
-                    {variant === "pill" && <TabBackgroundPill {...backgroundProps} />}
+                    {variant === "underline" && <TabBackgroundUnderline />}
+                    {variant === "pill" && <TabBackgroundPill />}
                 </>
             )}
             <p className="relative z-10">{tab.label}</p>
