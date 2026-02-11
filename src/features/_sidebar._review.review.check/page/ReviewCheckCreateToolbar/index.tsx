@@ -13,7 +13,6 @@ const tabValueToStatus: Record<TabValue, ReviewCheckStatus | null> = {
 } as const
 
 const ReviewCheckCreateToolbar = () => {
-    const status = useReviewCheckCreateStore((state) => state.status)
     const setStatus = useReviewCheckCreateStore((state) => state.setStatus)
     const isMultiSelecting = useReviewCheckCreateStore((state) => state.isMultiSelecting)
     const setIsMultiSelecting = useReviewCheckCreateStore((state) => state.setIsMultiSelecting)
