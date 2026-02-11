@@ -18,8 +18,7 @@ type ReviewCheckStoreState = {
 
     changedIdToRequestInfoByMultiSelect: QuestionIdToRequestInfo
     setChangedIdToRequestInfoByMultiSelect: (changedIdToRequestInfoByMultiSelect: QuestionIdToRequestInfo) => void
-    // NOTE: this function is only called internally
-    _applyChangedReviewChecksFromMultiSelect: () => void
+    applyChangedReviewChecksFromMultiSelect: () => void
 }
 const useReviewCheckStore = create<ReviewCheckStoreState>()((set, get) => ({
     status: "CORRECT",
@@ -27,7 +26,7 @@ const useReviewCheckStore = create<ReviewCheckStoreState>()((set, get) => ({
         const state = get()
         if (state.isMultiSelecting) {
             // NOTE: 다중 선택 중 status 바꾸면 일단 적용함
-            state._applyChangedReviewChecksFromMultiSelect()
+            state.applyChangedReviewChecksFromMultiSelect()
         }
         set({ status })
     },
@@ -35,7 +34,7 @@ const useReviewCheckStore = create<ReviewCheckStoreState>()((set, get) => ({
     isMultiSelecting: true,
     setIsMultiSelecting: (isMultiSelecting) => {
         if (!isMultiSelecting) {
-            get()._applyChangedReviewChecksFromMultiSelect()
+            get().applyChangedReviewChecksFromMultiSelect()
             set({ changedIdToRequestInfoByMultiSelect: {} })
         }
         set({ isMultiSelecting })
@@ -56,7 +55,7 @@ const useReviewCheckStore = create<ReviewCheckStoreState>()((set, get) => ({
     changedIdToRequestInfo: {},
     setChangedIdToRequestInfo: (changedReviewChecks) => set({ changedIdToRequestInfo: changedReviewChecks }),
 
-    _applyChangedReviewChecksFromMultiSelect: () => {
+    applyChangedReviewChecksFromMultiSelect: () => {
         const state = get()
         const changedReviewChecksByMultiSelect = state.changedIdToRequestInfoByMultiSelect
         const changedReviewChecks = { ...state.changedIdToRequestInfo }

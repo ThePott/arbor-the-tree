@@ -16,17 +16,26 @@ const ReviewCheckCreateToolbar = () => {
     const setStatus = useReviewCheckStore((state) => state.setStatus)
     const isMultiSelecting = useReviewCheckStore((state) => state.isMultiSelecting)
     const setIsMultiSelecting = useReviewCheckStore((state) => state.setIsMultiSelecting)
-    const changedReviewChecks = useReviewCheckStore((state) => state.changedIdToRequestInfo)
     const changedReviewChecksByMultiSelect = useReviewCheckStore((state) => state.changedIdToRequestInfoByMultiSelect)
+    const setChangedIdToRequestInfoByMultiSelect = useReviewCheckStore(
+        (state) => state.setChangedIdToRequestInfoByMultiSelect
+    )
+    const applyChangedReviewChecksFromMultiSelect = useReviewCheckStore(
+        (state) => state.applyChangedReviewChecksFromMultiSelect
+    )
 
-    const isStagedChanges =
-        Object.entries(changedReviewChecks).length > 0 || Object.entries(changedReviewChecksByMultiSelect).length > 0
+    const isButtonHighlighted = Object.entries(changedReviewChecksByMultiSelect).length > 0
 
     const tabArray: Tab<TabValue>[] = [
         { label: "정답", value: "correct" },
         { label: "복습", value: "wrong" },
         { label: "해제", value: "dismiss" },
     ]
+
+    const handleClick = () => {
+        applyChangedReviewChecksFromMultiSelect()
+        setChangedIdToRequestInfoByMultiSelect({})
+    }
 
     return (
         <Hstack className="p-my-md border-b border-b-border-dim justify-between">
@@ -37,7 +46,7 @@ const ReviewCheckCreateToolbar = () => {
                     다중 선택
                 </Toggle>
             </Hstack>
-            <Button color={isStagedChanges ? "bg2" : "transparent"} border="always">
+            <Button color={isButtonHighlighted ? "bg2" : "transparent"} border="always" onClick={handleClick}>
                 제출
             </Button>
         </Hstack>

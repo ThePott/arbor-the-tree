@@ -39,7 +39,7 @@ const useReviewCheckMutate = () => {
     })
     return { mutate }
 }
-type ReviewCheckMutate = ReturnType<typeof useReviewCheckMutate>["mutate"]
+export type ReviewCheckMutate = ReturnType<typeof useReviewCheckMutate>["mutate"]
 
 const filterReallyChanged = (queryData: ReviewCheckResponseData): QuestionIdToRequestInfo => {
     const changedIdToRequestInfo = useReviewCheckStore.getState().changedIdToRequestInfo
