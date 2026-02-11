@@ -1,6 +1,6 @@
 import { instance } from "@/packages/api/axiosInstances"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
 import { useEffect } from "react"
 import useReviewCheckStore from "../../store"
@@ -41,18 +41,38 @@ const useReviewCheckMutate = () => {
 }
 type ReviewCheckMutate = ReturnType<typeof useReviewCheckMutate>["mutate"]
 
+const filterReallyChanged = (queryData: ReviewCheckResponseData): QuestionIdToRequestInfo => {
+    const changedIdToRequestInfo = useReviewCheckStore.getState().changedIdToRequestInfo
+    const entryArray = Object.entries(changedIdToRequestInfo)
+    const filteredEntryArray = entryArray.filter((entry) => {
+        try {
+            const joinedQuestion = findJoinedQuestion({ queryData, changedEntry: entry })
+            return entry[1].status !== joinedQuestion.review_check_status
+        } catch {
+            return true
+        }
+    })
+    const isFiltered = entryArray.length !== filteredEntryArray.length
+    return isFiltered ? Object.fromEntries(filteredEntryArray) : changedIdToRequestInfo
+}
+
 const useDetectChangedIdToRequestInfoThenMutate = (mutate: ReviewCheckMutate) => {
     const changedIdToRequestInfo = useReviewCheckStore((state) => state.changedIdToRequestInfo)
+    const setChangedIdToRequestInfo = useReviewCheckStore((state) => state.setChangedIdToRequestInfo)
     const changedIdToRequestInfoByMultiSelect = useReviewCheckStore(
         (state) => state.changedIdToRequestInfoByMultiSelect
     )
     const searchParams = route.useSearch()
+    const queryClient = useQueryClient()
 
     useEffect(() => {
         if (Object.entries(changedIdToRequestInfo).length === 0) return
         if (Object.values(changedIdToRequestInfoByMultiSelect).length > 0) return
 
         const timeout = setTimeout(async () => {
+            const queryData = queryClient.getQueryData(["reviewCheck", searchParams]) as ReviewCheckResponseData
+            const reallyChanged = filterReallyChanged(queryData)
+            setChangedIdToRequestInfo(reallyChanged)
             const body = {
                 student_id: searchParams.student_id,
                 syllabus_id: searchParams.syllabus_id,
@@ -78,7 +98,7 @@ const useConvertRecentToChanged = (data: ReviewCheckResponseData | undefined) =>
         const newChangedIdToRequestInfo: QuestionIdToRequestInfo = {}
         if (recentOrderInfoArray.length === 1) {
             const recentReviewCheckInfo = recentOrderInfoArray[0]
-            const targetQuestion = findJoinedQuestion({ queryData: data, recentReviewCheckInfo })
+            const targetQuestion = findJoinedQuestion({ queryData: data, orderInfo: recentReviewCheckInfo })
             if (targetQuestion.review_check_status === status) return
 
             newChangedIdToRequestInfo[targetQuestion.id] = {

@@ -48,17 +48,17 @@ type QuestionIdToInfoValue = QuestionIdToRequestInfo[string]
 type FindJoinedQuestionProps<T extends ReviewCheckResponseData> = {
     queryData: T | undefined
     changedEntry?: [question_id: string, QuestionIdToInfoValue]
-    recentReviewCheckInfo?: ReviewCheckOrderInfo
+    orderInfo?: ReviewCheckOrderInfo
 }
 export const findJoinedQuestion = <T extends ReviewCheckResponseData>({
     queryData,
     changedEntry,
-    recentReviewCheckInfo,
+    orderInfo,
 }: FindJoinedQuestionProps<T>): JoinedQuestion => {
     const question_id = changedEntry?.[0]
-    const question_order = recentReviewCheckInfo?.question_order
-    const topic_order = changedEntry?.[1].topic_order ?? recentReviewCheckInfo?.topic_order
-    const step_order = changedEntry?.[1].step_order ?? recentReviewCheckInfo?.step_order
+    const question_order = orderInfo?.question_order
+    const topic_order = changedEntry?.[1].topic_order ?? orderInfo?.topic_order
+    const step_order = changedEntry?.[1].step_order ?? orderInfo?.step_order
 
     if (!question_id && !question_order) throw ClientError.Unexpected("오답 체크를 실패했어요")
     if (!topic_order || !step_order) throw ClientError.Unexpected("오답 체크를 실패했어요")
