@@ -29,7 +29,7 @@ const ReviewCheckPage = () => {
             }
         },
         overscan: 5,
-        measureElement: (element, entry, instance) => element.getBoundingClientRect().height,
+        measureElement: (element, _entry, _instance) => element.getBoundingClientRect().height,
         paddingStart: 48,
         paddingEnd: 48,
     })
