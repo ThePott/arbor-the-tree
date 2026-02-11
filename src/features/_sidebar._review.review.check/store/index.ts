@@ -2,7 +2,7 @@ import type { ReviewCheckStatus } from "@/shared/interfaces"
 import { create } from "zustand"
 import type { QuestionIdToRequestInfo, ReviewCheckOrderInfo } from "../types"
 
-type ReviewCheckCreateStoreState = {
+type ReviewCheckStoreState = {
     status: ReviewCheckStatus | null
     setStatus: (status: ReviewCheckStatus | null) => void
 
@@ -21,7 +21,7 @@ type ReviewCheckCreateStoreState = {
     // NOTE: this function is only called internally
     _applyChangedReviewChecksFromMultiSelect: () => void
 }
-const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, get) => ({
+const useReviewCheckStore = create<ReviewCheckStoreState>()((set, get) => ({
     status: "CORRECT",
     setStatus: (status) => {
         const state = get()
@@ -72,4 +72,4 @@ const useReviewCheckCreateStore = create<ReviewCheckCreateStoreState>()((set, ge
         set({ changedIdToRequestInfoByMultiSelect: changedReviewChecksByMultiSelect }),
 }))
 
-export default useReviewCheckCreateStore
+export default useReviewCheckStore

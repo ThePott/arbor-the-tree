@@ -44,7 +44,7 @@ const SyllabusForm = () => {
         method: "post",
         url: "/progress/syllabus/assigned",
         queryKeyWithoutParams: ["progressSyllabusAssigned"],
-        addtionalOnSetteled: (client) => client.invalidateQueries({ queryKey: ["progressSession", params] }),
+        additionalOnSetteled: (client) => client.invalidateQueries({ queryKey: ["progressSession", params] }),
         params: { classroom_id, student_id },
         update: ({
             previous,

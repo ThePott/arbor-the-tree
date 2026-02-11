@@ -2,11 +2,11 @@ import queryClient from "@/packages/api/queryClient"
 import type { SidebarSearchParams } from "@/routes/_sidebar"
 import { ClientError } from "@/shared/error/clientError"
 import { produce } from "immer"
-import useReviewCheckCreateStore from "../store"
+import useReviewCheckStore from "../store"
 import type { JoinedQuestion, QuestionIdToRequestInfo, ReviewCheckOrderInfo, ReviewCheckResponseData } from "../types"
 
 export const checkIsMultiSelected = ({ topic_order, step_order, question_order }: ReviewCheckOrderInfo): boolean => {
-    const recentReviewCheckInfoArray = useReviewCheckCreateStore.getState().recentOrderInfoArray
+    const recentReviewCheckInfoArray = useReviewCheckStore.getState().recentOrderInfoArray
     const sortedRecentReviewCheckInfoArray = recentReviewCheckInfoArray.sort((a, b) => {
         if (a.topic_order != b.topic_order) return a.topic_order - b.topic_order
         if (a.step_order != b.step_order) return a.step_order - b.step_order
@@ -123,7 +123,7 @@ const makeRevertedReviewChangedreviewChecks = ({
 }: MakeRevertedReviewChangedreviewChecksProps): QuestionIdToRequestInfo => {
     // NOTE: old 중 new와 겹치는 부분은 revert에서 제외
     const oldChangedIdToRequestInfoByMultiSelect = {
-        ...useReviewCheckCreateStore.getState().changedIdToRequestInfoByMultiSelect,
+        ...useReviewCheckStore.getState().changedIdToRequestInfoByMultiSelect,
     }
     Object.entries(newChangedIdToRequestInfoByMultiSelect).forEach(([question_id, _]) => {
         delete oldChangedIdToRequestInfoByMultiSelect[question_id]

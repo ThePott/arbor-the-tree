@@ -3,7 +3,7 @@ import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
 import { useEffect } from "react"
-import useReviewCheckCreateStore from "../../store"
+import useReviewCheckStore from "../../store"
 import type { QuestionIdToRequestInfo, ReviewCheckResponseData } from "../../types"
 import {
     checkIsMultiSelected,
@@ -16,12 +16,11 @@ import {
 const route = getRouteApi("/_sidebar")
 
 const useReviewCheckQuery = () => {
-    const setChangedReviewChecks = useReviewCheckCreateStore((state) => state.setChangedIdToRequestInfo)
     const searchParams = route.useSearch()
     const { data } = useQuery({
         queryKey: ["reviewCheck", searchParams],
         queryFn: async () => {
-            setChangedReviewChecks({})
+            // NOTE: 다른 학생으로 넘어가면 이걸 지워야 함 mutation.onSuccess 이 아니라 query에서 하는 게 맞기는 한데
             const response = await instance.get("/review/check", { params: searchParams })
             return response.data as ReviewCheckResponseData
         },
@@ -43,8 +42,8 @@ const useReviewCheckMutate = () => {
 type ReviewCheckMutate = ReturnType<typeof useReviewCheckMutate>["mutate"]
 
 const useDetectChangedIdToRequestInfoThenMutate = (mutate: ReviewCheckMutate) => {
-    const changedIdToRequestInfo = useReviewCheckCreateStore((state) => state.changedIdToRequestInfo)
-    const changedIdToRequestInfoByMultiSelect = useReviewCheckCreateStore(
+    const changedIdToRequestInfo = useReviewCheckStore((state) => state.changedIdToRequestInfo)
+    const changedIdToRequestInfoByMultiSelect = useReviewCheckStore(
         (state) => state.changedIdToRequestInfoByMultiSelect
     )
     const searchParams = route.useSearch()
@@ -66,11 +65,11 @@ const useDetectChangedIdToRequestInfoThenMutate = (mutate: ReviewCheckMutate) =>
 }
 
 const useConvertRecentToChanged = (data: ReviewCheckResponseData | undefined) => {
-    const setChangedReviewChecksByMultiSelect = useReviewCheckCreateStore(
+    const setChangedReviewChecksByMultiSelect = useReviewCheckStore(
         (state) => state.setChangedIdToRequestInfoByMultiSelect
     )
-    const status = useReviewCheckCreateStore((state) => state.status)
-    const recentOrderInfoArray = useReviewCheckCreateStore((state) => state.recentOrderInfoArray)
+    const status = useReviewCheckStore((state) => state.status)
+    const recentOrderInfoArray = useReviewCheckStore((state) => state.recentOrderInfoArray)
     const searchParams = route.useSearch()
 
     useEffect(() => {
@@ -130,11 +129,24 @@ const useConvertRecentToChanged = (data: ReviewCheckResponseData | undefined) =>
     }, [recentOrderInfoArray])
 }
 
+const useResetChangedWhenSearchParamsChanged = () => {
+    const setChangedIdToRequestInfo = useReviewCheckStore((state) => state.setChangedIdToRequestInfo)
+    const setChangedIdToRequestInfoByMultiSelect = useReviewCheckStore(
+        (state) => state.setChangedIdToRequestInfoByMultiSelect
+    )
+    const { student_id, syllabus_id, classroom_id } = route.useSearch()
+    useEffect(() => {
+        setChangedIdToRequestInfo({})
+        setChangedIdToRequestInfoByMultiSelect({})
+    }, [student_id, syllabus_id, classroom_id])
+}
+
 const useReviewCheck = () => {
     const { data } = useReviewCheckQuery()
     const { mutate } = useReviewCheckMutate()
     useDetectChangedIdToRequestInfoThenMutate(mutate)
     useConvertRecentToChanged(data)
+    useResetChangedWhenSearchParamsChanged()
 
     return { data }
 }

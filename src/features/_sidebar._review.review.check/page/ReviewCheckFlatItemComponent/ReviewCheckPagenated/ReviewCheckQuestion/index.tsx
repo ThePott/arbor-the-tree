@@ -1,4 +1,4 @@
-import useReviewCheckCreateStore from "@/features/_sidebar._review.review.check/store"
+import useReviewCheckStore from "@/features/_sidebar._review.review.check/store"
 import type { JoinedQuestionWithOrders, ReviewCheckOrderInfo } from "@/features/_sidebar._review.review.check/types"
 import { updateReviewCheckQueryData } from "@/features/_sidebar._review.review.check/utils"
 import Button from "@/packages/components/Button/Button"
@@ -33,12 +33,12 @@ type ReviewCheckQuestionProps = {
 const ReviewCheckQuestion = ({ questionWithOrder }: ReviewCheckQuestionProps) => {
     const { topic_order, step_order, question } = questionWithOrder
 
-    const status = useReviewCheckCreateStore((state) => state.status)
-    const isMultiSelecting = useReviewCheckCreateStore((state) => state.isMultiSelecting)
-    const insertRecentReviewCheckInfo = useReviewCheckCreateStore((state) => state.insertRecentOrderInfo)
-    const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedIdToRequestInfo)
-    const setChangedReviewChecks = useReviewCheckCreateStore((state) => state.setChangedIdToRequestInfo)
-    const recentReviewCheckInfoArray = useReviewCheckCreateStore((state) => state.recentOrderInfoArray)
+    const status = useReviewCheckStore((state) => state.status)
+    const isMultiSelecting = useReviewCheckStore((state) => state.isMultiSelecting)
+    const insertRecentReviewCheckInfo = useReviewCheckStore((state) => state.insertRecentOrderInfo)
+    const changedReviewChecks = useReviewCheckStore((state) => state.changedIdToRequestInfo)
+    const setChangedReviewChecks = useReviewCheckStore((state) => state.setChangedIdToRequestInfo)
+    const recentReviewCheckInfoArray = useReviewCheckStore((state) => state.recentOrderInfoArray)
     const searchParams = route.useSearch()
 
     // TODO: use event handler로 리팩터 한다

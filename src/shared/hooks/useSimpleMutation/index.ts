@@ -4,26 +4,32 @@ import { ClientError } from "@/shared/error/clientError"
 import { QueryClient, useMutation } from "@tanstack/react-query"
 import type { Method } from "axios"
 
-type UseDeleteMutationProps<TAdditionalData, TParams, TQueryKeyElement, TPrevious> = {
+type UseSimpleMutationProps<TAdditionalData, TParams, TQueryKeyElement, TPrevious> = {
     method: Method
     url: string
     params?: TParams
     queryKeyWithoutParams: TQueryKeyElement[]
-    addtionalOnSetteled?: (client: QueryClient) => void
+    additionalOnSetteled?: (client: QueryClient) => void
     update: ({ previous, additionalData }: { previous: TPrevious; additionalData: TAdditionalData }) => TPrevious
 }
-const useSimpleMutation = <TBody, TAdditionalData, TParams, TQueryKey, TPrevious>({
+const useSimpleMutation = <TBody, TAdditionalData, TParams, TQueryKey, TPrevious, TData>({
     method,
     url,
     params,
     queryKeyWithoutParams,
-    addtionalOnSetteled,
+    additionalOnSetteled,
     update,
-}: UseDeleteMutationProps<TAdditionalData, TParams, TQueryKey, TPrevious>) => {
+}: UseSimpleMutationProps<TAdditionalData, TParams, TQueryKey, TPrevious>) => {
     const queryKey = params ? [...queryKeyWithoutParams, params] : queryKeyWithoutParams
 
     const mutation = useMutation({
-        mutationFn: ({ body, additionalData: _additionalData }: { body: TBody; additionalData: TAdditionalData }) => {
+        mutationFn: ({
+            body,
+            additionalData: _additionalData,
+        }: {
+            body: TBody
+            additionalData: TAdditionalData
+        }): Promise<TData> => {
             return instance.request({ method, url, params, data: body })
         },
         onMutate: ({ additionalData }, context) => {
@@ -43,7 +49,7 @@ const useSimpleMutation = <TBody, TAdditionalData, TParams, TQueryKey, TPrevious
         onSettled: (_data, _error, _variables, _onMutateResult, context) => {
             debugMutation("useSimpleMutation onSettled", { url, queryKey })
             context.client.invalidateQueries({ queryKey })
-            addtionalOnSetteled?.(context.client)
+            additionalOnSetteled?.(context.client)
         },
     })
     return mutation

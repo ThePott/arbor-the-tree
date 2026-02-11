@@ -57,7 +57,7 @@ const useStatusMutation = (session_id?: string) => {
         },
         ...(classroom_id &&
             !student_id && {
-                addtionalOnSetteled: (client) =>
+                additionalOnSetteled: (client) =>
                     client.invalidateQueries({
                         predicate: (query) => {
                             const objectQueryKey = query.queryKey[1] as { classroom_id: string }

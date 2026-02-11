@@ -3,7 +3,7 @@ import { Hstack } from "@/packages/components/layouts"
 import TabBar, { type Tab } from "@/packages/components/TabBar/TabBar"
 import Toggle from "@/packages/components/Toggle"
 import type { ReviewCheckStatus } from "@/shared/interfaces"
-import useReviewCheckCreateStore from "../../store"
+import useReviewCheckStore from "../../store"
 
 type TabValue = "correct" | "wrong" | "dismiss"
 const tabValueToStatus: Record<TabValue, ReviewCheckStatus | null> = {
@@ -13,13 +13,11 @@ const tabValueToStatus: Record<TabValue, ReviewCheckStatus | null> = {
 } as const
 
 const ReviewCheckCreateToolbar = () => {
-    const setStatus = useReviewCheckCreateStore((state) => state.setStatus)
-    const isMultiSelecting = useReviewCheckCreateStore((state) => state.isMultiSelecting)
-    const setIsMultiSelecting = useReviewCheckCreateStore((state) => state.setIsMultiSelecting)
-    const changedReviewChecks = useReviewCheckCreateStore((state) => state.changedIdToRequestInfo)
-    const changedReviewChecksByMultiSelect = useReviewCheckCreateStore(
-        (state) => state.changedIdToRequestInfoByMultiSelect
-    )
+    const setStatus = useReviewCheckStore((state) => state.setStatus)
+    const isMultiSelecting = useReviewCheckStore((state) => state.isMultiSelecting)
+    const setIsMultiSelecting = useReviewCheckStore((state) => state.setIsMultiSelecting)
+    const changedReviewChecks = useReviewCheckStore((state) => state.changedIdToRequestInfo)
+    const changedReviewChecksByMultiSelect = useReviewCheckStore((state) => state.changedIdToRequestInfoByMultiSelect)
 
     const isStagedChanges =
         Object.entries(changedReviewChecks).length > 0 || Object.entries(changedReviewChecksByMultiSelect).length > 0
