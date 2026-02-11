@@ -8,8 +8,9 @@ type ToggleProps = {
     defaultIsOn?: boolean
     onChange: (isOn: boolean) => void
     children?: ReactNode
+    isBordered?: boolean
 }
-const ToggleWrapper = ({ defaultIsOn, onChange, children }: ToggleProps) => {
+const ToggleWrapper = ({ defaultIsOn, onChange, children, isBordered }: ToggleProps) => {
     const [isOn, setIsOn] = useState(defaultIsOn)
 
     const handleClick = () => {
@@ -18,9 +19,16 @@ const ToggleWrapper = ({ defaultIsOn, onChange, children }: ToggleProps) => {
     }
 
     return (
-        <Hstack gap="xs" className="items-center">
+        <Hstack
+            gap="md"
+            className={clsx(
+                "items-center rounded-full cursor-pointer select-none",
+                isBordered && "px-4 py-2 border border-border-dim"
+            )}
+            onClick={handleClick}
+        >
             {children}
-            <div className="p-my-md" onClick={handleClick}>
+            <div>
                 <div className={clsx("rounded-full relative p-my-xs bg-fg-muted w-[34px] h-[14px]")}>
                     <motion.div
                         layoutId="toggle"

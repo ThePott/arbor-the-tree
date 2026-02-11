@@ -35,7 +35,7 @@ const ReviewCheckCreateToolbar = () => {
             <Hstack className="items-center" gap="lg">
                 <TabBar onSelect={(tab) => setStatus(tabValueToStatus[tab.value])} tabArray={tabArray} variant="pill" />
 
-                <Toggle defaultIsOn={isMultiSelecting} onChange={(isOn) => setIsMultiSelecting(isOn)}>
+                <Toggle defaultIsOn={isMultiSelecting} onChange={(isOn) => setIsMultiSelecting(isOn)} isBordered>
                     다중 선택
                 </Toggle>
             </Hstack>
