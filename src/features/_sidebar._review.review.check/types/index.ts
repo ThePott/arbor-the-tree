@@ -2,10 +2,10 @@ import type { Book, Question, ReviewCheckStatus, SessionStatus, Step, Topic } fr
 
 export type JoinedQuestion = Pick<Question, "id" | "name" | "page" | "order"> & {
     session_status: SessionStatus | null
+    session_id: string | null
     review_check_status: ReviewCheckStatus | null
     review_check_status_visual: ReviewCheckStatus | null
     review_check_id: string | null
-    assigned_session_student_id: string | null
 }
 export type ExtendedStep = Step & { questions: JoinedQuestion[] }
 export type ExtendedTopic = Topic & { steps: ExtendedStep[] }
@@ -28,7 +28,7 @@ export type QuestionIdToRequestInfo = Record<
         review_check_id: string | null // NOTE: use to patch if exists
         topic_order: number
         step_order: number
-        assigned_session_student_id: string | null
+        session_id: string | null
     }
 >
 

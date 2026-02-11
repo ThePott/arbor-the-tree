@@ -87,7 +87,7 @@ const useConvertRecentToChanged = (data: ReviewCheckResponseData | undefined) =>
                 review_check_id: targetQuestion.review_check_id,
                 topic_order: recentReviewCheckInfo.topic_order,
                 step_order: recentReviewCheckInfo.step_order,
-                assigned_session_student_id: targetQuestion.assigned_session_student_id,
+                session_id: targetQuestion.session_id,
             }
             updateReviewCheckQueryData({
                 questionIdToRequestInfo: newChangedIdToRequestInfo,
@@ -112,7 +112,7 @@ const useConvertRecentToChanged = (data: ReviewCheckResponseData | undefined) =>
                         review_check_id: question.review_check_id,
                         topic_order: topic.order,
                         step_order: step.order,
-                        assigned_session_student_id: question.assigned_session_student_id,
+                        session_id: question.session_id,
                     }
                 })
             )

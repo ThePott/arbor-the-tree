@@ -66,7 +66,7 @@ const ReviewCheckQuestion = ({ questionWithOrder }: ReviewCheckQuestionProps) =>
             review_check_id: question.review_check_id,
             topic_order,
             step_order,
-            assigned_session_student_id: question.assigned_session_student_id,
+            session_id: question.session_id,
         }
 
         updateReviewCheckQueryData({

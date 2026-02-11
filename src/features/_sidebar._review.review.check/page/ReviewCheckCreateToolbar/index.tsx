@@ -39,7 +39,7 @@ const ReviewCheckCreateToolbar = () => {
                     다중 선택
                 </Toggle>
             </Hstack>
-            <Button color={isStagedChanges ? "green" : "transparent"} border="always">
+            <Button color={isStagedChanges ? "bg2" : "transparent"} border="always">
                 제출
             </Button>
         </Hstack>
