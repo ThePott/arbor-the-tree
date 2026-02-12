@@ -1,10 +1,14 @@
+import SidebarSection from "@/features/_sidebar/components"
 import { FlexOneContainer } from "@/packages/components/layouts"
 import { Outlet } from "@tanstack/react-router"
 
 const ReviewAssignmentLayout = () => {
     return (
         <>
-            <p>this is assignment sidebar placeholder</p>
+            <SidebarSection>
+                <SidebarSection.ClassroomSidebar />
+            </SidebarSection>
+
             <FlexOneContainer isYScrollable>
                 <Outlet />
             </FlexOneContainer>
