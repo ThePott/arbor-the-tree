@@ -17,8 +17,9 @@ const route = getRouteApi("/_sidebar")
 
 const useReviewCheckQuery = () => {
     const searchParams = route.useSearch()
+    const { classroom_id, student_id, syllabus_id } = searchParams
     const { data } = useQuery({
-        queryKey: ["reviewCheck", searchParams],
+        queryKey: ["reviewCheck", classroom_id, student_id, syllabus_id],
         queryFn: async () => {
             // NOTE: 다른 학생으로 넘어가면 이걸 지워야 함 mutation.onSuccess 이 아니라 query에서 하는 게 맞기는 한데
             const response = await instance.get("/review/check", { params: searchParams })
@@ -30,13 +31,15 @@ const useReviewCheckQuery = () => {
 
 const useReviewCheckMutate = () => {
     const searchParams = route.useSearch()
+    const { classroom_id, student_id } = searchParams
     const { mutate } = useSimpleMutation({
         method: "post",
         url: "/review/check",
         queryKey: ["reviewCheck"],
         params: searchParams,
         update: makeUpdatedReviewCheckQueryData,
-        additionalOnSetteled: (client) => client.invalidateQueries({ queryKey: ["progress", searchParams] }),
+        additionalOnSetteled: (client) =>
+            client.invalidateQueries({ queryKey: ["progressSession", classroom_id, student_id] }),
     })
     return { mutate }
 }

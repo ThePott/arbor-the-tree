@@ -24,14 +24,14 @@ type StatusUpdateProps = {
     additionalData: StatusAdditionalData
 }
 const useStatusMutation = (session_id?: string) => {
-    const params = route.useSearch()
-    const { classroom_id, student_id } = params
+    const searchParams = route.useSearch()
+    const { classroom_id, student_id, syllabus_id } = searchParams
 
     return useSimpleMutation({
-        queryKey: ["progressSession"],
+        queryKey: ["progressSession", classroom_id, student_id, syllabus_id],
         url: `/progress/session/assigned${session_id ? ["/", session_id].join("") : ""}`,
         method: session_id ? "delete" : "post",
-        params,
+        params: searchParams,
         update: ({ previous, additionalData }: StatusUpdateProps) => {
             debugMutation("useStatusMutation update", { additionalData })
             const { session_id, status, syllabus_id, startingTopicTitle } = additionalData
@@ -65,8 +65,14 @@ const useStatusMutation = (session_id?: string) => {
                         },
                     }),
             }),
-        additionalOnSetteled: (client) =>
-            client.invalidateQueries({ queryKey: ["progressSession", { classroom_id, student_id }] }),
+        additionalOnSetteled: (client) => {
+            // NOTE: 세부 문제집 있으면 전체일 때도 업데이트
+            client.invalidateQueries({ queryKey: ["progressSession", classroom_id, student_id] })
+            // NOTE: 상태는 개별 학생, 반 상단에서만 가능하다. 반 상단 mutate -> 반 세부 학생도 업데이트
+            if (classroom_id) {
+                client.invalidateQueries({ queryKey: ["progressSession", classroom_id] })
+            }
+        },
     })
 }
 export type MutateSessionStatus = ReturnType<typeof useStatusMutation>["mutate"]
@@ -87,14 +93,14 @@ type UseCompletedMutationProps = {
     method: Extract<Method, "post" | "delete">
 }
 const useCompletedMutation = ({ session_id, method }: UseCompletedMutationProps) => {
-    const { classroom_id, student_id } = route.useSearch()
-    const params = { classroom_id, student_id }
+    const searchParams = route.useSearch()
+    const { classroom_id, student_id, syllabus_id } = route.useSearch()
 
     return useSimpleMutation({
-        queryKey: ["progressSession"],
+        queryKey: ["progressSession", classroom_id, student_id, syllabus_id],
         url: `/progress/session/${session_id}/completed`,
         method,
-        params: params,
+        params: searchParams,
         update: ({ previous, additionalData }: CompletedUpdateProps) => {
             debugMutation("useCompletedMutation update", { additionalData })
             const { session_id, completed_at, syllabus_id, startingTopicTitle } = additionalData
@@ -113,8 +119,11 @@ const useCompletedMutation = ({ session_id, method }: UseCompletedMutationProps)
             debugMutation("useCompletedMutation update result", { newData })
             return newData
         },
-        additionalOnSetteled: (client) =>
-            client.invalidateQueries({ queryKey: ["progressSession", { classroom_id, student_id }] }),
+        additionalOnSetteled: (client) => {
+            // NOTE: syllabus_id가 있으면, 실라버스 선택하지 않았을 때도 무효화
+            client.invalidateQueries({ queryKey: ["progressSession", classroom_id, student_id] })
+            // NOTE: 반 내 학생과 반 전체의 완료 여부는 다르니 따로 맞추지 않음
+        },
     })
 }
 

@@ -21,7 +21,7 @@ const SyllabusSidebar = ({ syllabusAssignedButton, children }: SyllabusSidebarPr
 
     const { data } = useQuery({
         // NOTE: progress에서만 mutate을 하므로 progress prefix 사용
-        queryKey: ["progressSyllabusAssigned", { classroom_id, student_id: classroom_id ? undefined : student_id }],
+        queryKey: ["progressSyllabusAssigned", classroom_id, classroom_id ? undefined : student_id],
         queryFn: async () => {
             const response = await instance.get("/progress/syllabus/assigned", {
                 params: { classroom_id, student_id: classroom_id ? undefined : student_id },

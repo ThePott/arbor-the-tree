@@ -24,11 +24,17 @@ const ProgressSyllabusDeleteWarningModal = () => {
         method: "delete",
         url: `/progress/syllabus/assigned/${selectedSyllabus?.syllabus.id}`,
         params,
-        queryKey: ["progressSyllabusAssigned"],
-        additionalOnSetteled: (client) =>
-            client.invalidateQueries({ queryKey: ["progressSession", { classroom_id, student_id }] }),
+        // NOTE: 실라버스 삭제는 반, 혹은 개별 진도에서만 가능하다 (반 내부 학생은 불가능)
+        // NOTE: 반에서 삭제하면 반 소속 학생들 쿼리도 무효화해야 한다
+        queryKey: ["progressSyllabusAssigned", classroom_id, student_id],
         update: ({ previous }: { previous: AssignedJoinedSyllabus[] }) =>
             previous.filter((el) => el.syllabus.id !== selectedSyllabus?.syllabus.id),
+        additionalOnSetteled: (client) => {
+            client.invalidateQueries({ queryKey: ["progressSession", classroom_id, student_id] })
+            if (classroom_id) {
+                client.invalidateQueries({ queryKey: ["progressSyllabusAssigned", classroom_id] })
+            }
+        },
     })
 
     const handleCancel = () => {

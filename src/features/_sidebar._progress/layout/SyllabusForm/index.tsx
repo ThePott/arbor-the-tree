@@ -23,8 +23,8 @@ const route = getRouteApi("/_sidebar")
 const SyllabusForm = () => {
     const { extendedSyllabusArray } = useLoaderData({ from: "/_sidebar" })
     const queryClient = useQueryClient()
-    const { student_id, classroom_id } = route.useSearch()
-    const params = { student_id, classroom_id }
+    const searchParams = route.useSearch()
+    const { student_id, classroom_id } = searchParams
     const data = queryClient.getQueryData(["progressSyllabusAssigned", { student_id, classroom_id }]) as
         | AssignedJoinedSyllabus[]
         | null
@@ -43,8 +43,8 @@ const SyllabusForm = () => {
     const postMutation = useSimpleMutation({
         method: "post",
         url: "/progress/syllabus/assigned",
-        queryKey: ["progressSyllabusAssigned"],
-        additionalOnSetteled: (client) => client.invalidateQueries({ queryKey: ["progressSession", params] }),
+        // NOTE: 반, 혹은 학생에 부여된 실라버스 목록을 보여주는 것이니 개별 실라버스가 선택되었든 말든은 중요치 않다
+        queryKey: ["progressSyllabusAssigned", classroom_id, student_id],
         params: { classroom_id, student_id },
         update: ({
             previous,
@@ -67,6 +67,8 @@ const SyllabusForm = () => {
                 },
             },
         ],
+        additionalOnSetteled: (client) =>
+            client.invalidateQueries({ queryKey: ["progressSession", classroom_id, student_id] }),
     })
 
     const schema = z.object({
