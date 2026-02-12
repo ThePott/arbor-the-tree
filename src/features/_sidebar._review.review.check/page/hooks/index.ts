@@ -36,6 +36,7 @@ const useReviewCheckMutate = () => {
         queryKeyWithoutParams: ["reviewCheck"],
         params: searchParams,
         update: makeUpdatedReviewCheckQueryData,
+        additionalOnSetteled: (client) => client.invalidateQueries({ queryKey: ["progress", searchParams] }),
     })
     return { mutate }
 }
