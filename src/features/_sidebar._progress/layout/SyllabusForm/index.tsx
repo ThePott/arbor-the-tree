@@ -25,7 +25,7 @@ const SyllabusForm = () => {
     const queryClient = useQueryClient()
     const searchParams = route.useSearch()
     const { student_id, classroom_id } = searchParams
-    const data = queryClient.getQueryData(["progressSyllabusAssigned", { student_id, classroom_id }]) as
+    const data = queryClient.getQueryData(["progressSyllabusAssigned", student_id, classroom_id]) as
         | AssignedJoinedSyllabus[]
         | null
 

@@ -6,7 +6,7 @@ type ReviewCheckPagenatedProps = { pagenatedQuestions: PagenatedQuestions }
 const ReviewCheckPagenated = ({ pagenatedQuestions }: ReviewCheckPagenatedProps) => {
     const { page, questions } = pagenatedQuestions
     return (
-        <Hstack gap="xs" className="pt-my-sm">
+        <Hstack gap="xs" className="mt-my-sm">
             <p className="size-12 flex justify-center items-center text-fg-muted">{`p.${page}`}</p>
             <div className="grid grid-cols-[repeat(auto-fill,48px)] gap-my-xs grow">
                 {questions.map((questionWithOrder) => (

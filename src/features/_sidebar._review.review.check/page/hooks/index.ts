@@ -66,7 +66,7 @@ const useDetectChangedIdToRequestInfoThenMutate = (mutate: ReviewCheckMutate) =>
     const changedIdToRequestInfoByMultiSelect = useReviewCheckStore(
         (state) => state.changedIdToRequestInfoByMultiSelect
     )
-    const searchParams = route.useSearch()
+    const { classroom_id, student_id, syllabus_id } = route.useSearch()
     const queryClient = useQueryClient()
 
     useEffect(() => {
@@ -74,12 +74,17 @@ const useDetectChangedIdToRequestInfoThenMutate = (mutate: ReviewCheckMutate) =>
         if (Object.values(changedIdToRequestInfoByMultiSelect).length > 0) return
 
         const timeout = setTimeout(async () => {
-            const queryData = queryClient.getQueryData(["reviewCheck", searchParams]) as ReviewCheckResponseData
+            const queryData = queryClient.getQueryData([
+                "reviewCheck",
+                classroom_id,
+                student_id,
+                syllabus_id,
+            ]) as ReviewCheckResponseData
             const reallyChanged = filterReallyChanged(queryData)
             setChangedIdToRequestInfo(reallyChanged)
             const body = {
-                student_id: searchParams.student_id,
-                syllabus_id: searchParams.syllabus_id,
+                student_id,
+                syllabus_id,
                 changedReviewChecks: changedIdToRequestInfo,
             }
             mutate({ body, additionalData: changedIdToRequestInfo })

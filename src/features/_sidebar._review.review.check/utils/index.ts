@@ -102,10 +102,10 @@ type UpdateReviewCheckQueryData = {
 }
 export const updateReviewCheckQueryData = ({
     questionIdToRequestInfo,
-    searchParams,
+    searchParams: { classroom_id, student_id, syllabus_id },
     storeCallback,
 }: UpdateReviewCheckQueryData): void => {
-    const queryKey = ["reviewCheck", searchParams]
+    const queryKey = ["reviewCheck", classroom_id, student_id, syllabus_id]
     const previous = queryClient.getQueryData(queryKey) as ReviewCheckResponseData
     const newData = makeUpdatedReviewCheckQueryData({ previous, additionalData: questionIdToRequestInfo })
     queryClient.setQueryData(queryKey, newData)
@@ -146,9 +146,9 @@ type RevertReviewCheckQueryDataAfterMultiSelectProps = {
 }
 export const revertReviewCheckQueryDataAfterMultiSelect = ({
     newChangedIdToRequestInfoByMultiSelect,
-    searchParams,
+    searchParams: { classroom_id, student_id, syllabus_id },
 }: RevertReviewCheckQueryDataAfterMultiSelectProps) => {
-    const queryKey = ["reviewCheck", searchParams]
+    const queryKey = ["reviewCheck", classroom_id, student_id, syllabus_id]
     const queryData = queryClient.getQueryData(queryKey) as ReviewCheckResponseData
     const revertedIdToRequestInfo = makeRevertedReviewChangedreviewChecks({
         queryData,
