@@ -140,6 +140,17 @@ const Sidebar = () => {
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
+                                                    navigate({ to: "/review/assignment/create" })
+                                                }}
+                                            >
+                                                오답 과제 생성
+                                            </Button>
+                                            <Button
+                                                color="bg2"
+                                                border="onHover"
+                                                isOnLeft
+                                                onClick={() => {
+                                                    setIsSidebarOn(false)
                                                     navigate({ to: "/review/check" })
                                                 }}
                                             >

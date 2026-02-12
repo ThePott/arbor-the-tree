@@ -1,4 +1,4 @@
-import type { PagenatedQuestions } from "@/features/_sidebar._review.review.check/types"
+import type { PagenatedQuestions } from "@/features/_sidebar.review._check.check/types"
 import { Hstack } from "@/packages/components/layouts"
 import ReviewCheckQuestion from "./ReviewCheckQuestion"
 
