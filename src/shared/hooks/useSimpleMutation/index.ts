@@ -8,7 +8,7 @@ type UseSimpleMutationProps<TAdditionalData, TParams, TQueryKeyElement, TPreviou
     method: Method
     url: string
     params?: TParams
-    queryKeyWithoutParams: TQueryKeyElement[]
+    queryKey: TQueryKeyElement[]
     additionalOnSetteled?: (client: QueryClient) => void
     update: ({ previous, additionalData }: { previous: TPrevious; additionalData: TAdditionalData }) => TPrevious
 }
@@ -16,12 +16,10 @@ const useSimpleMutation = <TBody, TAdditionalData, TParams, TQueryKey, TPrevious
     method,
     url,
     params,
-    queryKeyWithoutParams,
+    queryKey,
     additionalOnSetteled,
     update,
 }: UseSimpleMutationProps<TAdditionalData, TParams, TQueryKey, TPrevious>) => {
-    const queryKey = params ? [...queryKeyWithoutParams, params] : queryKeyWithoutParams
-
     const mutation = useMutation({
         mutationFn: ({
             body,

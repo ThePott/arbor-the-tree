@@ -24,11 +24,11 @@ type StatusUpdateProps = {
     additionalData: StatusAdditionalData
 }
 const useStatusMutation = (session_id?: string) => {
-    const { classroom_id, student_id } = route.useSearch()
-    const params = { classroom_id, student_id }
+    const params = route.useSearch()
+    const { classroom_id, student_id } = params
 
     return useSimpleMutation({
-        queryKeyWithoutParams: ["progressSession"],
+        queryKey: ["progressSession"],
         url: `/progress/session/assigned${session_id ? ["/", session_id].join("") : ""}`,
         method: session_id ? "delete" : "post",
         params,
@@ -65,6 +65,8 @@ const useStatusMutation = (session_id?: string) => {
                         },
                     }),
             }),
+        additionalOnSetteled: (client) =>
+            client.invalidateQueries({ queryKey: ["progressSession", { classroom_id, student_id }] }),
     })
 }
 export type MutateSessionStatus = ReturnType<typeof useStatusMutation>["mutate"]
@@ -89,7 +91,7 @@ const useCompletedMutation = ({ session_id, method }: UseCompletedMutationProps)
     const params = { classroom_id, student_id }
 
     return useSimpleMutation({
-        queryKeyWithoutParams: ["progressSession"],
+        queryKey: ["progressSession"],
         url: `/progress/session/${session_id}/completed`,
         method,
         params: params,
@@ -111,6 +113,8 @@ const useCompletedMutation = ({ session_id, method }: UseCompletedMutationProps)
             debugMutation("useCompletedMutation update result", { newData })
             return newData
         },
+        additionalOnSetteled: (client) =>
+            client.invalidateQueries({ queryKey: ["progressSession", { classroom_id, student_id }] }),
     })
 }
 

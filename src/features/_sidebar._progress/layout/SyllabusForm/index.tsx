@@ -43,7 +43,7 @@ const SyllabusForm = () => {
     const postMutation = useSimpleMutation({
         method: "post",
         url: "/progress/syllabus/assigned",
-        queryKeyWithoutParams: ["progressSyllabusAssigned"],
+        queryKey: ["progressSyllabusAssigned"],
         additionalOnSetteled: (client) => client.invalidateQueries({ queryKey: ["progressSession", params] }),
         params: { classroom_id, student_id },
         update: ({

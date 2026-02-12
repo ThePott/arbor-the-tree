@@ -18,7 +18,7 @@ const ProgressColumnSection = () => {
     const { data } = useQuery({
         // NOTE: query key에는 syllabus_id를 따로 분리해야함. 그리고 invalidate 할 때는 syllabus 제외하고 해야 전체가 갱신됨
         // TODO: useSimpleMutation에서 queryKey를 통째로 받는 걸로 해야 하려나...
-        queryKey: ["progressSession", { classroom_id, student_id }, syllabus_id],
+        queryKey: ["progressSession", classroom_id, student_id, syllabus_id],
         queryFn: async () => {
             // NOTE: api에 넘길 땐 searchParams 모두 사용해야 함 (문제집 하나만 볼 수도 있으니)
             const response = await instance.get("/progress/syllabus-with-sessions", { params: searchParams })

@@ -33,7 +33,7 @@ const useReviewCheckMutate = () => {
     const { mutate } = useSimpleMutation({
         method: "post",
         url: "/review/check",
-        queryKeyWithoutParams: ["reviewCheck"],
+        queryKey: ["reviewCheck"],
         params: searchParams,
         update: makeUpdatedReviewCheckQueryData,
         additionalOnSetteled: (client) => client.invalidateQueries({ queryKey: ["progress", searchParams] }),
