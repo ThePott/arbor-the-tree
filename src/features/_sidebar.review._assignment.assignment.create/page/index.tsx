@@ -4,6 +4,7 @@ import RoundBox from "@/packages/components/RoundBox"
 import TanstackTable from "@/packages/components/TanstackTable"
 import Title from "@/packages/components/Title/Title"
 import Toggle from "@/packages/components/Toggle"
+import { ClientError } from "@/shared/error/clientError"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
@@ -43,7 +44,7 @@ const ReviewAssignmentCreatePage = () => {
         method: "post",
         url: "/review/assignment/create",
         queryKey: ["reviewAssignmentCreate", classroom_id, student_id],
-        update: () => {},
+        update: ({ previous }) => previous,
     })
 
     const rowArray = useMemo(() => convertDataToRowArray(queryData ?? loaderData), [queryData, loaderData])
@@ -53,6 +54,15 @@ const ReviewAssignmentCreatePage = () => {
     const { studentArray } = useLoaderData({ from: "/_sidebar" })
     const student = studentArray.find((el) => el.id === student_id)
     const title = `${student?.users.name} / 오답 과제 제작`
+
+    const handleClick = () => {
+        if (!student_id) throw ClientError.Unexpected("학생을 선택해주세요")
+        const body = {
+            student_id,
+            bookWithReviewChecksArray: queryData ?? loaderData,
+        }
+        mutate({ body, additionalData: undefined })
+    }
 
     if (!student?.users.name) {
         // TODO: 여기 제대로 만들어야
@@ -73,11 +83,7 @@ const ReviewAssignmentCreatePage = () => {
                                 <Button padding="wide" border="always" color="transparent">
                                     미리 보기
                                 </Button>
-                                <Button
-                                    padding="wide"
-                                    color="green"
-                                    onClick={() => mutate({ body: undefined, additionalData: undefined })}
-                                >
+                                <Button padding="wide" color="green" onClick={handleClick}>
                                     제작
                                 </Button>
                             </Hstack>

@@ -5,9 +5,10 @@ import TanstackTable from "@/packages/components/TanstackTable"
 import Title from "@/packages/components/Title/Title"
 import { makeFromNow } from "@/shared/utils/dateManipulations"
 import { useQuery } from "@tanstack/react-query"
-import { getRouteApi } from "@tanstack/react-router"
+import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
-import { makeReviewAssignmentQueryOptions } from "../loader"
+import { useMemo } from "react"
+import { makeReviewAssignmentQueryOptions, type ReviewAssignmentResponseData } from "../loader"
 
 type TabStatus = "uncompleted" | "all"
 const tabArray: Tab<TabStatus>[] = [
@@ -16,37 +17,44 @@ const tabArray: Tab<TabStatus>[] = [
 ]
 
 type Row = {
-    created_at: string // NOTE: ISOString
-    book_title: string[]
+    assigned_at: string // NOTE: ISOString
+    book_title_array: string[]
     question_count: number
 }
 const columnHelper = createColumnHelper<Row>()
 const columns = [
-    columnHelper.accessor("created_at", { header: "제작일", cell: ({ getValue }) => makeFromNow(getValue()) }),
-    columnHelper.accessor("book_title", { header: "문제집", cell: ({ getValue }) => getValue().join(", ") }),
+    columnHelper.accessor("assigned_at", { header: "제작일", cell: ({ getValue }) => makeFromNow(getValue()) }),
+    columnHelper.accessor("book_title_array", { header: "문제집", cell: ({ getValue }) => getValue().join(", ") }),
     columnHelper.accessor("question_count", { header: "문항 수", cell: ({ getValue }) => getValue() }),
 ]
-// TODO: delete this after connecting to api
-const TEMPORARY_ROW_ARRAY: Row[] = [
-    { created_at: "2026-02-12T04:54:43.114Z", book_title: ["이런 책", "저런 책"], question_count: 21 },
-    { created_at: "2026-02-10T04:54:43.114Z", book_title: ["이런 책", "저런 책"], question_count: 21 },
-]
+const convertDataToRowArray = (data: ReviewAssignmentResponseData | undefined): Row[] => {
+    if (!data) return []
+    const rowArray: Row[] = data.map((extendedReviewAssignment) => ({
+        assigned_at: extendedReviewAssignment.assigned_at,
+        book_title_array: extendedReviewAssignment.books.map(({ title }) => title),
+        question_count: extendedReviewAssignment.books.flatMap((book) => book.reviewAssignmentQuestions).length,
+    }))
+    return rowArray
+}
 
 const route = getRouteApi("/_sidebar")
 const ReviewAssignmentPage = () => {
     const { classroom_id, student_id } = route.useSearch()
 
-    const { data } = useQuery(makeReviewAssignmentQueryOptions({ classroom_id, student_id }))
+    const loaderData = useLoaderData({ from: "/_sidebar/review/_assignment/assignment/" })
+    const { data: queryData } = useQuery(makeReviewAssignmentQueryOptions({ classroom_id, student_id }))
+
+    const rowArray: Row[] = useMemo(() => convertDataToRowArray(queryData ?? loaderData), [queryData, loaderData])
+
     // NOTE: MUST MEMOIZE when convert data to rowArray
     // eslint-disable-next-line react-hooks/incompatible-library
-    const table = useReactTable({ columns, getCoreRowModel: getCoreRowModel(), data: TEMPORARY_ROW_ARRAY })
+    const table = useReactTable({ columns, getCoreRowModel: getCoreRowModel(), data: rowArray })
     return (
         <Container isPadded>
             <RoundBox color="bg0" radius="lg" isShadowed padding="xl">
                 <Vstack gap="lg">
                     <Title as="h1">오답 과제 목록</Title>
                     <TabBar onSelect={() => {}} tabArray={tabArray} variant="underline" />
-                    <p>{JSON.stringify(data)}</p>
                     <TanstackTable table={table} />
                 </Vstack>
             </RoundBox>

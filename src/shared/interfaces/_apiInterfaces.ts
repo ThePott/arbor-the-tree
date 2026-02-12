@@ -159,3 +159,18 @@ export type ReviewCheck = {
     question_id: string
     status: ReviewCheckStatus
 }
+
+export type ReviewAssignment = {
+    id: string
+    student_id: string
+    assigned_at: string
+    completed_at: string | null
+}
+
+export type ReviewAssginmentQuestion = {
+    id: string
+    review_assignment_id: string
+    review_check_id: string
+    status: ReviewCheckStatus | null
+    completed_at: string | null
+}
