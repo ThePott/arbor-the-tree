@@ -18,7 +18,7 @@ type Row = {
 }
 const columnHelper = createColumnHelper<Row>()
 const columns = [
-    columnHelper.display({ header: "포함", cell: (props) => <Toggle onChange={() => {}} /> }),
+    columnHelper.display({ header: "포함", cell: () => <Toggle onChange={() => {}} /> }),
     columnHelper.accessor("book_title", { header: "문제집", cell: ({ getValue }) => getValue() }),
     columnHelper.accessor("review_check_count", { header: "문항 수", cell: ({ getValue }) => getValue() }),
 ]
