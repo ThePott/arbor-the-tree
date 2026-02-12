@@ -46,6 +46,7 @@ const ReviewAssignmentPage = () => {
                 <Vstack gap="lg">
                     <Title as="h1">오답 과제 목록</Title>
                     <TabBar onSelect={() => {}} tabArray={tabArray} variant="underline" />
+                    <p>{JSON.stringify(data)}</p>
                     <TanstackTable table={table} />
                 </Vstack>
             </RoundBox>
