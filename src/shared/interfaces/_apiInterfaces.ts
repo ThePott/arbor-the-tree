@@ -151,3 +151,11 @@ export type Topic = {
 export type SessionStatus = "HOMEWORK" | "TODAY"
 
 export type ReviewCheckStatus = "CORRECT" | "WRONG"
+
+export type ReviewCheck = {
+    id: string
+    session_id: string
+    student_id: string
+    question_id: string
+    status: ReviewCheckStatus
+}

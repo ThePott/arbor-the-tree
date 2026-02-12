@@ -4,19 +4,25 @@ import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import { useQuery } from "@tanstack/react-query"
-import { getRouteApi } from "@tanstack/react-router"
+import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import { makeReviewAssignmentCreateQueryOptions } from "../loader"
 
 const route = getRouteApi("/_sidebar")
 const ReviewAssignmentCreatePage = () => {
     const { classroom_id, student_id } = route.useSearch()
-    const { data } = useQuery(makeReviewAssignmentCreateQueryOptions({ classroom_id, student_id }))
+    const loaderData = useLoaderData({ from: "/_sidebar/review/_assignment/assignment/create/" })
+    const { data: queryData } = useQuery(makeReviewAssignmentCreateQueryOptions({ classroom_id, student_id }))
     const { mutate } = useSimpleMutation({
         method: "post",
         url: "/review/assignment/create",
         queryKey: ["reviewAssignmentCreate", classroom_id, student_id],
         update: () => {},
     })
+    const data = queryData ?? loaderData
+
+    // TODO: 여기 제대로 만들어야
+    if (!data) return <p>학생을 선택해주세요</p>
+
     return (
         <Container isPadded>
             <RoundBox padding="xl" radius="lg" isShadowed color="bg0">
