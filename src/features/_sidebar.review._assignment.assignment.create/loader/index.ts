@@ -31,7 +31,7 @@ const reviewAssignmentCreateLoaderFn = async ({
     classroom_id,
     student_id,
 }: ReviewAssignmentCreateLoaderFnProps) => {
-    if (!student_id) return null
+    if (!student_id) return undefined
 
     const data = await queryClient.ensureQueryData(makeReviewAssignmentCreateQueryOptions({ classroom_id, student_id }))
     return data

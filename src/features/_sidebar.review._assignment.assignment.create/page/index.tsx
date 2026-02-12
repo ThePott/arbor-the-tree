@@ -1,11 +1,38 @@
 import Button from "@/packages/components/Button/Button"
 import { Container, Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
+import TanstackTable from "@/packages/components/TanstackTable"
 import Title from "@/packages/components/Title/Title"
+import Toggle from "@/packages/components/Toggle"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
-import { makeReviewAssignmentCreateQueryOptions } from "../loader"
+import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
+import { useMemo } from "react"
+import { makeReviewAssignmentCreateQueryOptions, type ReviewAssignmentCreateResponseData } from "../loader"
+
+type Row = {
+    book_title: string
+    review_check_count: number
+}
+const columnHelper = createColumnHelper<Row>()
+const columns = [
+    columnHelper.display({ header: "포함", cell: (props) => <Toggle onChange={() => {}} /> }),
+    columnHelper.accessor("book_title", { header: "문제집", cell: ({ getValue }) => getValue() }),
+    columnHelper.accessor("review_check_count", { header: "문항 수", cell: ({ getValue }) => getValue() }),
+]
+const convertDataToRowArray = (data: ReviewAssignmentCreateResponseData | undefined): Row[] => {
+    if (!data) return []
+
+    const rowArray = data.map((book) => {
+        const row: Row = {
+            book_title: book.title,
+            review_check_count: book.reviewChecks.length,
+        }
+        return row
+    })
+    return rowArray
+}
 
 const route = getRouteApi("/_sidebar")
 const ReviewAssignmentCreatePage = () => {
@@ -18,10 +45,10 @@ const ReviewAssignmentCreatePage = () => {
         queryKey: ["reviewAssignmentCreate", classroom_id, student_id],
         update: () => {},
     })
-    const data = queryData ?? loaderData
 
-    // TODO: 여기 제대로 만들어야
-    if (!data) return <p>학생을 선택해주세요</p>
+    const rowArray = useMemo(() => convertDataToRowArray(queryData ?? loaderData), [queryData, loaderData])
+    // eslint-disable-next-line react-hooks/incompatible-library
+    const table = useReactTable({ columns, data: rowArray, getCoreRowModel: getCoreRowModel() })
 
     return (
         <Container isPadded>
@@ -29,7 +56,7 @@ const ReviewAssignmentCreatePage = () => {
                 <Vstack>
                     <Title as="h1">오답 과제 제작</Title>
 
-                    <p>{JSON.stringify(data)}</p>
+                    <TanstackTable table={table} />
 
                     <Hstack>
                         <Button padding="wide" border="always" color="transparent">
