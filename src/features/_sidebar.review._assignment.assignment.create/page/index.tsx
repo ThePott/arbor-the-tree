@@ -50,26 +50,41 @@ const ReviewAssignmentCreatePage = () => {
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ columns, data: rowArray, getCoreRowModel: getCoreRowModel() })
 
+    const { studentArray } = useLoaderData({ from: "/_sidebar" })
+    const student = studentArray.find((el) => el.id === student_id)
+    const title = `${student?.users.name} / 오답 과제 제작`
+
+    if (!student?.users.name) {
+        // TODO: 여기 제대로 만들어야
+        return <p>학생을 선택해주세요</p>
+    }
+
     return (
         <Container isPadded>
             <RoundBox padding="xl" radius="lg" isShadowed color="bg0">
                 <Vstack>
-                    <Title as="h1">오답 과제 제작</Title>
+                    <Title as="h1">{title}</Title>
 
-                    <TanstackTable table={table} />
+                    {rowArray.length > 0 && (
+                        <>
+                            <TanstackTable table={table} />
 
-                    <Hstack>
-                        <Button padding="wide" border="always" color="transparent">
-                            미리 보기
-                        </Button>
-                        <Button
-                            padding="wide"
-                            color="green"
-                            onClick={() => mutate({ body: undefined, additionalData: undefined })}
-                        >
-                            제작
-                        </Button>
-                    </Hstack>
+                            <Hstack>
+                                <Button padding="wide" border="always" color="transparent">
+                                    미리 보기
+                                </Button>
+                                <Button
+                                    padding="wide"
+                                    color="green"
+                                    onClick={() => mutate({ body: undefined, additionalData: undefined })}
+                                >
+                                    제작
+                                </Button>
+                            </Hstack>
+                        </>
+                    )}
+                    {/* TODO: 여기 제대로 만들어야 */}
+                    {rowArray.length === 0 && <p>오답 과제로 만들 게 없어요</p>}
                 </Vstack>
             </RoundBox>
         </Container>
