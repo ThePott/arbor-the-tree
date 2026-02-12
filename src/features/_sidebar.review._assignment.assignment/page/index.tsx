@@ -4,7 +4,10 @@ import TabBar, { type Tab } from "@/packages/components/TabBar/TabBar"
 import TanstackTable from "@/packages/components/TanstackTable"
 import Title from "@/packages/components/Title/Title"
 import { makeFromNow } from "@/shared/utils/dateManipulations"
+import { useQuery } from "@tanstack/react-query"
+import { getRouteApi } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
+import { makeReviewAssignmentQueryOptions } from "../loader"
 
 type TabStatus = "uncompleted" | "all"
 const tabArray: Tab<TabStatus>[] = [
@@ -29,7 +32,11 @@ const TEMPORARY_ROW_ARRAY: Row[] = [
     { created_at: "2026-02-10T04:54:43.114Z", book_title: ["이런 책", "저런 책"], question_count: 21 },
 ]
 
+const route = getRouteApi("/_sidebar")
 const ReviewAssignmentPage = () => {
+    const { classroom_id, student_id } = route.useSearch()
+
+    const { data } = useQuery(makeReviewAssignmentQueryOptions({ classroom_id, student_id }))
     // NOTE: MUST MEMOIZE when convert data to rowArray
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ columns, getCoreRowModel: getCoreRowModel(), data: TEMPORARY_ROW_ARRAY })
