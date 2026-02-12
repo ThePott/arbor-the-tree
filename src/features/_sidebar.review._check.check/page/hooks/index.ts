@@ -31,11 +31,11 @@ const useReviewCheckQuery = () => {
 
 const useReviewCheckMutate = () => {
     const searchParams = route.useSearch()
-    const { classroom_id, student_id } = searchParams
+    const { classroom_id, student_id, syllabus_id } = searchParams
     const { mutate } = useSimpleMutation({
         method: "post",
         url: "/review/check",
-        queryKey: ["reviewCheck"],
+        queryKey: ["reviewCheck", classroom_id, student_id, syllabus_id],
         params: searchParams,
         update: makeUpdatedReviewCheckQueryData,
         additionalOnSetteled: (client) =>
