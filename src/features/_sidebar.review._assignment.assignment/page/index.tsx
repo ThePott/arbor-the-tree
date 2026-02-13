@@ -1,3 +1,4 @@
+import Button from "@/packages/components/Button/Button"
 import { Container, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import TabBar, { type Tab } from "@/packages/components/TabBar/TabBar"
@@ -7,6 +8,7 @@ import { makeFromNow } from "@/shared/utils/dateManipulations"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
+import { BookOpen } from "lucide-react"
 import { useMemo } from "react"
 import { makeReviewAssignmentQueryOptions, type ReviewAssignmentResponseData } from "../loader"
 
@@ -26,6 +28,14 @@ const columns = [
     columnHelper.accessor("assigned_at", { header: "제작일", cell: ({ getValue }) => makeFromNow(getValue()) }),
     columnHelper.accessor("book_title_array", { header: "문제집", cell: ({ getValue }) => getValue().join(", ") }),
     columnHelper.accessor("question_count", { header: "문항 수", cell: ({ getValue }) => getValue() }),
+    columnHelper.display({
+        header: "열기",
+        cell: () => (
+            <Button padding="tight" border="onHover">
+                <BookOpen />
+            </Button>
+        ),
+    }),
 ]
 const convertDataToRowArray = (data: ReviewAssignmentResponseData | undefined): Row[] => {
     if (!data) return []
