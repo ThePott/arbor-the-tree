@@ -53,7 +53,6 @@ const LocalAutoCompleteWrapper = () => {
                 value={inputValue}
                 onChange={handleChange}
                 onFocus={() => setIsContentOn(true)}
-                onBlur={() => setIsContentOn(false)}
                 onKeyDown={handleKeyDown}
                 placeholder={placeholder}
             />

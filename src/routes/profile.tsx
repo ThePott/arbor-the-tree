@@ -1,6 +1,6 @@
-import profileLoaderFn from "@/featuresPerRoute/profile/loader/profileLoaderFn"
-import ProfilePage from "@/featuresPerRoute/profile/page/ProfilePage"
-import ProfilePending from "@/featuresPerRoute/profile/pending/ProfilePending"
+import profileLoaderFn from "@/features/profile/loader/profileLoaderFn"
+import ProfilePage from "@/features/profile/page/ProfilePage"
+import ProfilePending from "@/features/profile/pending/ProfilePending"
 import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/profile")({

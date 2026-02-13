@@ -1,6 +1,6 @@
-import OauthKakaoCallbackError from "@/featuresPerRoute/oauth.kakao.callback/error/OauthKakaoCallbackError"
-import oauthKakaoCallbakLoaderFn from "@/featuresPerRoute/oauth.kakao.callback/loader/oauthKakaoCallbackLoaderFn"
-import OauthKakaoCallbackPending from "@/featuresPerRoute/oauth.kakao.callback/pending/OauthKakaoCallbackPending"
+import OauthKakaoCallbackError from "@/features/oauth.kakao.callback/error/OauthKakaoCallbackError"
+import oauthKakaoCallbakLoaderFn from "@/features/oauth.kakao.callback/loader/oauthKakaoCallbackLoaderFn"
+import OauthKakaoCallbackPending from "@/features/oauth.kakao.callback/pending/OauthKakaoCallbackPending"
 import { createFileRoute } from "@tanstack/react-router"
 import z from "zod/v3"
 

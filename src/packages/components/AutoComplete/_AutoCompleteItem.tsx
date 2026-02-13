@@ -11,7 +11,7 @@ const AutoCompleteOption = ({ children }: { children: string }) => {
     }
 
     return (
-        <Button color="black" isBorderedOnHover onClick={handleClick} type="button">
+        <Button color="transparent" border="onHover" onClick={handleClick} type="button">
             {children}
         </Button>
     )

@@ -1,12 +1,12 @@
 import type { ReactNode } from "react"
 import Button from "../components/Button/Button"
-import type { ButtonColor } from "../components/Button/buttonInterfaces"
+import type { ButtonBorder, ButtonColor } from "../components/Button/buttonInterfaces"
 
 type ModalButtonRole = "cancel" | "destruct" | "confirm"
 
 type ModalButtonConfig = {
     color: ButtonColor
-    isBorderedOnHover: boolean
+    border: ButtonBorder
     status: "enabled" | "disabled" | "pending"
 }
 
@@ -18,20 +18,20 @@ const makeConfig = ({ role, isPending }: MakeConfigProps): ModalButtonConfig => 
     switch (role) {
         case "cancel":
             return {
-                color: "black",
-                isBorderedOnHover: true,
+                color: "transparent",
+                border: "onHover",
                 status: isPending ? "disabled" : "enabled",
             }
         case "destruct":
             return {
                 color: "red",
-                isBorderedOnHover: false,
+                border: "none",
                 status: isPending ? "pending" : "enabled",
             }
         case "confirm":
             return {
                 color: "bg0",
-                isBorderedOnHover: false,
+                border: "none",
                 status: isPending ? "pending" : "enabled",
             }
     }

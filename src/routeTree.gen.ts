@@ -11,20 +11,22 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as SidebarRouteImport } from './routes/_sidebar'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ReviewCheckIndexRouteImport } from './routes/review-check.index'
-import { Route as ProgressIndexRouteImport } from './routes/progress.index'
 import { Route as BookIndexRouteImport } from './routes/book.index'
 import { Route as TestFloatingRouteImport } from './routes/test.floating'
-import { Route as ProgressSummarizedRouteImport } from './routes/progress.summarized'
 import { Route as ManageStudentRouteImport } from './routes/manage.student'
 import { Route as ManageResumeRouteImport } from './routes/manage.resume'
 import { Route as ManageDeleteRouteImport } from './routes/manage.delete'
 import { Route as BookWriteRouteImport } from './routes/book.write'
-import { Route as ReviewCheckCreateIndexRouteImport } from './routes/review-check.create.index'
-import { Route as ReviewCheckBookIndexRouteImport } from './routes/review-check.book.index'
-import { Route as ReviewCheckBookBookTitleRouteImport } from './routes/review-check.book.$bookTitle'
+import { Route as SidebarProgressRouteImport } from './routes/_sidebar._progress'
 import { Route as OauthKakaoCallbackRouteImport } from './routes/oauth.kakao.callback'
+import { Route as SidebarReviewCheckRouteImport } from './routes/_sidebar.review._check'
+import { Route as SidebarReviewAssignmentRouteImport } from './routes/_sidebar.review._assignment'
+import { Route as SidebarProgressProgressIndexRouteImport } from './routes/_sidebar._progress.progress.index'
+import { Route as SidebarReviewCheckCheckIndexRouteImport } from './routes/_sidebar.review._check.check.index'
+import { Route as SidebarReviewAssignmentAssignmentIndexRouteImport } from './routes/_sidebar.review._assignment.assignment.index'
+import { Route as SidebarReviewAssignmentAssignmentCreateIndexRouteImport } from './routes/_sidebar.review._assignment.assignment.create.index'
 
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
@@ -36,19 +38,13 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SidebarRoute = SidebarRouteImport.update({
+  id: '/_sidebar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReviewCheckIndexRoute = ReviewCheckIndexRouteImport.update({
-  id: '/review-check/',
-  path: '/review-check/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProgressIndexRoute = ProgressIndexRouteImport.update({
-  id: '/progress/',
-  path: '/progress/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookIndexRoute = BookIndexRouteImport.update({
@@ -59,11 +55,6 @@ const BookIndexRoute = BookIndexRouteImport.update({
 const TestFloatingRoute = TestFloatingRouteImport.update({
   id: '/test/floating',
   path: '/test/floating',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProgressSummarizedRoute = ProgressSummarizedRouteImport.update({
-  id: '/progress/summarized',
-  path: '/progress/summarized',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ManageStudentRoute = ManageStudentRouteImport.update({
@@ -86,27 +77,49 @@ const BookWriteRoute = BookWriteRouteImport.update({
   path: '/book/write',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ReviewCheckCreateIndexRoute = ReviewCheckCreateIndexRouteImport.update({
-  id: '/review-check/create/',
-  path: '/review-check/create/',
-  getParentRoute: () => rootRouteImport,
+const SidebarProgressRoute = SidebarProgressRouteImport.update({
+  id: '/_progress',
+  getParentRoute: () => SidebarRoute,
 } as any)
-const ReviewCheckBookIndexRoute = ReviewCheckBookIndexRouteImport.update({
-  id: '/review-check/book/',
-  path: '/review-check/book/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReviewCheckBookBookTitleRoute =
-  ReviewCheckBookBookTitleRouteImport.update({
-    id: '/review-check/book/$bookTitle',
-    path: '/review-check/book/$bookTitle',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const OauthKakaoCallbackRoute = OauthKakaoCallbackRouteImport.update({
   id: '/oauth/kakao/callback',
   path: '/oauth/kakao/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SidebarReviewCheckRoute = SidebarReviewCheckRouteImport.update({
+  id: '/review/_check',
+  path: '/review',
+  getParentRoute: () => SidebarRoute,
+} as any)
+const SidebarReviewAssignmentRoute = SidebarReviewAssignmentRouteImport.update({
+  id: '/review/_assignment',
+  path: '/review',
+  getParentRoute: () => SidebarRoute,
+} as any)
+const SidebarProgressProgressIndexRoute =
+  SidebarProgressProgressIndexRouteImport.update({
+    id: '/progress/',
+    path: '/progress/',
+    getParentRoute: () => SidebarProgressRoute,
+  } as any)
+const SidebarReviewCheckCheckIndexRoute =
+  SidebarReviewCheckCheckIndexRouteImport.update({
+    id: '/check/',
+    path: '/check/',
+    getParentRoute: () => SidebarReviewCheckRoute,
+  } as any)
+const SidebarReviewAssignmentAssignmentIndexRoute =
+  SidebarReviewAssignmentAssignmentIndexRouteImport.update({
+    id: '/assignment/',
+    path: '/assignment/',
+    getParentRoute: () => SidebarReviewAssignmentRoute,
+  } as any)
+const SidebarReviewAssignmentAssignmentCreateIndexRoute =
+  SidebarReviewAssignmentAssignmentCreateIndexRouteImport.update({
+    id: '/assignment/create/',
+    path: '/assignment/create/',
+    getParentRoute: () => SidebarReviewAssignmentRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -116,15 +129,14 @@ export interface FileRoutesByFullPath {
   '/manage/delete': typeof ManageDeleteRoute
   '/manage/resume': typeof ManageResumeRoute
   '/manage/student': typeof ManageStudentRoute
-  '/progress/summarized': typeof ProgressSummarizedRoute
   '/test/floating': typeof TestFloatingRoute
   '/book/': typeof BookIndexRoute
-  '/progress/': typeof ProgressIndexRoute
-  '/review-check/': typeof ReviewCheckIndexRoute
+  '/review': typeof SidebarReviewCheckRouteWithChildren
   '/oauth/kakao/callback': typeof OauthKakaoCallbackRoute
-  '/review-check/book/$bookTitle': typeof ReviewCheckBookBookTitleRoute
-  '/review-check/book/': typeof ReviewCheckBookIndexRoute
-  '/review-check/create/': typeof ReviewCheckCreateIndexRoute
+  '/progress/': typeof SidebarProgressProgressIndexRoute
+  '/review/assignment/': typeof SidebarReviewAssignmentAssignmentIndexRoute
+  '/review/check/': typeof SidebarReviewCheckCheckIndexRoute
+  '/review/assignment/create/': typeof SidebarReviewAssignmentAssignmentCreateIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -134,34 +146,35 @@ export interface FileRoutesByTo {
   '/manage/delete': typeof ManageDeleteRoute
   '/manage/resume': typeof ManageResumeRoute
   '/manage/student': typeof ManageStudentRoute
-  '/progress/summarized': typeof ProgressSummarizedRoute
   '/test/floating': typeof TestFloatingRoute
   '/book': typeof BookIndexRoute
-  '/progress': typeof ProgressIndexRoute
-  '/review-check': typeof ReviewCheckIndexRoute
+  '/review': typeof SidebarReviewCheckRouteWithChildren
   '/oauth/kakao/callback': typeof OauthKakaoCallbackRoute
-  '/review-check/book/$bookTitle': typeof ReviewCheckBookBookTitleRoute
-  '/review-check/book': typeof ReviewCheckBookIndexRoute
-  '/review-check/create': typeof ReviewCheckCreateIndexRoute
+  '/progress': typeof SidebarProgressProgressIndexRoute
+  '/review/assignment': typeof SidebarReviewAssignmentAssignmentIndexRoute
+  '/review/check': typeof SidebarReviewCheckCheckIndexRoute
+  '/review/assignment/create': typeof SidebarReviewAssignmentAssignmentCreateIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_sidebar': typeof SidebarRouteWithChildren
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
+  '/_sidebar/_progress': typeof SidebarProgressRouteWithChildren
   '/book/write': typeof BookWriteRoute
   '/manage/delete': typeof ManageDeleteRoute
   '/manage/resume': typeof ManageResumeRoute
   '/manage/student': typeof ManageStudentRoute
-  '/progress/summarized': typeof ProgressSummarizedRoute
   '/test/floating': typeof TestFloatingRoute
   '/book/': typeof BookIndexRoute
-  '/progress/': typeof ProgressIndexRoute
-  '/review-check/': typeof ReviewCheckIndexRoute
+  '/_sidebar/review/_assignment': typeof SidebarReviewAssignmentRouteWithChildren
+  '/_sidebar/review/_check': typeof SidebarReviewCheckRouteWithChildren
   '/oauth/kakao/callback': typeof OauthKakaoCallbackRoute
-  '/review-check/book/$bookTitle': typeof ReviewCheckBookBookTitleRoute
-  '/review-check/book/': typeof ReviewCheckBookIndexRoute
-  '/review-check/create/': typeof ReviewCheckCreateIndexRoute
+  '/_sidebar/_progress/progress/': typeof SidebarProgressProgressIndexRoute
+  '/_sidebar/review/_assignment/assignment/': typeof SidebarReviewAssignmentAssignmentIndexRoute
+  '/_sidebar/review/_check/check/': typeof SidebarReviewCheckCheckIndexRoute
+  '/_sidebar/review/_assignment/assignment/create/': typeof SidebarReviewAssignmentAssignmentCreateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -173,15 +186,14 @@ export interface FileRouteTypes {
     | '/manage/delete'
     | '/manage/resume'
     | '/manage/student'
-    | '/progress/summarized'
     | '/test/floating'
     | '/book/'
-    | '/progress/'
-    | '/review-check/'
+    | '/review'
     | '/oauth/kakao/callback'
-    | '/review-check/book/$bookTitle'
-    | '/review-check/book/'
-    | '/review-check/create/'
+    | '/progress/'
+    | '/review/assignment/'
+    | '/review/check/'
+    | '/review/assignment/create/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -191,52 +203,48 @@ export interface FileRouteTypes {
     | '/manage/delete'
     | '/manage/resume'
     | '/manage/student'
-    | '/progress/summarized'
     | '/test/floating'
     | '/book'
-    | '/progress'
-    | '/review-check'
+    | '/review'
     | '/oauth/kakao/callback'
-    | '/review-check/book/$bookTitle'
-    | '/review-check/book'
-    | '/review-check/create'
+    | '/progress'
+    | '/review/assignment'
+    | '/review/check'
+    | '/review/assignment/create'
   id:
     | '__root__'
     | '/'
+    | '/_sidebar'
     | '/login'
     | '/profile'
+    | '/_sidebar/_progress'
     | '/book/write'
     | '/manage/delete'
     | '/manage/resume'
     | '/manage/student'
-    | '/progress/summarized'
     | '/test/floating'
     | '/book/'
-    | '/progress/'
-    | '/review-check/'
+    | '/_sidebar/review/_assignment'
+    | '/_sidebar/review/_check'
     | '/oauth/kakao/callback'
-    | '/review-check/book/$bookTitle'
-    | '/review-check/book/'
-    | '/review-check/create/'
+    | '/_sidebar/_progress/progress/'
+    | '/_sidebar/review/_assignment/assignment/'
+    | '/_sidebar/review/_check/check/'
+    | '/_sidebar/review/_assignment/assignment/create/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SidebarRoute: typeof SidebarRouteWithChildren
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   BookWriteRoute: typeof BookWriteRoute
   ManageDeleteRoute: typeof ManageDeleteRoute
   ManageResumeRoute: typeof ManageResumeRoute
   ManageStudentRoute: typeof ManageStudentRoute
-  ProgressSummarizedRoute: typeof ProgressSummarizedRoute
   TestFloatingRoute: typeof TestFloatingRoute
   BookIndexRoute: typeof BookIndexRoute
-  ProgressIndexRoute: typeof ProgressIndexRoute
-  ReviewCheckIndexRoute: typeof ReviewCheckIndexRoute
   OauthKakaoCallbackRoute: typeof OauthKakaoCallbackRoute
-  ReviewCheckBookBookTitleRoute: typeof ReviewCheckBookBookTitleRoute
-  ReviewCheckBookIndexRoute: typeof ReviewCheckBookIndexRoute
-  ReviewCheckCreateIndexRoute: typeof ReviewCheckCreateIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -255,25 +263,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_sidebar': {
+      id: '/_sidebar'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof SidebarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/review-check/': {
-      id: '/review-check/'
-      path: '/review-check'
-      fullPath: '/review-check/'
-      preLoaderRoute: typeof ReviewCheckIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/progress/': {
-      id: '/progress/'
-      path: '/progress'
-      fullPath: '/progress/'
-      preLoaderRoute: typeof ProgressIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/book/': {
@@ -288,13 +289,6 @@ declare module '@tanstack/react-router' {
       path: '/test/floating'
       fullPath: '/test/floating'
       preLoaderRoute: typeof TestFloatingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/progress/summarized': {
-      id: '/progress/summarized'
-      path: '/progress/summarized'
-      fullPath: '/progress/summarized'
-      preLoaderRoute: typeof ProgressSummarizedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/manage/student': {
@@ -325,26 +319,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BookWriteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/review-check/create/': {
-      id: '/review-check/create/'
-      path: '/review-check/create'
-      fullPath: '/review-check/create/'
-      preLoaderRoute: typeof ReviewCheckCreateIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/review-check/book/': {
-      id: '/review-check/book/'
-      path: '/review-check/book'
-      fullPath: '/review-check/book/'
-      preLoaderRoute: typeof ReviewCheckBookIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/review-check/book/$bookTitle': {
-      id: '/review-check/book/$bookTitle'
-      path: '/review-check/book/$bookTitle'
-      fullPath: '/review-check/book/$bookTitle'
-      preLoaderRoute: typeof ReviewCheckBookBookTitleRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_sidebar/_progress': {
+      id: '/_sidebar/_progress'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof SidebarProgressRouteImport
+      parentRoute: typeof SidebarRoute
     }
     '/oauth/kakao/callback': {
       id: '/oauth/kakao/callback'
@@ -353,26 +333,119 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OauthKakaoCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_sidebar/review/_check': {
+      id: '/_sidebar/review/_check'
+      path: '/review'
+      fullPath: '/review'
+      preLoaderRoute: typeof SidebarReviewCheckRouteImport
+      parentRoute: typeof SidebarRoute
+    }
+    '/_sidebar/review/_assignment': {
+      id: '/_sidebar/review/_assignment'
+      path: '/review'
+      fullPath: '/review'
+      preLoaderRoute: typeof SidebarReviewAssignmentRouteImport
+      parentRoute: typeof SidebarRoute
+    }
+    '/_sidebar/_progress/progress/': {
+      id: '/_sidebar/_progress/progress/'
+      path: '/progress'
+      fullPath: '/progress/'
+      preLoaderRoute: typeof SidebarProgressProgressIndexRouteImport
+      parentRoute: typeof SidebarProgressRoute
+    }
+    '/_sidebar/review/_check/check/': {
+      id: '/_sidebar/review/_check/check/'
+      path: '/check'
+      fullPath: '/review/check/'
+      preLoaderRoute: typeof SidebarReviewCheckCheckIndexRouteImport
+      parentRoute: typeof SidebarReviewCheckRoute
+    }
+    '/_sidebar/review/_assignment/assignment/': {
+      id: '/_sidebar/review/_assignment/assignment/'
+      path: '/assignment'
+      fullPath: '/review/assignment/'
+      preLoaderRoute: typeof SidebarReviewAssignmentAssignmentIndexRouteImport
+      parentRoute: typeof SidebarReviewAssignmentRoute
+    }
+    '/_sidebar/review/_assignment/assignment/create/': {
+      id: '/_sidebar/review/_assignment/assignment/create/'
+      path: '/assignment/create'
+      fullPath: '/review/assignment/create/'
+      preLoaderRoute: typeof SidebarReviewAssignmentAssignmentCreateIndexRouteImport
+      parentRoute: typeof SidebarReviewAssignmentRoute
+    }
   }
 }
 
+interface SidebarProgressRouteChildren {
+  SidebarProgressProgressIndexRoute: typeof SidebarProgressProgressIndexRoute
+}
+
+const SidebarProgressRouteChildren: SidebarProgressRouteChildren = {
+  SidebarProgressProgressIndexRoute: SidebarProgressProgressIndexRoute,
+}
+
+const SidebarProgressRouteWithChildren = SidebarProgressRoute._addFileChildren(
+  SidebarProgressRouteChildren,
+)
+
+interface SidebarReviewAssignmentRouteChildren {
+  SidebarReviewAssignmentAssignmentIndexRoute: typeof SidebarReviewAssignmentAssignmentIndexRoute
+  SidebarReviewAssignmentAssignmentCreateIndexRoute: typeof SidebarReviewAssignmentAssignmentCreateIndexRoute
+}
+
+const SidebarReviewAssignmentRouteChildren: SidebarReviewAssignmentRouteChildren =
+  {
+    SidebarReviewAssignmentAssignmentIndexRoute:
+      SidebarReviewAssignmentAssignmentIndexRoute,
+    SidebarReviewAssignmentAssignmentCreateIndexRoute:
+      SidebarReviewAssignmentAssignmentCreateIndexRoute,
+  }
+
+const SidebarReviewAssignmentRouteWithChildren =
+  SidebarReviewAssignmentRoute._addFileChildren(
+    SidebarReviewAssignmentRouteChildren,
+  )
+
+interface SidebarReviewCheckRouteChildren {
+  SidebarReviewCheckCheckIndexRoute: typeof SidebarReviewCheckCheckIndexRoute
+}
+
+const SidebarReviewCheckRouteChildren: SidebarReviewCheckRouteChildren = {
+  SidebarReviewCheckCheckIndexRoute: SidebarReviewCheckCheckIndexRoute,
+}
+
+const SidebarReviewCheckRouteWithChildren =
+  SidebarReviewCheckRoute._addFileChildren(SidebarReviewCheckRouteChildren)
+
+interface SidebarRouteChildren {
+  SidebarProgressRoute: typeof SidebarProgressRouteWithChildren
+  SidebarReviewAssignmentRoute: typeof SidebarReviewAssignmentRouteWithChildren
+  SidebarReviewCheckRoute: typeof SidebarReviewCheckRouteWithChildren
+}
+
+const SidebarRouteChildren: SidebarRouteChildren = {
+  SidebarProgressRoute: SidebarProgressRouteWithChildren,
+  SidebarReviewAssignmentRoute: SidebarReviewAssignmentRouteWithChildren,
+  SidebarReviewCheckRoute: SidebarReviewCheckRouteWithChildren,
+}
+
+const SidebarRouteWithChildren =
+  SidebarRoute._addFileChildren(SidebarRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SidebarRoute: SidebarRouteWithChildren,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   BookWriteRoute: BookWriteRoute,
   ManageDeleteRoute: ManageDeleteRoute,
   ManageResumeRoute: ManageResumeRoute,
   ManageStudentRoute: ManageStudentRoute,
-  ProgressSummarizedRoute: ProgressSummarizedRoute,
   TestFloatingRoute: TestFloatingRoute,
   BookIndexRoute: BookIndexRoute,
-  ProgressIndexRoute: ProgressIndexRoute,
-  ReviewCheckIndexRoute: ReviewCheckIndexRoute,
   OauthKakaoCallbackRoute: OauthKakaoCallbackRoute,
-  ReviewCheckBookBookTitleRoute: ReviewCheckBookBookTitleRoute,
-  ReviewCheckBookIndexRoute: ReviewCheckBookIndexRoute,
-  ReviewCheckCreateIndexRoute: ReviewCheckCreateIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

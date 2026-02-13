@@ -1,27 +1,19 @@
 import { makeTransition } from "@/shared/utils/animation"
+import clsx from "clsx"
 import { motion } from "motion/react"
 import { useState } from "react"
 import { Hstack } from "../layouts"
-
-export interface Tab<T extends string> {
-    label: string
-    value: T
-}
-
-type TabVariant = "underline" | "pill"
 
 const TabBackgroundPill = () => {
     return (
         <motion.div
             layout
             layoutId="selected-pill"
-            style={{ borderRadius: 9999 }}
             className="bg-bg-3 absolute inset-0"
             transition={makeTransition()}
         />
     )
 }
-
 const TabBackgroundUnderline = () => {
     return (
         <motion.div
@@ -33,7 +25,12 @@ const TabBackgroundUnderline = () => {
     )
 }
 
-interface TabItemProps<T extends string> {
+type TabVariant = "underline" | "pill"
+export type Tab<T extends string> = {
+    label: string
+    value: T
+}
+type TabItemProps<T extends string> = {
     variant: TabVariant
     tab: Tab<T>
     isSelected: boolean
@@ -41,7 +38,7 @@ interface TabItemProps<T extends string> {
 }
 const TabItem = <T extends string>({ variant, tab, isSelected, onClick }: TabItemProps<T>) => {
     return (
-        <div className="relative cursor-pointer px-3 py-2" onClick={onClick}>
+        <div className="relative cursor-pointer px-4 py-2" onClick={onClick}>
             {isSelected && (
                 <>
                     {variant === "underline" && <TabBackgroundUnderline />}
@@ -53,7 +50,7 @@ const TabItem = <T extends string>({ variant, tab, isSelected, onClick }: TabIte
     )
 }
 
-interface TabBar<T extends string> {
+type TabBar<T extends string> = {
     variant: TabVariant
     tabArray: Tab<T>[]
     onSelect: (tab: Tab<T>) => void
@@ -65,7 +62,10 @@ const TabBar = <T extends string>({ variant, tabArray, onSelect }: TabBar<T>) =>
         onSelect(tab)
     }
     return (
-        <Hstack>
+        <Hstack
+            gap="none"
+            className={clsx(variant === "pill" && "outline outline-border-dim rounded-full overflow-hidden")}
+        >
             {tabArray.map((tab) => (
                 <TabItem
                     key={tab.value}

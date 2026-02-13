@@ -19,8 +19,8 @@ const SelectTrigger = ({ children }: SelectTriggerProps) => {
             ref={triggerRef}
             type="button"
             onClick={handleClick}
-            color={isInDanger ? "red" : "black"}
-            isWide
+            color={isInDanger ? "red" : "transparent"}
+            padding="wide"
             className="border-border-dim hover:border-border-muted border"
         >
             {label}
