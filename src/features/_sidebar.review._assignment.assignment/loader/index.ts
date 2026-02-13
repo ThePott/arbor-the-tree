@@ -1,8 +1,8 @@
 import { instance } from "@/packages/api/axiosInstances"
 import type { QueryClient } from "@tanstack/react-query"
-import type { ExtendedReviewAssignment } from "../type"
+import type { ReviewAssignmentMetaInfo } from "../type"
 
-export type ReviewAssignmentResponseData = ExtendedReviewAssignment[]
+export type ReviewAssignmentResponseData = ReviewAssignmentMetaInfo[]
 
 type MakeReviewAssignmentQueryOptionsProps = {
     classroom_id: string | undefined

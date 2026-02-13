@@ -1,7 +1,7 @@
 import { Document, Page, Text } from "@react-pdf/renderer"
-import type { ExtendedReviewAssignment } from "../../type"
+import type { ReviewAssignmentMetaInfo } from "../../type"
 
-type AssignmentPdfProps = { assignment: ExtendedReviewAssignment }
+type AssignmentPdfProps = { assignment: ReviewAssignmentMetaInfo }
 const AssignmentPdf = ({ assignment }: AssignmentPdfProps) => {
     return (
         <Document>

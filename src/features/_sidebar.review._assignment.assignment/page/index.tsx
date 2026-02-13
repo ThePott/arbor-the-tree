@@ -1,3 +1,4 @@
+import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import { Container, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
@@ -5,15 +6,12 @@ import TabBar, { type Tab } from "@/packages/components/TabBar/TabBar"
 import TanstackTable from "@/packages/components/TanstackTable"
 import Title from "@/packages/components/Title/Title"
 import { makeFromNow } from "@/shared/utils/dateManipulations"
-import { pdf } from "@react-pdf/renderer"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import { BookOpen } from "lucide-react"
 import { useMemo } from "react"
 import { makeReviewAssignmentQueryOptions, type ReviewAssignmentResponseData } from "../loader"
-import type { ExtendedReviewAssignment } from "../type"
-import AssignmentPdf from "./AssignmentPdf"
 
 type TabStatus = "uncompleted" | "all"
 const tabArray: Tab<TabStatus>[] = [
@@ -22,16 +20,17 @@ const tabArray: Tab<TabStatus>[] = [
 ]
 
 type Row = {
+    assignmentId: string
     assigned_at: string // NOTE: ISOString
-    book_title_array: string[]
-    question_count: number
-    extendedAssignment: ExtendedReviewAssignment
+    completed_at: string | null
+    bookTitleArray: string[]
+    questionCount: number
 }
 const columnHelper = createColumnHelper<Row>()
 const columns = [
     columnHelper.accessor("assigned_at", { header: "제작일", cell: ({ getValue }) => makeFromNow(getValue()) }),
-    columnHelper.accessor("book_title_array", { header: "문제집", cell: ({ getValue }) => getValue().join(", ") }),
-    columnHelper.accessor("question_count", { header: "문항 수", cell: ({ getValue }) => getValue() }),
+    columnHelper.accessor("bookTitleArray", { header: "문제집", cell: ({ getValue }) => getValue().join(", ") }),
+    columnHelper.accessor("questionCount", { header: "문항 수", cell: ({ getValue }) => getValue() }),
     columnHelper.display({
         id: "preview",
         header: "미리 보기",
@@ -40,8 +39,11 @@ const columns = [
                 padding="tight"
                 border="onHover"
                 onClick={async () => {
-                    const pdfBlob = await pdf(<AssignmentPdf assignment={row.original.extendedAssignment} />).toBlob()
-                    const url = URL.createObjectURL(pdfBlob)
+                    const response = await instance.get(`assignment/${row.original.assignmentId}`, {
+                        responseType: "blob",
+                    })
+                    const blob = response.data
+                    const url = URL.createObjectURL(blob)
                     window.open(url)
                 }}
             >
@@ -52,11 +54,12 @@ const columns = [
 ]
 const convertDataToRowArray = (data: ReviewAssignmentResponseData | undefined): Row[] => {
     if (!data) return []
-    const rowArray: Row[] = data.map((extendedReviewAssignment) => ({
-        assigned_at: extendedReviewAssignment.assigned_at,
-        book_title_array: extendedReviewAssignment.books.map(({ title }) => title),
-        question_count: extendedReviewAssignment.books.flatMap((book) => book.reviewAssignmentQuestions).length,
-        extendedAssignment: extendedReviewAssignment,
+    const rowArray: Row[] = data.map((assignmentMetaInfo) => ({
+        assignmentId: assignmentMetaInfo.id,
+        assigned_at: assignmentMetaInfo.assigned_at,
+        completed_at: assignmentMetaInfo.completed_at,
+        bookTitleArray: assignmentMetaInfo.bookTitleArray,
+        questionCount: assignmentMetaInfo.questionCount,
     }))
     return rowArray
 }
