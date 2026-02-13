@@ -5,12 +5,15 @@ import TabBar, { type Tab } from "@/packages/components/TabBar/TabBar"
 import TanstackTable from "@/packages/components/TanstackTable"
 import Title from "@/packages/components/Title/Title"
 import { makeFromNow } from "@/shared/utils/dateManipulations"
+import { pdf } from "@react-pdf/renderer"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import { BookOpen } from "lucide-react"
 import { useMemo } from "react"
 import { makeReviewAssignmentQueryOptions, type ReviewAssignmentResponseData } from "../loader"
+import type { ExtendedReviewAssignment } from "../type"
+import AssignmentPdf from "./AssignmentPdf"
 
 type TabStatus = "uncompleted" | "all"
 const tabArray: Tab<TabStatus>[] = [
@@ -22,6 +25,7 @@ type Row = {
     assigned_at: string // NOTE: ISOString
     book_title_array: string[]
     question_count: number
+    extendedAssignment: ExtendedReviewAssignment
 }
 const columnHelper = createColumnHelper<Row>()
 const columns = [
@@ -29,9 +33,18 @@ const columns = [
     columnHelper.accessor("book_title_array", { header: "문제집", cell: ({ getValue }) => getValue().join(", ") }),
     columnHelper.accessor("question_count", { header: "문항 수", cell: ({ getValue }) => getValue() }),
     columnHelper.display({
-        header: "열기",
-        cell: () => (
-            <Button padding="tight" border="onHover">
+        id: "preview",
+        header: "미리 보기",
+        cell: ({ row }) => (
+            <Button
+                padding="tight"
+                border="onHover"
+                onClick={async () => {
+                    const pdfBlob = await pdf(<AssignmentPdf assignment={row.original.extendedAssignment} />).toBlob()
+                    const url = URL.createObjectURL(pdfBlob)
+                    window.open(url)
+                }}
+            >
                 <BookOpen />
             </Button>
         ),
@@ -43,6 +56,7 @@ const convertDataToRowArray = (data: ReviewAssignmentResponseData | undefined): 
         assigned_at: extendedReviewAssignment.assigned_at,
         book_title_array: extendedReviewAssignment.books.map(({ title }) => title),
         question_count: extendedReviewAssignment.books.flatMap((book) => book.reviewAssignmentQuestions).length,
+        extendedAssignment: extendedReviewAssignment,
     }))
     return rowArray
 }
