@@ -34,12 +34,16 @@ const columns = [
     columnHelper.display({
         id: "preview",
         header: "미리 보기",
-        cell: ({ row }) => (
+        // cell: ({ row }) => (
+        cell: () => (
             <Button
                 padding="tight"
                 border="onHover"
                 onClick={async () => {
-                    const response = await instance.get(`assignment/${row.original.assignmentId}`, {
+                    // const response = await instance.get(`assignment/${row.original.assignmentId}`, {
+                    //     responseType: "blob",
+                    // })
+                    const response = await instance.get(`review/assignment/dev/pdf-check`, {
                         responseType: "blob",
                     })
                     const blob = response.data
