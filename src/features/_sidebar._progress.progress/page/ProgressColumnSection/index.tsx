@@ -13,6 +13,7 @@ const ProgressColumnSection = () => {
     const [isSummarized, setIsSummarized] = useState(false)
     const searchParams = route.useSearch()
     const { classroom_id, student_id, syllabus_id } = searchParams
+
     const { data } = useQuery({
         // NOTE: query key에는 syllabus_id를 따로 분리해야함. 그리고 invalidate 할 때는 syllabus 제외하고 해야 전체가 갱신됨
         // TODO: useSimpleMutation에서 queryKey를 통째로 받는 걸로 해야 하려나...
