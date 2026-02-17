@@ -48,6 +48,7 @@ const ProgressColumnSection = () => {
                     )}
                     {isSummarized && <ProgressColumnSummarizedMany conciseSyllabusArray={conciseSyllabusArray} />}
                 </Hstack>
+                <p>{JSON.stringify(assignmentData)}</p>
             </Vstack>
         </FlexOneContainer>
     )
