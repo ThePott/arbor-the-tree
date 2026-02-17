@@ -17,15 +17,16 @@ const ProgressColumnSection = () => {
     const { progressSessionData: progressSessionLoaderData, assignmentData: assignmentLoaderData } = useLoaderData({
         from: "/_sidebar/_progress/progress/",
     })
-    const { data: progressSessionQueryData } = useQuery(
-        makeProgressSessionQueryOptions({ classroom_id, student_id, syllabus_id })
-    )
-    const { data: assignmentQueryData } = useQuery(makeReviewAssignmentQueryOptions({ classroom_id, student_id }))
+    const { data: progressSessionQueryData } = useQuery({
+        ...makeProgressSessionQueryOptions({ classroom_id, student_id, syllabus_id }),
+        enabled: Boolean(classroom_id || student_id),
+    })
+    const { data: assignmentQueryData } = useQuery({
+        ...makeReviewAssignmentQueryOptions({ classroom_id, student_id }),
+        enabled: Boolean(student_id),
+    })
     const progressSessionData = progressSessionQueryData ?? progressSessionLoaderData
     const assignmentData = assignmentQueryData ?? assignmentLoaderData
-
-    // TODO: 여기 핸들링
-    if (!progressSessionData || !assignmentData) return <p>여기는 보이면 안 됩니다</p>
 
     const conciseSyllabusArray = syllabus_id
         ? progressSessionData.filter((conciseSyllabus) => conciseSyllabus.id === syllabus_id)

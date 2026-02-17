@@ -33,11 +33,11 @@ const progressSessionLoaderFn = async ({
     const progressSessionPromise =
         classroom_id || student_id
             ? queryClient.ensureQueryData(makeProgressSessionQueryOptions({ classroom_id, student_id, syllabus_id }))
-            : Promise.resolve(null)
+            : Promise.resolve([])
 
     const assignmentPromise = student_id
         ? queryClient.ensureQueryData(makeReviewAssignmentQueryOptions({ classroom_id, student_id }))
-        : Promise.resolve(null)
+        : Promise.resolve([])
 
     const [progressSessionData, assignmentData] = await Promise.all([progressSessionPromise, assignmentPromise])
     return { progressSessionData, assignmentData }
