@@ -23,13 +23,13 @@ export const makeProgressSessionQueryOptions = ({
     },
 })
 
-type ProgressColumnSectionLoaderFnProps = SearchParamsForProgressSession & { queryClient: QueryClient }
-const progressColumnsForSessionsLoaderFn = async ({
+type ProgressSectionLoaderFnProps = SearchParamsForProgressSession & { queryClient: QueryClient }
+const progressSessionLoaderFn = async ({
     queryClient,
     classroom_id,
     student_id,
     syllabus_id,
-}: ProgressColumnSectionLoaderFnProps) => {
+}: ProgressSectionLoaderFnProps) => {
     const progressSessionPromise =
         classroom_id || student_id
             ? queryClient.ensureQueryData(makeProgressSessionQueryOptions({ classroom_id, student_id, syllabus_id }))
@@ -43,4 +43,4 @@ const progressColumnsForSessionsLoaderFn = async ({
     return { progressSessionData, assignmentData }
 }
 
-export default progressColumnsForSessionsLoaderFn
+export default progressSessionLoaderFn

@@ -1,3 +1,4 @@
+import progressSessionLoaderFn from "@/features/_sidebar._progress.progress/loader"
 import ProgressPage from "@/features/_sidebar._progress.progress/page"
 import ProgressPending from "@/features/_sidebar._progress.progress/pending"
 import { createFileRoute } from "@tanstack/react-router"
@@ -9,5 +10,7 @@ import { createFileRoute } from "@tanstack/react-router"
 export const Route = createFileRoute("/_sidebar/_progress/progress/")({
     component: ProgressPage,
     pendingComponent: ProgressPending,
-    loader: ({ context: { queryClient } }) => {},
+    loaderDeps: ({ search: { classroom_id, student_id, syllabus_id } }) => ({ classroom_id, student_id, syllabus_id }),
+    loader: ({ context: { queryClient }, deps: { classroom_id, student_id, syllabus_id } }) =>
+        progressSessionLoaderFn({ queryClient, classroom_id, student_id, syllabus_id }),
 })

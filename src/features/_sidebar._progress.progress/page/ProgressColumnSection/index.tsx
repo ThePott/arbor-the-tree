@@ -1,10 +1,10 @@
-import { instance } from "@/packages/api/axiosInstances"
+import { makeReviewAssignmentQueryOptions } from "@/features/_sidebar.review._assignment.assignment/loader"
 import { FlexOneContainer, Hstack, Vstack } from "@/packages/components/layouts"
 import Toggle from "@/packages/components/Toggle"
 import { useQuery } from "@tanstack/react-query"
-import { getRouteApi } from "@tanstack/react-router"
+import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import { useState } from "react"
-import type { ConciseSyllabus } from "../../types"
+import { makeProgressSessionQueryOptions } from "../../loader"
 import ProgressColumn from "./ProgressColumn"
 import ProgressColumnSummarizedMany from "./ProgressColumnSummarizedMany"
 
@@ -14,23 +14,22 @@ const ProgressColumnSection = () => {
     const searchParams = route.useSearch()
     const { classroom_id, student_id, syllabus_id } = searchParams
 
-    const { data } = useQuery({
-        // NOTE: query key에는 syllabus_id를 따로 분리해야함. 그리고 invalidate 할 때는 syllabus 제외하고 해야 전체가 갱신됨
-        // TODO: useSimpleMutation에서 queryKey를 통째로 받는 걸로 해야 하려나...
-        queryKey: ["progressSession", classroom_id, student_id, syllabus_id],
-        queryFn: async () => {
-            // NOTE: api에 넘길 땐 searchParams 모두 사용해야 함 (문제집 하나만 볼 수도 있으니)
-            const response = await instance.get("/progress/syllabus-with-sessions", { params: searchParams })
-            return response.data as ConciseSyllabus[]
-        },
-        enabled: Boolean(classroom_id || student_id),
+    const { progressSessionData: progressSessionLoaderData, assignmentData: assignmentLoaderData } = useLoaderData({
+        from: "/_sidebar/_progress/progress/",
     })
+    const { data: progressSessionQueryData } = useQuery(
+        makeProgressSessionQueryOptions({ classroom_id, student_id, syllabus_id })
+    )
+    const { data: assignmentQueryData } = useQuery(makeReviewAssignmentQueryOptions({ classroom_id, student_id }))
+    const progressSessionData = progressSessionQueryData ?? progressSessionLoaderData
+    const assignmentData = assignmentQueryData ?? assignmentLoaderData
 
-    if (!data) return null
+    // TODO: 여기 핸들링
+    if (!progressSessionData || !assignmentData) return <p>여기는 보이면 안 됩니다</p>
 
     const conciseSyllabusArray = syllabus_id
-        ? data.filter((conciseSyllabus) => conciseSyllabus.id === syllabus_id)
-        : data
+        ? progressSessionData.filter((conciseSyllabus) => conciseSyllabus.id === syllabus_id)
+        : progressSessionData
 
     return (
         <FlexOneContainer isXScrollable className="pt-my-lg pl-my-lg">
