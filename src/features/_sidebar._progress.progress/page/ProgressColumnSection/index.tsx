@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import { useState } from "react"
 import { makeProgressSessionQueryOptions } from "../../loader"
+import AssignmentColumn from "./AssignmentColumn"
 import ProgressColumn from "./ProgressColumn"
 import ProgressColumnSummarizedMany from "./ProgressColumnSummarizedMany"
 
@@ -41,6 +42,7 @@ const ProgressColumnSection = () => {
                 <Hstack className="flex-1 overflow-y-hidden pb-my-lg">
                     {!isSummarized && (
                         <>
+                            {assignmentData.length > 0 && <AssignmentColumn />}
                             {conciseSyllabusArray.map((conciseSyllabus) => (
                                 <ProgressColumn key={conciseSyllabus.id} conciseSyllabus={conciseSyllabus} />
                             ))}
@@ -48,7 +50,6 @@ const ProgressColumnSection = () => {
                     )}
                     {isSummarized && <ProgressColumnSummarizedMany conciseSyllabusArray={conciseSyllabusArray} />}
                 </Hstack>
-                <p>{JSON.stringify(assignmentData)}</p>
             </Vstack>
         </FlexOneContainer>
     )
