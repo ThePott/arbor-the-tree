@@ -42,7 +42,7 @@ const ProgressColumnSection = () => {
                 <Hstack className="flex-1 overflow-y-hidden pb-my-lg">
                     {!isSummarized && (
                         <>
-                            {assignmentData.length > 0 && <AssignmentColumn />}
+                            {assignmentData.length > 0 && <AssignmentColumn assignmentData={assignmentData} />}
                             {conciseSyllabusArray.map((conciseSyllabus) => (
                                 <ProgressColumn key={conciseSyllabus.id} conciseSyllabus={conciseSyllabus} />
                             ))}

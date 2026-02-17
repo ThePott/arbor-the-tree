@@ -1,15 +1,16 @@
+import type { ReviewAssignmentResponseData } from "@/features/_sidebar.review._assignment.assignment/loader"
 import ColumnWithBoxes from "../ColumnWithBoxes"
 import AssignmentSession from "./AssignmentSession"
 
-const AssignmentColumn = () => {
+type AssignmentColumnProps = { assignmentData: ReviewAssignmentResponseData }
+const AssignmentColumn = ({ assignmentData }: AssignmentColumnProps) => {
     return (
         <ColumnWithBoxes>
             <ColumnWithBoxes.Title>오답 과제</ColumnWithBoxes.Title>
             <ColumnWithBoxes.Content>
-                <AssignmentSession />
-                <AssignmentSession />
-                <AssignmentSession />
-                <AssignmentSession />
+                {assignmentData.map((assignmentMetaInfo) => (
+                    <AssignmentSession assignmentMetaInfo={assignmentMetaInfo} />
+                ))}
             </ColumnWithBoxes.Content>
         </ColumnWithBoxes>
     )
