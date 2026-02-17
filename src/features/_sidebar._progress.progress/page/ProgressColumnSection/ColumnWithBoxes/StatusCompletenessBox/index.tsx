@@ -1,6 +1,6 @@
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
-import type { SessionStatus } from "@/shared/interfaces"
+import type { DivProps, SessionStatus } from "@/shared/interfaces"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
 import type { ReactNode } from "react"
@@ -49,10 +49,7 @@ const StatusCompletenessBoxLabelGroup = ({ children }: StatusCompletenessBoxLabe
     )
 }
 
-type StatusCompletenessBoxProps = StatusCompletenessBoxStyleProps & {
-    onClick: () => void
-    children: ReactNode
-}
+type StatusCompletenessBoxProps = StatusCompletenessBoxStyleProps & Pick<DivProps, "onClick" | "children">
 const statusCompletenessBoxVariants = cva(
     "w-full outline -outline-offset-1 hover:outline-4 hover:-outline-offset-4 my-transition",
     {
