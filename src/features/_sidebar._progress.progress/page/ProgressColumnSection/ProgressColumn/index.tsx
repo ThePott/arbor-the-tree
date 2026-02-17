@@ -1,7 +1,7 @@
 import type { ConciseSyllabus } from "@/features/_sidebar._progress.progress/types"
-import { FlexOneContainer, Vstack } from "@/packages/components/layouts"
-import RoundBox from "@/packages/components/RoundBox"
+import { Vstack } from "@/packages/components/layouts"
 import Title from "@/packages/components/Title/Title"
+import ColumnWithBoxes from "../ColumnWithBoxes"
 import ProgressSession from "./ProgressSession"
 
 type ProgressColumnProps = {
@@ -9,32 +9,26 @@ type ProgressColumnProps = {
 }
 const ProgressColumn = ({ conciseSyllabus }: ProgressColumnProps) => {
     return (
-        <RoundBox isBordered color="bg0" className="h-full shrink-0 overflow-hidden">
-            <Vstack className="h-full w-[300px]">
-                <Title as="h3" className="px-my-lg pt-my-lg">
-                    {conciseSyllabus.book.title}
-                </Title>
-                <FlexOneContainer isYScrollable className="px-my-lg pb-my-lg">
-                    <Vstack gap="md">
-                        {conciseSyllabus.sessionsByTopicArray.map((sessionsByTopic) => (
-                            <Vstack key={sessionsByTopic.title} gap="none">
-                                <Title as="h3" className="sticky top-0 bg-bg-0 text-center text-wrap" isMuted>
-                                    {sessionsByTopic.title}
-                                </Title>
-                                {sessionsByTopic.conciseSessionArray.map((conciseSession) => (
-                                    <ProgressSession
-                                        key={conciseSession.id}
-                                        syllabus_id={conciseSyllabus.id}
-                                        startingTopicTitle={sessionsByTopic.title}
-                                        conciseSession={conciseSession}
-                                    />
-                                ))}
-                            </Vstack>
+        <ColumnWithBoxes>
+            <ColumnWithBoxes.Title>{conciseSyllabus.book.title}</ColumnWithBoxes.Title>
+            <ColumnWithBoxes.Content>
+                {conciseSyllabus.sessionsByTopicArray.map((sessionsByTopic) => (
+                    <Vstack key={sessionsByTopic.title} gap="none">
+                        <Title as="h3" className="sticky top-0 bg-bg-0 text-center text-wrap" isMuted>
+                            {sessionsByTopic.title}
+                        </Title>
+                        {sessionsByTopic.conciseSessionArray.map((conciseSession) => (
+                            <ProgressSession
+                                key={conciseSession.id}
+                                syllabus_id={conciseSyllabus.id}
+                                startingTopicTitle={sessionsByTopic.title}
+                                conciseSession={conciseSession}
+                            />
                         ))}
                     </Vstack>
-                </FlexOneContainer>
-            </Vstack>
-        </RoundBox>
+                ))}
+            </ColumnWithBoxes.Content>
+        </ColumnWithBoxes>
     )
 }
 
