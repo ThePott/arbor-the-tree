@@ -18,18 +18,12 @@ const AssignmentSessionDropdown = ({ assignmentMetaInfo }: AssignmentSessionDrop
         url: `/review/assignment/${assignmentMetaInfo.id}/assigned`,
         update: ({ previous }) => previous,
     })
-    // const { mutate: patchMutate } = useSimpleMutation({
-    //     queryKey: ["reviewAssignment", classroom_id, student_id],
-    //     method: "patch",
-    //     url: `/review/assignment/${assignmentMetaInfo.id}/assinged`,
-    //     update: ({ previous }) => previous,
-    // })
-    // const { mutate: deleteMutate } = useSimpleMutation({
-    //     queryKey: ["reviewAssignment", classroom_id, student_id],
-    //     method: "delete",
-    //     url: `/review/assignment/${assignmentMetaInfo.id}/assinged`,
-    //     update: ({ previous }) => previous,
-    // })
+    const { mutate: deleteMutate } = useSimpleMutation({
+        queryKey: ["reviewAssignment", classroom_id, student_id],
+        method: "delete",
+        url: `/review/assignment/${assignmentMetaInfo.id}/assigned`,
+        update: ({ previous }) => previous,
+    })
     return (
         <Dropdown>
             <Dropdown.Trigger>
@@ -48,8 +42,19 @@ const AssignmentSessionDropdown = ({ assignmentMetaInfo }: AssignmentSessionDrop
                 >
                     숙제
                 </Dropdown.MenuItem>
-                <Dropdown.MenuItem onClick={() => {}}>할당</Dropdown.MenuItem>
-                <Dropdown.MenuItem onClick={() => {}}>해제</Dropdown.MenuItem>
+                <Dropdown.MenuItem
+                    onClick={() =>
+                        postMutate({
+                            body: { assignment_id: assignmentMetaInfo.id, status: "TODAY" },
+                            additionalData: undefined,
+                        })
+                    }
+                >
+                    할당
+                </Dropdown.MenuItem>
+                <Dropdown.MenuItem onClick={() => deleteMutate({ body: undefined, additionalData: undefined })}>
+                    해제
+                </Dropdown.MenuItem>
             </Dropdown.Menu>
         </Dropdown>
     )
