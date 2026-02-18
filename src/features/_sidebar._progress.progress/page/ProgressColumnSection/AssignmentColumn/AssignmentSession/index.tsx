@@ -2,7 +2,7 @@ import type { ReviewAssignmentMetaInfo } from "@/features/_sidebar.review._assig
 import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
-import { isSameDay, makeFromNow } from "@/shared/utils/dateManipulations"
+import { checkIsBeforeToday, isSameDay, makeFromNow } from "@/shared/utils/dateManipulations"
 import { getRouteApi } from "@tanstack/react-router"
 import { Ellipsis } from "lucide-react"
 import StatusCompletenessBox from "../../ColumnWithBoxes/StatusCompletenessBox"
@@ -15,9 +15,21 @@ const AssignmentSessionDropdown = ({ assignmentMetaInfo }: AssignmentSessionDrop
     const { mutate: postMutate } = useSimpleMutation({
         queryKey: ["reviewAssignment", classroom_id, student_id],
         method: "post",
-        url: `/review/assignment/${assignmentMetaInfo.id}/assinged`,
+        url: `/review/assignment/${assignmentMetaInfo.id}/assigned`,
         update: ({ previous }) => previous,
     })
+    // const { mutate: patchMutate } = useSimpleMutation({
+    //     queryKey: ["reviewAssignment", classroom_id, student_id],
+    //     method: "patch",
+    //     url: `/review/assignment/${assignmentMetaInfo.id}/assinged`,
+    //     update: ({ previous }) => previous,
+    // })
+    // const { mutate: deleteMutate } = useSimpleMutation({
+    //     queryKey: ["reviewAssignment", classroom_id, student_id],
+    //     method: "delete",
+    //     url: `/review/assignment/${assignmentMetaInfo.id}/assinged`,
+    //     update: ({ previous }) => previous,
+    // })
     return (
         <Dropdown>
             <Dropdown.Trigger>
@@ -26,7 +38,14 @@ const AssignmentSessionDropdown = ({ assignmentMetaInfo }: AssignmentSessionDrop
                 </Button>
             </Dropdown.Trigger>
             <Dropdown.Menu>
-                <Dropdown.MenuItem onClick={() => postMutate({ body: undefined, additionalData: undefined })}>
+                <Dropdown.MenuItem
+                    onClick={() =>
+                        postMutate({
+                            body: { assignment_id: assignmentMetaInfo.id, status: "HOMEWORK" },
+                            additionalData: undefined,
+                        })
+                    }
+                >
                     숙제
                 </Dropdown.MenuItem>
                 <Dropdown.MenuItem onClick={() => {}}>할당</Dropdown.MenuItem>
@@ -38,12 +57,17 @@ const AssignmentSessionDropdown = ({ assignmentMetaInfo }: AssignmentSessionDrop
 
 type AssignmentSessionProps = { assignmentMetaInfo: ReviewAssignmentMetaInfo }
 const AssignmentSession = ({ assignmentMetaInfo }: AssignmentSessionProps) => {
-    const { created_at, assigned_at, completed_at } = assignmentMetaInfo
+    const { created_at, assigned_at, completed_at, questionCount } = assignmentMetaInfo
 
     return (
-        <StatusCompletenessBox isCompleted={false} status="default" isOld={false} onClick={() => {}}>
+        <StatusCompletenessBox
+            isCompleted={Boolean(completed_at)}
+            status={assignmentMetaInfo.status ?? "default"}
+            isOld={assigned_at ? checkIsBeforeToday(assigned_at) : false}
+            onClick={() => {}}
+        >
             <StatusCompletenessBox.LabelGroup>
-                <StatusCompletenessBox.Label role="main">{`${makeFromNow(created_at)} 제작`}</StatusCompletenessBox.Label>
+                <StatusCompletenessBox.Label role="main">{`${makeFromNow(created_at)} 제작 __${questionCount} 문제`}</StatusCompletenessBox.Label>
                 {assigned_at && !isSameDay(created_at, assigned_at) && (
                     <StatusCompletenessBox.Label role="conditional">{`${makeFromNow(assigned_at)} 할당`}</StatusCompletenessBox.Label>
                 )}
