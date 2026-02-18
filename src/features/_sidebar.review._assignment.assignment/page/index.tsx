@@ -21,14 +21,14 @@ const tabArray: Tab<TabStatus>[] = [
 
 type Row = {
     assignmentId: string
-    assigned_at: string // NOTE: ISOString
+    created_at: string // NOTE: ISOString
     completed_at: string | null
     bookTitleArray: string[]
     questionCount: number
 }
 const columnHelper = createColumnHelper<Row>()
 const columns = [
-    columnHelper.accessor("assigned_at", { header: "제작일", cell: ({ getValue }) => makeFromNow(getValue()) }),
+    columnHelper.accessor("created_at", { header: "제작일", cell: ({ getValue }) => makeFromNow(getValue()) }),
     columnHelper.accessor("bookTitleArray", { header: "문제집", cell: ({ getValue }) => getValue().join(", ") }),
     columnHelper.accessor("questionCount", { header: "문항 수", cell: ({ getValue }) => getValue() }),
     columnHelper.display({
@@ -56,7 +56,7 @@ const convertDataToRowArray = (data: ReviewAssignmentResponseData | undefined): 
     if (!data) return []
     const rowArray: Row[] = data.map((assignmentMetaInfo) => ({
         assignmentId: assignmentMetaInfo.id,
-        assigned_at: assignmentMetaInfo.assigned_at,
+        created_at: assignmentMetaInfo.created_at,
         completed_at: assignmentMetaInfo.completed_at,
         bookTitleArray: assignmentMetaInfo.bookTitleArray,
         questionCount: assignmentMetaInfo.questionCount,

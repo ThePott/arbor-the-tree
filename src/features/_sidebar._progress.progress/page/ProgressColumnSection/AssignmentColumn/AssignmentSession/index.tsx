@@ -1,5 +1,5 @@
 import type { ReviewAssignmentMetaInfo } from "@/features/_sidebar.review._assignment.assignment/type"
-import RoundBox from "@/packages/components/RoundBox"
+import StatusCompletenessBox from "../../ColumnWithBoxes/StatusCompletenessBox"
 
 type AssignmentSessionProps = { assignmentMetaInfo: ReviewAssignmentMetaInfo }
 const AssignmentSession = ({ assignmentMetaInfo }: AssignmentSessionProps) => {
@@ -7,12 +7,12 @@ const AssignmentSession = ({ assignmentMetaInfo }: AssignmentSessionProps) => {
     // NOTE: 그렇다면 오늘, 숙제 컴포넌트를 일반화해야겠네...
     // NOTE: TodayHomeworkBox
     return (
-        <RoundBox isBordered padding="xl">
-            <p>1일 전(2025-12-12) __14문제</p>
-            <p>- 이런 문제집</p>
-            <p>- 저런 문제집</p>
+        <StatusCompletenessBox isCompleted={false} status="default" isOld={false} onClick={() => {}}>
+            <StatusCompletenessBox.LabelGroup>
+                <StatusCompletenessBox.Label role="main">{"whatever"}</StatusCompletenessBox.Label>
+            </StatusCompletenessBox.LabelGroup>
             <p>{JSON.stringify(assignmentMetaInfo)}</p>
-        </RoundBox>
+        </StatusCompletenessBox>
     )
 }
 

@@ -163,7 +163,7 @@ export type ReviewCheck = {
 export type ReviewAssignment = {
     id: string
     student_id: string
-    assigned_at: string
+    created_at: string
     completed_at: string | null
 }
 
