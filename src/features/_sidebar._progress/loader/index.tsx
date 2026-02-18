@@ -1,16 +1,32 @@
+import { makeReviewAssignmentQueryOptions } from "@/features/_sidebar.review._assignment.assignment/loader"
 import type { ExtendedSyllabus } from "@/features/_sidebar/types"
 import { instance } from "@/packages/api/axiosInstances"
 import type { QueryClient } from "@tanstack/react-query"
 
-const progressLoaderFn = async (queryClient: QueryClient) => {
-    const extendedSyllabusArray = await queryClient.ensureQueryData({
-        queryKey: ["progressSyllabus"],
-        queryFn: async () => {
-            const response = await instance.get("/progress/syllabus")
-            return response.data as ExtendedSyllabus[]
-        },
-    })
-    return extendedSyllabusArray
+type ProgressLoaderFnProps = {
+    queryClient: QueryClient
+    classroom_id: string | undefined
+    student_id: string | undefined
+}
+const progressLoaderFn = async ({ queryClient, classroom_id, student_id }: ProgressLoaderFnProps) => {
+    const assignmentMetaInfoArrayPromise = student_id
+        ? await queryClient.ensureQueryData(makeReviewAssignmentQueryOptions({ classroom_id, student_id }))
+        : Promise.resolve(null)
+    const extendedSyllabusArrayPromise =
+        student_id || classroom_id
+            ? await queryClient.ensureQueryData({
+                  queryKey: ["progressSyllabus"],
+                  queryFn: async () => {
+                      const response = await instance.get("/progress/syllabus")
+                      return response.data as ExtendedSyllabus[]
+                  },
+              })
+            : Promise.resolve(null)
+    const [assignmentMetaInfoArray, extendedSyllabusArray] = await Promise.all([
+        assignmentMetaInfoArrayPromise,
+        extendedSyllabusArrayPromise,
+    ])
+    return { assignmentMetaInfoArray, extendedSyllabusArray }
 }
 
 export type ProgressSyllabusResponseData = ExtendedSyllabus[]

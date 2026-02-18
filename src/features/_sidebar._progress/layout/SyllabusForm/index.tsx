@@ -20,7 +20,7 @@ type PostBody = {
 
 const route = getRouteApi("/_sidebar")
 const SyllabusForm = () => {
-    const extendedSyllabusArray = useLoaderData({ from: "/_sidebar/_progress" })
+    const { extendedSyllabusArray } = useLoaderData({ from: "/_sidebar/_progress" })
     const queryClient = useQueryClient()
     const searchParams = route.useSearch()
     const { student_id, classroom_id } = searchParams
