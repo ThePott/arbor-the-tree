@@ -1,7 +1,9 @@
+import type { ReviewAssignmentResponseData } from "@/features/_sidebar.review._assignment.assignment/loader"
 import type { ReviewAssignmentMetaInfo } from "@/features/_sidebar.review._assignment.assignment/type"
 import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
+import type { SessionStatus } from "@/shared/interfaces"
 import { checkIsBeforeToday, isSameDay, makeFromNow } from "@/shared/utils/dateManipulations"
 import { getRouteApi } from "@tanstack/react-router"
 import { Ellipsis } from "lucide-react"
@@ -16,13 +18,29 @@ const AssignmentSessionDropdown = ({ assignmentMetaInfo }: AssignmentSessionDrop
         queryKey: ["reviewAssignment", classroom_id, student_id],
         method: "post",
         url: `/review/assignment/${assignmentMetaInfo.id}/assigned`,
-        update: ({ previous }) => previous,
+        update: ({
+            previous,
+            additionalData,
+        }: {
+            previous: ReviewAssignmentResponseData
+            additionalData: SessionStatus
+        }) => {
+            const newData = previous.map((elMetaInfo) =>
+                elMetaInfo.id === assignmentMetaInfo.id ? { ...elMetaInfo, status: additionalData } : elMetaInfo
+            )
+            return newData
+        },
     })
     const { mutate: deleteMutate } = useSimpleMutation({
         queryKey: ["reviewAssignment", classroom_id, student_id],
         method: "delete",
         url: `/review/assignment/${assignmentMetaInfo.id}/assigned`,
-        update: ({ previous }) => previous,
+        update: ({ previous }: { previous: ReviewAssignmentResponseData }) => {
+            const newData = previous.map((elMetaInfo) =>
+                elMetaInfo.id === assignmentMetaInfo.id ? { ...elMetaInfo, status: null } : elMetaInfo
+            )
+            return newData
+        },
     })
     return (
         <Dropdown>
@@ -36,7 +54,7 @@ const AssignmentSessionDropdown = ({ assignmentMetaInfo }: AssignmentSessionDrop
                     onClick={() =>
                         postMutate({
                             body: { assignment_id: assignmentMetaInfo.id, status: "HOMEWORK" },
-                            additionalData: undefined,
+                            additionalData: "HOMEWORK",
                         })
                     }
                 >
@@ -46,7 +64,7 @@ const AssignmentSessionDropdown = ({ assignmentMetaInfo }: AssignmentSessionDrop
                     onClick={() =>
                         postMutate({
                             body: { assignment_id: assignmentMetaInfo.id, status: "TODAY" },
-                            additionalData: undefined,
+                            additionalData: "TODAY",
                         })
                     }
                 >
