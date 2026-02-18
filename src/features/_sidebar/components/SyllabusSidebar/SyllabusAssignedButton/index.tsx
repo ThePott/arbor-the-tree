@@ -1,22 +1,31 @@
+import useProgressStore from "@/features/_sidebar._progress.progress/store"
 import type { AssignedJoinedSyllabus } from "@/features/_sidebar._progress.progress/types"
 import Button from "@/packages/components/Button/Button"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import { getRouteApi, useLocation, useNavigate } from "@tanstack/react-router"
-import type { ReactNode } from "react"
+import { X } from "lucide-react"
 
 const route = getRouteApi("/_sidebar")
 
 export type SyllabusAssignedButtonProps = {
     assignedJoinedSyllabus: AssignedJoinedSyllabus | null
-    children?: ReactNode
 }
-const SyllabusAssignedButton = ({ assignedJoinedSyllabus, children }: SyllabusAssignedButtonProps) => {
-    const { pathname } = useLocation()
+// TODO: 이거 이용해서 삭제 버튼을 넣었을텐데 없어졌다
+const SyllabusAssignedButton = ({ assignedJoinedSyllabus }: SyllabusAssignedButtonProps) => {
+    const setModalKey = useProgressStore((state) => state.setModalKey)
+    const setSelectedSyllabus = useProgressStore((state) => state.setSelectedSyllabus)
+
     const navigate = useNavigate()
+    const { pathname } = useLocation()
     const searchParams = route.useSearch()
+    const { classroom_id, student_id } = searchParams
 
     const handleBodyClick = () => {
         navigate({ to: pathname, search: { ...searchParams, syllabus_id: assignedJoinedSyllabus?.syllabus.id } })
+    }
+    const handleDeleteClick = () => {
+        setModalKey("deleteAssginedSyllabus")
+        setSelectedSyllabus(assignedJoinedSyllabus)
     }
 
     const isSelected = searchParams.syllabus_id === assignedJoinedSyllabus?.syllabus.id
@@ -35,7 +44,11 @@ const SyllabusAssignedButton = ({ assignedJoinedSyllabus, children }: SyllabusAs
                     <p>{assignedJoinedSyllabus ? assignedJoinedSyllabus.syllabus.book.title : "전체"}</p>
                     <p className="text-fg-dim text-my-xs">{assignedJoinedSyllabus?.syllabus.created_at.slice(0, 10)}</p>
                 </Vstack>
-                {children}
+                {assignedJoinedSyllabus && Boolean(classroom_id) !== Boolean(student_id) && (
+                    <Button padding="tight" border="onHover" color="transparent" onClick={handleDeleteClick}>
+                        <X size={16} />
+                    </Button>
+                )}
             </Hstack>
         </Button>
     )

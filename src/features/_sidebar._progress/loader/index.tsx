@@ -8,7 +8,7 @@ type MakeProgressSyllabusAssignedQueryOptionsProps = {
     classroom_id: string | undefined
     student_id: string | undefined
 }
-const makeProgressSyllabusAssignedQueryOptions = ({
+export const makeProgressSyllabusAssignedQueryOptions = ({
     classroom_id,
     student_id,
 }: MakeProgressSyllabusAssignedQueryOptionsProps) => ({
