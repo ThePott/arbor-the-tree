@@ -11,3 +11,14 @@ export const checkIsBeforeToday = (date: string | number | Date): boolean => {
 
     return comparingDate < startOfToday
 }
+
+export const isSameDay = (firstDate: string | number | Date, secondDate: string | number | Date): boolean => {
+    const first = new Date(firstDate)
+    const second = new Date(secondDate)
+
+    if (first.getFullYear() !== second.getFullYear()) return false
+    if (first.getMonth() !== second.getMonth()) return false
+    if (first.getDate() !== second.getDate()) return false
+
+    return true
+}
