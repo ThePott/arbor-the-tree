@@ -9,9 +9,10 @@ const route = getRouteApi("/_sidebar")
 
 export type SyllabusAssignedButtonProps = {
     assignedJoinedSyllabus: AssignedJoinedSyllabus | null
+    isDeletable?: boolean
 }
 // TODO: 이거 이용해서 삭제 버튼을 넣었을텐데 없어졌다
-const SyllabusAssignedButton = ({ assignedJoinedSyllabus }: SyllabusAssignedButtonProps) => {
+const SyllabusAssignedButton = ({ assignedJoinedSyllabus, isDeletable }: SyllabusAssignedButtonProps) => {
     const setModalKey = useProgressStore((state) => state.setModalKey)
     const setSelectedSyllabus = useProgressStore((state) => state.setSelectedSyllabus)
 
@@ -23,9 +24,10 @@ const SyllabusAssignedButton = ({ assignedJoinedSyllabus }: SyllabusAssignedButt
     const handleBodyClick = () => {
         navigate({ to: pathname, search: { ...searchParams, syllabus_id: assignedJoinedSyllabus?.syllabus.id } })
     }
-    const handleDeleteClick = () => {
-        setModalKey("deleteAssginedSyllabus")
+    const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.stopPropagation()
         setSelectedSyllabus(assignedJoinedSyllabus)
+        setModalKey("deleteAssginedSyllabus")
     }
 
     const isSelected = searchParams.syllabus_id === assignedJoinedSyllabus?.syllabus.id
@@ -44,7 +46,7 @@ const SyllabusAssignedButton = ({ assignedJoinedSyllabus }: SyllabusAssignedButt
                     <p>{assignedJoinedSyllabus ? assignedJoinedSyllabus.syllabus.book.title : "전체"}</p>
                     <p className="text-fg-dim text-my-xs">{assignedJoinedSyllabus?.syllabus.created_at.slice(0, 10)}</p>
                 </Vstack>
-                {assignedJoinedSyllabus && Boolean(classroom_id) !== Boolean(student_id) && (
+                {isDeletable && assignedJoinedSyllabus && Boolean(classroom_id) !== Boolean(student_id) && (
                     <Button padding="tight" border="onHover" color="transparent" onClick={handleDeleteClick}>
                         <X size={16} />
                     </Button>

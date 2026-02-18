@@ -10,8 +10,84 @@ import SyllabusAssignedButton from "./SyllabusAssignedButton"
 
 const commonSidebarRoute = getRouteApi("/_sidebar")
 
+const SyllabusSidebarAllButton = () => {
+    const { student_id, classroom_id } = commonSidebarRoute.useSearch()
+    const { assignedJoinedSyllabusArray: loaderDataSyllabus, assignmentMetaInfoArray: loaderDataAssignment } =
+        useLoaderData({
+            from: "/_sidebar/_progress",
+        })
+
+    const { data: queryDataSyllabus } = useQuery({
+        ...makeProgressSyllabusAssignedQueryOptions({ classroom_id, student_id }),
+        enabled: Boolean(classroom_id || student_id),
+    })
+    const { data: queryDataAssignment } = useQuery({
+        ...makeReviewAssignmentQueryOptions({ classroom_id, student_id }),
+        enabled: Boolean(student_id),
+    })
+
+    const dataSyllabus = queryDataSyllabus ?? loaderDataSyllabus
+    const dataAssignment = queryDataAssignment ?? loaderDataAssignment
+
+    if (dataAssignment.length === 0 && dataSyllabus.length === 0) return null
+
+    return <SyllabusAssignedButton assignedJoinedSyllabus={null} />
+}
+
+type SyllabusSidebarButtonManyProps = {
+    isDeletable?: boolean
+}
+const SyllabusSidebarButtonMany = ({ isDeletable }: SyllabusSidebarButtonManyProps) => {
+    const { student_id, classroom_id } = commonSidebarRoute.useSearch()
+    const { assignedJoinedSyllabusArray: loaderDataSyllabus, assignmentMetaInfoArray: loaderDataAssignment } =
+        useLoaderData({
+            from: "/_sidebar/_progress",
+        })
+
+    const { data: queryDataSyllabus } = useQuery({
+        ...makeProgressSyllabusAssignedQueryOptions({ classroom_id, student_id }),
+        enabled: Boolean(classroom_id || student_id),
+    })
+    const { data: queryDataAssignment } = useQuery({
+        ...makeReviewAssignmentQueryOptions({ classroom_id, student_id }),
+        enabled: Boolean(student_id),
+    })
+
+    const dataSyllabus = queryDataSyllabus ?? loaderDataSyllabus
+    const dataAssignment = queryDataAssignment ?? loaderDataAssignment
+
+    if (!student_id && !classroom_id) return null
+
+    return (
+        <Vstack gap="none">
+            <SyllabusAssignedButton assignedJoinedSyllabus={null} />
+            {dataAssignment.length > 0 && (
+                <RoundBox padding="xl" isBordered>
+                    placeholder for assignement
+                </RoundBox>
+            )}
+            {dataSyllabus.length > 0 && (
+                <>
+                    {dataSyllabus.map((assignedJoinedSyllabus) => (
+                        <SyllabusAssignedButton
+                            isDeletable={isDeletable}
+                            key={assignedJoinedSyllabus.syllabus.id}
+                            assignedJoinedSyllabus={assignedJoinedSyllabus}
+                        />
+                    ))}
+                </>
+            )}
+        </Vstack>
+    )
+}
+
+type SyllabusSidebarButtonGroupProps = { children: ReactNode }
+const SyllabusSidebarButtonGroup = ({ children }: SyllabusSidebarButtonGroupProps) => {
+    return <Vstack gap="none">{children}</Vstack>
+}
+
 type SyllabusSidebarProps = {
-    children?: ReactNode
+    children: ReactNode
 }
 const SyllabusSidebar = ({ children }: SyllabusSidebarProps) => {
     const { student_id, classroom_id } = commonSidebarRoute.useSearch()
@@ -45,7 +121,8 @@ const SyllabusSidebar = ({ children }: SyllabusSidebarProps) => {
             {children}
 
             <Vstack gap="none">
-                <SyllabusAssignedButton assignedJoinedSyllabus={null} />
+                {dataAssignment.length > 0 ||
+                    (dataSyllabus.length > 0 && <SyllabusAssignedButton assignedJoinedSyllabus={null} />)}
                 {dataAssignment.length > 0 && (
                     <RoundBox padding="xl" isBordered>
                         placeholder for assignement
@@ -65,5 +142,9 @@ const SyllabusSidebar = ({ children }: SyllabusSidebarProps) => {
         </Vstack>
     )
 }
+
+SyllabusSidebar.ButtonGroup = SyllabusSidebarButtonGroup
+SyllabusSidebar.ButtonMany = SyllabusSidebarButtonMany
+SyllabusSidebar.AllButton = SyllabusSidebarAllButton
 
 export default SyllabusSidebar

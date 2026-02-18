@@ -7,7 +7,11 @@ const ReviewCheckLayout = () => {
         <>
             <SidebarSection>
                 <SidebarSection.ClassroomSidebar />
-                <SidebarSection.SyllabusSidebar />
+                <SidebarSection.SyllabusSidebar>
+                    <SidebarSection.SyllabusSidebar.ButtonGroup>
+                        <SidebarSection.SyllabusSidebar.ButtonMany />
+                    </SidebarSection.SyllabusSidebar.ButtonGroup>
+                </SidebarSection.SyllabusSidebar>
             </SidebarSection>
 
             <FlexOneContainer isYScrollable>

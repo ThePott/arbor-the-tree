@@ -1,6 +1,5 @@
 import SidebarSection from "@/features/_sidebar/components"
 import { Outlet } from "@tanstack/react-router"
-import ProgressSyllabusAssignedButton from "./ProgressSyllabusAssignedButton"
 import SyllabusForm from "./SyllabusForm"
 
 const ProgressSidebar = () => {
@@ -8,8 +7,12 @@ const ProgressSidebar = () => {
         <>
             <SidebarSection>
                 <SidebarSection.ClassroomSidebar />
-                <SidebarSection.SyllabusSidebar syllabusAssignedButton={ProgressSyllabusAssignedButton}>
+                <SidebarSection.SyllabusSidebar>
                     <SyllabusForm />
+                    <SidebarSection.SyllabusSidebar.ButtonGroup>
+                        <SidebarSection.SyllabusSidebar.AllButton />
+                        <SidebarSection.SyllabusSidebar.ButtonMany isDeletable />
+                    </SidebarSection.SyllabusSidebar.ButtonGroup>
                 </SidebarSection.SyllabusSidebar>
             </SidebarSection>
 
