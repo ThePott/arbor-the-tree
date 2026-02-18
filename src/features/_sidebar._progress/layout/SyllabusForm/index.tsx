@@ -18,7 +18,6 @@ type PostBody = {
     student_id?: string
 }
 
-// NOTE: 이거는 progress layout으로 뺀다
 const route = getRouteApi("/_sidebar")
 const SyllabusForm = () => {
     const extendedSyllabusArray = useLoaderData({ from: "/_sidebar/_progress" })
@@ -37,9 +36,6 @@ const SyllabusForm = () => {
             label: `${extendedSyllabus.book.title}, ${extendedSyllabus.created_at.slice(0, 10)}`,
         }))
 
-    // TODO: 양쪽의 query를 동시에 무효화해야 한다
-    // TODO: 복잡한데??
-    // NOTE: invalidate "progressSyllabusAssigned" with params, "progressSession" with params
     const postMutation = useSimpleMutation({
         method: "post",
         url: "/progress/syllabus/assigned",

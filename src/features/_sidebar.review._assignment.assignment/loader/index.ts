@@ -3,7 +3,6 @@ import type { QueryClient } from "@tanstack/react-query"
 import type { ReviewAssignmentMetaInfo } from "../type"
 
 // NOTE: use to navigate when searching type of query data
-export type ReviewAssignmentResponseData = ReviewAssignmentMetaInfo[]
 type MakeReviewAssignmentQueryOptionsProps = {
     classroom_id: string | undefined
     student_id: string | undefined
@@ -16,7 +15,7 @@ export const makeReviewAssignmentQueryOptions = ({
         queryKey: ["reviewAssignment", classroom_id, student_id],
         queryFn: async () => {
             const response = await instance.get("/review/assignment", { params: { classroom_id, student_id } })
-            return response.data as ReviewAssignmentResponseData
+            return response.data as ReviewAssignmentMetaInfo[]
         },
     }
 }
@@ -36,4 +35,5 @@ const reviewAssignmentLoaderFn = async ({ queryClient, classroom_id, student_id 
     return assignmentMetaInfoArray
 }
 
+export type ReviewAssignmentResponseData = ReviewAssignmentMetaInfo[]
 export default reviewAssignmentLoaderFn

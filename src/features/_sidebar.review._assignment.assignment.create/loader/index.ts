@@ -2,7 +2,6 @@ import { instance } from "@/packages/api/axiosInstances"
 import type { QueryClient } from "@tanstack/react-query"
 import type { BookWithReviewChecks } from "../types"
 
-export type ReviewAssignmentCreateResponseData = BookWithReviewChecks[]
 type MakeReviewAssignmentCreateQueryOptionsProps = {
     classroom_id: string | undefined
     student_id: string | undefined
@@ -15,7 +14,7 @@ export const makeReviewAssignmentCreateQueryOptions = ({
         queryKey: ["reviewAssignmentCreate", classroom_id, student_id],
         queryFn: async () => {
             const response = await instance.get("/review/assignment/create", { params: { classroom_id, student_id } })
-            return response.data as ReviewAssignmentCreateResponseData
+            return response.data as BookWithReviewChecks[]
         },
     }
 }
@@ -38,4 +37,5 @@ const reviewAssignmentCreateLoaderFn = async ({
     return bookWithReviewChecksArray
 }
 
+export type ReviewAssignmentCreateResponseData = BookWithReviewChecks[]
 export default reviewAssignmentCreateLoaderFn

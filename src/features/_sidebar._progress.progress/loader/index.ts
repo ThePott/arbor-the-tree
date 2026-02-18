@@ -3,12 +3,12 @@ import { instance } from "@/packages/api/axiosInstances"
 import type { QueryClient } from "@tanstack/react-query"
 import type { ConciseSyllabus } from "../types"
 
-export type ProgressSessionResponseData = ConciseSyllabus[]
 type SearchParamsForProgressSession = {
     classroom_id: string | undefined
     student_id: string | undefined
     syllabus_id: string | undefined
 }
+
 export const makeProgressSessionQueryOptions = ({
     classroom_id,
     student_id,
@@ -44,4 +44,5 @@ const progressSessionLoaderFn = async ({
     return { progressSessionData, assignmentData }
 }
 
+export type ProgressSessionResponseData = ConciseSyllabus[]
 export default progressSessionLoaderFn
