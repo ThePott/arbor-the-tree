@@ -1,17 +1,19 @@
+import makeComponentContext from "@/packages/components/ComponentContextProvider"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import type { DivProps, SessionStatus } from "@/shared/interfaces"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
-import type { ReactNode } from "react"
+import { type ReactNode } from "react"
 
 type StatusCompletenessBoxStyleProps = {
     isCompleted: boolean
     status: SessionStatus | "default"
     isOld: boolean
 }
+const { useComponentContext, ComponentContextProvider } = makeComponentContext<StatusCompletenessBoxStyleProps>()
 
-type StatusCompletenessBoxLabelProps = StatusCompletenessBoxStyleProps & {
+type StatusCompletenessBoxLabelProps = {
     children: string
     role: "main" | "sub" | "conditional"
 }
@@ -24,13 +26,8 @@ const roleVariants = cva("", {
         },
     },
 })
-const StatusCompletenessBoxLabel = ({
-    isCompleted,
-    status,
-    isOld,
-    role,
-    children,
-}: StatusCompletenessBoxLabelProps) => {
+const StatusCompletenessBoxLabel = ({ role, children }: StatusCompletenessBoxLabelProps) => {
+    const { isCompleted, status, isOld } = useComponentContext()
     // NOTE: muted의 스타일만 지정하면 된다
     const isHomework = status === "HOMEWORK"
     const isNewToday = status === "TODAY" && !isOld
@@ -133,15 +130,17 @@ const statusCompletenessBoxVariants = cva(
 )
 const StatusCompletenessBox = ({ isCompleted, status, isOld, onClick, children }: StatusCompletenessBoxProps) => {
     return (
-        <RoundBox
-            onClick={onClick}
-            padding="md"
-            className={clsx(statusCompletenessBoxVariants({ isCompleted, status: status, isOld }))}
-        >
-            <Hstack className="items-start" gap="none">
-                {children}
-            </Hstack>
-        </RoundBox>
+        <ComponentContextProvider value={{ isCompleted, status, isOld }}>
+            <RoundBox
+                onClick={onClick}
+                padding="md"
+                className={clsx(statusCompletenessBoxVariants({ isCompleted, status: status, isOld }))}
+            >
+                <Hstack className="items-start" gap="none">
+                    {children}
+                </Hstack>
+            </RoundBox>
+        </ComponentContextProvider>
     )
 }
 
