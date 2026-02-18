@@ -10,18 +10,19 @@ type ProgressLoaderFnProps = {
 }
 const progressLoaderFn = async ({ queryClient, classroom_id, student_id }: ProgressLoaderFnProps) => {
     const assignmentMetaInfoArrayPromise = student_id
-        ? await queryClient.ensureQueryData(makeReviewAssignmentQueryOptions({ classroom_id, student_id }))
-        : Promise.resolve(null)
+        ? queryClient.ensureQueryData(makeReviewAssignmentQueryOptions({ classroom_id, student_id }))
+        : Promise.resolve([])
     const extendedSyllabusArrayPromise =
         student_id || classroom_id
-            ? await queryClient.ensureQueryData({
+            ? queryClient.ensureQueryData({
                   queryKey: ["progressSyllabus"],
                   queryFn: async () => {
                       const response = await instance.get("/progress/syllabus")
                       return response.data as ExtendedSyllabus[]
                   },
               })
-            : Promise.resolve(null)
+            : Promise.resolve([])
+
     const [assignmentMetaInfoArray, extendedSyllabusArray] = await Promise.all([
         assignmentMetaInfoArrayPromise,
         extendedSyllabusArrayPromise,
