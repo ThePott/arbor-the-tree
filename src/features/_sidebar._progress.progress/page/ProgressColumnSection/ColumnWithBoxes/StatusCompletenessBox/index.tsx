@@ -11,7 +11,8 @@ type StatusCompletenessBoxStyleProps = {
     status: SessionStatus | "default"
     isOld: boolean
 }
-const { useComponentContext, ComponentContextProvider } = makeComponentContext<StatusCompletenessBoxStyleProps>()
+type ContextProps = { isBgBright: boolean }
+const { useComponentContext, ComponentContextProvider } = makeComponentContext<ContextProps>()
 
 type StatusCompletenessBoxLabelProps = {
     children: string
@@ -27,12 +28,7 @@ const roleVariants = cva("", {
     },
 })
 const StatusCompletenessBoxLabel = ({ role, children }: StatusCompletenessBoxLabelProps) => {
-    const { isCompleted, status, isOld } = useComponentContext()
-    // NOTE: muted의 스타일만 지정하면 된다
-    const isHomework = status === "HOMEWORK"
-    const isNewToday = status === "TODAY" && !isOld
-
-    const isBgBright = !isCompleted && (isHomework || isNewToday)
+    const { isBgBright } = useComponentContext()
     const mutedClassName = clsx(isBgBright ? "text-fg-inverted-muted" : "text-fg-muted")
     return <p className={clsx(role !== "main" && mutedClassName, roleVariants({ role }))}>{children}</p>
 }
@@ -129,14 +125,22 @@ const statusCompletenessBoxVariants = cva(
     }
 )
 const StatusCompletenessBox = ({ isCompleted, status, isOld, onClick, children }: StatusCompletenessBoxProps) => {
+    // NOTE: muted의 스타일만 지정하면 된다
+    const isHomework = status === "HOMEWORK"
+    const isNewToday = status === "TODAY" && !isOld
+
+    const isBgBright = !isCompleted && (isHomework || isNewToday)
     return (
-        <ComponentContextProvider value={{ isCompleted, status, isOld }}>
+        <ComponentContextProvider value={{ isBgBright }}>
             <RoundBox
                 onClick={onClick}
                 padding="md"
                 className={clsx(statusCompletenessBoxVariants({ isCompleted, status: status, isOld }))}
             >
-                <Hstack className="items-start" gap="none">
+                <Hstack
+                    className={clsx("justify-between items-start", isBgBright && "text-fg-inverted-vivid")}
+                    gap="none"
+                >
                     {children}
                 </Hstack>
             </RoundBox>

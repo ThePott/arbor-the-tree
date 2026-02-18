@@ -32,7 +32,8 @@ const buttonVariants = cva("rounded-my-sm my-transition", {
     },
     compoundVariants: [
         // NOTE: text colors
-        { color: ["bg0", "bg1", "bg2", "transparent"], className: "text-fg-vivid disabled:text-fg-muted" },
+        { color: ["transparent"], className: "disabled:text-fg-muted" },
+        { color: ["bg0", "bg1", "bg2"], className: "text-fg-vivid disabled:text-fg-muted" },
         { color: ["green", "red"], className: "text-fg-inverted-vivid disabled:text-fg-inverted-muted" },
 
         // NOTE: background colors

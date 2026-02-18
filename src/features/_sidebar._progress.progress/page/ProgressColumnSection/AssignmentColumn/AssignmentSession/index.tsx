@@ -1,12 +1,23 @@
 import type { ReviewAssignmentMetaInfo } from "@/features/_sidebar.review._assignment.assignment/type"
 import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown"
+import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import { isSameDay, makeFromNow } from "@/shared/utils/dateManipulations"
+import { getRouteApi } from "@tanstack/react-router"
 import { Ellipsis } from "lucide-react"
 import StatusCompletenessBox from "../../ColumnWithBoxes/StatusCompletenessBox"
 
+const route = getRouteApi("/_sidebar")
+
 type AssignmentSessionDropdownProps = { assignmentMetaInfo: ReviewAssignmentMetaInfo }
 const AssignmentSessionDropdown = ({ assignmentMetaInfo }: AssignmentSessionDropdownProps) => {
+    const { classroom_id, student_id } = route.useSearch()
+    const { mutate: postMutate } = useSimpleMutation({
+        queryKey: ["reviewAssignment", classroom_id, student_id],
+        method: "post",
+        url: `/review/assignment/${assignmentMetaInfo.id}/assinged`,
+        update: ({ previous }) => previous,
+    })
     return (
         <Dropdown>
             <Dropdown.Trigger>
@@ -15,7 +26,9 @@ const AssignmentSessionDropdown = ({ assignmentMetaInfo }: AssignmentSessionDrop
                 </Button>
             </Dropdown.Trigger>
             <Dropdown.Menu>
-                <Dropdown.MenuItem onClick={() => {}}>숙제</Dropdown.MenuItem>
+                <Dropdown.MenuItem onClick={() => postMutate({ body: undefined, additionalData: undefined })}>
+                    숙제
+                </Dropdown.MenuItem>
                 <Dropdown.MenuItem onClick={() => {}}>할당</Dropdown.MenuItem>
                 <Dropdown.MenuItem onClick={() => {}}>해제</Dropdown.MenuItem>
             </Dropdown.Menu>
