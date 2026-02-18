@@ -1,6 +1,11 @@
 import ProgressSidebar from "@/features/_sidebar._progress/layout"
 import progressLoaderFn from "@/features/_sidebar._progress/loader"
 import { createFileRoute } from "@tanstack/react-router"
+import z from "zod/v3"
+
+const validateSearch = z.object({
+    is_assignment: z.boolean().optional(),
+})
 
 export const Route = createFileRoute("/_sidebar/_progress")({
     component: ProgressSidebar,
@@ -9,4 +14,5 @@ export const Route = createFileRoute("/_sidebar/_progress")({
     loaderDeps: ({ search: { classroom_id, student_id } }) => ({ classroom_id, student_id }),
     loader: ({ context: { queryClient }, deps: { classroom_id, student_id } }) =>
         progressLoaderFn({ queryClient, classroom_id, student_id }),
+    validateSearch,
 })

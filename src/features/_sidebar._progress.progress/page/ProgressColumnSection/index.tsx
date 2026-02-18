@@ -9,11 +9,12 @@ import AssignmentColumn from "./AssignmentColumn"
 import ProgressColumn from "./ProgressColumn"
 import ProgressColumnSummarizedMany from "./ProgressColumnSummarizedMany"
 
-const route = getRouteApi("/_sidebar")
+const commonSidebarRoute = getRouteApi("/_sidebar")
+const progressSidebarRoute = getRouteApi("/_sidebar/_progress")
 const ProgressColumnSection = () => {
     const [isSummarized, setIsSummarized] = useState(false)
-    const searchParams = route.useSearch()
-    const { classroom_id, student_id, syllabus_id } = searchParams
+    const { classroom_id, student_id, syllabus_id } = commonSidebarRoute.useSearch()
+    const { is_assignment } = progressSidebarRoute.useSearch()
 
     const { progressSessionData: progressSessionLoaderData, assignmentData: assignmentLoaderData } = useLoaderData({
         from: "/_sidebar/_progress/progress/",
@@ -45,9 +46,10 @@ const ProgressColumnSection = () => {
                             {!syllabus_id && assignmentData.length > 0 && (
                                 <AssignmentColumn assignmentData={assignmentData} />
                             )}
-                            {conciseSyllabusArray.map((conciseSyllabus) => (
-                                <ProgressColumn key={conciseSyllabus.id} conciseSyllabus={conciseSyllabus} />
-                            ))}
+                            {!is_assignment &&
+                                conciseSyllabusArray.map((conciseSyllabus) => (
+                                    <ProgressColumn key={conciseSyllabus.id} conciseSyllabus={conciseSyllabus} />
+                                ))}
                         </>
                     )}
                     {isSummarized && <ProgressColumnSummarizedMany conciseSyllabusArray={conciseSyllabusArray} />}
