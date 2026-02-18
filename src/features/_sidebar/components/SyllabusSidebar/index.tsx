@@ -4,20 +4,18 @@ import { Vstack } from "@/packages/components/layouts"
 import Title from "@/packages/components/Title/Title"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
-import type { JSX, ReactNode } from "react"
-import SyllabusAssignedButton, { type SyllabusAssignedButtonProps } from "./SyllabusAssignedButton"
+import type { ReactNode } from "react"
+import SyllabusAssignedButton from "./SyllabusAssignedButton"
 
-const route = getRouteApi("/_sidebar")
+const commonSidebarRoute = getRouteApi("/_sidebar")
 
 type SyllabusSidebarProps = {
     children?: ReactNode
-    syllabusAssignedButton?: (props: SyllabusAssignedButtonProps) => JSX.Element
+    // syllabusAssignedButton?: (props: SyllabusAssignedButtonProps) => JSX.Element
 }
-const SyllabusSidebar = ({ syllabusAssignedButton, children }: SyllabusSidebarProps) => {
-    const { student_id, classroom_id } = route.useSearch()
+const SyllabusSidebar = ({ children }: SyllabusSidebarProps) => {
+    const { student_id, classroom_id } = commonSidebarRoute.useSearch()
     const { studentArray, classroomArray } = useLoaderData({ from: "/_sidebar" })
-
-    const ResolvedSyllabusAssignedButton = syllabusAssignedButton ?? SyllabusAssignedButton
 
     const { data } = useQuery({
         // NOTE: progress에서만 mutate을 하므로 progress prefix 사용
@@ -37,7 +35,7 @@ const SyllabusSidebar = ({ syllabusAssignedButton, children }: SyllabusSidebarPr
 
     if (!student_id && !classroom_id) return null
     return (
-        <Vstack className="w-[300px] p-my-md pl-1.5 overflow-y-scroll pl-0">
+        <Vstack className="w-[300px] p-my-md pl-1.5 overflow-y-scroll">
             <Title as="h3">{title}</Title>
 
             {children}
@@ -45,9 +43,9 @@ const SyllabusSidebar = ({ syllabusAssignedButton, children }: SyllabusSidebarPr
             <Vstack gap="none">
                 {data && data.length > 0 && (
                     <>
-                        <ResolvedSyllabusAssignedButton assignedJoinedSyllabus={null} />
+                        <SyllabusAssignedButton assignedJoinedSyllabus={null} />
                         {data.map((assignedJoinedSyllabus) => (
-                            <ResolvedSyllabusAssignedButton
+                            <SyllabusAssignedButton
                                 key={assignedJoinedSyllabus.syllabus.id}
                                 assignedJoinedSyllabus={assignedJoinedSyllabus}
                             />
