@@ -7,6 +7,6 @@ import { createFileRoute } from "@tanstack/react-router"
 export const Route = createFileRoute("/manage/student")({
     component: ManageStudentPage,
     pendingComponent: ManageStudentPending,
-    loader: ({ context: { queryClient } }) => manageStudentLoaderFn({ queryClient }),
+    loader: ({ context: { queryClient } }) => manageStudentLoaderFn(queryClient),
     validateSearch: manageStudentSearchSchema,
 })

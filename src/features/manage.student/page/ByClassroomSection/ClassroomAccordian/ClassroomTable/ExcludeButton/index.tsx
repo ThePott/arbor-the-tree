@@ -1,4 +1,4 @@
-import type { ManageStudentLoaderResponseData } from "@/features/manage.student/loader"
+import type { ManageStudentResponseData } from "@/features/manage.student/loader"
 import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import { debugCache, debugMutation, debugRender } from "@/shared/config/debug/"
@@ -18,12 +18,12 @@ const ExcludeButton = ({ classroom_student_id }: ExcludeButtonProps) => {
             debugMutation("ExcludeButton:onMutate - deleting classroom_student_id: %s", classroom_student_id)
             // NOTE: classroomStudent 지우기만 하면 됨
             await context.client.cancelQueries({ queryKey: ["manageStudent"] })
-            const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
+            const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentResponseData
             const classroomStudentArray: ClassroomStudent[] = previous.classroomStudentArray.filter(
                 (classroomStudent) => classroomStudent.id !== classroom_student_id
             )
 
-            const newData: ManageStudentLoaderResponseData = {
+            const newData: ManageStudentResponseData = {
                 ...previous,
                 classroomStudentArray,
             }

@@ -3,7 +3,6 @@ import type { QueryClient } from "@tanstack/react-query"
 import type { BookWithReviewChecks } from "../types"
 
 export type ReviewAssignmentCreateResponseData = BookWithReviewChecks[]
-
 type MakeReviewAssignmentCreateQueryOptionsProps = {
     classroom_id: string | undefined
     student_id: string | undefined
@@ -33,8 +32,10 @@ const reviewAssignmentCreateLoaderFn = async ({
 }: ReviewAssignmentCreateLoaderFnProps) => {
     if (!student_id) return undefined
 
-    const data = await queryClient.ensureQueryData(makeReviewAssignmentCreateQueryOptions({ classroom_id, student_id }))
-    return data
+    const bookWithReviewChecksArray = await queryClient.ensureQueryData(
+        makeReviewAssignmentCreateQueryOptions({ classroom_id, student_id })
+    )
+    return bookWithReviewChecksArray
 }
 
 export default reviewAssignmentCreateLoaderFn

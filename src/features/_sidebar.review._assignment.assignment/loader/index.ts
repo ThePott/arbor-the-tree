@@ -2,8 +2,8 @@ import { instance } from "@/packages/api/axiosInstances"
 import type { QueryClient } from "@tanstack/react-query"
 import type { ReviewAssignmentMetaInfo } from "../type"
 
+// NOTE: use to navigate when searching type of query data
 export type ReviewAssignmentResponseData = ReviewAssignmentMetaInfo[]
-
 type MakeReviewAssignmentQueryOptionsProps = {
     classroom_id: string | undefined
     student_id: string | undefined
@@ -30,8 +30,10 @@ const reviewAssignmentLoaderFn = async ({ queryClient, classroom_id, student_id 
     // NOTE: 학생 선택 안 되면 호출 안 함
     if (!student_id) return undefined
 
-    const data = queryClient.ensureQueryData(makeReviewAssignmentQueryOptions({ classroom_id, student_id }))
-    return data
+    const assignmentMetaInfoArray = await queryClient.ensureQueryData(
+        makeReviewAssignmentQueryOptions({ classroom_id, student_id })
+    )
+    return assignmentMetaInfoArray
 }
 
 export default reviewAssignmentLoaderFn
