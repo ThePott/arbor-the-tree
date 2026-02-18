@@ -116,16 +116,16 @@ const ProgressSession = (props: ProgressSessionProps) => {
             onClick={handleClickToComplete}
         >
             <StatusCompletenessBox.LabelGroup>
-                <StatusCompletenessBox.Label role="main">{conciseSession.start.step} </StatusCompletenessBox.Label>
+                <StatusCompletenessBox.Label role="main">{conciseSession.start.step}</StatusCompletenessBox.Label>
                 {conciseSession.end.topic && (
                     <StatusCompletenessBox.Label role="conditional">
                         {conciseSession.end.topic}
                     </StatusCompletenessBox.Label>
                 )}
                 {conciseSession.end.step && (
-                    <StatusCompletenessBox.Label role="main">{conciseSession.end.step} </StatusCompletenessBox.Label>
+                    <StatusCompletenessBox.Label role="main">{conciseSession.end.step}</StatusCompletenessBox.Label>
                 )}
-                <StatusCompletenessBox.Label role="sub">{dateInfoText} </StatusCompletenessBox.Label>
+                <StatusCompletenessBox.Label role="sub">{dateInfoText}</StatusCompletenessBox.Label>
             </StatusCompletenessBox.LabelGroup>
             <ProgressSessionDropdown
                 startingTopicTitle={startingTopicTitle}
