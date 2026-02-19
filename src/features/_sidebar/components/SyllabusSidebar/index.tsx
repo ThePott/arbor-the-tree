@@ -1,10 +1,10 @@
 import { Vstack } from "@/packages/components/layouts"
-import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import type { ReactNode } from "react"
 import { makeProgressSyllabusAssignedQueryOptions, makeReviewAssignmentQueryOptions } from "../../loader"
+import CreatedReviewAssignmentButton from "./CreatedReviewAssignmentButton"
 import SyllabusAssignedButton from "./SyllabusAssignedButton"
 
 const commonSidebarRoute = getRouteApi("/_sidebar")
@@ -57,11 +57,7 @@ const SyllabusSidebarButtonMany = ({ isDeletable }: SyllabusSidebarButtonManyPro
 
     return (
         <>
-            {dataAssignment.length > 0 && (
-                <RoundBox padding="xl" isBordered>
-                    placeholder for assignement
-                </RoundBox>
-            )}
+            {dataAssignment.length > 0 && <CreatedReviewAssignmentButton />}
             {dataSyllabus.length > 0 && (
                 <>
                     {dataSyllabus.map((assignedJoinedSyllabus) => (

@@ -9,6 +9,7 @@ const validateSearch = z.object({
     student_id: z.string().optional(),
     classroom_id: z.string().optional(),
     syllabus_id: z.string().optional(),
+    is_assignment: z.boolean().optional(),
 })
 export type SidebarSearchParams = z.input<typeof validateSearch>
 export const Route = createFileRoute("/_sidebar")({

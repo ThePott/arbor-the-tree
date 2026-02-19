@@ -19,10 +19,11 @@ const SyllabusAssignedButton = ({ assignedJoinedSyllabus, isDeletable }: Syllabu
     const navigate = useNavigate()
     const { pathname } = useLocation()
     const searchParams = route.useSearch()
+    const { is_assignment: _, ...rest } = searchParams
     const { classroom_id, student_id } = searchParams
 
     const handleBodyClick = () => {
-        navigate({ to: pathname, search: { ...searchParams, syllabus_id: assignedJoinedSyllabus?.syllabus.id } })
+        navigate({ to: pathname, search: { ...rest, syllabus_id: assignedJoinedSyllabus?.syllabus.id } })
     }
     const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.stopPropagation()
