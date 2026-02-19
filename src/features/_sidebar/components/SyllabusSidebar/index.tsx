@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import type { ReactNode } from "react"
 import { makeProgressSyllabusAssignedQueryOptions, makeReviewAssignmentQueryOptions } from "../../loader"
+import AllButton from "./AllButton"
 import CreatedReviewAssignmentButton from "./CreatedReviewAssignmentButton"
 import SyllabusAssignedButton from "./SyllabusAssignedButton"
 
@@ -30,7 +31,7 @@ const SyllabusSidebarAllButton = () => {
 
     if (dataAssignment.length === 0 && dataSyllabus.length === 0) return null
 
-    return <SyllabusAssignedButton assignedJoinedSyllabus={null} />
+    return <AllButton />
 }
 
 type SyllabusSidebarButtonManyProps = {

@@ -1,9 +1,7 @@
 import useProgressStore from "@/features/_sidebar._progress.progress/store"
 import type { AssignedJoinedSyllabus } from "@/features/_sidebar._progress.progress/types"
-import Button from "@/packages/components/Button/Button"
-import { Hstack, Vstack } from "@/packages/components/layouts"
 import { getRouteApi, useLocation, useNavigate } from "@tanstack/react-router"
-import { X } from "lucide-react"
+import SidebarButton from "../SidebarButton"
 
 const route = getRouteApi("/_sidebar")
 
@@ -34,26 +32,15 @@ const SyllabusAssignedButton = ({ assignedJoinedSyllabus, isDeletable }: Syllabu
     const isSelected = searchParams.syllabus_id === assignedJoinedSyllabus?.syllabus.id
 
     return (
-        <Button
-            as="div"
-            border="onHover"
-            color={isSelected ? "bg2" : "transparent"}
-            isOnLeft
-            onClick={handleBodyClick}
-            className="grow"
-        >
-            <Hstack className="w-full items-center">
-                <Vstack gap="none" className="grow">
-                    <p>{assignedJoinedSyllabus ? assignedJoinedSyllabus.syllabus.book.title : "전체"}</p>
-                    <p className="text-fg-dim text-my-xs">{assignedJoinedSyllabus?.syllabus.created_at.slice(0, 10)}</p>
-                </Vstack>
-                {isDeletable && assignedJoinedSyllabus && Boolean(classroom_id) !== Boolean(student_id) && (
-                    <Button padding="tight" border="onHover" color="transparent" onClick={handleDeleteClick}>
-                        <X size={16} />
-                    </Button>
-                )}
-            </Hstack>
-        </Button>
+        <SidebarButton isSelected={isSelected} onClick={handleBodyClick}>
+            <SidebarButton.TextSection>
+                <p>{assignedJoinedSyllabus ? assignedJoinedSyllabus.syllabus.book.title : "전체"}</p>
+                <p className="text-fg-dim text-my-xs">{assignedJoinedSyllabus?.syllabus.created_at.slice(0, 10)}</p>
+            </SidebarButton.TextSection>
+            {isDeletable && assignedJoinedSyllabus && Boolean(classroom_id) !== Boolean(student_id) && (
+                <SidebarButton.XButton onClick={handleDeleteClick} />
+            )}
+        </SidebarButton>
     )
 }
 

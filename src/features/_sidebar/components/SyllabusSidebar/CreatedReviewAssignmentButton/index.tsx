@@ -1,6 +1,5 @@
-import Button from "@/packages/components/Button/Button"
-import { Hstack, Vstack } from "@/packages/components/layouts"
 import { getRouteApi, useLoaderData, useLocation, useNavigate } from "@tanstack/react-router"
+import SidebarButton from "../SidebarButton"
 
 const route = getRouteApi("/_sidebar")
 const CreatedReviewAssignmentButton = () => {
@@ -21,21 +20,12 @@ const CreatedReviewAssignmentButton = () => {
     }
 
     return (
-        <Button
-            as="div"
-            border="onHover"
-            color={is_assignment ? "bg2" : "transparent"}
-            isOnLeft
-            onClick={handleClick}
-            className="grow"
-        >
-            <Hstack className="w-full items-center">
-                <Vstack gap="none" className="grow">
-                    <p>오답 과제</p>
-                    <p className="text-fg-dim text-my-xs">{`${assignmentMetaInfoArray.length} 묶음`}</p>
-                </Vstack>
-            </Hstack>
-        </Button>
+        <SidebarButton onClick={handleClick} isSelected={Boolean(is_assignment)}>
+            <SidebarButton.TextSection>
+                <p>오답 과제</p>
+                <p className="text-fg-dim text-my-xs">{`${assignmentMetaInfoArray.length} 묶음`}</p>
+            </SidebarButton.TextSection>
+        </SidebarButton>
     )
 }
 
