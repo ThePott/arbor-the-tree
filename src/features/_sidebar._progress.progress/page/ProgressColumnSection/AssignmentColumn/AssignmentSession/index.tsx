@@ -1,5 +1,5 @@
-import type { ReviewAssignmentResponseData } from "@/features/_sidebar.review._assignment.assignment/loader"
 import type { ReviewAssignmentMetaInfo } from "@/features/_sidebar.review._assignment.assignment/type"
+import type { ReviewAssignmentResponseData } from "@/features/_sidebar/loader"
 import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"

@@ -51,7 +51,9 @@ const ReviewAssignmentCreatePage = () => {
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ columns, data: rowArray, getCoreRowModel: getCoreRowModel() })
 
-    const { studentArray } = useLoaderData({ from: "/_sidebar" })
+    const {
+        extendedStudentArray: { studentArray },
+    } = useLoaderData({ from: "/_sidebar" })
     const student = studentArray.find((el) => el.id === student_id)
     const title = `${student?.users.name} / 오답 과제 제작`
 

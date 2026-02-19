@@ -1,11 +1,10 @@
-import { makeProgressSyllabusAssignedQueryOptions } from "@/features/_sidebar._progress/loader"
-import { makeReviewAssignmentQueryOptions } from "@/features/_sidebar.review._assignment.assignment/loader"
 import { Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import type { ReactNode } from "react"
+import { makeProgressSyllabusAssignedQueryOptions, makeReviewAssignmentQueryOptions } from "../../loader"
 import SyllabusAssignedButton from "./SyllabusAssignedButton"
 
 const commonSidebarRoute = getRouteApi("/_sidebar")
@@ -14,7 +13,7 @@ const SyllabusSidebarAllButton = () => {
     const { student_id, classroom_id } = commonSidebarRoute.useSearch()
     const { assignedJoinedSyllabusArray: loaderDataSyllabus, assignmentMetaInfoArray: loaderDataAssignment } =
         useLoaderData({
-            from: "/_sidebar/_progress",
+            from: "/_sidebar",
         })
 
     const { data: queryDataSyllabus } = useQuery({
@@ -40,9 +39,7 @@ type SyllabusSidebarButtonManyProps = {
 const SyllabusSidebarButtonMany = ({ isDeletable }: SyllabusSidebarButtonManyProps) => {
     const { student_id, classroom_id } = commonSidebarRoute.useSearch()
     const { assignedJoinedSyllabusArray: loaderDataSyllabus, assignmentMetaInfoArray: loaderDataAssignment } =
-        useLoaderData({
-            from: "/_sidebar/_progress",
-        })
+        useLoaderData({ from: "/_sidebar" })
 
     const { data: queryDataSyllabus } = useQuery({
         ...makeProgressSyllabusAssignedQueryOptions({ classroom_id, student_id }),
@@ -59,8 +56,7 @@ const SyllabusSidebarButtonMany = ({ isDeletable }: SyllabusSidebarButtonManyPro
     if (!student_id && !classroom_id) return null
 
     return (
-        <Vstack gap="none">
-            <SyllabusAssignedButton assignedJoinedSyllabus={null} />
+        <>
             {dataAssignment.length > 0 && (
                 <RoundBox padding="xl" isBordered>
                     placeholder for assignement
@@ -77,7 +73,7 @@ const SyllabusSidebarButtonMany = ({ isDeletable }: SyllabusSidebarButtonManyPro
                     ))}
                 </>
             )}
-        </Vstack>
+        </>
     )
 }
 
@@ -91,23 +87,9 @@ type SyllabusSidebarProps = {
 }
 const SyllabusSidebar = ({ children }: SyllabusSidebarProps) => {
     const { student_id, classroom_id } = commonSidebarRoute.useSearch()
-    const { studentArray, classroomArray } = useLoaderData({ from: "/_sidebar" })
-    const { assignedJoinedSyllabusArray: loaderDataSyllabus, assignmentMetaInfoArray: loaderDataAssignment } =
-        useLoaderData({
-            from: "/_sidebar/_progress",
-        })
-
-    const { data: queryDataSyllabus } = useQuery({
-        ...makeProgressSyllabusAssignedQueryOptions({ classroom_id, student_id }),
-        enabled: Boolean(classroom_id || student_id),
-    })
-    const { data: queryDataAssignment } = useQuery({
-        ...makeReviewAssignmentQueryOptions({ classroom_id, student_id }),
-        enabled: Boolean(student_id),
-    })
-
-    const dataSyllabus = queryDataSyllabus ?? loaderDataSyllabus
-    const dataAssignment = queryDataAssignment ?? loaderDataAssignment
+    const {
+        extendedStudentArray: { studentArray, classroomArray },
+    } = useLoaderData({ from: "/_sidebar" })
 
     const classroom = classroomArray.find((el) => el.id === classroom_id)
     const student = studentArray.find((el) => el.id === student_id)
@@ -119,26 +101,6 @@ const SyllabusSidebar = ({ children }: SyllabusSidebarProps) => {
             <Title as="h3">{title}</Title>
 
             {children}
-
-            <Vstack gap="none">
-                {dataAssignment.length > 0 ||
-                    (dataSyllabus.length > 0 && <SyllabusAssignedButton assignedJoinedSyllabus={null} />)}
-                {dataAssignment.length > 0 && (
-                    <RoundBox padding="xl" isBordered>
-                        placeholder for assignement
-                    </RoundBox>
-                )}
-                {dataSyllabus.length > 0 && (
-                    <>
-                        {dataSyllabus.map((assignedJoinedSyllabus) => (
-                            <SyllabusAssignedButton
-                                key={assignedJoinedSyllabus.syllabus.id}
-                                assignedJoinedSyllabus={assignedJoinedSyllabus}
-                            />
-                        ))}
-                    </>
-                )}
-            </Vstack>
         </Vstack>
     )
 }

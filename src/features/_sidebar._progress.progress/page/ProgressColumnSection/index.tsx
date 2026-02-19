@@ -1,4 +1,4 @@
-import { makeReviewAssignmentQueryOptions } from "@/features/_sidebar.review._assignment.assignment/loader"
+import { makeReviewAssignmentQueryOptions } from "@/features/_sidebar/loader"
 import { FlexOneContainer, Hstack, Vstack } from "@/packages/components/layouts"
 import Toggle from "@/packages/components/Toggle"
 import { useQuery } from "@tanstack/react-query"

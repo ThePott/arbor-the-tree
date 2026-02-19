@@ -1,4 +1,4 @@
-import { makeReviewAssignmentQueryOptions } from "@/features/_sidebar.review._assignment.assignment/loader"
+import { makeReviewAssignmentQueryOptions } from "@/features/_sidebar/loader"
 import { instance } from "@/packages/api/axiosInstances"
 import type { QueryClient } from "@tanstack/react-query"
 import type { ConciseSyllabus } from "../types"

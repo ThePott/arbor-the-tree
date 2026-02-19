@@ -1,3 +1,4 @@
+import { type ReviewAssignmentResponseData, makeReviewAssignmentQueryOptions } from "@/features/_sidebar/loader"
 import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import { Container, Vstack } from "@/packages/components/layouts"
@@ -11,7 +12,6 @@ import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import { BookOpen } from "lucide-react"
 import { useMemo } from "react"
-import { makeReviewAssignmentQueryOptions, type ReviewAssignmentResponseData } from "../loader"
 
 type TabStatus = "uncompleted" | "all"
 const tabArray: Tab<TabStatus>[] = [

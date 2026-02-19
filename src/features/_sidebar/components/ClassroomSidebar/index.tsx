@@ -49,8 +49,8 @@ const groupByClassroom = ({
 }
 
 const ClassroomSidebar = () => {
-    const loaderData = useLoaderData({ from: "/_sidebar" })
-    const { classroomWithStudentArray, isolatedStudentArray } = groupByClassroom(loaderData)
+    const { extendedStudentArray } = useLoaderData({ from: "/_sidebar" })
+    const { classroomWithStudentArray, isolatedStudentArray } = groupByClassroom(extendedStudentArray)
 
     return (
         <Vstack className="overflow-y-auto p-my-md pr-1.5 w-[200px]" gap="sm">

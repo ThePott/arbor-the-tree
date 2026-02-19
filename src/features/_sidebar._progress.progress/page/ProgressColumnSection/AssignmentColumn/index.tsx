@@ -1,4 +1,4 @@
-import type { ReviewAssignmentResponseData } from "@/features/_sidebar.review._assignment.assignment/loader"
+import type { ReviewAssignmentResponseData } from "@/features/_sidebar/loader"
 import ColumnWithBoxes from "../ColumnWithBoxes"
 import AssignmentSession from "./AssignmentSession"
 
