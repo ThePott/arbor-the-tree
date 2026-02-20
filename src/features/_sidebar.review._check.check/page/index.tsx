@@ -8,8 +8,8 @@ import ReviewCheckFlatItemComponent from "./ReviewCheckFlatItemComponent"
 import { makeReviewCheckFlatItemArray } from "./utils/make-review-check-flat-item-array"
 
 const ReviewCheckPage = () => {
-    const { data } = useReviewCheck()
-    const flatItemArray = makeReviewCheckFlatItemArray(data)
+    const { extendedBook } = useReviewCheck()
+    const flatItemArray = makeReviewCheckFlatItemArray(extendedBook)
 
     const parentRef = useRef<HTMLDivElement>(null)
 

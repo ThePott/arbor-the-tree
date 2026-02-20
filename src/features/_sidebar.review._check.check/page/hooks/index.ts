@@ -1,10 +1,10 @@
-import { instance } from "@/packages/api/axiosInstances"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { getRouteApi } from "@tanstack/react-router"
+import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import { useEffect } from "react"
+import { makeReviewCheckAssignmentQueryOptions, makeReviewCheckQueryOptions } from "../../loader"
 import useReviewCheckStore from "../../store"
-import type { QuestionIdToRequestInfo, ReviewCheckResponseData } from "../../types"
+import type { ExtendedBook, QuestionIdToRequestInfo } from "../../types"
 import {
     checkIsMultiSelected,
     findJoinedQuestion,
@@ -19,16 +19,23 @@ const route = getRouteApi("/_sidebar")
 const useReviewCheckQuery = () => {
     const searchParams = route.useSearch()
     const { classroom_id, student_id, syllabus_id } = searchParams
-    const { data } = useQuery({
-        queryKey: ["reviewCheck", classroom_id, student_id, syllabus_id],
-        queryFn: async () => {
-            // NOTE: 다른 학생으로 넘어가면 이걸 지워야 함 mutation.onSuccess 이 아니라 query에서 하는 게 맞기는 한데
-            const response = await instance.get("/review/check", { params: searchParams })
-            return response.data as ReviewCheckResponseData
-        },
+    const { extendedBook: extendedBookLoaderData, extendedAssignment: extendedAssignmentLoaderData } = useLoaderData({
+        from: "/_sidebar/review/_check/check/",
     })
-    return { data }
+
+    const { data: extendedBookQueryData } = useQuery({
+        ...makeReviewCheckQueryOptions({ classroom_id, student_id, syllabus_id }),
+        enabled: Boolean(student_id),
+    })
+    const { data: extendedAssignmentQueryData } = useQuery({
+        ...makeReviewCheckAssignmentQueryOptions({ classroom_id, student_id }),
+        enabled: Boolean(student_id),
+    })
+    const extendedBook = extendedBookLoaderData ?? extendedBookQueryData
+    const extendedAssignment = extendedAssignmentLoaderData ?? extendedAssignmentQueryData
+    return { extendedBook, extendedAssignment }
 }
+export type ReviewCheckResponseData = ExtendedBook
 
 const useReviewCheckMutate = () => {
     const searchParams = route.useSearch()
@@ -94,6 +101,7 @@ const useDetectChangedIdToRequestInfoThenMutate = (mutate: ReviewCheckMutate) =>
     }, [changedIdToRequestInfo, changedIdToRequestInfoByMultiSelect])
 }
 
+// NOTE: recent array (다중 선택)에 있는 것을 changed에 저장해두는 역할
 const useConvertRecentToChanged = (data: ReviewCheckResponseData | undefined) => {
     const setChangedReviewChecksByMultiSelect = useReviewCheckStore(
         (state) => state.setChangedIdToRequestInfoByMultiSelect
@@ -172,13 +180,13 @@ const useResetChangedWhenSearchParamsChanged = () => {
 }
 
 const useReviewCheck = () => {
-    const { data } = useReviewCheckQuery()
+    const { extendedAssignment, extendedBook } = useReviewCheckQuery()
     const { mutate } = useReviewCheckMutate()
     useDetectChangedIdToRequestInfoThenMutate(mutate)
-    useConvertRecentToChanged(data)
+    useConvertRecentToChanged(extendedBook)
     useResetChangedWhenSearchParamsChanged()
 
-    return { data }
+    return { extendedBook, extendedAssignment }
 }
 
 export default useReviewCheck
