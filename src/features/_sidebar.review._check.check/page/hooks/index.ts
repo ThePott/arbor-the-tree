@@ -15,6 +15,7 @@ import {
 
 const route = getRouteApi("/_sidebar")
 
+// TODO: 이거 로더로 빼야 할 거 같은데
 const useReviewCheckQuery = () => {
     const searchParams = route.useSearch()
     const { classroom_id, student_id, syllabus_id } = searchParams

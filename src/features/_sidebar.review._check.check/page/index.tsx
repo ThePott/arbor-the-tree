@@ -1,5 +1,6 @@
 import { Container, FlexOneContainer, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
+import { useLoaderData } from "@tanstack/react-router"
 import { useVirtualizer } from "@tanstack/react-virtual"
 import { useRef } from "react"
 import useReviewCheck from "./hooks"
@@ -10,6 +11,7 @@ import { makeReviewCheckFlatItemArray } from "./utils/make-review-check-flat-ite
 const ReviewCheckPage = () => {
     const { data } = useReviewCheck()
     const flatItemArray = makeReviewCheckFlatItemArray(data)
+    const { assignmentMetaInfoArray } = useLoaderData({ from: "/_sidebar" })
 
     const parentRef = useRef<HTMLDivElement>(null)
 

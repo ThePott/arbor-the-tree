@@ -8,7 +8,8 @@ type DropdownMenuItemProps = {
 }
 const DropdownMenuItem = ({ children, onClick }: DropdownMenuItemProps) => {
     const setIsOn = useDropdownStore((state) => state.setIsOn)
-    const handleClick = () => {
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.stopPropagation()
         setIsOn(false)
         onClick()
     }

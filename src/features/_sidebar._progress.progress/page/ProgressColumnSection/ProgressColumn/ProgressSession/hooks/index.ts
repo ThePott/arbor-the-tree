@@ -169,9 +169,7 @@ const useEventHandlers = ({
         })
     }, [debouncedBoolValue])
 
-    const handleClickToComplete = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        const target = event.target as HTMLElement
-        if (target.closest("[data-dropdown]")) return
+    const handleClickToComplete = async () => {
         // NOTE: 상태 없는 건 끝낼 수 없음
         if (!conciseSession.status) return
 

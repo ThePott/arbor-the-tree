@@ -130,10 +130,17 @@ const StatusCompletenessBox = ({ isCompleted, status, isOld, onClick, children }
     const isNewToday = status === "TODAY" && !isOld
 
     const isBgBright = !isCompleted && (isHomework || isNewToday)
+
+    const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        const target = event.target as HTMLElement
+        if (target.closest("[data-dropdown]")) return
+        onClick?.(event)
+    }
+
     return (
         <ComponentContextProvider value={{ isBgBright }}>
             <RoundBox
-                onClick={onClick}
+                onClick={handleClick}
                 padding="md"
                 className={clsx(statusCompletenessBoxVariants({ isCompleted, status: status, isOld }))}
             >
