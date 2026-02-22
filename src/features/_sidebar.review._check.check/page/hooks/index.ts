@@ -2,9 +2,13 @@ import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import { useEffect } from "react"
-import { makeReviewCheckAssignmentQueryOptions, makeReviewCheckQueryOptions } from "../../loader"
+import {
+    makeReviewCheckAssignmentQueryOptions,
+    makeReviewCheckQueryOptions,
+    type ReviewCheckResponseData,
+} from "../../loader"
 import useReviewCheckStore from "../../store"
-import type { ExtendedBook, QuestionIdToRequestInfo } from "../../types"
+import type { QuestionIdToRequestInfo } from "../../types"
 import {
     checkIsMultiSelected,
     findJoinedQuestion,
@@ -15,7 +19,6 @@ import {
 
 const route = getRouteApi("/_sidebar")
 
-// TODO: 이거 로더로 빼야 할 거 같은데
 const useReviewCheckQuery = () => {
     const searchParams = route.useSearch()
     const { classroom_id, student_id, syllabus_id } = searchParams
@@ -35,7 +38,6 @@ const useReviewCheckQuery = () => {
     const extendedAssignment = extendedAssignmentLoaderData ?? extendedAssignmentQueryData
     return { extendedBook, extendedAssignment }
 }
-export type ReviewCheckResponseData = ExtendedBook
 
 const useReviewCheckMutate = () => {
     const searchParams = route.useSearch()

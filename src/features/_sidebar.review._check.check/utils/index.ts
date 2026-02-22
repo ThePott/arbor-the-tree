@@ -2,8 +2,9 @@ import queryClient from "@/packages/api/queryClient"
 import type { SidebarSearchParams } from "@/routes/_sidebar"
 import { ClientError } from "@/shared/error/clientError"
 import { produce } from "immer"
+import type { ReviewCheckResponseData } from "../loader"
 import useReviewCheckStore from "../store"
-import type { JoinedQuestion, QuestionIdToRequestInfo, ReviewCheckOrderInfo, ReviewCheckResponseData } from "../types"
+import type { JoinedQuestion, QuestionIdToRequestInfo, ReviewCheckOrderInfo } from "../types"
 
 export const checkIsMultiSelected = ({ topic_order, step_order, question_order }: ReviewCheckOrderInfo): boolean => {
     const recentReviewCheckInfoArray = useReviewCheckStore.getState().recentOrderInfoArray

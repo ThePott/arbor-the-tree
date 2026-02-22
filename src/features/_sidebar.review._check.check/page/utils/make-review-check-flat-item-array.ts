@@ -1,4 +1,5 @@
-import type { JoinedQuestion, JoinedQuestionWithOrders, PagenatedQuestions, ReviewCheckResponseData } from "../../types"
+import type { ReviewCheckResponseData } from "../../loader"
+import type { JoinedQuestion, JoinedQuestionWithOrders, PagenatedQuestions } from "../../types"
 
 type MakeFlatPagenatedInStepProps = {
     topic_order: number
