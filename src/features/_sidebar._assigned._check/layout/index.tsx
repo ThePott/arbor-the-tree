@@ -1,18 +1,15 @@
-import SidebarSection from "@/features/_sidebar/components"
+import SyllabusSidebar from "@/features/_sidebar._assigned/components/SyllabusSidebar"
 import { FlexOneContainer } from "@/packages/components/layouts"
 import { Outlet } from "@tanstack/react-router"
 
 const ReviewCheckLayout = () => {
     return (
         <>
-            <SidebarSection>
-                <SidebarSection.ClassroomSidebar />
-                <SidebarSection.SyllabusSidebar>
-                    <SidebarSection.SyllabusSidebar.ButtonGroup>
-                        <SidebarSection.SyllabusSidebar.ButtonMany />
-                    </SidebarSection.SyllabusSidebar.ButtonGroup>
-                </SidebarSection.SyllabusSidebar>
-            </SidebarSection>
+            <SyllabusSidebar>
+                <SyllabusSidebar.ButtonGroup>
+                    <SyllabusSidebar.ButtonMany />
+                </SyllabusSidebar.ButtonGroup>
+            </SyllabusSidebar>
 
             <FlexOneContainer isYScrollable>
                 <Outlet />

@@ -1,20 +1,17 @@
-import SidebarSection from "@/features/_sidebar/components"
+import SyllabusSidebar from "@/features/_sidebar._assigned/components/SyllabusSidebar"
 import { Outlet } from "@tanstack/react-router"
 import SyllabusForm from "./SyllabusForm"
 
 const ProgressSidebar = () => {
     return (
         <>
-            <SidebarSection>
-                <SidebarSection.ClassroomSidebar />
-                <SidebarSection.SyllabusSidebar>
-                    <SyllabusForm />
-                    <SidebarSection.SyllabusSidebar.ButtonGroup>
-                        <SidebarSection.SyllabusSidebar.AllButton />
-                        <SidebarSection.SyllabusSidebar.ButtonMany isDeletable />
-                    </SidebarSection.SyllabusSidebar.ButtonGroup>
-                </SidebarSection.SyllabusSidebar>
-            </SidebarSection>
+            <SyllabusSidebar>
+                <SyllabusForm />
+                <SyllabusSidebar.ButtonGroup>
+                    <SyllabusSidebar.AllButton />
+                    <SyllabusSidebar.ButtonMany isDeletable />
+                </SyllabusSidebar.ButtonGroup>
+            </SyllabusSidebar>
 
             <Outlet />
         </>
