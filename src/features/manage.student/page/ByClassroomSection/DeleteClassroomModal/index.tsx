@@ -1,8 +1,8 @@
-import type { ManageStudentResponseData } from "@/features/manage.student/loader"
 import useManageStudentStore from "@/features/manage.student/store"
 import { instance } from "@/packages/api/axiosInstances"
 import Modal from "@/packages/Modal"
 import { debugCache, debugMutation, debugRender } from "@/shared/config/debug/"
+import type { ManageStudentResponseData } from "@/shared/queryOptions/manageStudentQueryOptions"
 import { makeUlLul } from "@/shared/utils/stringManipulation"
 import { useMutation } from "@tanstack/react-query"
 

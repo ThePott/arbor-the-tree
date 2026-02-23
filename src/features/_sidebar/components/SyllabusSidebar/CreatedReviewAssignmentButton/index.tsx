@@ -7,7 +7,7 @@ const CreatedReviewAssignmentButton = () => {
     const navigate = useNavigate()
     const { pathname } = useLocation()
     const { is_assignment, syllabus_id: _, ...rest } = searchParams
-    const { assignmentMetaInfoArray } = useLoaderData({ from: "/_sidebar" })
+    const { assignmentMetaInfoArray } = useLoaderData({ from: "/_sidebar/_assigned" })
 
     const handleClick = () => {
         navigate({

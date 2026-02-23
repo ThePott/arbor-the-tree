@@ -1,8 +1,11 @@
-import { ManageStudentLoaderQueryOptions, type ManageStudentResponseData } from "@/features/manage.student/loader"
 import useManageStudentStore from "@/features/manage.student/store"
 import { instance } from "@/packages/api/axiosInstances"
 import { debugCache, debugForm, debugMutation } from "@/shared/config/debug/"
 import type { Classroom, ClassroomStudent, ValueLabel } from "@/shared/interfaces"
+import {
+    manageStudentLoaderQueryOptions,
+    type ManageStudentResponseData,
+} from "@/shared/queryOptions/manageStudentQueryOptions"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useLoaderData } from "@tanstack/react-router"
@@ -16,7 +19,7 @@ type PostBody = {
 
 const useClassrromAccordianForm = (classroom: Classroom) => {
     const loaderData = useLoaderData({ from: "/manage/student" })
-    const { data: queryData } = useQuery(ManageStudentLoaderQueryOptions)
+    const { data: queryData } = useQuery(manageStudentLoaderQueryOptions)
     const studentArray = queryData?.studentArray ?? loaderData.studentArray
     const classroomStudentArray = queryData?.classroomStudentArray ?? loaderData.classroomStudentArray
 

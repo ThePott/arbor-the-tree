@@ -19,14 +19,15 @@ import { Route as ManageStudentRouteImport } from './routes/manage.student'
 import { Route as ManageResumeRouteImport } from './routes/manage.resume'
 import { Route as ManageDeleteRouteImport } from './routes/manage.delete'
 import { Route as BookWriteRouteImport } from './routes/book.write'
-import { Route as SidebarProgressRouteImport } from './routes/_sidebar._progress'
+import { Route as SidebarAssignedRouteImport } from './routes/_sidebar._assigned'
 import { Route as OauthKakaoCallbackRouteImport } from './routes/oauth.kakao.callback'
-import { Route as SidebarReviewCheckRouteImport } from './routes/_sidebar.review._check'
-import { Route as SidebarReviewAssignmentRouteImport } from './routes/_sidebar.review._assignment'
-import { Route as SidebarProgressProgressIndexRouteImport } from './routes/_sidebar._progress.progress.index'
-import { Route as SidebarReviewCheckCheckIndexRouteImport } from './routes/_sidebar.review._check.check.index'
-import { Route as SidebarReviewAssignmentAssignmentIndexRouteImport } from './routes/_sidebar.review._assignment.assignment.index'
-import { Route as SidebarReviewAssignmentAssignmentCreateIndexRouteImport } from './routes/_sidebar.review._assignment.assignment.create.index'
+import { Route as SidebarAssignedProgressRouteImport } from './routes/_sidebar._assigned._progress'
+import { Route as SidebarAssignedCheckRouteImport } from './routes/_sidebar._assigned._check'
+import { Route as SidebarAssignedAssignmentRouteImport } from './routes/_sidebar._assigned._assignment'
+import { Route as SidebarAssignedProgressProgressIndexRouteImport } from './routes/_sidebar._assigned._progress.progress.index'
+import { Route as SidebarAssignedCheckCheckIndexRouteImport } from './routes/_sidebar._assigned._check.check.index'
+import { Route as SidebarAssignedAssignmentAssignmentIndexRouteImport } from './routes/_sidebar._assigned._assignment.assignment.index'
+import { Route as SidebarAssignedAssignmentAssignmentCreateIndexRouteImport } from './routes/_sidebar._assigned._assignment.assignment.create.index'
 
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
@@ -77,8 +78,8 @@ const BookWriteRoute = BookWriteRouteImport.update({
   path: '/book/write',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SidebarProgressRoute = SidebarProgressRouteImport.update({
-  id: '/_progress',
+const SidebarAssignedRoute = SidebarAssignedRouteImport.update({
+  id: '/_assigned',
   getParentRoute: () => SidebarRoute,
 } as any)
 const OauthKakaoCallbackRoute = OauthKakaoCallbackRouteImport.update({
@@ -86,39 +87,42 @@ const OauthKakaoCallbackRoute = OauthKakaoCallbackRouteImport.update({
   path: '/oauth/kakao/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SidebarReviewCheckRoute = SidebarReviewCheckRouteImport.update({
-  id: '/review/_check',
-  path: '/review',
-  getParentRoute: () => SidebarRoute,
+const SidebarAssignedProgressRoute = SidebarAssignedProgressRouteImport.update({
+  id: '/_progress',
+  getParentRoute: () => SidebarAssignedRoute,
 } as any)
-const SidebarReviewAssignmentRoute = SidebarReviewAssignmentRouteImport.update({
-  id: '/review/_assignment',
-  path: '/review',
-  getParentRoute: () => SidebarRoute,
+const SidebarAssignedCheckRoute = SidebarAssignedCheckRouteImport.update({
+  id: '/_check',
+  getParentRoute: () => SidebarAssignedRoute,
 } as any)
-const SidebarProgressProgressIndexRoute =
-  SidebarProgressProgressIndexRouteImport.update({
+const SidebarAssignedAssignmentRoute =
+  SidebarAssignedAssignmentRouteImport.update({
+    id: '/_assignment',
+    getParentRoute: () => SidebarAssignedRoute,
+  } as any)
+const SidebarAssignedProgressProgressIndexRoute =
+  SidebarAssignedProgressProgressIndexRouteImport.update({
     id: '/progress/',
     path: '/progress/',
-    getParentRoute: () => SidebarProgressRoute,
+    getParentRoute: () => SidebarAssignedProgressRoute,
   } as any)
-const SidebarReviewCheckCheckIndexRoute =
-  SidebarReviewCheckCheckIndexRouteImport.update({
+const SidebarAssignedCheckCheckIndexRoute =
+  SidebarAssignedCheckCheckIndexRouteImport.update({
     id: '/check/',
     path: '/check/',
-    getParentRoute: () => SidebarReviewCheckRoute,
+    getParentRoute: () => SidebarAssignedCheckRoute,
   } as any)
-const SidebarReviewAssignmentAssignmentIndexRoute =
-  SidebarReviewAssignmentAssignmentIndexRouteImport.update({
+const SidebarAssignedAssignmentAssignmentIndexRoute =
+  SidebarAssignedAssignmentAssignmentIndexRouteImport.update({
     id: '/assignment/',
     path: '/assignment/',
-    getParentRoute: () => SidebarReviewAssignmentRoute,
+    getParentRoute: () => SidebarAssignedAssignmentRoute,
   } as any)
-const SidebarReviewAssignmentAssignmentCreateIndexRoute =
-  SidebarReviewAssignmentAssignmentCreateIndexRouteImport.update({
+const SidebarAssignedAssignmentAssignmentCreateIndexRoute =
+  SidebarAssignedAssignmentAssignmentCreateIndexRouteImport.update({
     id: '/assignment/create/',
     path: '/assignment/create/',
-    getParentRoute: () => SidebarReviewAssignmentRoute,
+    getParentRoute: () => SidebarAssignedAssignmentRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -131,12 +135,11 @@ export interface FileRoutesByFullPath {
   '/manage/student': typeof ManageStudentRoute
   '/test/floating': typeof TestFloatingRoute
   '/book/': typeof BookIndexRoute
-  '/review': typeof SidebarReviewCheckRouteWithChildren
   '/oauth/kakao/callback': typeof OauthKakaoCallbackRoute
-  '/progress/': typeof SidebarProgressProgressIndexRoute
-  '/review/assignment/': typeof SidebarReviewAssignmentAssignmentIndexRoute
-  '/review/check/': typeof SidebarReviewCheckCheckIndexRoute
-  '/review/assignment/create/': typeof SidebarReviewAssignmentAssignmentCreateIndexRoute
+  '/assignment/': typeof SidebarAssignedAssignmentAssignmentIndexRoute
+  '/check/': typeof SidebarAssignedCheckCheckIndexRoute
+  '/progress/': typeof SidebarAssignedProgressProgressIndexRoute
+  '/assignment/create/': typeof SidebarAssignedAssignmentAssignmentCreateIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -148,12 +151,11 @@ export interface FileRoutesByTo {
   '/manage/student': typeof ManageStudentRoute
   '/test/floating': typeof TestFloatingRoute
   '/book': typeof BookIndexRoute
-  '/review': typeof SidebarReviewCheckRouteWithChildren
   '/oauth/kakao/callback': typeof OauthKakaoCallbackRoute
-  '/progress': typeof SidebarProgressProgressIndexRoute
-  '/review/assignment': typeof SidebarReviewAssignmentAssignmentIndexRoute
-  '/review/check': typeof SidebarReviewCheckCheckIndexRoute
-  '/review/assignment/create': typeof SidebarReviewAssignmentAssignmentCreateIndexRoute
+  '/assignment': typeof SidebarAssignedAssignmentAssignmentIndexRoute
+  '/check': typeof SidebarAssignedCheckCheckIndexRoute
+  '/progress': typeof SidebarAssignedProgressProgressIndexRoute
+  '/assignment/create': typeof SidebarAssignedAssignmentAssignmentCreateIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -161,20 +163,21 @@ export interface FileRoutesById {
   '/_sidebar': typeof SidebarRouteWithChildren
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
-  '/_sidebar/_progress': typeof SidebarProgressRouteWithChildren
+  '/_sidebar/_assigned': typeof SidebarAssignedRouteWithChildren
   '/book/write': typeof BookWriteRoute
   '/manage/delete': typeof ManageDeleteRoute
   '/manage/resume': typeof ManageResumeRoute
   '/manage/student': typeof ManageStudentRoute
   '/test/floating': typeof TestFloatingRoute
   '/book/': typeof BookIndexRoute
-  '/_sidebar/review/_assignment': typeof SidebarReviewAssignmentRouteWithChildren
-  '/_sidebar/review/_check': typeof SidebarReviewCheckRouteWithChildren
+  '/_sidebar/_assigned/_assignment': typeof SidebarAssignedAssignmentRouteWithChildren
+  '/_sidebar/_assigned/_check': typeof SidebarAssignedCheckRouteWithChildren
+  '/_sidebar/_assigned/_progress': typeof SidebarAssignedProgressRouteWithChildren
   '/oauth/kakao/callback': typeof OauthKakaoCallbackRoute
-  '/_sidebar/_progress/progress/': typeof SidebarProgressProgressIndexRoute
-  '/_sidebar/review/_assignment/assignment/': typeof SidebarReviewAssignmentAssignmentIndexRoute
-  '/_sidebar/review/_check/check/': typeof SidebarReviewCheckCheckIndexRoute
-  '/_sidebar/review/_assignment/assignment/create/': typeof SidebarReviewAssignmentAssignmentCreateIndexRoute
+  '/_sidebar/_assigned/_assignment/assignment/': typeof SidebarAssignedAssignmentAssignmentIndexRoute
+  '/_sidebar/_assigned/_check/check/': typeof SidebarAssignedCheckCheckIndexRoute
+  '/_sidebar/_assigned/_progress/progress/': typeof SidebarAssignedProgressProgressIndexRoute
+  '/_sidebar/_assigned/_assignment/assignment/create/': typeof SidebarAssignedAssignmentAssignmentCreateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -188,12 +191,11 @@ export interface FileRouteTypes {
     | '/manage/student'
     | '/test/floating'
     | '/book/'
-    | '/review'
     | '/oauth/kakao/callback'
+    | '/assignment/'
+    | '/check/'
     | '/progress/'
-    | '/review/assignment/'
-    | '/review/check/'
-    | '/review/assignment/create/'
+    | '/assignment/create/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -205,32 +207,32 @@ export interface FileRouteTypes {
     | '/manage/student'
     | '/test/floating'
     | '/book'
-    | '/review'
     | '/oauth/kakao/callback'
+    | '/assignment'
+    | '/check'
     | '/progress'
-    | '/review/assignment'
-    | '/review/check'
-    | '/review/assignment/create'
+    | '/assignment/create'
   id:
     | '__root__'
     | '/'
     | '/_sidebar'
     | '/login'
     | '/profile'
-    | '/_sidebar/_progress'
+    | '/_sidebar/_assigned'
     | '/book/write'
     | '/manage/delete'
     | '/manage/resume'
     | '/manage/student'
     | '/test/floating'
     | '/book/'
-    | '/_sidebar/review/_assignment'
-    | '/_sidebar/review/_check'
+    | '/_sidebar/_assigned/_assignment'
+    | '/_sidebar/_assigned/_check'
+    | '/_sidebar/_assigned/_progress'
     | '/oauth/kakao/callback'
-    | '/_sidebar/_progress/progress/'
-    | '/_sidebar/review/_assignment/assignment/'
-    | '/_sidebar/review/_check/check/'
-    | '/_sidebar/review/_assignment/assignment/create/'
+    | '/_sidebar/_assigned/_assignment/assignment/'
+    | '/_sidebar/_assigned/_check/check/'
+    | '/_sidebar/_assigned/_progress/progress/'
+    | '/_sidebar/_assigned/_assignment/assignment/create/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -319,11 +321,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BookWriteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_sidebar/_progress': {
-      id: '/_sidebar/_progress'
+    '/_sidebar/_assigned': {
+      id: '/_sidebar/_assigned'
       path: ''
       fullPath: '/'
-      preLoaderRoute: typeof SidebarProgressRouteImport
+      preLoaderRoute: typeof SidebarAssignedRouteImport
       parentRoute: typeof SidebarRoute
     }
     '/oauth/kakao/callback': {
@@ -333,102 +335,124 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OauthKakaoCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_sidebar/review/_check': {
-      id: '/_sidebar/review/_check'
-      path: '/review'
-      fullPath: '/review'
-      preLoaderRoute: typeof SidebarReviewCheckRouteImport
-      parentRoute: typeof SidebarRoute
+    '/_sidebar/_assigned/_progress': {
+      id: '/_sidebar/_assigned/_progress'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof SidebarAssignedProgressRouteImport
+      parentRoute: typeof SidebarAssignedRoute
     }
-    '/_sidebar/review/_assignment': {
-      id: '/_sidebar/review/_assignment'
-      path: '/review'
-      fullPath: '/review'
-      preLoaderRoute: typeof SidebarReviewAssignmentRouteImport
-      parentRoute: typeof SidebarRoute
+    '/_sidebar/_assigned/_check': {
+      id: '/_sidebar/_assigned/_check'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof SidebarAssignedCheckRouteImport
+      parentRoute: typeof SidebarAssignedRoute
     }
-    '/_sidebar/_progress/progress/': {
-      id: '/_sidebar/_progress/progress/'
+    '/_sidebar/_assigned/_assignment': {
+      id: '/_sidebar/_assigned/_assignment'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof SidebarAssignedAssignmentRouteImport
+      parentRoute: typeof SidebarAssignedRoute
+    }
+    '/_sidebar/_assigned/_progress/progress/': {
+      id: '/_sidebar/_assigned/_progress/progress/'
       path: '/progress'
       fullPath: '/progress/'
-      preLoaderRoute: typeof SidebarProgressProgressIndexRouteImport
-      parentRoute: typeof SidebarProgressRoute
+      preLoaderRoute: typeof SidebarAssignedProgressProgressIndexRouteImport
+      parentRoute: typeof SidebarAssignedProgressRoute
     }
-    '/_sidebar/review/_check/check/': {
-      id: '/_sidebar/review/_check/check/'
+    '/_sidebar/_assigned/_check/check/': {
+      id: '/_sidebar/_assigned/_check/check/'
       path: '/check'
-      fullPath: '/review/check/'
-      preLoaderRoute: typeof SidebarReviewCheckCheckIndexRouteImport
-      parentRoute: typeof SidebarReviewCheckRoute
+      fullPath: '/check/'
+      preLoaderRoute: typeof SidebarAssignedCheckCheckIndexRouteImport
+      parentRoute: typeof SidebarAssignedCheckRoute
     }
-    '/_sidebar/review/_assignment/assignment/': {
-      id: '/_sidebar/review/_assignment/assignment/'
+    '/_sidebar/_assigned/_assignment/assignment/': {
+      id: '/_sidebar/_assigned/_assignment/assignment/'
       path: '/assignment'
-      fullPath: '/review/assignment/'
-      preLoaderRoute: typeof SidebarReviewAssignmentAssignmentIndexRouteImport
-      parentRoute: typeof SidebarReviewAssignmentRoute
+      fullPath: '/assignment/'
+      preLoaderRoute: typeof SidebarAssignedAssignmentAssignmentIndexRouteImport
+      parentRoute: typeof SidebarAssignedAssignmentRoute
     }
-    '/_sidebar/review/_assignment/assignment/create/': {
-      id: '/_sidebar/review/_assignment/assignment/create/'
+    '/_sidebar/_assigned/_assignment/assignment/create/': {
+      id: '/_sidebar/_assigned/_assignment/assignment/create/'
       path: '/assignment/create'
-      fullPath: '/review/assignment/create/'
-      preLoaderRoute: typeof SidebarReviewAssignmentAssignmentCreateIndexRouteImport
-      parentRoute: typeof SidebarReviewAssignmentRoute
+      fullPath: '/assignment/create/'
+      preLoaderRoute: typeof SidebarAssignedAssignmentAssignmentCreateIndexRouteImport
+      parentRoute: typeof SidebarAssignedAssignmentRoute
     }
   }
 }
 
-interface SidebarProgressRouteChildren {
-  SidebarProgressProgressIndexRoute: typeof SidebarProgressProgressIndexRoute
+interface SidebarAssignedAssignmentRouteChildren {
+  SidebarAssignedAssignmentAssignmentIndexRoute: typeof SidebarAssignedAssignmentAssignmentIndexRoute
+  SidebarAssignedAssignmentAssignmentCreateIndexRoute: typeof SidebarAssignedAssignmentAssignmentCreateIndexRoute
 }
 
-const SidebarProgressRouteChildren: SidebarProgressRouteChildren = {
-  SidebarProgressProgressIndexRoute: SidebarProgressProgressIndexRoute,
-}
-
-const SidebarProgressRouteWithChildren = SidebarProgressRoute._addFileChildren(
-  SidebarProgressRouteChildren,
-)
-
-interface SidebarReviewAssignmentRouteChildren {
-  SidebarReviewAssignmentAssignmentIndexRoute: typeof SidebarReviewAssignmentAssignmentIndexRoute
-  SidebarReviewAssignmentAssignmentCreateIndexRoute: typeof SidebarReviewAssignmentAssignmentCreateIndexRoute
-}
-
-const SidebarReviewAssignmentRouteChildren: SidebarReviewAssignmentRouteChildren =
+const SidebarAssignedAssignmentRouteChildren: SidebarAssignedAssignmentRouteChildren =
   {
-    SidebarReviewAssignmentAssignmentIndexRoute:
-      SidebarReviewAssignmentAssignmentIndexRoute,
-    SidebarReviewAssignmentAssignmentCreateIndexRoute:
-      SidebarReviewAssignmentAssignmentCreateIndexRoute,
+    SidebarAssignedAssignmentAssignmentIndexRoute:
+      SidebarAssignedAssignmentAssignmentIndexRoute,
+    SidebarAssignedAssignmentAssignmentCreateIndexRoute:
+      SidebarAssignedAssignmentAssignmentCreateIndexRoute,
   }
 
-const SidebarReviewAssignmentRouteWithChildren =
-  SidebarReviewAssignmentRoute._addFileChildren(
-    SidebarReviewAssignmentRouteChildren,
+const SidebarAssignedAssignmentRouteWithChildren =
+  SidebarAssignedAssignmentRoute._addFileChildren(
+    SidebarAssignedAssignmentRouteChildren,
   )
 
-interface SidebarReviewCheckRouteChildren {
-  SidebarReviewCheckCheckIndexRoute: typeof SidebarReviewCheckCheckIndexRoute
+interface SidebarAssignedCheckRouteChildren {
+  SidebarAssignedCheckCheckIndexRoute: typeof SidebarAssignedCheckCheckIndexRoute
 }
 
-const SidebarReviewCheckRouteChildren: SidebarReviewCheckRouteChildren = {
-  SidebarReviewCheckCheckIndexRoute: SidebarReviewCheckCheckIndexRoute,
+const SidebarAssignedCheckRouteChildren: SidebarAssignedCheckRouteChildren = {
+  SidebarAssignedCheckCheckIndexRoute: SidebarAssignedCheckCheckIndexRoute,
 }
 
-const SidebarReviewCheckRouteWithChildren =
-  SidebarReviewCheckRoute._addFileChildren(SidebarReviewCheckRouteChildren)
+const SidebarAssignedCheckRouteWithChildren =
+  SidebarAssignedCheckRoute._addFileChildren(SidebarAssignedCheckRouteChildren)
+
+interface SidebarAssignedProgressRouteChildren {
+  SidebarAssignedProgressProgressIndexRoute: typeof SidebarAssignedProgressProgressIndexRoute
+}
+
+const SidebarAssignedProgressRouteChildren: SidebarAssignedProgressRouteChildren =
+  {
+    SidebarAssignedProgressProgressIndexRoute:
+      SidebarAssignedProgressProgressIndexRoute,
+  }
+
+const SidebarAssignedProgressRouteWithChildren =
+  SidebarAssignedProgressRoute._addFileChildren(
+    SidebarAssignedProgressRouteChildren,
+  )
+
+interface SidebarAssignedRouteChildren {
+  SidebarAssignedAssignmentRoute: typeof SidebarAssignedAssignmentRouteWithChildren
+  SidebarAssignedCheckRoute: typeof SidebarAssignedCheckRouteWithChildren
+  SidebarAssignedProgressRoute: typeof SidebarAssignedProgressRouteWithChildren
+}
+
+const SidebarAssignedRouteChildren: SidebarAssignedRouteChildren = {
+  SidebarAssignedAssignmentRoute: SidebarAssignedAssignmentRouteWithChildren,
+  SidebarAssignedCheckRoute: SidebarAssignedCheckRouteWithChildren,
+  SidebarAssignedProgressRoute: SidebarAssignedProgressRouteWithChildren,
+}
+
+const SidebarAssignedRouteWithChildren = SidebarAssignedRoute._addFileChildren(
+  SidebarAssignedRouteChildren,
+)
 
 interface SidebarRouteChildren {
-  SidebarProgressRoute: typeof SidebarProgressRouteWithChildren
-  SidebarReviewAssignmentRoute: typeof SidebarReviewAssignmentRouteWithChildren
-  SidebarReviewCheckRoute: typeof SidebarReviewCheckRouteWithChildren
+  SidebarAssignedRoute: typeof SidebarAssignedRouteWithChildren
 }
 
 const SidebarRouteChildren: SidebarRouteChildren = {
-  SidebarProgressRoute: SidebarProgressRouteWithChildren,
-  SidebarReviewAssignmentRoute: SidebarReviewAssignmentRouteWithChildren,
-  SidebarReviewCheckRoute: SidebarReviewCheckRouteWithChildren,
+  SidebarAssignedRoute: SidebarAssignedRouteWithChildren,
 }
 
 const SidebarRouteWithChildren =

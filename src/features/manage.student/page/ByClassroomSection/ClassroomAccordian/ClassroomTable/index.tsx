@@ -1,10 +1,10 @@
-import { ManageStudentLoaderQueryOptions } from "@/features/manage.student/loader"
 import type { ExtendedStudent } from "@/features/manage.student/types"
 import { Vstack } from "@/packages/components/layouts"
 import TanstackTable from "@/packages/components/TanstackTable"
 import { debugRender } from "@/shared/config/debug/"
 import { ClientError } from "@/shared/error/clientError"
 import type { Classroom, ClassroomStudent } from "@/shared/interfaces"
+import { manageStudentLoaderQueryOptions } from "@/shared/queryOptions/manageStudentQueryOptions"
 import { useQuery } from "@tanstack/react-query"
 import { useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
@@ -98,7 +98,7 @@ type ClassroomTableProps = {
 const ClassroomTable = ({ classroom }: ClassroomTableProps) => {
     debugRender("ClassroomTable %s", classroom.name)
     const loaderData = useLoaderData({ from: "/manage/student" })
-    const { data: queryData } = useQuery(ManageStudentLoaderQueryOptions)
+    const { data: queryData } = useQuery(manageStudentLoaderQueryOptions)
     const data = queryData ?? loaderData
     const rowArray = useMemo(
         () => convertDataToRowArray({ classroom_id: classroom.id, ...data }),

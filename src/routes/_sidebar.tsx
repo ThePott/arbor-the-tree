@@ -14,9 +14,7 @@ const validateSearch = z.object({
 export type SidebarSearchParams = z.input<typeof validateSearch>
 export const Route = createFileRoute("/_sidebar")({
     component: SidebarSectionLayout,
-    loaderDeps: ({ search: { classroom_id, student_id } }) => ({ classroom_id, student_id }),
-    loader: ({ context: { queryClient }, deps: { classroom_id, student_id } }) =>
-        sidebarLoaderFn({ queryClient, classroom_id, student_id }),
+    loader: ({ context: { queryClient } }) => sidebarLoaderFn(queryClient),
     pendingComponent: SidebarSectionPending,
     validateSearch,
 })

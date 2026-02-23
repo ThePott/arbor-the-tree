@@ -1,5 +1,5 @@
-import useProgressStore from "@/features/_sidebar._progress.progress/store"
-import type { AssignedJoinedSyllabus } from "@/features/_sidebar._progress.progress/types"
+import useProgressStore from "@/features/_sidebar._assigned._progress.progress/store"
+import type { AssignedJoinedSyllabus } from "@/features/_sidebar._assigned._progress.progress/types"
 import { getRouteApi, useLocation, useNavigate } from "@tanstack/react-router"
 import SidebarButton from "../SidebarButton"
 

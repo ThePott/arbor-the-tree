@@ -1,9 +1,10 @@
 import { Vstack } from "@/packages/components/layouts"
 import Title from "@/packages/components/Title/Title"
+import { makeProgressSyllabusAssignedQueryOptions } from "@/shared/queryOptions/progressSyllabusAssignedQueryOptions"
+import { makeReviewAssignmentQueryOptions } from "@/shared/queryOptions/reviewAssignmentQueryOptions"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import type { ReactNode } from "react"
-import { makeProgressSyllabusAssignedQueryOptions, makeReviewAssignmentQueryOptions } from "../../loader"
 import AllButton from "./AllButton"
 import CreatedReviewAssignmentButton from "./CreatedReviewAssignmentButton"
 import SyllabusAssignedButton from "./SyllabusAssignedButton"
@@ -14,7 +15,7 @@ const SyllabusSidebarAllButton = () => {
     const { student_id, classroom_id } = commonSidebarRoute.useSearch()
     const { assignedJoinedSyllabusArray: loaderDataSyllabus, assignmentMetaInfoArray: loaderDataAssignment } =
         useLoaderData({
-            from: "/_sidebar",
+            from: "/_sidebar/_assigned",
         })
 
     const { data: queryDataSyllabus } = useQuery({
@@ -40,7 +41,7 @@ type SyllabusSidebarButtonManyProps = {
 const SyllabusSidebarButtonMany = ({ isDeletable }: SyllabusSidebarButtonManyProps) => {
     const { student_id, classroom_id } = commonSidebarRoute.useSearch()
     const { assignedJoinedSyllabusArray: loaderDataSyllabus, assignmentMetaInfoArray: loaderDataAssignment } =
-        useLoaderData({ from: "/_sidebar" })
+        useLoaderData({ from: "/_sidebar/_assigned" })
 
     const { data: queryDataSyllabus } = useQuery({
         ...makeProgressSyllabusAssignedQueryOptions({ classroom_id, student_id }),
