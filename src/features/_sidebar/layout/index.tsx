@@ -1,6 +1,6 @@
 import { Hstack } from "@/packages/components/layouts"
 import { Outlet } from "@tanstack/react-router"
-import ClassroomSidebar from "../components/ClassroomSidebar"
+import ClassroomSidebar from "./ClassroomSidebar"
 
 const SidebarSectionLayout = () => {
     return (

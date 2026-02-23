@@ -1,6 +1,6 @@
 import SidebarSectionLayout from "@/features/_sidebar/layout"
 import sidebarLoaderFn from "@/features/_sidebar/loader"
-import SidebarSectionPending from "@/features/_sidebar/pending"
+import SidebarPending from "@/features/_sidebar/pending"
 import { createFileRoute } from "@tanstack/react-router"
 import z from "zod/v3"
 
@@ -15,6 +15,6 @@ export type SidebarSearchParams = z.input<typeof validateSearch>
 export const Route = createFileRoute("/_sidebar")({
     component: SidebarSectionLayout,
     loader: ({ context: { queryClient } }) => sidebarLoaderFn(queryClient),
-    pendingComponent: SidebarSectionPending,
+    pendingComponent: SidebarPending,
     validateSearch,
 })
