@@ -3,7 +3,7 @@ import { Outlet } from "@tanstack/react-router"
 
 const ReviewAssignmentLayout = () => {
     return (
-        <FlexOneContainer isYScrollable>
+        <FlexOneContainer isYScrollable className="border-l border-l-border-dim">
             <Outlet />
         </FlexOneContainer>
     )

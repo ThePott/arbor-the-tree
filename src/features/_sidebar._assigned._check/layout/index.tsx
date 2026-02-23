@@ -11,7 +11,7 @@ const ReviewCheckLayout = () => {
                 </SyllabusSidebar.ButtonGroup>
             </SyllabusSidebar>
 
-            <FlexOneContainer isYScrollable>
+            <FlexOneContainer isYScrollable className="border-l border-l-border-dim">
                 <Outlet />
             </FlexOneContainer>
         </>

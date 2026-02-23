@@ -1,4 +1,4 @@
-import { FlexOneContainer, Hstack, Vstack } from "@/packages/components/layouts"
+import { Hstack, Vstack } from "@/packages/components/layouts"
 import Toggle from "@/packages/components/Toggle"
 import { makeReviewAssignmentQueryOptions } from "@/shared/queryOptions/reviewAssignmentQueryOptions"
 import { useQuery } from "@tanstack/react-query"
@@ -35,27 +35,25 @@ const ProgressColumnSection = () => {
         : progressSessionData
 
     return (
-        <FlexOneContainer isXScrollable className="h-full pt-my-lg pl-my-lg">
-            <Vstack gap="none" className="h-full">
-                <Toggle onChange={(value) => setIsSummarized(value)} defaultIsOn={isSummarized}>
-                    요약
-                </Toggle>
-                <Hstack className="flex-1 overflow-y-hidden pb-my-lg">
-                    {!isSummarized && (
-                        <>
-                            {!syllabus_id && assignmentData.length > 0 && (
-                                <AssignmentColumn assignmentData={assignmentData} />
-                            )}
-                            {!is_assignment &&
-                                conciseSyllabusArray.map((conciseSyllabus) => (
-                                    <ProgressColumn key={conciseSyllabus.id} conciseSyllabus={conciseSyllabus} />
-                                ))}
-                        </>
-                    )}
-                    {isSummarized && <ProgressColumnSummarizedMany conciseSyllabusArray={conciseSyllabusArray} />}
-                </Hstack>
-            </Vstack>
-        </FlexOneContainer>
+        <Vstack gap="none" className="h-full">
+            <Toggle onChange={(value) => setIsSummarized(value)} defaultIsOn={isSummarized}>
+                요약
+            </Toggle>
+            <Hstack className="flex-1 overflow-y-hidden pb-my-lg">
+                {!isSummarized && (
+                    <>
+                        {!syllabus_id && assignmentData.length > 0 && (
+                            <AssignmentColumn assignmentData={assignmentData} />
+                        )}
+                        {!is_assignment &&
+                            conciseSyllabusArray.map((conciseSyllabus) => (
+                                <ProgressColumn key={conciseSyllabus.id} conciseSyllabus={conciseSyllabus} />
+                            ))}
+                    </>
+                )}
+                {isSummarized && <ProgressColumnSummarizedMany conciseSyllabusArray={conciseSyllabusArray} />}
+            </Hstack>
+        </Vstack>
     )
 }
 
