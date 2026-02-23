@@ -35,7 +35,7 @@ const ProgressColumnSection = () => {
         : progressSessionData
 
     return (
-        <FlexOneContainer isXScrollable className="pt-my-lg pl-my-lg">
+        <FlexOneContainer isXScrollable className="h-full pt-my-lg pl-my-lg">
             <Vstack gap="none" className="h-full">
                 <Toggle onChange={(value) => setIsSummarized(value)} defaultIsOn={isSummarized}>
                     요약
