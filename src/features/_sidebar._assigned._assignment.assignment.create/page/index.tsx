@@ -63,6 +63,7 @@ const ReviewAssignmentCreatePage = () => {
         if (!student_id) throw ClientError.Unexpected("학생을 선택해주세요")
         const body = {
             student_id,
+            classroom_id,
             bookWithReviewChecksArray: queryData ?? loaderData,
         }
         mutate({ body, additionalData: undefined })
