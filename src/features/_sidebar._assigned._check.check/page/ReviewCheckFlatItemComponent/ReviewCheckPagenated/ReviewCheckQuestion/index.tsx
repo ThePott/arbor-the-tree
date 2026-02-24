@@ -7,7 +7,7 @@ import clsx from "clsx"
 
 const route = getRouteApi("/_sidebar")
 
-type ChecIsOrderInfoMatchingQuestionProps = {
+type CheckIsOrderInfoMatchingQuestionProps = {
     reviewCheckInfo?: ReviewCheckOrderInfo
     topic_order: number
     step_order: number
@@ -18,7 +18,7 @@ const checkIsOrderInfoMatchingQuestion = ({
     topic_order,
     step_order,
     question_order,
-}: ChecIsOrderInfoMatchingQuestionProps): boolean => {
+}: CheckIsOrderInfoMatchingQuestionProps): boolean => {
     if (!reviewCheckInfo) return false
     return (
         reviewCheckInfo.topic_order === topic_order &&
