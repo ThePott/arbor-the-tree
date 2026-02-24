@@ -1,4 +1,13 @@
-import type { Book, Question, ReviewCheckStatus, SessionStatus, Step, Topic } from "@/shared/interfaces"
+import type {
+    Book,
+    Question,
+    ReviewAssginmentQuestion,
+    ReviewAssignment,
+    ReviewCheckStatus,
+    SessionStatus,
+    Step,
+    Topic,
+} from "@/shared/interfaces"
 
 export type JoinedQuestion = Pick<Question, "id" | "name" | "page" | "order"> & {
     session_status: SessionStatus | null
@@ -38,4 +47,9 @@ export type JoinedQuestionWithOrders = {
 export type PagenatedQuestions = {
     page: number
     questions: JoinedQuestionWithOrders[]
+}
+
+export type AssignmentWithQuestions = ReviewAssignment & {
+    bookTitleArray: string[]
+    reviewAssignmentQuestions: ReviewAssginmentQuestion[]
 }

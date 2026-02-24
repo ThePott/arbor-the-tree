@@ -1,7 +1,7 @@
 import { instance } from "@/packages/api/axiosInstances"
 import { ClientError } from "@/shared/error/clientError"
 import { type QueryClient } from "@tanstack/react-query"
-import type { ExtendedBook } from "../types"
+import type { AssignmentWithQuestions, ExtendedBook } from "../types"
 
 type MakeReviewCheckQueryOptionsProps = {
     classroom_id: string | undefined
@@ -35,9 +35,10 @@ export const makeReviewCheckAssignmentQueryOptions = ({
         const response = await instance.get("/review/check/assignment", {
             params: { classroom_id, student_id },
         })
-        return response.data
+        return response.data as AssignmentWithQuestions[]
     },
 })
+export type ReviewCheckAssignmentResponseData = AssignmentWithQuestions[]
 
 // NOTE: 여기서 해야 하는 것
 // NOTE: 그 학생, 반의 오답과제에 맞는 문제들, 오답 체크 현황 가져오기
