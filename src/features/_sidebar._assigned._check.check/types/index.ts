@@ -35,7 +35,7 @@ export type QuestionIdToRequestInfo = Record<
         review_check_id: string | null // NOTE: use to patch if exists
         topic_order: number
         step_order: number
-        session_id: string | null
+        session_id: string | null // NOTE: session_id는 도대체 어디다 쓰는 거야
     }
 >
 
