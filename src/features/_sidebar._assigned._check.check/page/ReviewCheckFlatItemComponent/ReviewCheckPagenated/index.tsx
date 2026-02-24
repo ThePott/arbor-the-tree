@@ -1,6 +1,6 @@
 import type { PagenatedQuestions } from "@/features/_sidebar._assigned._check.check/types"
 import { Hstack } from "@/packages/components/layouts"
-import CheckboxGrid from "../../CheckboxGrid"
+import CheckboxGrid from "../../flatItemComponents/CheckboxGrid"
 import ReviewCheckQuestion from "./ReviewCheckQuestion"
 
 type ReviewCheckPagenatedProps = { pagenatedQuestions: PagenatedQuestions }

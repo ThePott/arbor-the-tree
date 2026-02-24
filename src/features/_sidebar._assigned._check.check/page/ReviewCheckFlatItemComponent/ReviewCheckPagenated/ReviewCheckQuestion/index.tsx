@@ -2,7 +2,7 @@ import useReviewCheckStore from "@/features/_sidebar._assigned._check.check/stor
 import type { JoinedQuestionWithOrders, ReviewCheckOrderInfo } from "@/features/_sidebar._assigned._check.check/types"
 import { updateReviewCheckQueryData } from "@/features/_sidebar._assigned._check.check/utils"
 import { getRouteApi } from "@tanstack/react-router"
-import Checkbox from "../../../Checkbox"
+import Checkbox from "../../../flatItemComponents/Checkbox"
 
 const route = getRouteApi("/_sidebar")
 

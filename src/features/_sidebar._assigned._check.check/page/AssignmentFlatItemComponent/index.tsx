@@ -1,9 +1,9 @@
 import { ClientError } from "@/shared/error/clientError"
 import type { ReviewAssginmentQuestion } from "@/shared/interfaces"
-import Checkbox from "../Checkbox"
-import CheckboxGrid from "../CheckboxGrid"
-import SubtitleHeader from "../SubtitleHeader"
-import TitleHeader from "../TitleHeader"
+import Checkbox from "../flatItemComponents/Checkbox"
+import CheckboxGrid from "../flatItemComponents/CheckboxGrid"
+import SubtitleHeader from "../flatItemComponents/SubtitleHeader"
+import TitleHeader from "../flatItemComponents/TitleHeader"
 
 export type AssignmentFlatItem =
     | { forWhat: "assignment"; title: string }
@@ -25,7 +25,7 @@ const AssignmentFlatItemComponent = ({ flatItem }: { flatItem: AssignmentFlatIte
                             onClick={() => {}}
                             session_status="HOMEWORK"
                             recent="no"
-                            review_check_status_visual="WRONG"
+                            review_check_status_visual={null}
                         >
                             오더
                         </Checkbox>
