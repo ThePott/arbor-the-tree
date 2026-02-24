@@ -50,8 +50,9 @@ export type PagenatedQuestions = {
 }
 
 export type ExtendedReviewAssignmentQuestion = Omit<ReviewAssginmentQuestion, "status"> & {
-    review_check_status: ReviewCheckStatus | null
     session_status: SessionStatus | null
+    review_check_status: ReviewCheckStatus | null
+    review_check_status_visual: ReviewCheckStatus | null
 }
 export type BookInAssignment = {
     bookTitle: string

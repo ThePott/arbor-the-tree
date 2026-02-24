@@ -25,9 +25,9 @@ const AssignmentFlatItemComponent = ({ flatItem }: { flatItem: AssignmentFlatIte
                             onClick={() => {}}
                             session_status={assignmentQuestion.session_status}
                             recent="no"
-                            review_check_status_visual={assignmentQuestion.review_check_status}
+                            review_check_status_visual={assignmentQuestion.review_check_status_visual}
                         >
-                            오더
+                            {assignmentQuestion.order}
                         </Checkbox>
                     ))}
                 </CheckboxGrid>

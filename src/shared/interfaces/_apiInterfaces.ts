@@ -171,6 +171,7 @@ export type ReviewAssginmentQuestion = {
     id: string
     review_assignment_id: string
     review_check_id: string
+    order: number
     status: ReviewCheckStatus | null
     completed_at: string | null
 }
