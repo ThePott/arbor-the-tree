@@ -8,8 +8,9 @@ import ReviewCheckFlatItemComponent from "./ReviewCheckFlatItemComponent"
 import { makeReviewCheckFlatItemArray } from "./utils/make-review-check-flat-item-array"
 
 const ReviewCheckPage = () => {
-    const { extendedBook } = useReviewCheck()
+    const { extendedBook, assignmentWithQuestionsArray } = useReviewCheck()
     const flatItemArray = makeReviewCheckFlatItemArray(extendedBook)
+    // TODO: cont assignmentsFlatItemArray = makeSomethingFlat(assignmentWithQuestionArray)
 
     const parentRef = useRef<HTMLDivElement>(null)
 
@@ -20,10 +21,13 @@ const ReviewCheckPage = () => {
         estimateSize: (index) => {
             const forWhat = flatItemArray[index].forWhat
             switch (forWhat) {
+                // TODO: titleHeader
                 case "topicHeader":
                     return 48
+                // TODO: subtitleHeader
                 case "stepHeader":
                     return 36
+                // TODO: default
                 case "pagenatedQuestions":
                     return 60
             }
@@ -64,6 +68,7 @@ const ReviewCheckPage = () => {
                             }}
                             className="absolute top-0 left-my-xl w-full"
                         >
+                            {/* 어떤 걸 사용하냐에 따라 달라지게 */}
                             <ReviewCheckFlatItemComponent flatItem={flatItemArray[virtualItem.index]} />
                         </div>
                     ))}

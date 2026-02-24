@@ -22,7 +22,10 @@ const route = getRouteApi("/_sidebar")
 const useReviewCheckQuery = () => {
     const searchParams = route.useSearch()
     const { classroom_id, student_id, syllabus_id, is_assignment } = searchParams
-    const { extendedBook: extendedBookLoaderData, extendedAssignment: extendedAssignmentLoaderData } = useLoaderData({
+    const {
+        extendedBook: extendedBookLoaderData,
+        assignmentWithQuestionsArray: assignmentWithQuestionsArrayLoaderData,
+    } = useLoaderData({
         from: "/_sidebar/_assigned/_check/check/",
     })
 
@@ -30,13 +33,13 @@ const useReviewCheckQuery = () => {
         ...makeReviewCheckQueryOptions({ classroom_id, student_id, syllabus_id }),
         enabled: Boolean(student_id && !is_assignment),
     })
-    const { data: extendedAssignmentQueryData } = useQuery({
+    const { data: assignmentWithQuestionsArrayQueryData } = useQuery({
         ...makeReviewCheckAssignmentQueryOptions({ classroom_id, student_id }),
         enabled: Boolean(student_id && is_assignment),
     })
     const extendedBook = extendedBookLoaderData ?? extendedBookQueryData
-    const extendedAssignment = extendedAssignmentLoaderData ?? extendedAssignmentQueryData
-    return { extendedBook, extendedAssignment }
+    const assignmentWithQuestionsArray = assignmentWithQuestionsArrayQueryData ?? assignmentWithQuestionsArrayLoaderData
+    return { extendedBook, assignmentWithQuestionsArray }
 }
 
 const useReviewCheckMutate = () => {
@@ -182,13 +185,13 @@ const useResetChangedWhenSearchParamsChanged = () => {
 }
 
 const useReviewCheck = () => {
-    const { extendedAssignment, extendedBook } = useReviewCheckQuery()
+    const { assignmentWithQuestionsArray, extendedBook } = useReviewCheckQuery()
     const { mutate } = useReviewCheckMutate()
     useDetectChangedIdToRequestInfoThenMutate(mutate)
     useConvertRecentToChanged(extendedBook)
     useResetChangedWhenSearchParamsChanged()
 
-    return { extendedBook, extendedAssignment }
+    return { extendedBook, assignmentWithQuestionsArray }
 }
 
 export default useReviewCheck

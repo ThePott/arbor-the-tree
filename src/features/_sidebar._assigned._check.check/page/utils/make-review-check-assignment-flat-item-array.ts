@@ -1,0 +1,22 @@
+import type { ReviewCheckAssignmentResponseData } from "../../loader"
+import type { AssignmentFlatItem } from "../AssignmentFlatItemComponent"
+
+export const makeReviewCheckAssignmentFlatItemArray = (
+    queryData: ReviewCheckAssignmentResponseData | undefined
+): AssignmentFlatItem[] => {
+    if (!queryData) return []
+    const flatItemArray = queryData.flatMap((assignment) => {
+        const bookTitleArray = assignment.books.map((book) => book.bookTitle)
+        const titleHeader: AssignmentFlatItem = { forWhat: "title", title: bookTitleArray.join(", ") }
+        const subtitleHeaderGroupArray = assignment.books.flatMap((book) => {
+            const subtitleHeader: AssignmentFlatItem = { forWhat: "subtitle", title: book.bookTitle }
+            const assignmentQuestions: AssignmentFlatItem = {
+                forWhat: "assignmentQuestions",
+                reviewAssignmentQuestions: book.reviewAssignmentQuestions,
+            }
+            return [subtitleHeader, assignmentQuestions]
+        })
+        return [titleHeader, ...subtitleHeaderGroupArray]
+    })
+    return flatItemArray
+}

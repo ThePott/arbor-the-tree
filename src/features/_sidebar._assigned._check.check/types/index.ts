@@ -49,7 +49,8 @@ export type PagenatedQuestions = {
     questions: JoinedQuestionWithOrders[]
 }
 
-export type AssignmentWithQuestions = ReviewAssignment & {
-    bookTitleArray: string[]
+export type BookInAssignment = {
+    bookTitle: string
     reviewAssignmentQuestions: ReviewAssginmentQuestion[]
 }
+export type AssignmentWithBooks = ReviewAssignment & { books: BookInAssignment[] }

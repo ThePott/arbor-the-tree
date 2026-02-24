@@ -6,15 +6,15 @@ import SubtitleHeader from "../flatItemComponents/SubtitleHeader"
 import TitleHeader from "../flatItemComponents/TitleHeader"
 
 export type AssignmentFlatItem =
-    | { forWhat: "assignment"; title: string }
-    | { forWhat: "book"; title: string }
+    | { forWhat: "title"; title: string }
+    | { forWhat: "subtitle"; title: string }
     | { forWhat: "assignmentQuestions"; reviewAssignmentQuestions: ReviewAssginmentQuestion[] }
 const AssignmentFlatItemComponent = ({ flatItem }: { flatItem: AssignmentFlatItem }) => {
     const forWhat = flatItem.forWhat
     switch (forWhat) {
-        case "assignment":
+        case "title":
             return <TitleHeader title={flatItem.title} />
-        case "book":
+        case "subtitle":
             return <SubtitleHeader title={flatItem.title} />
         case "assignmentQuestions":
             return (
