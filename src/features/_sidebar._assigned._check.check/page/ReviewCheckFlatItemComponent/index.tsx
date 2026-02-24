@@ -10,9 +10,9 @@ type ReviewCheckFlatItemComponentProps = {
 const ReviewCheckFlatItemComponent = ({ flatItem }: ReviewCheckFlatItemComponentProps) => {
     const forWhat = flatItem.forWhat
     switch (forWhat) {
-        case "topicHeader":
+        case "title":
             return <TitleHeader title={flatItem.title} />
-        case "stepHeader":
+        case "subtitle":
             return <SubtitleHeader title={flatItem.title} />
         case "pagenatedQuestions":
             return <ReviewCheckPagenated pagenatedQuestions={flatItem.pagenatedQuestions} />

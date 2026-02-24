@@ -22,24 +22,22 @@ const route = getRouteApi("/_sidebar")
 const useReviewCheckQuery = () => {
     const searchParams = route.useSearch()
     const { classroom_id, student_id, syllabus_id, is_assignment } = searchParams
-    const {
-        extendedBook: extendedBookLoaderData,
-        assignmentWithQuestionsArray: assignmentWithQuestionsArrayLoaderData,
-    } = useLoaderData({
-        from: "/_sidebar/_assigned/_check/check/",
-    })
+    const { extendedBook: extendedBookLoaderData, assignmentWithBooksArray: assignmentWithBooksArrayLoaderData } =
+        useLoaderData({
+            from: "/_sidebar/_assigned/_check/check/",
+        })
 
     const { data: extendedBookQueryData } = useQuery({
         ...makeReviewCheckQueryOptions({ classroom_id, student_id, syllabus_id }),
         enabled: Boolean(student_id && !is_assignment),
     })
-    const { data: assignmentWithQuestionsArrayQueryData } = useQuery({
+    const { data: assignmentWithBooksArrayQueryData } = useQuery({
         ...makeReviewCheckAssignmentQueryOptions({ classroom_id, student_id }),
         enabled: Boolean(student_id && is_assignment),
     })
     const extendedBook = extendedBookLoaderData ?? extendedBookQueryData
-    const assignmentWithQuestionsArray = assignmentWithQuestionsArrayQueryData ?? assignmentWithQuestionsArrayLoaderData
-    return { extendedBook, assignmentWithQuestionsArray }
+    const assignmentWithBooksArray = assignmentWithBooksArrayQueryData ?? assignmentWithBooksArrayLoaderData
+    return { extendedBook, assignmentWithBooksArray }
 }
 
 const useReviewCheckMutate = () => {
@@ -185,13 +183,13 @@ const useResetChangedWhenSearchParamsChanged = () => {
 }
 
 const useReviewCheck = () => {
-    const { assignmentWithQuestionsArray, extendedBook } = useReviewCheckQuery()
+    const { assignmentWithBooksArray, extendedBook } = useReviewCheckQuery()
     const { mutate } = useReviewCheckMutate()
     useDetectChangedIdToRequestInfoThenMutate(mutate)
     useConvertRecentToChanged(extendedBook)
     useResetChangedWhenSearchParamsChanged()
 
-    return { extendedBook, assignmentWithQuestionsArray }
+    return { extendedBook, assignmentWithBooksArray }
 }
 
 export default useReviewCheck

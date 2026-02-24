@@ -41,17 +41,17 @@ const makeFlatPagenatedInStep = ({
 
 type FlatItemForPagenatedQuestions = { forWhat: "pagenatedQuestions"; pagenatedQuestions: PagenatedQuestions }
 export type ReviewCheckFlatItem =
-    | { forWhat: "topicHeader"; title: string }
-    | { forWhat: "stepHeader"; title: string }
+    | { forWhat: "title"; title: string }
+    | { forWhat: "subtitle"; title: string }
     | FlatItemForPagenatedQuestions
 export const makeReviewCheckFlatItemArray = (queryData: ReviewCheckResponseData | undefined): ReviewCheckFlatItem[] => {
     if (!queryData) return []
     const flatItemArray = queryData.topics
         .map((topic) => {
-            const topicHeader: ReviewCheckFlatItem = { forWhat: "topicHeader", title: topic.title }
+            const topicHeader: ReviewCheckFlatItem = { forWhat: "title", title: topic.title }
             const stepHeaderArray = topic.steps
                 .map((step) => {
-                    const stepHeader: ReviewCheckFlatItem = { forWhat: "stepHeader", title: step.title }
+                    const stepHeader: ReviewCheckFlatItem = { forWhat: "subtitle", title: step.title }
                     const flatPagednatedArray: FlatItemForPagenatedQuestions[] = makeFlatPagenatedInStep({
                         topic_order: topic.order,
                         step_order: step.order,

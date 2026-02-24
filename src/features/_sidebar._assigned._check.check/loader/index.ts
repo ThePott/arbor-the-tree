@@ -64,15 +64,15 @@ const reviewCheckLoaderFn = async ({
     const extendedBookPromise = is_assignment
         ? Promise.resolve(null)
         : queryClient.ensureQueryData(makeReviewCheckQueryOptions({ classroom_id, student_id, syllabus_id }))
-    const assignmentWithQuestionsArrayPromise = is_assignment
+    const assignmentWithBooksArrayPromise = is_assignment
         ? queryClient.ensureQueryData(makeReviewCheckAssignmentQueryOptions({ classroom_id, student_id }))
-        : Promise.resolve(null)
+        : Promise.resolve([])
 
-    const [extendedBook, assignmentWithQuestionsArray] = await Promise.all([
+    const [extendedBook, assignmentWithBooksArray] = await Promise.all([
         extendedBookPromise,
-        assignmentWithQuestionsArrayPromise,
+        assignmentWithBooksArrayPromise,
     ])
-    return { extendedBook, assignmentWithQuestionsArray }
+    return { extendedBook, assignmentWithBooksArray }
 }
 
 export default reviewCheckLoaderFn

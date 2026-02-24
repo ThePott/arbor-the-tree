@@ -2,14 +2,19 @@ import { Container, FlexOneContainer, Vstack } from "@/packages/components/layou
 import RoundBox from "@/packages/components/RoundBox"
 import { useVirtualizer } from "@tanstack/react-virtual"
 import { useRef } from "react"
+import AssignmentFlatItemComponent from "./AssignmentFlatItemComponent"
 import useReviewCheck from "./hooks"
 import ReviewCheckCreateToolbar from "./ReviewCheckCreateToolbar"
 import ReviewCheckFlatItemComponent from "./ReviewCheckFlatItemComponent"
+import { makeReviewCheckAssignmentFlatItemArray } from "./utils/make-review-check-assignment-flat-item-array"
 import { makeReviewCheckFlatItemArray } from "./utils/make-review-check-flat-item-array"
 
 const ReviewCheckPage = () => {
-    const { extendedBook, assignmentWithQuestionsArray } = useReviewCheck()
-    const flatItemArray = makeReviewCheckFlatItemArray(extendedBook)
+    const { extendedBook, assignmentWithBooksArray } = useReviewCheck()
+    const bookFlatItemArray = makeReviewCheckFlatItemArray(extendedBook)
+    const assignmentFlatItemArray = makeReviewCheckAssignmentFlatItemArray(assignmentWithBooksArray)
+    const isForBook = Boolean(extendedBook)
+    const flatItemArray = isForBook ? bookFlatItemArray : assignmentFlatItemArray
     // TODO: cont assignmentsFlatItemArray = makeSomethingFlat(assignmentWithQuestionArray)
 
     const parentRef = useRef<HTMLDivElement>(null)
@@ -21,14 +26,11 @@ const ReviewCheckPage = () => {
         estimateSize: (index) => {
             const forWhat = flatItemArray[index].forWhat
             switch (forWhat) {
-                // TODO: titleHeader
-                case "topicHeader":
+                case "title":
                     return 48
-                // TODO: subtitleHeader
-                case "stepHeader":
+                case "subtitle":
                     return 36
-                // TODO: default
-                case "pagenatedQuestions":
+                default:
                     return 60
             }
         },
@@ -68,8 +70,12 @@ const ReviewCheckPage = () => {
                             }}
                             className="absolute top-0 left-my-xl w-full"
                         >
-                            {/* 어떤 걸 사용하냐에 따라 달라지게 */}
-                            <ReviewCheckFlatItemComponent flatItem={flatItemArray[virtualItem.index]} />
+                            {isForBook && (
+                                <ReviewCheckFlatItemComponent flatItem={bookFlatItemArray[virtualItem.index]} />
+                            )}
+                            {!isForBook && (
+                                <AssignmentFlatItemComponent flatItem={assignmentFlatItemArray[virtualItem.index]} />
+                            )}
                         </div>
                     ))}
                 </Container>
