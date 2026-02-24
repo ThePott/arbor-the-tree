@@ -28,7 +28,7 @@ const convertDataToRowArray = (data: ReviewAssignmentCreateResponseData | undefi
     const rowArray = data.map((book) => {
         const row: Row = {
             book_title: book.title,
-            review_check_count: book.reviewChecks.length,
+            review_check_count: book.extendedReviewChecks.length,
         }
         return row
     })
@@ -38,7 +38,7 @@ const convertDataToRowArray = (data: ReviewAssignmentCreateResponseData | undefi
 const route = getRouteApi("/_sidebar")
 const ReviewAssignmentCreatePage = () => {
     const { classroom_id, student_id } = route.useSearch()
-    const { bookWithReviewChecksArray: loaderData } = useLoaderData({
+    const { bookWithExtendedReviewChecksArray: loaderData } = useLoaderData({
         from: "/_sidebar/_assigned/_assignment/assignment/create/",
     })
     const { data: queryData } = useQuery(makeReviewAssignmentCreateQueryOptions({ classroom_id, student_id }))
@@ -64,7 +64,9 @@ const ReviewAssignmentCreatePage = () => {
         const body = {
             student_id,
             classroom_id,
-            bookWithReviewChecksArray: queryData ?? loaderData,
+            // NOTE: 지금으로선 토글로 문제집 선택하는 기능은 없다
+            // TODO: 문제집 선택하면 거기에 맞춰 필터되게 하기
+            bookWithExtendedReviewChecksArray: queryData ?? loaderData,
         }
         mutate({ body, additionalData: undefined })
     }
