@@ -49,8 +49,12 @@ export type PagenatedQuestions = {
     questions: JoinedQuestionWithOrders[]
 }
 
+export type ExtendedReviewAssignmentQuestion = Omit<ReviewAssginmentQuestion, "status"> & {
+    review_check_status: ReviewCheckStatus | null
+    session_status: SessionStatus | null
+}
 export type BookInAssignment = {
     bookTitle: string
-    reviewAssignmentQuestions: ReviewAssginmentQuestion[]
+    reviewAssignmentQuestions: ExtendedReviewAssignmentQuestion[]
 }
-export type AssignmentWithBooks = ReviewAssignment & { books: BookInAssignment[] }
+export type AssignmentWithBooks = ReviewAssignment & { books: BookInAssignment[]; session_status: SessionStatus | null }

@@ -1,5 +1,5 @@
 import { ClientError } from "@/shared/error/clientError"
-import type { ReviewAssginmentQuestion } from "@/shared/interfaces"
+import type { ExtendedReviewAssignmentQuestion } from "../../types"
 import Checkbox from "../flatItemComponents/Checkbox"
 import CheckboxGrid from "../flatItemComponents/CheckboxGrid"
 import SubtitleHeader from "../flatItemComponents/SubtitleHeader"
@@ -8,7 +8,7 @@ import TitleHeader from "../flatItemComponents/TitleHeader"
 export type AssignmentFlatItem =
     | { forWhat: "title"; title: string }
     | { forWhat: "subtitle"; title: string }
-    | { forWhat: "assignmentQuestions"; reviewAssignmentQuestions: ReviewAssginmentQuestion[] }
+    | { forWhat: "assignmentQuestions"; reviewAssignmentQuestions: ExtendedReviewAssignmentQuestion[] }
 const AssignmentFlatItemComponent = ({ flatItem }: { flatItem: AssignmentFlatItem }) => {
     const forWhat = flatItem.forWhat
     switch (forWhat) {
@@ -23,9 +23,9 @@ const AssignmentFlatItemComponent = ({ flatItem }: { flatItem: AssignmentFlatIte
                         <Checkbox
                             key={assignmentQuestion.id}
                             onClick={() => {}}
-                            session_status="HOMEWORK"
+                            session_status={assignmentQuestion.session_status}
                             recent="no"
-                            review_check_status_visual={null}
+                            review_check_status_visual={assignmentQuestion.review_check_status}
                         >
                             오더
                         </Checkbox>
