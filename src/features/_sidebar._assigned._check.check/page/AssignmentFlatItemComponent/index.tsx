@@ -1,9 +1,9 @@
 import { ClientError } from "@/shared/error/clientError"
 import type { ExtendedReviewAssignmentQuestion } from "../../types"
-import Checkbox from "../flatItemComponents/Checkbox"
 import CheckboxGrid from "../flatItemComponents/CheckboxGrid"
 import SubtitleHeader from "../flatItemComponents/SubtitleHeader"
 import TitleHeader from "../flatItemComponents/TitleHeader"
+import AssignmentQuestion from "./AssignmentQuestion"
 
 export type AssignmentFlatItem =
     | { forWhat: "title"; title: string }
@@ -20,15 +20,7 @@ const AssignmentFlatItemComponent = ({ flatItem }: { flatItem: AssignmentFlatIte
             return (
                 <CheckboxGrid>
                     {flatItem.reviewAssignmentQuestions.map((assignmentQuestion) => (
-                        <Checkbox
-                            key={assignmentQuestion.id}
-                            onClick={() => {}}
-                            session_status={assignmentQuestion.session_status}
-                            recent="no"
-                            review_check_status_visual={assignmentQuestion.review_check_status_visual}
-                        >
-                            {assignmentQuestion.order}
-                        </Checkbox>
+                        <AssignmentQuestion assignmentQuestion={assignmentQuestion} />
                     ))}
                 </CheckboxGrid>
             )

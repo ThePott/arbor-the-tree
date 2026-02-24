@@ -58,4 +58,8 @@ export type BookInAssignment = {
     bookTitle: string
     reviewAssignmentQuestions: ExtendedReviewAssignmentQuestion[]
 }
-export type AssignmentWithBooks = ReviewAssignment & { books: BookInAssignment[]; session_status: SessionStatus | null }
+export type AssignmentWithBooks = ReviewAssignment & {
+    books: BookInAssignment[]
+    session_status: SessionStatus | null
+    question_count: number
+}

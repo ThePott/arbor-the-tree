@@ -1,24 +1,19 @@
-import type { ReviewAssginmentQuestion } from "@/shared/interfaces"
+import type { ExtendedReviewAssignmentQuestion } from "@/features/_sidebar._assigned._check.check/types"
 import Checkbox from "../../flatItemComponents/Checkbox"
 
 type AssignmentQuestionProps = {
-    assignmentQuestion: ReviewAssginmentQuestion
+    assignmentQuestion: ExtendedReviewAssignmentQuestion
 }
 
 const AssignmentQuestion = ({ assignmentQuestion }: AssignmentQuestionProps) => {
-    //
     return (
         <Checkbox
-            key={assignmentQuestion.id}
             onClick={() => {}}
-            // TODO: 서버에서 받아와야
-            session_status="HOMEWORK"
-            // TODO: recent 어떻게 추적할지 고민해야
+            session_status={assignmentQuestion.session_status}
             recent="no"
-            // TODO: 서버에서 받아와야 함
-            review_check_status_visual={null}
+            review_check_status_visual={assignmentQuestion.review_check_status_visual}
         >
-            오더
+            {assignmentQuestion.order}
         </Checkbox>
     )
 }
