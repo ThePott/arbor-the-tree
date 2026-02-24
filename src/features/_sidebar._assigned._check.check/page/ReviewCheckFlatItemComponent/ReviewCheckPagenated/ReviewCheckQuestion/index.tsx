@@ -1,9 +1,8 @@
 import useReviewCheckStore from "@/features/_sidebar._assigned._check.check/store"
 import type { JoinedQuestionWithOrders, ReviewCheckOrderInfo } from "@/features/_sidebar._assigned._check.check/types"
 import { updateReviewCheckQueryData } from "@/features/_sidebar._assigned._check.check/utils"
-import Button from "@/packages/components/Button/Button"
 import { getRouteApi } from "@tanstack/react-router"
-import clsx from "clsx"
+import Checkbox from "../../../Checkbox"
 
 const route = getRouteApi("/_sidebar")
 
@@ -76,13 +75,6 @@ const ReviewCheckQuestion = ({ questionWithOrder }: ReviewCheckQuestionProps) =>
         })
     }
 
-    // TODO: 정답은 파란색으로 바꿔야 함
-    const statusToColor = {
-        CORRECT: "green",
-        WRONG: "red",
-        null: "transparent",
-    } as const
-
     const isVeryRecent = checkIsOrderInfoMatchingQuestion({
         reviewCheckInfo: recentReviewCheckInfoArray[recentReviewCheckInfoArray.length - 1],
         topic_order,
@@ -97,20 +89,14 @@ const ReviewCheckQuestion = ({ questionWithOrder }: ReviewCheckQuestionProps) =>
     })
 
     return (
-        <Button
-            color={statusToColor[question.review_check_status_visual ?? "null"]}
-            status={question.session_status ? "enabled" : "disabled"}
-            padding="none"
-            border="always"
+        <Checkbox
+            review_check_status_visual={question.review_check_status_visual}
+            session_status={question.session_status}
             onClick={handleClick}
-            className={clsx(
-                "size-12 flex justify-center items-center",
-                isVeryRecent && "outline-2 outline-border-vivid hover:outline-4",
-                isSomewhatRecent && "outline-2 outline-border-muted hover:outline-4"
-            )}
+            recent={isVeryRecent ? "very" : isSomewhatRecent ? "somewhat" : "no"}
         >
             {question.name}
-        </Button>
+        </Checkbox>
     )
 }
 

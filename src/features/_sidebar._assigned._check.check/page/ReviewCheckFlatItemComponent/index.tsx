@@ -1,8 +1,8 @@
 import { ClientError } from "@/shared/error/clientError"
+import SubtitleHeader from "../SubtitleHeader"
+import TitleHeader from "../TitleHeader"
 import type { ReviewCheckFlatItem } from "../utils/make-review-check-flat-item-array"
 import ReviewCheckPagenated from "./ReviewCheckPagenated"
-import StepHeader from "./ReviewCheckStepHeader"
-import TopicHeader from "./ReviewCheckTopicHeader"
 
 type ReviewCheckFlatItemComponentProps = {
     flatItem: ReviewCheckFlatItem
@@ -11,9 +11,9 @@ const ReviewCheckFlatItemComponent = ({ flatItem }: ReviewCheckFlatItemComponent
     const forWhat = flatItem.forWhat
     switch (forWhat) {
         case "topicHeader":
-            return <TopicHeader title={flatItem.title} />
+            return <TitleHeader title={flatItem.title} />
         case "stepHeader":
-            return <StepHeader title={flatItem.title} />
+            return <SubtitleHeader title={flatItem.title} />
         case "pagenatedQuestions":
             return <ReviewCheckPagenated pagenatedQuestions={flatItem.pagenatedQuestions} />
         default:

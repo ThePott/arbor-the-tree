@@ -1,5 +1,6 @@
 import type { PagenatedQuestions } from "@/features/_sidebar._assigned._check.check/types"
 import { Hstack } from "@/packages/components/layouts"
+import CheckboxGrid from "../../CheckboxGrid"
 import ReviewCheckQuestion from "./ReviewCheckQuestion"
 
 type ReviewCheckPagenatedProps = { pagenatedQuestions: PagenatedQuestions }
@@ -8,11 +9,11 @@ const ReviewCheckPagenated = ({ pagenatedQuestions }: ReviewCheckPagenatedProps)
     return (
         <Hstack gap="xs" className="mt-my-sm">
             <p className="size-12 flex justify-center items-center text-fg-muted">{`p.${page}`}</p>
-            <div className="grid grid-cols-[repeat(auto-fill,48px)] gap-my-xs grow">
+            <CheckboxGrid>
                 {questions.map((questionWithOrder) => (
                     <ReviewCheckQuestion key={questionWithOrder.question.id} questionWithOrder={questionWithOrder} />
                 ))}
-            </div>
+            </CheckboxGrid>
         </Hstack>
     )
 }
