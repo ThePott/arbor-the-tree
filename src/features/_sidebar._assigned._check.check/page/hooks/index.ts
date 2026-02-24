@@ -21,18 +21,18 @@ const route = getRouteApi("/_sidebar")
 
 const useReviewCheckQuery = () => {
     const searchParams = route.useSearch()
-    const { classroom_id, student_id, syllabus_id } = searchParams
+    const { classroom_id, student_id, syllabus_id, is_assignment } = searchParams
     const { extendedBook: extendedBookLoaderData, extendedAssignment: extendedAssignmentLoaderData } = useLoaderData({
         from: "/_sidebar/_assigned/_check/check/",
     })
 
     const { data: extendedBookQueryData } = useQuery({
         ...makeReviewCheckQueryOptions({ classroom_id, student_id, syllabus_id }),
-        enabled: Boolean(student_id),
+        enabled: Boolean(student_id && !is_assignment),
     })
     const { data: extendedAssignmentQueryData } = useQuery({
         ...makeReviewCheckAssignmentQueryOptions({ classroom_id, student_id }),
-        enabled: Boolean(student_id),
+        enabled: Boolean(student_id && is_assignment),
     })
     const extendedBook = extendedBookLoaderData ?? extendedBookQueryData
     const extendedAssignment = extendedAssignmentLoaderData ?? extendedAssignmentQueryData
