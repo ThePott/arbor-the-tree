@@ -4,14 +4,18 @@ import { ClientError } from "@/shared/error/clientError"
 import { produce } from "immer"
 import type { ReviewCheckResponseData } from "../loader"
 import useReviewCheckStore from "../store"
-import type { JoinedQuestion, QuestionIdToRequestInfo, ReviewCheckOrderInfo } from "../types"
+import type { IdToChangedInfo, IndexInfo, JoinedQuestion, ReviewCheckChangedInfo } from "../types"
 
-export const checkIsMultiSelected = ({ topic_order, step_order, question_order }: ReviewCheckOrderInfo): boolean => {
-    const recentReviewCheckInfoArray = useReviewCheckStore.getState().recentOrderInfoArray
+export const checkIsMultiSelected = ({
+    titleIndex: titleOrder,
+    subtitleIndex: subtitleOrder,
+    checkboxIndex: checkboxOrder,
+}: IndexInfo): boolean => {
+    const recentReviewCheckInfoArray = useReviewCheckStore.getState().recentIndexInfoArray
     const sortedRecentReviewCheckInfoArray = recentReviewCheckInfoArray.sort((a, b) => {
-        if (a.topic_order != b.topic_order) return a.topic_order - b.topic_order
-        if (a.step_order != b.step_order) return a.step_order - b.step_order
-        return a.question_order - b.question_order
+        if (a.titleIndex != b.titleIndex) return a.titleIndex - b.titleIndex
+        if (a.subtitleIndex != b.subtitleIndex) return a.subtitleIndex - b.subtitleIndex
+        return a.checkboxIndex - b.checkboxIndex
     })
 
     const length = recentReviewCheckInfoArray.length
@@ -20,9 +24,9 @@ export const checkIsMultiSelected = ({ topic_order, step_order, question_order }
         // TODO: 선택된 게 나면 선택됐다.
         const reviewCheckInfo = recentReviewCheckInfoArray[0]
         if (
-            reviewCheckInfo.topic_order === topic_order &&
-            reviewCheckInfo.step_order === step_order &&
-            reviewCheckInfo.question_order === question_order
+            reviewCheckInfo.titleIndex === titleOrder &&
+            reviewCheckInfo.subtitleIndex === subtitleOrder &&
+            reviewCheckInfo.checkboxIndex === checkboxOrder
         ) {
             return true
         }
@@ -33,23 +37,22 @@ export const checkIsMultiSelected = ({ topic_order, step_order, question_order }
     const second = sortedRecentReviewCheckInfoArray[1]
 
     if (
-        first.topic_order <= topic_order &&
-        topic_order <= second.topic_order &&
-        first.step_order <= step_order &&
-        step_order <= second.step_order &&
-        first.question_order <= question_order &&
-        question_order <= second.question_order
+        first.titleIndex <= titleOrder &&
+        titleOrder <= second.titleIndex &&
+        first.subtitleIndex <= subtitleOrder &&
+        subtitleOrder <= second.subtitleIndex &&
+        first.checkboxIndex <= checkboxOrder &&
+        checkboxOrder <= second.checkboxIndex
     ) {
         return true
     }
     return false
 }
 
-type QuestionIdToInfoValue = QuestionIdToRequestInfo[string]
 type FindJoinedQuestionProps<T extends ReviewCheckResponseData> = {
     queryData: T | undefined
-    changedEntry?: [question_id: string, QuestionIdToInfoValue]
-    orderInfo?: ReviewCheckOrderInfo
+    changedEntry?: [question_id: string, ReviewCheckChangedInfo]
+    orderInfo?: IndexInfo
 }
 export const findJoinedQuestion = <T extends ReviewCheckResponseData>({
     queryData,
@@ -57,20 +60,23 @@ export const findJoinedQuestion = <T extends ReviewCheckResponseData>({
     orderInfo,
 }: FindJoinedQuestionProps<T>): JoinedQuestion => {
     const question_id = changedEntry?.[0]
-    const question_order = orderInfo?.question_order
-    const topic_order = changedEntry?.[1].topic_order ?? orderInfo?.topic_order
-    const step_order = changedEntry?.[1].step_order ?? orderInfo?.step_order
+    const checkboxIndex = orderInfo?.checkboxIndex
+    const titleIndex = changedEntry?.[1].indexInfo.titleIndex ?? orderInfo?.titleIndex
+    const subtitleIndex = changedEntry?.[1].indexInfo.subtitleIndex ?? orderInfo?.subtitleIndex
 
-    if (!question_id && !question_order) throw ClientError.Unexpected("오답 체크를 실패했어요")
-    if (!topic_order || !step_order) throw ClientError.Unexpected("오답 체크를 실패했어요")
+    // NOTE: id로 찾을 수도 있고 order로 찾을 수도 있다 << orderInfo 넣느냐 안 넣느냐에 따라 달라짐 << 이건 유지해야 함
+    // NOTE: order 없이 찾을 때 ---- mutate 할 때 addtional data 가지고 optimistic update. 이 땐 order info 넣지 않음
+    // NOTE: order로 찾을 때 ---- detect recent to changed 할 때, 한 개만 다중 선택한 걸 changed 로 만들 땐 order info 만으로 찾아냄
+    if (!question_id && !checkboxIndex) throw ClientError.Unexpected("오답 체크를 실패했어요")
+    if (!titleIndex || !subtitleIndex) throw ClientError.Unexpected("오답 체크를 실패했어요")
 
-    const targetTopic = queryData?.topics.find((elTopic) => elTopic.order === topic_order)
+    const targetTopic = queryData?.topics.find((_, index) => index === titleIndex)
     if (!targetTopic) throw ClientError.Unexpected("오답 체크를 실패했어요")
-    const targetStep = targetTopic.steps.find((elStep) => elStep.order === step_order)
+    const targetStep = targetTopic.steps.find((elStep) => elStep.order === subtitleIndex)
     if (!targetStep) throw ClientError.Unexpected("오답 체크를 실패했어요")
     const targetQuestion = targetStep.questions.find((elQuestion) => {
         if (question_id) return elQuestion.id === question_id
-        return elQuestion.order === question_order
+        return elQuestion.order === checkboxIndex
     })
     if (!targetQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
     return targetQuestion
@@ -79,7 +85,7 @@ export const findJoinedQuestion = <T extends ReviewCheckResponseData>({
 // NOTE: useSimpleMutation update에서도 사용되어야 하므로 export 되어야 함
 type MakeUpdatedReviewCheckQueryData = {
     previous: ReviewCheckResponseData
-    additionalData: QuestionIdToRequestInfo
+    additionalData: IdToChangedInfo
 }
 export const makeUpdatedReviewCheckQueryData = ({
     previous,
@@ -97,18 +103,18 @@ export const makeUpdatedReviewCheckQueryData = ({
 }
 
 type UpdateReviewCheckQueryData = {
-    questionIdToRequestInfo: QuestionIdToRequestInfo
+    idToChangedInfo: IdToChangedInfo
     searchParams: SidebarSearchParams
     storeCallback: () => void
 }
 export const updateReviewCheckQueryData = ({
-    questionIdToRequestInfo,
+    idToChangedInfo,
     searchParams: { classroom_id, student_id, syllabus_id },
     storeCallback,
 }: UpdateReviewCheckQueryData): void => {
     const queryKey = ["reviewCheck", classroom_id, student_id, syllabus_id]
     const previous = queryClient.getQueryData(queryKey) as ReviewCheckResponseData
-    const newData = makeUpdatedReviewCheckQueryData({ previous, additionalData: questionIdToRequestInfo })
+    const newData = makeUpdatedReviewCheckQueryData({ previous, additionalData: idToChangedInfo })
     queryClient.setQueryData(queryKey, newData)
 
     storeCallback()
@@ -116,15 +122,15 @@ export const updateReviewCheckQueryData = ({
 
 type MakeRevertedReviewChangedreviewChecksProps = {
     queryData: ReviewCheckResponseData
-    newChangedIdToRequestInfoByMultiSelect: QuestionIdToRequestInfo
+    newChangedIdToRequestInfoByMultiSelect: IdToChangedInfo
 }
 const makeRevertedReviewChangedreviewChecks = ({
     queryData,
     newChangedIdToRequestInfoByMultiSelect,
-}: MakeRevertedReviewChangedreviewChecksProps): QuestionIdToRequestInfo => {
+}: MakeRevertedReviewChangedreviewChecksProps): IdToChangedInfo => {
     // NOTE: old 중 new와 겹치는 부분은 revert에서 제외
     const oldChangedIdToRequestInfoByMultiSelect = {
-        ...useReviewCheckStore.getState().changedIdToRequestInfoByMultiSelect,
+        ...useReviewCheckStore.getState().idToChangedInfoByMultiSelect,
     }
     Object.entries(newChangedIdToRequestInfoByMultiSelect).forEach(([question_id, _]) => {
         delete oldChangedIdToRequestInfoByMultiSelect[question_id]
@@ -142,7 +148,7 @@ const makeRevertedReviewChangedreviewChecks = ({
 }
 
 type RevertReviewCheckQueryDataAfterMultiSelectProps = {
-    newChangedIdToRequestInfoByMultiSelect: QuestionIdToRequestInfo
+    newChangedIdToRequestInfoByMultiSelect: IdToChangedInfo
     searchParams: SidebarSearchParams
 }
 export const revertReviewCheckQueryDataAfterMultiSelect = ({

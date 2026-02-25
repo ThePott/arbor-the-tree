@@ -42,48 +42,25 @@ export type ExtendedBook = Pick<Book, "title"> & { topics: ExtendedTopic[] }
 //                })
 //            )
 //        )
-export type ReviewCheckOrderInfo = {
-    topic_order: number
-    step_order: number
-    question_order: number
-}
 
-export type OrderInfo = {
-    titleOrder: number
-    stepOrder: number
-    checkboxOrder: number
+export type IndexInfo = {
+    titleIndex: number
+    subtitleIndex: number
+    checkboxIndex: number
 }
-
-// NOTE: changed, multi changed에 사용됨
-// NOTE: 얘는 스토어에 저장되는 changed이다. 그리고 얘를 api에 보낸다. api에 보내고나서는 낙관적 업데이트를 해야 한다
-// NOTE: 낙관적 업데이트를 할 때에는 topic order, step order, question_id를 사용한다
-//
-// NOTE: api 분리, 따라서 mutate 분리, 따라서 optimistic update 로직 분리
-//
-export type QuestionIdToRequestInfo = Record<
-    string, // NOTE: question_id
-    {
-        status: ReviewCheckStatus | null // NOTE: use to delete if null
-        topic_order: number // NOTE: optimistic update을 할 때 query data에서 target question을 찾는 데에 사용됨 -- `findJoinedQuestion`
-        step_order: number // NOTE: optimistic update을 할 때 query data에서 target question을 찾는 데에 사용됨 -- `findJoinedQuestion`
-        session_id: string | null
-        // NOTE: session_id -> api에서 session 내의 문제 수와, 오답 체크된 문제 수를 비교해서 완료 여부 판단
-        // TODO: 왜 null일 수도 있지?? 세션이 없는 문제는 없는 거 아니야?
-    }
->
 
 export type ReviewCheckChangedInfo =
     | {
           forWhat: "syllabus"
           status: ReviewCheckStatus | null
-          orderInfo: OrderInfo // NOTE: optimistic update을 할 때 query data에서 target question을 찾는 데에 사용됨 -- `findJoinedQuestion`
-          session_id: string // NOTE: session_id if syllabus, assignment_id otherwise
+          indexInfo: IndexInfo // NOTE: optimistic update을 할 때 query data에서 target question을 찾는 데에 사용됨 -- `findJoinedQuestion`
+          session_id: string | null // NOTE: session_id if syllabus, assignment_id otherwise, null if not assigned
       }
     | {
           forWhat: "assignment"
           status: ReviewCheckStatus | null
-          orderInfo: OrderInfo // NOTE: optimistic update을 할 때 query data에서 target question을 찾는 데에 사용됨 -- `findJoinedQuestion`
-          assignment_id: string // NOTE: session_id if syllabus, assignment_id otherwise
+          indexInfo: IndexInfo // NOTE: optimistic update을 할 때 query data에서 target question을 찾는 데에 사용됨 -- `findJoinedQuestion`
+          assignment_id: string | null // NOTE: session_id if syllabus, assignment_id otherwise, null if not assigned
       }
 
 // NOTE: question_id if for syllabus, reivew_assignment_question_id otherwise
@@ -113,14 +90,14 @@ export type IdToChangedInfo = Record<string, ReviewCheckChangedInfo>
 
 // TODO: review_check_id를 지워도 문제 없이 upsert 되는지 확인
 
-export type JoinedQuestionWithOrders = {
-    topic_order: number
-    step_order: number
+// NOTE: pagenation을 위해서 사용함
+export type JoinedQuestionWithIndexInfo = {
     question: JoinedQuestion
+    indexInfo: IndexInfo
 }
 export type PagenatedQuestions = {
     page: number
-    questions: JoinedQuestionWithOrders[]
+    questions: JoinedQuestionWithIndexInfo[]
 }
 
 export type ExtendedReviewAssignmentQuestion = Omit<ReviewAssginmentQuestion, "status"> & {

@@ -1,33 +1,37 @@
 import type { ReviewCheckResponseData } from "../../loader"
-import type { JoinedQuestion, JoinedQuestionWithOrders, PagenatedQuestions } from "../../types"
+import type { JoinedQuestion, JoinedQuestionWithIndexInfo, PagenatedQuestions } from "../../types"
 
 type MakeFlatPagenatedInStepProps = {
-    topic_order: number
-    step_order: number
+    titleIndex: number
+    subtitleIndex: number
     questions: JoinedQuestion[]
 }
 const makeFlatPagenatedInStep = ({
-    topic_order,
-    step_order,
+    titleIndex,
+    subtitleIndex,
     questions,
 }: MakeFlatPagenatedInStepProps): FlatItemForPagenatedQuestions[] => {
-    const result = questions.reduce((acc: FlatItemForPagenatedQuestions[], question) => {
-        const targetFlatItem = acc.find((elFlatItem) => elFlatItem.pagenatedQuestions.page === question.page)
+    const result = questions.reduce((acc: FlatItemForPagenatedQuestions[], question, index) => {
+        // TODO: 얜 뭔데
+        const targetPagenated = acc.find((elFlatItem) => elFlatItem.pagenatedQuestions.page === question.page)
 
-        const newJoinedQuestionWithOrders: JoinedQuestionWithOrders = {
-            topic_order,
-            step_order,
+        const newJoinedQuestionWithIndexInfo: JoinedQuestionWithIndexInfo = {
+            indexInfo: {
+                titleIndex,
+                subtitleIndex,
+                checkboxIndex: index,
+            },
             question,
         }
 
-        if (targetFlatItem) {
-            targetFlatItem.pagenatedQuestions.questions.push(newJoinedQuestionWithOrders)
+        if (targetPagenated) {
+            targetPagenated.pagenatedQuestions.questions.push(newJoinedQuestionWithIndexInfo)
             return acc
         }
 
         const newPagenated: PagenatedQuestions = {
             page: question.page,
-            questions: [newJoinedQuestionWithOrders],
+            questions: [newJoinedQuestionWithIndexInfo],
         }
         const newFlatItem: FlatItemForPagenatedQuestions = {
             forWhat: "pagenatedQuestions",
@@ -47,14 +51,14 @@ export type ReviewCheckFlatItem =
 export const makeReviewCheckFlatItemArray = (queryData: ReviewCheckResponseData | undefined): ReviewCheckFlatItem[] => {
     if (!queryData) return []
     const flatItemArray = queryData.topics
-        .map((topic) => {
+        .map((topic, titleIndex) => {
             const topicHeader: ReviewCheckFlatItem = { forWhat: "title", title: topic.title }
             const stepHeaderArray = topic.steps
-                .map((step) => {
+                .map((step, subtitleIndex) => {
                     const stepHeader: ReviewCheckFlatItem = { forWhat: "subtitle", title: step.title }
                     const flatPagednatedArray: FlatItemForPagenatedQuestions[] = makeFlatPagenatedInStep({
-                        topic_order: topic.order,
-                        step_order: step.order,
+                        titleIndex: titleIndex,
+                        subtitleIndex: subtitleIndex,
                         questions: step.questions,
                     })
                     return [stepHeader, ...flatPagednatedArray]

@@ -16,12 +16,10 @@ const ReviewCheckCreateToolbar = () => {
     const setStatus = useReviewCheckStore((state) => state.setStatus)
     const isMultiSelecting = useReviewCheckStore((state) => state.isMultiSelecting)
     const setIsMultiSelecting = useReviewCheckStore((state) => state.setIsMultiSelecting)
-    const changedReviewChecksByMultiSelect = useReviewCheckStore((state) => state.changedIdToRequestInfoByMultiSelect)
-    const setChangedIdToRequestInfoByMultiSelect = useReviewCheckStore(
-        (state) => state.setChangedIdToRequestInfoByMultiSelect
-    )
+    const changedReviewChecksByMultiSelect = useReviewCheckStore((state) => state.idToChangedInfoByMultiSelect)
+    const setChangedIdToRequestInfoByMultiSelect = useReviewCheckStore((state) => state.setIdToChangedInfoByMultiSelect)
     const applyChangedReviewChecksFromMultiSelect = useReviewCheckStore(
-        (state) => state.applyChangedReviewChecksFromMultiSelect
+        (state) => state.applyIdToChangedInfoByMultiSelect
     )
 
     const isButtonHighlighted = Object.entries(changedReviewChecksByMultiSelect).length > 0

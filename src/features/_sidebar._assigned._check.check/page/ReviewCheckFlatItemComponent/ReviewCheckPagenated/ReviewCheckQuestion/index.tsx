@@ -1,43 +1,37 @@
 import useReviewCheckStore from "@/features/_sidebar._assigned._check.check/store"
-import type { JoinedQuestionWithOrders, ReviewCheckOrderInfo } from "@/features/_sidebar._assigned._check.check/types"
+import type { IndexInfo, JoinedQuestionWithIndexInfo } from "@/features/_sidebar._assigned._check.check/types"
 import { updateReviewCheckQueryData } from "@/features/_sidebar._assigned._check.check/utils"
 import { getRouteApi } from "@tanstack/react-router"
 import Checkbox from "../../../flatItemComponents/Checkbox"
 
 const route = getRouteApi("/_sidebar")
 
-type CheckIsOrderInfoMatchingQuestionProps = {
-    reviewCheckInfo?: ReviewCheckOrderInfo
-    topic_order: number
-    step_order: number
-    question_order: number
+// NOTE: veryRecent, somewhatRecent인지 확인하는 용도. 같은지 다른지만 비교하면 됨
+type CheckIsIndexInfoSame = {
+    fromRecent?: IndexInfo // NOTE: recent array가 비어 있으면 [0], [1]이 undefined 로 나올 수 있다
+    fromCheckbox: IndexInfo // NOTE: 여기엔 checkbox에서 사용하고 있는 question의 index info를 사용한다
 }
-const checkIsOrderInfoMatchingQuestion = ({
-    reviewCheckInfo,
-    topic_order,
-    step_order,
-    question_order,
-}: CheckIsOrderInfoMatchingQuestionProps): boolean => {
-    if (!reviewCheckInfo) return false
+const checkAreIndexesTheSame = ({ fromRecent, fromCheckbox }: CheckIsIndexInfoSame): boolean => {
+    if (!fromRecent) return false
     return (
-        reviewCheckInfo.topic_order === topic_order &&
-        reviewCheckInfo.step_order === step_order &&
-        reviewCheckInfo.question_order === question_order
+        fromRecent.titleIndex === fromCheckbox.titleIndex &&
+        fromRecent.subtitleIndex === fromCheckbox.subtitleIndex &&
+        fromRecent.checkboxIndex === fromCheckbox.checkboxIndex
     )
 }
 
 type ReviewCheckQuestionProps = {
-    questionWithOrder: JoinedQuestionWithOrders
+    questionWithIndexInfo: JoinedQuestionWithIndexInfo
 }
-const ReviewCheckQuestion = ({ questionWithOrder }: ReviewCheckQuestionProps) => {
-    const { topic_order, step_order, question } = questionWithOrder
+const ReviewCheckQuestion = ({ questionWithIndexInfo }: ReviewCheckQuestionProps) => {
+    const { indexInfo, question } = questionWithIndexInfo
 
     const status = useReviewCheckStore((state) => state.status)
     const isMultiSelecting = useReviewCheckStore((state) => state.isMultiSelecting)
-    const insertRecentReviewCheckInfo = useReviewCheckStore((state) => state.insertRecentOrderInfo)
-    const changedReviewChecks = useReviewCheckStore((state) => state.changedIdToRequestInfo)
-    const setChangedReviewChecks = useReviewCheckStore((state) => state.setChangedIdToRequestInfo)
-    const recentReviewCheckInfoArray = useReviewCheckStore((state) => state.recentOrderInfoArray)
+    const insertRecentIndexInfo = useReviewCheckStore((state) => state.insertRecentIndexInfo)
+    const idToChangedInfo = useReviewCheckStore((state) => state.idToChangedInfo)
+    const setIdToChangedInfo = useReviewCheckStore((state) => state.setIdToChangedInfo)
+    const recentReviewCheckInfoArray = useReviewCheckStore((state) => state.recentIndexInfoArray)
     const searchParams = route.useSearch()
 
     // TODO: use event handler로 리팩터 한다
@@ -45,46 +39,44 @@ const ReviewCheckQuestion = ({ questionWithOrder }: ReviewCheckQuestionProps) =>
         if (isMultiSelecting) {
             // NOTE: multi select일 때 구체적인 선택 로직은 page에서 이뤄진다
             // NOTE: 여기서는 recent에 추가하기만 한다
-            insertRecentReviewCheckInfo({ topic_order, step_order, question_order: question.order })
+            insertRecentIndexInfo(indexInfo)
             return
         }
 
-        const copiedReviewChecks = { ...changedReviewChecks }
+        const copiedIdToChangedInfo = { ...idToChangedInfo }
+        // NOTE: 원래 상태랑 똑같으면 삭제
         if (question.review_check_status === status) {
-            delete copiedReviewChecks[question.id]
+            delete copiedIdToChangedInfo[question.id]
             updateReviewCheckQueryData({
-                questionIdToRequestInfo: copiedReviewChecks,
+                idToChangedInfo: copiedIdToChangedInfo,
                 searchParams,
-                storeCallback: () => setChangedReviewChecks(copiedReviewChecks),
+                storeCallback: () => setIdToChangedInfo(copiedIdToChangedInfo),
             })
             return
         }
 
-        copiedReviewChecks[question.id] = {
+        // NOTE: 원래 상태랑 다르면 추가 혹은 수정
+        copiedIdToChangedInfo[question.id] = {
+            forWhat: "syllabus",
             status,
-            topic_order,
-            step_order,
+            indexInfo,
             session_id: question.session_id,
         }
 
         updateReviewCheckQueryData({
-            questionIdToRequestInfo: copiedReviewChecks,
+            idToChangedInfo: copiedIdToChangedInfo,
             searchParams,
-            storeCallback: () => setChangedReviewChecks(copiedReviewChecks),
+            storeCallback: () => setIdToChangedInfo(copiedIdToChangedInfo),
         })
     }
 
-    const isVeryRecent = checkIsOrderInfoMatchingQuestion({
-        reviewCheckInfo: recentReviewCheckInfoArray[recentReviewCheckInfoArray.length - 1],
-        topic_order,
-        step_order,
-        question_order: question.order,
+    const isVeryRecent = checkAreIndexesTheSame({
+        fromRecent: recentReviewCheckInfoArray[recentReviewCheckInfoArray.length - 1],
+        fromCheckbox: indexInfo,
     })
-    const isSomewhatRecent = checkIsOrderInfoMatchingQuestion({
-        reviewCheckInfo: recentReviewCheckInfoArray[recentReviewCheckInfoArray.length - 2],
-        topic_order,
-        step_order,
-        question_order: question.order,
+    const isSomewhatRecent = checkAreIndexesTheSame({
+        fromRecent: recentReviewCheckInfoArray[recentReviewCheckInfoArray.length - 2],
+        fromCheckbox: indexInfo,
     })
 
     return (

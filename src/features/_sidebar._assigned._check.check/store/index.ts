@@ -1,6 +1,6 @@
 import type { ReviewCheckStatus } from "@/shared/interfaces"
 import { create } from "zustand"
-import type { QuestionIdToRequestInfo, ReviewCheckOrderInfo } from "../types"
+import type { IdToChangedInfo, IndexInfo } from "../types"
 
 type ReviewCheckStoreState = {
     status: ReviewCheckStatus | null
@@ -9,16 +9,16 @@ type ReviewCheckStoreState = {
     isMultiSelecting: boolean
     setIsMultiSelecting: (isMultiSelecting: boolean) => void
 
-    recentOrderInfoArray: ReviewCheckOrderInfo[]
-    insertRecentOrderInfo: (reviewOrderInfo: ReviewCheckOrderInfo) => void
-    resetRecentOrderInfoArray: () => void
+    recentIndexInfoArray: IndexInfo[]
+    insertRecentIndexInfo: (indexInfo: IndexInfo) => void
+    resetRecentIndexInfoArray: () => void
 
-    changedIdToRequestInfo: QuestionIdToRequestInfo
-    setChangedIdToRequestInfo: (changedIdToRequestInfo: QuestionIdToRequestInfo) => void
+    idToChangedInfo: IdToChangedInfo
+    setIdToChangedInfo: (idToRequestInfo: IdToChangedInfo) => void
 
-    changedIdToRequestInfoByMultiSelect: QuestionIdToRequestInfo
-    setChangedIdToRequestInfoByMultiSelect: (changedIdToRequestInfoByMultiSelect: QuestionIdToRequestInfo) => void
-    applyChangedReviewChecksFromMultiSelect: () => void
+    idToChangedInfoByMultiSelect: IdToChangedInfo
+    setIdToChangedInfoByMultiSelect: (idToChangedInfoByMultiSelect: IdToChangedInfo) => void
+    applyIdToChangedInfoByMultiSelect: () => void
 }
 const useReviewCheckStore = create<ReviewCheckStoreState>()((set, get) => ({
     status: "CORRECT",
@@ -26,7 +26,7 @@ const useReviewCheckStore = create<ReviewCheckStoreState>()((set, get) => ({
         const state = get()
         if (state.isMultiSelecting) {
             // NOTE: 다중 선택 중 status 바꾸면 일단 적용함
-            state.applyChangedReviewChecksFromMultiSelect()
+            state.applyIdToChangedInfoByMultiSelect()
         }
         set({ status })
     },
@@ -34,41 +34,41 @@ const useReviewCheckStore = create<ReviewCheckStoreState>()((set, get) => ({
     isMultiSelecting: true,
     setIsMultiSelecting: (isMultiSelecting) => {
         if (!isMultiSelecting) {
-            get().applyChangedReviewChecksFromMultiSelect()
-            set({ changedIdToRequestInfoByMultiSelect: {} })
+            get().applyIdToChangedInfoByMultiSelect()
+            set({ idToChangedInfoByMultiSelect: {} })
         }
         set({ isMultiSelecting })
     },
 
-    recentOrderInfoArray: [],
-    insertRecentOrderInfo: (reviewCheckInfo) => {
-        const lastReviewCheck = get().recentOrderInfoArray.pop()
+    recentIndexInfoArray: [],
+    insertRecentIndexInfo: (reviewCheckInfo) => {
+        const lastReviewCheck = get().recentIndexInfoArray.pop()
         if (!lastReviewCheck) {
-            set({ recentOrderInfoArray: [reviewCheckInfo] })
+            set({ recentIndexInfoArray: [reviewCheckInfo] })
             return
         }
 
-        set({ recentOrderInfoArray: [lastReviewCheck, reviewCheckInfo] })
+        set({ recentIndexInfoArray: [lastReviewCheck, reviewCheckInfo] })
     },
-    resetRecentOrderInfoArray: () => set({ recentOrderInfoArray: [] }),
+    resetRecentIndexInfoArray: () => set({ recentIndexInfoArray: [] }),
 
-    changedIdToRequestInfo: {},
-    setChangedIdToRequestInfo: (changedReviewChecks) => set({ changedIdToRequestInfo: changedReviewChecks }),
+    idToChangedInfo: {},
+    setIdToChangedInfo: (changedReviewChecks) => set({ idToChangedInfo: changedReviewChecks }),
 
-    applyChangedReviewChecksFromMultiSelect: () => {
+    applyIdToChangedInfoByMultiSelect: () => {
         const state = get()
-        const changedReviewChecksByMultiSelect = state.changedIdToRequestInfoByMultiSelect
-        const changedReviewChecks = { ...state.changedIdToRequestInfo }
+        const changedReviewChecksByMultiSelect = state.idToChangedInfoByMultiSelect
+        const changedReviewChecks = { ...state.idToChangedInfo }
         const entryArray = Object.entries(changedReviewChecksByMultiSelect)
         entryArray.forEach(([key, value]) => {
             changedReviewChecks[key] = value
         })
-        set({ changedIdToRequestInfo: changedReviewChecks, recentOrderInfoArray: [] })
+        set({ idToChangedInfo: changedReviewChecks, recentIndexInfoArray: [] })
     },
 
-    changedIdToRequestInfoByMultiSelect: {},
-    setChangedIdToRequestInfoByMultiSelect: (changedReviewChecksByMultiSelect) =>
-        set({ changedIdToRequestInfoByMultiSelect: changedReviewChecksByMultiSelect }),
+    idToChangedInfoByMultiSelect: {},
+    setIdToChangedInfoByMultiSelect: (changedReviewChecksByMultiSelect) =>
+        set({ idToChangedInfoByMultiSelect: changedReviewChecksByMultiSelect }),
 }))
 
 export default useReviewCheckStore
