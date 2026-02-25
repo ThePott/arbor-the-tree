@@ -62,7 +62,7 @@ const reviewCheckLoaderFn = async ({
     // NOTE: 그냥 문제집의 오답체크를 가져온다
 
     const extendedBookPromise = is_assignment
-        ? Promise.resolve(null)
+        ? Promise.resolve(undefined)
         : queryClient.ensureQueryData(makeReviewCheckQueryOptions({ classroom_id, student_id, syllabus_id }))
     const assignmentWithBooksArrayPromise = is_assignment
         ? queryClient.ensureQueryData(makeReviewCheckAssignmentQueryOptions({ classroom_id, student_id }))
