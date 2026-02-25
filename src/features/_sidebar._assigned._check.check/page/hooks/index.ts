@@ -35,7 +35,7 @@ const useReviewCheckQuery = () => {
         ...makeReviewCheckAssignmentQueryOptions({ classroom_id, student_id }),
         enabled: Boolean(student_id && is_assignment),
     })
-    const extendedBook = extendedBookLoaderData ?? extendedBookQueryData
+    const extendedBook = extendedBookQueryData ?? extendedBookLoaderData
     const assignmentWithBooksArray = assignmentWithBooksArrayQueryData ?? assignmentWithBooksArrayLoaderData
     return { extendedBook, assignmentWithBooksArray }
 }
