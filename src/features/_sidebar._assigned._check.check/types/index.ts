@@ -55,14 +55,24 @@ export type CheckOrderInfo = {
 }
 
 // NOTE: changed, multi changed에 사용됨
+// NOTE: 얘는 스토어에 저장되는 changed이다. 그리고 얘를 api에 보낸다. api에 보내고나서는 낙관적 업데이트를 해야 한다
+// NOTE: 낙관적 업데이트를 할 때에는 topic order, step order, question_id를 사용한다
+//
+// NOTE: api 분리, 따라서 mutate 분리, 따라서 optimistic update 로직 분리
+//
 export type QuestionIdToRequestInfo = Record<
     string, // NOTE: question_id
     {
         status: ReviewCheckStatus | null // NOTE: use to delete if null
-        review_check_id: string | null // NOTE: use to patch if exists, NOT used to specify review check in api
-        topic_order: number // TODO: api에서 이건 필요 없는데 왜 넣었지??
-        step_order: number
+        topic_order: number // NOTE: optimistic update을 할 때 query data에서 target question을 찾는 데에 사용됨 -- `findJoinedQuestion`
+        step_order: number // NOTE: optimistic update을 할 때 query data에서 target question을 찾는 데에 사용됨 -- `findJoinedQuestion`
         session_id: string | null // NOTE: session_id -> api에서 session 내의 문제 수와, 오답 체크된 문제 수를 비교해서 완료 여부 판단
+    }
+>
+export type IdToInfo = Record<
+    string,
+    {
+        status: ReviewCheckStatus | null
     }
 >
 

@@ -62,7 +62,6 @@ const ReviewCheckQuestion = ({ questionWithOrder }: ReviewCheckQuestionProps) =>
 
         copiedReviewChecks[question.id] = {
             status,
-            review_check_id: question.review_check_id,
             topic_order,
             step_order,
             session_id: question.session_id,

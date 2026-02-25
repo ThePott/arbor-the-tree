@@ -124,7 +124,6 @@ const useConvertRecentToChanged = (data: ReviewCheckResponseData | undefined) =>
 
             newChangedIdToRequestInfo[targetQuestion.id] = {
                 status,
-                review_check_id: targetQuestion.review_check_id,
                 topic_order: recentReviewCheckInfo.topic_order,
                 step_order: recentReviewCheckInfo.step_order,
                 session_id: targetQuestion.session_id,
@@ -149,7 +148,6 @@ const useConvertRecentToChanged = (data: ReviewCheckResponseData | undefined) =>
 
                     newChangedIdToRequestInfo[question.id] = {
                         status,
-                        review_check_id: question.review_check_id,
                         topic_order: topic.order,
                         step_order: step.order,
                         session_id: question.session_id,
