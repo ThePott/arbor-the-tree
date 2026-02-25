@@ -48,7 +48,7 @@ export type ReviewCheckOrderInfo = {
     question_order: number
 }
 
-export type CheckOrderInfo = {
+export type OrderInfo = {
     titleOrder: number
     stepOrder: number
     checkboxOrder: number
@@ -66,15 +66,28 @@ export type QuestionIdToRequestInfo = Record<
         status: ReviewCheckStatus | null // NOTE: use to delete if null
         topic_order: number // NOTE: optimistic update을 할 때 query data에서 target question을 찾는 데에 사용됨 -- `findJoinedQuestion`
         step_order: number // NOTE: optimistic update을 할 때 query data에서 target question을 찾는 데에 사용됨 -- `findJoinedQuestion`
-        session_id: string | null // NOTE: session_id -> api에서 session 내의 문제 수와, 오답 체크된 문제 수를 비교해서 완료 여부 판단
+        session_id: string | null
+        // NOTE: session_id -> api에서 session 내의 문제 수와, 오답 체크된 문제 수를 비교해서 완료 여부 판단
+        // TODO: 왜 null일 수도 있지?? 세션이 없는 문제는 없는 거 아니야?
     }
 >
-export type IdToInfo = Record<
-    string,
-    {
-        status: ReviewCheckStatus | null
-    }
->
+
+export type ReviewCheckChangedInfo =
+    | {
+          forWhat: "syllabus"
+          status: ReviewCheckStatus | null
+          orderInfo: OrderInfo // NOTE: optimistic update을 할 때 query data에서 target question을 찾는 데에 사용됨 -- `findJoinedQuestion`
+          session_id: string // NOTE: session_id if syllabus, assignment_id otherwise
+      }
+    | {
+          forWhat: "assignment"
+          status: ReviewCheckStatus | null
+          orderInfo: OrderInfo // NOTE: optimistic update을 할 때 query data에서 target question을 찾는 데에 사용됨 -- `findJoinedQuestion`
+          assignment_id: string // NOTE: session_id if syllabus, assignment_id otherwise
+      }
+
+// NOTE: question_id if for syllabus, reivew_assignment_question_id otherwise
+export type IdToChangedInfo = Record<string, ReviewCheckChangedInfo>
 
 // NOTE: api에게 필요한 건 id(key), session_id, status
 // NOTE: id - question id or assignment question id
