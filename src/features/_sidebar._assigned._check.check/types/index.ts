@@ -35,7 +35,7 @@ export type QuestionIdToRequestInfo = Record<
         review_check_id: string | null // NOTE: use to patch if exists
         topic_order: number
         step_order: number
-        session_id: string | null // NOTE: session_id는 도대체 어디다 쓰는 거야
+        session_id: string | null // NOTE: session_id -> api에서 session 내의 문제 수와, 오답 체크된 문제 수를 비교해서 완료 여부 판단
     }
 >
 
