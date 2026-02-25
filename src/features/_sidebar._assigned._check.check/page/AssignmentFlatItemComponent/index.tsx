@@ -1,15 +1,16 @@
 import { ClientError } from "@/shared/error/clientError"
-import type { ExtendedReviewAssignmentQuestion } from "../../types"
+import type { AssignmentQuestionWithExtraInfo } from "../../types"
+import Checkbox from "../flatItemComponents/Checkbox"
 import CheckboxGrid from "../flatItemComponents/CheckboxGrid"
 import SubtitleHeader from "../flatItemComponents/SubtitleHeader"
 import TitleHeader from "../flatItemComponents/TitleHeader"
-import AssignmentQuestion from "./AssignmentQuestion"
 
 export type AssignmentFlatItem =
     | { forWhat: "title"; title: string }
     | { forWhat: "subtitle"; title: string }
-    | { forWhat: "assignmentQuestions"; reviewAssignmentQuestions: ExtendedReviewAssignmentQuestion[] }
-const AssignmentFlatItemComponent = ({ flatItem }: { flatItem: AssignmentFlatItem }) => {
+    | { forWhat: "assignmentQuestions"; assignmentQuestionWithExtraInfoArray: AssignmentQuestionWithExtraInfo[] }
+type AssignmentFlatItemComponentProps = { flatItem: AssignmentFlatItem }
+const AssignmentFlatItemComponent = ({ flatItem }: AssignmentFlatItemComponentProps) => {
     const forWhat = flatItem.forWhat
     switch (forWhat) {
         case "title":
@@ -19,8 +20,14 @@ const AssignmentFlatItemComponent = ({ flatItem }: { flatItem: AssignmentFlatIte
         case "assignmentQuestions":
             return (
                 <CheckboxGrid>
-                    {flatItem.reviewAssignmentQuestions.map((assignmentQuestion) => (
-                        <AssignmentQuestion assignmentQuestion={assignmentQuestion} />
+                    {flatItem.assignmentQuestionWithExtraInfoArray.map((assignmentQuestionWithExtraInfo) => (
+                        <Checkbox
+                            forWhat="assignment"
+                            source={assignmentQuestionWithExtraInfo}
+                            indexInfo={assignmentQuestionWithExtraInfo.indexInfo}
+                        >
+                            {assignmentQuestionWithExtraInfo.order}
+                        </Checkbox>
                     ))}
                 </CheckboxGrid>
             )
