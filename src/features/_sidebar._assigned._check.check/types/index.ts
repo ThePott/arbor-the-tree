@@ -57,16 +57,19 @@ export type ReviewCheckChangedInfo =
 export type IdToChangedInfo = Record<string, ReviewCheckChangedInfo>
 
 // NOTE: types for checkbox grid and checkbox
+// NOTE: parent_id를 joinedQuestion은 포함하고 있고, assignmentQuesion은 포함하고 있지 않다
+//// NOTE: types for checkbox grid and checkbox - syllabus
 export type PagenatedQuestionsForCheckboxGrid = {
     page: number
     questions: JoinedQuestionForCheckbox[]
 }
 export type JoinedQuestionForCheckbox = {
-    question: JoinedQuestion
     indexInfo: IndexInfo
+    question: JoinedQuestion // NOTE: parent id(session_id) 포함되어 있음
 }
+//// NOTE: types for checkbox grid and checkbox - assignment
 export type AssignmentQuestionForCheckbox = {
-    assignmentQuestion: ExtendedReviewAssignmentQuestion // NOTE: this is inside of response.data
-    assignment_id: string
     indexInfo: IndexInfo
+    assignmentQuestion: ExtendedReviewAssignmentQuestion // NOTE: this is inside of response.data
+    assignment_id: string // NOTE: parent id 없기 때문에 주입해야
 }

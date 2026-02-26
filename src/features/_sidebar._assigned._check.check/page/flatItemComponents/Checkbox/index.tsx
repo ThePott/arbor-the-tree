@@ -1,6 +1,6 @@
 import useReviewCheckStore from "@/features/_sidebar._assigned._check.check/store"
 import type {
-    AssignmentQuestionForCheckbox,
+    ExtendedReviewAssignmentQuestion,
     IndexInfo,
     JoinedQuestion,
 } from "@/features/_sidebar._assigned._check.check/types"
@@ -42,11 +42,13 @@ type CheckboxForSyllabusProps = {
 }
 type CheckboxForAssignmentProps = {
     forWhat: "assignment"
-    source: AssignmentQuestionForCheckbox
+    source: ExtendedReviewAssignmentQuestion
+    assignment_id: string
 }
 
 type CheckboxProps = CheckboxCommonProps & (CheckboxForSyllabusProps | CheckboxForAssignmentProps)
-const Checkbox = ({ forWhat, children, indexInfo, source }: CheckboxProps) => {
+const Checkbox = (props: CheckboxProps) => {
+    const { forWhat, children, indexInfo, source } = props
     const status = useReviewCheckStore((state) => state.status)
     const isMultiSelecting = useReviewCheckStore((state) => state.isMultiSelecting)
     const insertRecentIndexInfo = useReviewCheckStore((state) => state.insertRecentIndexInfo)
@@ -83,13 +85,13 @@ const Checkbox = ({ forWhat, children, indexInfo, source }: CheckboxProps) => {
                       forWhat,
                       status,
                       indexInfo,
-                      session_id: source.session_id,
+                      session_id: source.session_id, // NOTE: session_id는 joinedQuestion에 들어있는 채로 서버에게 받는다
                   }
                 : {
                       forWhat,
                       status,
                       indexInfo,
-                      assignment_id: source.assignment_id,
+                      assignment_id: props.assignment_id, // NOTE: assignment_id는 flatten 과정에서 주입된다
                   }
 
         updateReviewCheckQueryData({

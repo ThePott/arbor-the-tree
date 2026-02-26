@@ -8,7 +8,7 @@ import TitleHeader from "../flatItemComponents/TitleHeader"
 export type AssignmentFlatItem =
     | { forWhat: "title"; title: string }
     | { forWhat: "subtitle"; title: string }
-    | { forWhat: "assignmentQuestions"; assignmentQuestionWithExtraInfoArray: AssignmentQuestionForCheckbox[] }
+    | { forWhat: "assignmentQuestions"; assignmentQuestionForCheckboxArray: AssignmentQuestionForCheckbox[] }
 type AssignmentFlatItemComponentProps = { flatItem: AssignmentFlatItem }
 const AssignmentFlatItemComponent = ({ flatItem }: AssignmentFlatItemComponentProps) => {
     const forWhat = flatItem.forWhat
@@ -20,13 +20,15 @@ const AssignmentFlatItemComponent = ({ flatItem }: AssignmentFlatItemComponentPr
         case "assignmentQuestions":
             return (
                 <CheckboxGrid>
-                    {flatItem.assignmentQuestionWithExtraInfoArray.map((assignmentQuestionWithExtraInfo) => (
+                    {flatItem.assignmentQuestionForCheckboxArray.map((assignmentQuestionForCheckbox) => (
                         <Checkbox
+                            key={assignmentQuestionForCheckbox.assignmentQuestion.id}
                             forWhat="assignment"
-                            source={assignmentQuestionWithExtraInfo}
-                            indexInfo={assignmentQuestionWithExtraInfo.indexInfo}
+                            source={assignmentQuestionForCheckbox.assignmentQuestion}
+                            indexInfo={assignmentQuestionForCheckbox.indexInfo}
+                            assignment_id={assignmentQuestionForCheckbox.assignment_id}
                         >
-                            {assignmentQuestionWithExtraInfo.order}
+                            {assignmentQuestionForCheckbox.assignmentQuestion.order}
                         </Checkbox>
                     ))}
                 </CheckboxGrid>

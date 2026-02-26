@@ -15,9 +15,9 @@ export const makeReviewCheckAssignmentFlatItemArray = (
             const subtitleHeader: AssignmentFlatItem = { forWhat: "subtitle", title: book.bookTitle }
             const assignmentQuestions: AssignmentFlatItem = {
                 forWhat: "assignmentQuestions",
-                assignmentQuestionWithExtraInfoArray: book.reviewAssignmentQuestions.map(
+                assignmentQuestionForCheckboxArray: book.reviewAssignmentQuestions.map(
                     (assignmentQuestion, checkboxIndex) => ({
-                        ...assignmentQuestion,
+                        assignmentQuestion,
                         indexInfo: { titleIndex, subtitleIndex, checkboxIndex },
                         assignment_id: assignment.id,
                     })
