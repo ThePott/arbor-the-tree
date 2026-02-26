@@ -1,5 +1,5 @@
-import type { ReviewCheckAssignmentResponseData } from "../../loader"
-import type { AssignmentFlatItem } from "../AssignmentFlatItemComponent"
+import type { ReviewCheckAssignmentResponseData } from "../loader"
+import type { AssignmentFlatItem } from "../page/AssignmentFlatItemComponent"
 
 export const makeReviewCheckAssignmentFlatItemArray = (
     queryData: ReviewCheckAssignmentResponseData | undefined

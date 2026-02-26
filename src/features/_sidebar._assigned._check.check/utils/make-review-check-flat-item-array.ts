@@ -1,5 +1,5 @@
-import type { ReviewCheckResponseData } from "../../loader"
-import type { JoinedQuestion, JoinedQuestionForCheckbox, PagenatedQuestionsForCheckboxGrid } from "../../types"
+import type { ReviewCheckResponseData } from "../loader"
+import type { JoinedQuestion, JoinedQuestionForCheckbox, PagenatedQuestionsForCheckboxGrid } from "../types"
 
 type MakeFlatPagenatedInStepProps = {
     titleIndex: number

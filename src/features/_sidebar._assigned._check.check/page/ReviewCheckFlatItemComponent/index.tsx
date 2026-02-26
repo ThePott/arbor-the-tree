@@ -1,7 +1,7 @@
 import { ClientError } from "@/shared/error/clientError"
+import type { ReviewCheckFlatItem } from "../../utils/make-review-check-flat-item-array"
 import SubtitleHeader from "../flatItemComponents/SubtitleHeader"
 import TitleHeader from "../flatItemComponents/TitleHeader"
-import type { ReviewCheckFlatItem } from "../utils/make-review-check-flat-item-array"
 import ReviewCheckPagenated from "./ReviewCheckPagenated"
 
 type ReviewCheckFlatItemComponentProps = {

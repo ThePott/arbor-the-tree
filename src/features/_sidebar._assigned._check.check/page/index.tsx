@@ -2,12 +2,12 @@ import { Container, FlexOneContainer, Vstack } from "@/packages/components/layou
 import RoundBox from "@/packages/components/RoundBox"
 import { useVirtualizer } from "@tanstack/react-virtual"
 import { useRef } from "react"
+import { makeReviewCheckAssignmentFlatItemArray } from "../utils/make-review-check-assignment-flat-item-array"
+import { makeReviewCheckFlatItemArray } from "../utils/make-review-check-flat-item-array"
 import AssignmentFlatItemComponent from "./AssignmentFlatItemComponent"
 import useReviewCheck from "./hooks"
 import ReviewCheckCreateToolbar from "./ReviewCheckCreateToolbar"
 import ReviewCheckFlatItemComponent from "./ReviewCheckFlatItemComponent"
-import { makeReviewCheckAssignmentFlatItemArray } from "./utils/make-review-check-assignment-flat-item-array"
-import { makeReviewCheckFlatItemArray } from "./utils/make-review-check-flat-item-array"
 
 const ReviewCheckPage = () => {
     const { extendedBook, assignmentWithBooksArray } = useReviewCheck()
