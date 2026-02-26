@@ -46,7 +46,7 @@ type CheckboxForAssignmentProps = {
     assignment_id: string
 }
 
-type CheckboxProps = CheckboxCommonProps & (CheckboxForSyllabusProps | CheckboxForAssignmentProps)
+export type CheckboxProps = CheckboxCommonProps & (CheckboxForSyllabusProps | CheckboxForAssignmentProps) // NOTE: hooks에서 그대로 받아 사용함
 const Checkbox = (props: CheckboxProps) => {
     const { forWhat, children, indexInfo, source } = props
     const status = useReviewCheckStore((state) => state.status)
@@ -67,38 +67,42 @@ const Checkbox = (props: CheckboxProps) => {
         }
 
         const copiedIdToChangedInfo = { ...idToChangedInfo }
-        // NOTE: 원래 상태랑 똑같으면 삭제
-        if (source.review_check_status === status) {
-            delete copiedIdToChangedInfo[source.id]
+
+        if (searchParams.is_assignment) {
+        } else {
+            // NOTE: 원래 상태랑 똑같으면 삭제
+            if (source.review_check_status === status) {
+                delete copiedIdToChangedInfo[source.id]
+                updateReviewCheckQueryData({
+                    idToChangedInfo: copiedIdToChangedInfo,
+                    searchParams,
+                    storeCallback: () => setIdToChangedInfo(copiedIdToChangedInfo),
+                })
+                return
+            }
+
+            // NOTE: 원래 상태랑 다르면 추가 혹은 수정
+            copiedIdToChangedInfo[source.id] =
+                forWhat === "syllabus"
+                    ? {
+                          forWhat,
+                          status,
+                          indexInfo,
+                          session_id: source.session_id, // NOTE: session_id는 joinedQuestion에 들어있는 채로 서버에게 받는다
+                      }
+                    : {
+                          forWhat,
+                          status,
+                          indexInfo,
+                          assignment_id: props.assignment_id, // NOTE: assignment_id는 flatten 과정에서 주입된다
+                      }
+
             updateReviewCheckQueryData({
                 idToChangedInfo: copiedIdToChangedInfo,
                 searchParams,
                 storeCallback: () => setIdToChangedInfo(copiedIdToChangedInfo),
             })
-            return
         }
-
-        // NOTE: 원래 상태랑 다르면 추가 혹은 수정
-        copiedIdToChangedInfo[source.id] =
-            forWhat === "syllabus"
-                ? {
-                      forWhat,
-                      status,
-                      indexInfo,
-                      session_id: source.session_id, // NOTE: session_id는 joinedQuestion에 들어있는 채로 서버에게 받는다
-                  }
-                : {
-                      forWhat,
-                      status,
-                      indexInfo,
-                      assignment_id: props.assignment_id, // NOTE: assignment_id는 flatten 과정에서 주입된다
-                  }
-
-        updateReviewCheckQueryData({
-            idToChangedInfo: copiedIdToChangedInfo,
-            searchParams,
-            storeCallback: () => setIdToChangedInfo(copiedIdToChangedInfo),
-        })
     }
 
     const isVeryRecent = checkAreIndexesTheSame({

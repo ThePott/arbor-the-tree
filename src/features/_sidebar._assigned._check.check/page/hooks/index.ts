@@ -57,6 +57,7 @@ const useReviewCheckMutateForSyllabus = () => {
 }
 type ReviewCheckMutateForSyllabus = ReturnType<typeof useReviewCheckMutateForSyllabus>["mutate"]
 const filterReallyChangedForSyllabus = (queryData: ReviewCheckResponseData): IdToChangedInfo => {
+    debugger
     const changedIdToRequestInfo = useReviewCheckStore.getState().idToChangedInfo
     const entryArray = Object.entries(changedIdToRequestInfo)
     const filteredEntryArray = entryArray.filter((entry) => {
@@ -79,6 +80,7 @@ const useDetectIdToChanedInfoThenMutateForSyllabus = (mutate: ReviewCheckMutateF
 
     useEffect(() => {
         if (is_assignment) return
+        debugger
         if (Object.entries(changedIdToRequestInfo).length === 0) return
         if (Object.values(changedIdToRequestInfoByMultiSelect).length > 0) return
 
@@ -104,13 +106,13 @@ const useDetectIdToChanedInfoThenMutateForSyllabus = (mutate: ReviewCheckMutateF
 
 const useReviewCheckMutateForAssignment = () => {
     const searchParams = route.useSearch()
-    const { classroom_id, student_id, syllabus_id } = searchParams
+    const { classroom_id, student_id } = searchParams
     const { mutate } = useSimpleMutation({
         method: "post",
-        url: "/review/check",
-        queryKey: ["reviewCheck", classroom_id, student_id, syllabus_id],
+        url: "/review/check/assignment",
+        queryKey: ["reviewCheckAssignment", classroom_id, student_id],
         params: searchParams,
-        update: makeUpdatedReviewCheckQueryData,
+        update: ({ previous }) => previous,
         additionalOnSetteled: (client) =>
             client.invalidateQueries({ queryKey: ["progressSession", classroom_id, student_id] }),
     })
@@ -139,11 +141,12 @@ const useDetectIdToChanedInfoThenMutateForAssignment = (mutate: ReviewCheckMutat
     const { classroom_id, student_id, syllabus_id, is_assignment } = route.useSearch()
 
     useEffect(() => {
-        if (is_assignment) return
+        if (!is_assignment) return
         if (Object.entries(changedIdToRequestInfo).length === 0) return
         if (Object.values(changedIdToRequestInfoByMultiSelect).length > 0) return
 
         const timeout = setTimeout(async () => {
+            debugger
             const queryData = queryClient.getQueryData([
                 "reviewCheckAssignment",
                 classroom_id,
@@ -172,6 +175,7 @@ const useConvertRecentToChanged = (data: ReviewCheckResponseData | undefined) =>
     const searchParams = route.useSearch()
 
     useEffect(() => {
+        if (searchParams.is_assignment) return
         if (recentIndexInfoArray.length === 0) return
 
         const newIdToChangedInfo: IdToChangedInfo = {}
