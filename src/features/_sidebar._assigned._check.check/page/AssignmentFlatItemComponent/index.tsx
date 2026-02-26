@@ -1,5 +1,5 @@
 import { ClientError } from "@/shared/error/clientError"
-import type { AssignmentQuestionWithExtraInfo } from "../../types"
+import type { AssignmentQuestionForCheckbox } from "../../types"
 import Checkbox from "../flatItemComponents/Checkbox"
 import CheckboxGrid from "../flatItemComponents/CheckboxGrid"
 import SubtitleHeader from "../flatItemComponents/SubtitleHeader"
@@ -8,7 +8,7 @@ import TitleHeader from "../flatItemComponents/TitleHeader"
 export type AssignmentFlatItem =
     | { forWhat: "title"; title: string }
     | { forWhat: "subtitle"; title: string }
-    | { forWhat: "assignmentQuestions"; assignmentQuestionWithExtraInfoArray: AssignmentQuestionWithExtraInfo[] }
+    | { forWhat: "assignmentQuestions"; assignmentQuestionWithExtraInfoArray: AssignmentQuestionForCheckbox[] }
 type AssignmentFlatItemComponentProps = { flatItem: AssignmentFlatItem }
 const AssignmentFlatItemComponent = ({ flatItem }: AssignmentFlatItemComponentProps) => {
     const forWhat = flatItem.forWhat

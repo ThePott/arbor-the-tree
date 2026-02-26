@@ -1,6 +1,6 @@
 import useReviewCheckStore from "@/features/_sidebar._assigned._check.check/store"
 import type {
-    AssignmentQuestionWithExtraInfo,
+    AssignmentQuestionForCheckbox,
     IndexInfo,
     JoinedQuestion,
 } from "@/features/_sidebar._assigned._check.check/types"
@@ -42,7 +42,7 @@ type CheckboxForSyllabusProps = {
 }
 type CheckboxForAssignmentProps = {
     forWhat: "assignment"
-    source: AssignmentQuestionWithExtraInfo
+    source: AssignmentQuestionForCheckbox
 }
 
 type CheckboxProps = CheckboxCommonProps & (CheckboxForSyllabusProps | CheckboxForAssignmentProps)

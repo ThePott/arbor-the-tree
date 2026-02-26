@@ -1,9 +1,9 @@
-import type { PagenatedQuestions } from "@/features/_sidebar._assigned._check.check/types"
+import type { PagenatedQuestionsForCheckboxGrid } from "@/features/_sidebar._assigned._check.check/types"
 import { Hstack } from "@/packages/components/layouts"
 import Checkbox from "../../flatItemComponents/Checkbox"
 import CheckboxGrid from "../../flatItemComponents/CheckboxGrid"
 
-type ReviewCheckPagenatedProps = { pagenatedQuestions: PagenatedQuestions }
+type ReviewCheckPagenatedProps = { pagenatedQuestions: PagenatedQuestionsForCheckboxGrid }
 const ReviewCheckPagenated = ({ pagenatedQuestions }: ReviewCheckPagenatedProps) => {
     const { page, questions } = pagenatedQuestions
     return (

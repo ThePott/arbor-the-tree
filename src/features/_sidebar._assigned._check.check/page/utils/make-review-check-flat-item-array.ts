@@ -1,5 +1,5 @@
 import type { ReviewCheckResponseData } from "../../loader"
-import type { JoinedQuestion, JoinedQuestionWithIndexInfo, PagenatedQuestions } from "../../types"
+import type { JoinedQuestion, JoinedQuestionForCheckbox, PagenatedQuestionsForCheckboxGrid } from "../../types"
 
 type MakeFlatPagenatedInStepProps = {
     titleIndex: number
@@ -15,7 +15,7 @@ const makeFlatPagenatedInStep = ({
         // TODO: 얜 뭔데
         const targetPagenated = acc.find((elFlatItem) => elFlatItem.pagenatedQuestions.page === question.page)
 
-        const newJoinedQuestionWithIndexInfo: JoinedQuestionWithIndexInfo = {
+        const newJoinedQuestionWithIndexInfo: JoinedQuestionForCheckbox = {
             indexInfo: {
                 titleIndex,
                 subtitleIndex,
@@ -29,7 +29,7 @@ const makeFlatPagenatedInStep = ({
             return acc
         }
 
-        const newPagenated: PagenatedQuestions = {
+        const newPagenated: PagenatedQuestionsForCheckboxGrid = {
             page: question.page,
             questions: [newJoinedQuestionWithIndexInfo],
         }
@@ -43,7 +43,10 @@ const makeFlatPagenatedInStep = ({
     return result
 }
 
-type FlatItemForPagenatedQuestions = { forWhat: "pagenatedQuestions"; pagenatedQuestions: PagenatedQuestions }
+type FlatItemForPagenatedQuestions = {
+    forWhat: "pagenatedQuestions"
+    pagenatedQuestions: PagenatedQuestionsForCheckboxGrid
+}
 export type ReviewCheckFlatItem =
     | { forWhat: "title"; title: string }
     | { forWhat: "subtitle"; title: string }
