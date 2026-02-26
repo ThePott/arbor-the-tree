@@ -40,7 +40,7 @@ const useReviewCheckQuery = () => {
     return { extendedBook, assignmentWithBooksArray }
 }
 
-const useReviewCheckMutate = () => {
+const useReviewCheckMutateForSyllabus = () => {
     const searchParams = route.useSearch()
     const { classroom_id, student_id, syllabus_id } = searchParams
     const { mutate } = useSimpleMutation({
@@ -54,9 +54,8 @@ const useReviewCheckMutate = () => {
     })
     return { mutate }
 }
-export type ReviewCheckMutate = ReturnType<typeof useReviewCheckMutate>["mutate"]
-
-const filterReallyChanged = (queryData: ReviewCheckResponseData): IdToChangedInfo => {
+type ReviewCheckMutateForSyllabus = ReturnType<typeof useReviewCheckMutateForSyllabus>["mutate"]
+const filterReallyChangedForSyllabus = (queryData: ReviewCheckResponseData): IdToChangedInfo => {
     const changedIdToRequestInfo = useReviewCheckStore.getState().idToChangedInfo
     const entryArray = Object.entries(changedIdToRequestInfo)
     const filteredEntryArray = entryArray.filter((entry) => {
@@ -70,15 +69,15 @@ const filterReallyChanged = (queryData: ReviewCheckResponseData): IdToChangedInf
     const isFiltered = entryArray.length !== filteredEntryArray.length
     return isFiltered ? Object.fromEntries(filteredEntryArray) : changedIdToRequestInfo
 }
-
-const useDetectChangedIdToRequestInfoThenMutate = (mutate: ReviewCheckMutate) => {
+const useDetectIdToChanedInfoThenMutateForSyllabus = (mutate: ReviewCheckMutateForSyllabus) => {
     const changedIdToRequestInfo = useReviewCheckStore((state) => state.idToChangedInfo)
     const setChangedIdToRequestInfo = useReviewCheckStore((state) => state.setIdToChangedInfo)
     const changedIdToRequestInfoByMultiSelect = useReviewCheckStore((state) => state.idToChangedInfoByMultiSelect)
-    const { classroom_id, student_id, syllabus_id } = route.useSearch()
     const queryClient = useQueryClient()
+    const { classroom_id, student_id, syllabus_id, is_assignment } = route.useSearch()
 
     useEffect(() => {
+        if (is_assignment) return
         if (Object.entries(changedIdToRequestInfo).length === 0) return
         if (Object.values(changedIdToRequestInfoByMultiSelect).length > 0) return
 
@@ -89,7 +88,68 @@ const useDetectChangedIdToRequestInfoThenMutate = (mutate: ReviewCheckMutate) =>
                 student_id,
                 syllabus_id,
             ]) as ReviewCheckResponseData
-            const reallyChanged = filterReallyChanged(queryData)
+            const reallyChanged = filterReallyChangedForSyllabus(queryData)
+            setChangedIdToRequestInfo(reallyChanged)
+            const body = {
+                student_id,
+                syllabus_id,
+                changedReviewChecks: changedIdToRequestInfo,
+            }
+            mutate({ body, additionalData: changedIdToRequestInfo })
+        }, 500)
+        return () => clearTimeout(timeout)
+    }, [changedIdToRequestInfo, changedIdToRequestInfoByMultiSelect])
+}
+
+const useReviewCheckMutateForAssignment = () => {
+    const searchParams = route.useSearch()
+    const { classroom_id, student_id, syllabus_id } = searchParams
+    const { mutate } = useSimpleMutation({
+        method: "post",
+        url: "/review/check",
+        queryKey: ["reviewCheck", classroom_id, student_id, syllabus_id],
+        params: searchParams,
+        update: makeUpdatedReviewCheckQueryData,
+        additionalOnSetteled: (client) =>
+            client.invalidateQueries({ queryKey: ["progressSession", classroom_id, student_id] }),
+    })
+    return { mutate }
+}
+type ReviewCheckMutateForAssignment = ReturnType<typeof useReviewCheckMutateForAssignment>["mutate"]
+const filterReallyChangedForAssignment = (queryData: ReviewCheckResponseData): IdToChangedInfo => {
+    const changedIdToRequestInfo = useReviewCheckStore.getState().idToChangedInfo
+    const entryArray = Object.entries(changedIdToRequestInfo)
+    const filteredEntryArray = entryArray.filter((entry) => {
+        try {
+            const joinedQuestion = findJoinedQuestion({ queryData, changedEntry: entry })
+            return entry[1].status !== joinedQuestion.review_check_status
+        } catch {
+            return true
+        }
+    })
+    const isFiltered = entryArray.length !== filteredEntryArray.length
+    return isFiltered ? Object.fromEntries(filteredEntryArray) : changedIdToRequestInfo
+}
+const useDetectIdToChanedInfoThenMutateForAssignment = (mutate: ReviewCheckMutateForAssignment) => {
+    const changedIdToRequestInfo = useReviewCheckStore((state) => state.idToChangedInfo)
+    const setChangedIdToRequestInfo = useReviewCheckStore((state) => state.setIdToChangedInfo)
+    const changedIdToRequestInfoByMultiSelect = useReviewCheckStore((state) => state.idToChangedInfoByMultiSelect)
+    const queryClient = useQueryClient()
+    const { classroom_id, student_id, syllabus_id, is_assignment } = route.useSearch()
+
+    useEffect(() => {
+        if (is_assignment) return
+        if (Object.entries(changedIdToRequestInfo).length === 0) return
+        if (Object.values(changedIdToRequestInfoByMultiSelect).length > 0) return
+
+        const timeout = setTimeout(async () => {
+            const queryData = queryClient.getQueryData([
+                "reviewCheck",
+                classroom_id,
+                student_id,
+                syllabus_id,
+            ]) as ReviewCheckResponseData
+            const reallyChanged = filterReallyChangedForAssignment(queryData)
             setChangedIdToRequestInfo(reallyChanged)
             const body = {
                 student_id,
@@ -181,8 +241,13 @@ const useResetChangedWhenSearchParamsChanged = () => {
 
 const useReviewCheck = () => {
     const { assignmentWithBooksArray, extendedBook } = useReviewCheckQuery()
-    const { mutate } = useReviewCheckMutate()
-    useDetectChangedIdToRequestInfoThenMutate(mutate)
+
+    const { mutate: mutateForSyllabus } = useReviewCheckMutateForSyllabus()
+    useDetectIdToChanedInfoThenMutateForSyllabus(mutateForSyllabus)
+
+    const { mutate: mutateForAssignment } = useReviewCheckMutateForAssignment()
+    useDetectIdToChanedInfoThenMutateForAssignment(mutateForAssignment)
+
     useConvertRecentToChanged(extendedBook)
     useResetChangedWhenSearchParamsChanged()
 
