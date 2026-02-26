@@ -57,7 +57,6 @@ const useReviewCheckMutateForSyllabus = () => {
 }
 type ReviewCheckMutateForSyllabus = ReturnType<typeof useReviewCheckMutateForSyllabus>["mutate"]
 const filterReallyChangedForSyllabus = (queryData: ReviewCheckResponseData): IdToChangedInfo => {
-    debugger
     const changedIdToRequestInfo = useReviewCheckStore.getState().idToChangedInfo
     const entryArray = Object.entries(changedIdToRequestInfo)
     const filteredEntryArray = entryArray.filter((entry) => {
@@ -80,7 +79,6 @@ const useDetectIdToChanedInfoThenMutateForSyllabus = (mutate: ReviewCheckMutateF
 
     useEffect(() => {
         if (is_assignment) return
-        debugger
         if (Object.entries(changedIdToRequestInfo).length === 0) return
         if (Object.values(changedIdToRequestInfoByMultiSelect).length > 0) return
 
@@ -146,7 +144,6 @@ const useDetectIdToChanedInfoThenMutateForAssignment = (mutate: ReviewCheckMutat
         if (Object.values(changedIdToRequestInfoByMultiSelect).length > 0) return
 
         const timeout = setTimeout(async () => {
-            debugger
             const queryData = queryClient.getQueryData([
                 "reviewCheckAssignment",
                 classroom_id,

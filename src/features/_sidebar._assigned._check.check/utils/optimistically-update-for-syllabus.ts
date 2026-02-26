@@ -15,7 +15,6 @@ export const makeUpdatedReviewCheckQueryData = ({
     previous,
     additionalData,
 }: MakeUpdatedReviewCheckQueryData): ReviewCheckResponseData => {
-    debugger
     const newData = produce(previous, (draft) => {
         const entryArray = Object.entries(additionalData)
         entryArray.forEach((entry) => {
@@ -37,7 +36,6 @@ export const updateReviewCheckQueryData = ({
     searchParams: { classroom_id, student_id, syllabus_id },
     storeCallback,
 }: UpdateReviewCheckQueryData): void => {
-    debugger
     const queryKey = ["reviewCheck", classroom_id, student_id, syllabus_id]
     const previous = queryClient.getQueryData(queryKey) as ReviewCheckResponseData
     const newData = makeUpdatedReviewCheckQueryData({ previous, additionalData: idToChangedInfo })
@@ -54,7 +52,6 @@ const makeRevertedReviewChangedreviewChecks = ({
     queryData,
     newChangedIdToRequestInfoByMultiSelect,
 }: MakeRevertedReviewChangedreviewChecksProps): IdToChangedInfo => {
-    debugger
     // NOTE: old 중 new와 겹치는 부분은 revert에서 제외
     const oldChangedIdToRequestInfoByMultiSelect = {
         ...useReviewCheckStore.getState().idToChangedInfoByMultiSelect,

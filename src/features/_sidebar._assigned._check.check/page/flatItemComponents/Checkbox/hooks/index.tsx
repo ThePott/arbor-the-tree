@@ -73,8 +73,8 @@ const useCheckboxEventHandler = (props: CheckboxProps) => {
 
     return { handleClick }
 }
-const useCheckbox = () => {
-    const eventHanderReturns = useCheckboxEventHandler
+const useCheckbox = (props: CheckboxProps) => {
+    const eventHanderReturns = useCheckboxEventHandler(props)
     return { ...eventHanderReturns }
 }
 export default useCheckbox

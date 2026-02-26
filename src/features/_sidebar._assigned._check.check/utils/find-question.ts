@@ -12,7 +12,6 @@ export const findJoinedQuestion = <T extends ReviewCheckResponseData>({
     changedEntry,
     orderInfo,
 }: FindJoinedQuestionProps<T>): JoinedQuestion => {
-    debugger
     const question_id = changedEntry?.[0]
     const titleIndex = changedEntry?.[1].indexInfo.titleIndex ?? orderInfo?.titleIndex
     const subtitleIndex = changedEntry?.[1].indexInfo.subtitleIndex ?? orderInfo?.subtitleIndex
