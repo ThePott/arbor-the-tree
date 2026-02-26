@@ -2,6 +2,7 @@ import { Container, FlexOneContainer, Vstack } from "@/packages/components/layou
 import RoundBox from "@/packages/components/RoundBox"
 import { useVirtualizer } from "@tanstack/react-virtual"
 import { useRef } from "react"
+import useReviewCheckStore from "../store"
 import { makeReviewCheckAssignmentFlatItemArray } from "../utils/make-review-check-assignment-flat-item-array"
 import { makeReviewCheckFlatItemArray } from "../utils/make-review-check-flat-item-array"
 import AssignmentFlatItemComponent from "./AssignmentFlatItemComponent"
@@ -11,6 +12,8 @@ import ReviewCheckFlatItemComponent from "./ReviewCheckFlatItemComponent"
 
 const ReviewCheckPage = () => {
     const { extendedBook, assignmentWithBooksArray } = useReviewCheck()
+    const idToChangedInfo = useReviewCheckStore((state) => state.idToChangedInfo)
+    console.log({ idToChangedInfo })
     const bookFlatItemArray = makeReviewCheckFlatItemArray(extendedBook)
     const assignmentFlatItemArray = makeReviewCheckAssignmentFlatItemArray(assignmentWithBooksArray)
     const isForBook = Boolean(extendedBook)

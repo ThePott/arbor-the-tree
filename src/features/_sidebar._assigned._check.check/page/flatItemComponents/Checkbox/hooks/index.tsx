@@ -1,4 +1,5 @@
 import useReviewCheckStore from "@/features/_sidebar._assigned._check.check/store"
+import { updateReviewCheckAssignmentQueryData } from "@/features/_sidebar._assigned._check.check/utils/optimistically-update-for-assignment"
 import { updateReviewCheckQueryData } from "@/features/_sidebar._assigned._check.check/utils/optimistically-update-for-syllabus"
 import { ClientError } from "@/shared/error/clientError"
 import { getRouteApi } from "@tanstack/react-router"
@@ -62,8 +63,11 @@ const useCheckboxEventHandler = (props: CheckboxProps) => {
                 return
             }
             case "assignment": {
-                const TODO_FILL_HERE = () => {}
-                TODO_FILL_HERE()
+                updateReviewCheckAssignmentQueryData({
+                    idToChangedInfo: copiedIdToChangedInfo,
+                    searchParams,
+                    storeCallback: () => setIdToChangedInfo(copiedIdToChangedInfo),
+                })
                 return
             }
             default:
