@@ -4,7 +4,7 @@ import type {
     IndexInfo,
     JoinedQuestion,
 } from "@/features/_sidebar._assigned._check.check/types"
-import { updateReviewCheckQueryData } from "@/features/_sidebar._assigned._check.check/utils"
+import { updateReviewCheckQueryData } from "@/features/_sidebar._assigned._check.check/utils/optimistically-update-for-syllabus"
 import Button from "@/packages/components/Button/Button"
 import { getRouteApi } from "@tanstack/react-router"
 import clsx from "clsx"

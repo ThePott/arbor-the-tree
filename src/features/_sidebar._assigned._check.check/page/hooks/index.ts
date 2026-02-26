@@ -5,17 +5,18 @@ import { useEffect } from "react"
 import {
     makeReviewCheckAssignmentQueryOptions,
     makeReviewCheckQueryOptions,
+    type ReviewCheckAssignmentResponseData,
     type ReviewCheckResponseData,
 } from "../../loader"
 import useReviewCheckStore from "../../store"
 import type { IdToChangedInfo } from "../../types"
+import { checkIsMultiSelected } from "../../utils/check-is-muti-selected"
+import { findAssignmentQuestion, findJoinedQuestion } from "../../utils/find-question"
 import {
-    checkIsMultiSelected,
-    findJoinedQuestion,
     makeUpdatedReviewCheckQueryData,
     revertReviewCheckQueryDataAfterMultiSelect,
     updateReviewCheckQueryData,
-} from "../../utils"
+} from "../../utils/optimistically-update-for-syllabus"
 
 const route = getRouteApi("/_sidebar")
 
@@ -116,12 +117,12 @@ const useReviewCheckMutateForAssignment = () => {
     return { mutate }
 }
 type ReviewCheckMutateForAssignment = ReturnType<typeof useReviewCheckMutateForAssignment>["mutate"]
-const filterReallyChangedForAssignment = (queryData: ReviewCheckResponseData): IdToChangedInfo => {
+const filterReallyChangedForAssignment = (queryData: ReviewCheckAssignmentResponseData): IdToChangedInfo => {
     const changedIdToRequestInfo = useReviewCheckStore.getState().idToChangedInfo
     const entryArray = Object.entries(changedIdToRequestInfo)
     const filteredEntryArray = entryArray.filter((entry) => {
         try {
-            const joinedQuestion = findJoinedQuestion({ queryData, changedEntry: entry })
+            const joinedQuestion = findAssignmentQuestion({ queryData, changedEntry: entry })
             return entry[1].status !== joinedQuestion.review_check_status
         } catch {
             return true
@@ -144,11 +145,11 @@ const useDetectIdToChanedInfoThenMutateForAssignment = (mutate: ReviewCheckMutat
 
         const timeout = setTimeout(async () => {
             const queryData = queryClient.getQueryData([
-                "reviewCheck",
+                "reviewCheckAssignment",
                 classroom_id,
                 student_id,
                 syllabus_id,
-            ]) as ReviewCheckResponseData
+            ]) as ReviewCheckAssignmentResponseData
             const reallyChanged = filterReallyChangedForAssignment(queryData)
             setChangedIdToRequestInfo(reallyChanged)
             const body = {
