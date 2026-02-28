@@ -50,7 +50,6 @@ const useCheckboxEventHandler = (props: CheckboxProps) => {
                       forWhat,
                       status,
                       indexInfo,
-                      assignment_id: props.assignment_id, // NOTE: assignment_id는 flatten 과정에서 주입된다
                   }
 
         switch (forWhat) {
