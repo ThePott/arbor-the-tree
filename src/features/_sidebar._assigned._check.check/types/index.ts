@@ -52,7 +52,6 @@ export type ReviewCheckChangedInfo =
           forWhat: "assignment"
           status: ReviewCheckStatus | null
           indexInfo: IndexInfo // NOTE: optimistic update을 할 때 query data에서 target question을 찾는 데에 사용됨 -- `findJoinedQuestion`
-          assignment_id: string | null // NOTE: session_id if syllabus, assignment_id otherwise, null if not assigned
       }
 export type IdToChangedInfo = Record<string, ReviewCheckChangedInfo>
 

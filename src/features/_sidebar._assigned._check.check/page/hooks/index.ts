@@ -13,6 +13,10 @@ import type { IdToChangedInfo } from "../../types"
 import { checkIsMultiSelected } from "../../utils/check-is-muti-selected"
 import { findAssignmentQuestion, findJoinedQuestion } from "../../utils/find-question"
 import {
+    revertReviewCheckAssignmentQueryDataAfterMultiSelect,
+    updateReviewCheckAssignmentQueryData,
+} from "../../utils/optimistically-update-for-assignment"
+import {
     makeUpdatedReviewCheckQueryData,
     revertReviewCheckQueryDataAfterMultiSelect,
     updateReviewCheckQueryData,
@@ -132,15 +136,15 @@ const filterReallyChangedForAssignment = (queryData: ReviewCheckAssignmentRespon
     return isFiltered ? Object.fromEntries(filteredEntryArray) : changedIdToRequestInfo
 }
 const useDetectIdToChanedInfoThenMutateForAssignment = (mutate: ReviewCheckMutateForAssignment) => {
-    const changedIdToRequestInfo = useReviewCheckStore((state) => state.idToChangedInfo)
+    const idToChangedInfo = useReviewCheckStore((state) => state.idToChangedInfo)
     const setChangedIdToRequestInfo = useReviewCheckStore((state) => state.setIdToChangedInfo)
     const changedIdToRequestInfoByMultiSelect = useReviewCheckStore((state) => state.idToChangedInfoByMultiSelect)
     const queryClient = useQueryClient()
-    const { classroom_id, student_id, syllabus_id, is_assignment } = route.useSearch()
+    const { classroom_id, student_id, is_assignment } = route.useSearch()
 
     useEffect(() => {
         if (!is_assignment) return
-        if (Object.entries(changedIdToRequestInfo).length === 0) return
+        if (Object.entries(idToChangedInfo).length === 0) return
         if (Object.values(changedIdToRequestInfoByMultiSelect).length > 0) return
 
         const timeout = setTimeout(async () => {
@@ -148,24 +152,22 @@ const useDetectIdToChanedInfoThenMutateForAssignment = (mutate: ReviewCheckMutat
                 "reviewCheckAssignment",
                 classroom_id,
                 student_id,
-                syllabus_id,
             ]) as ReviewCheckAssignmentResponseData
             const reallyChanged = filterReallyChangedForAssignment(queryData)
             setChangedIdToRequestInfo(reallyChanged)
             const body = {
                 student_id,
-                syllabus_id,
-                changedReviewChecks: changedIdToRequestInfo,
+                idToChangedInfo,
             }
-            mutate({ body, additionalData: changedIdToRequestInfo })
+            mutate({ body, additionalData: idToChangedInfo })
         }, 500)
         return () => clearTimeout(timeout)
-    }, [changedIdToRequestInfo, changedIdToRequestInfoByMultiSelect])
+    }, [idToChangedInfo, changedIdToRequestInfoByMultiSelect])
 }
 
 // NOTE: recent array (다중 선택)에 있는 것을 changed에 저장해두는 역할
 // NOTE: 이건 syllabus 한정.
-const useConvertRecentToChanged = (data: ReviewCheckResponseData | undefined) => {
+const useConvertRecentToChangedForSyllabus = (data: ReviewCheckResponseData | undefined) => {
     const setChangedReviewChecksByMultiSelect = useReviewCheckStore((state) => state.setIdToChangedInfoByMultiSelect)
     const status = useReviewCheckStore((state) => state.status)
     const recentIndexInfoArray = useReviewCheckStore((state) => state.recentIndexInfoArray)
@@ -231,14 +233,80 @@ const useConvertRecentToChanged = (data: ReviewCheckResponseData | undefined) =>
     }, [recentIndexInfoArray])
 }
 
+// NOTE: recent array (다중 선택)에 있는 것을 changed에 저장해두는 역할
+// NOTE: 이건 assignment 한정.
+const useConvertRecentToChangedForAssignment = (data: ReviewCheckAssignmentResponseData | undefined) => {
+    const setChangedReviewChecksByMultiSelect = useReviewCheckStore((state) => state.setIdToChangedInfoByMultiSelect)
+    const status = useReviewCheckStore((state) => state.status)
+    const recentIndexInfoArray = useReviewCheckStore((state) => state.recentIndexInfoArray)
+    const searchParams = route.useSearch()
+
+    useEffect(() => {
+        if (!searchParams.is_assignment) return
+        if (recentIndexInfoArray.length === 0) return
+
+        const newIdToChangedInfo: IdToChangedInfo = {}
+        if (recentIndexInfoArray.length === 1) {
+            const recentIndexInfo = recentIndexInfoArray[0]
+            const targetQuestion = findAssignmentQuestion({ queryData: data, orderInfo: recentIndexInfo })
+            if (targetQuestion.review_check_status === status) return
+
+            newIdToChangedInfo[targetQuestion.id] = {
+                status,
+                forWhat: "assignment",
+                indexInfo: recentIndexInfo,
+            }
+            updateReviewCheckAssignmentQueryData({
+                idToChangedInfo: newIdToChangedInfo,
+                searchParams,
+                storeCallback: () => setChangedReviewChecksByMultiSelect(newIdToChangedInfo),
+            })
+            return
+        }
+
+        data?.forEach((assignment, titleIndex) => {
+            assignment.books.forEach((book, subtitleIndex) => {
+                book.reviewAssignmentQuestions.forEach((assignmentQuestion, checkboxIndex) => {
+                    const isMultiSelected = checkIsMultiSelected({
+                        titleIndex,
+                        subtitleIndex,
+                        checkboxIndex,
+                    })
+                    if (!isMultiSelected) return
+
+                    newIdToChangedInfo[assignmentQuestion.id] = {
+                        forWhat: "assignment",
+                        status,
+                        indexInfo: {
+                            titleIndex,
+                            subtitleIndex,
+                            checkboxIndex,
+                        },
+                    }
+                })
+            })
+        })
+
+        revertReviewCheckAssignmentQueryDataAfterMultiSelect({
+            newChangedIdToRequestInfoByMultiSelect: newIdToChangedInfo,
+            searchParams,
+        })
+        updateReviewCheckAssignmentQueryData({
+            idToChangedInfo: newIdToChangedInfo,
+            searchParams,
+            storeCallback: () => setChangedReviewChecksByMultiSelect(newIdToChangedInfo),
+        })
+    }, [recentIndexInfoArray])
+}
+
 const useResetChangedWhenSearchParamsChanged = () => {
     const setChangedIdToRequestInfo = useReviewCheckStore((state) => state.setIdToChangedInfo)
     const setChangedIdToRequestInfoByMultiSelect = useReviewCheckStore((state) => state.setIdToChangedInfoByMultiSelect)
-    const { student_id, syllabus_id, classroom_id } = route.useSearch()
+    const { student_id, syllabus_id, classroom_id, is_assignment } = route.useSearch()
     useEffect(() => {
         setChangedIdToRequestInfo({})
         setChangedIdToRequestInfoByMultiSelect({})
-    }, [student_id, syllabus_id, classroom_id])
+    }, [student_id, syllabus_id, classroom_id, is_assignment])
 }
 
 const useReviewCheck = () => {
@@ -250,7 +318,8 @@ const useReviewCheck = () => {
     const { mutate: mutateForAssignment } = useReviewCheckMutateForAssignment()
     useDetectIdToChanedInfoThenMutateForAssignment(mutateForAssignment)
 
-    useConvertRecentToChanged(extendedBook)
+    useConvertRecentToChangedForSyllabus(extendedBook)
+    useConvertRecentToChangedForAssignment(assignmentWithBooksArray)
     useResetChangedWhenSearchParamsChanged()
 
     return { extendedBook, assignmentWithBooksArray }
