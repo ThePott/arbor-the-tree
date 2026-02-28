@@ -10,17 +10,25 @@ import clsx from "clsx"
 import type { ReactNode } from "react"
 import useCheckbox from "./hooks"
 
-const checkboxVariants = cva("size-12 flex justify-center items-center", {
+const checkboxVariants = cva("flex justify-center items-center", {
     variants: {
-        isCompleted: { true: "", false: "" },
+        isCompleted: { true: "size-8", false: "size-12" },
         status: { CORRECT: "", WRONG: "", null: "" },
         recency: { very: "", somewhat: "", no: "" },
     },
     compoundVariants: [
         { recency: "very", isCompleted: false, className: "outline-2 outline-border-vivid hover:outline-4" },
         { recency: "somewhat", isCompleted: false, className: "outline-2 outline-border-muted hover:outline-4" },
-        { isCompleted: true, status: "CORRECT", className: "outline-2 outline-washed-green/30 -outline-offset-2" },
-        { isCompleted: true, status: "WRONG", className: "outline-2 outline-washed-red/30 -outline-offset-2" },
+        {
+            isCompleted: true,
+            status: "CORRECT",
+            className: "outline-2 outline-washed-green/30 -outline-offset-2 bg-bg-2",
+        },
+        {
+            isCompleted: true,
+            status: "WRONG",
+            className: "outline-2 outline-washed-red/30 -outline-offset-2 bg-bg-2",
+        },
     ],
 })
 
