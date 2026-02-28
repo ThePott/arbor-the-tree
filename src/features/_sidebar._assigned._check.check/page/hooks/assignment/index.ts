@@ -14,14 +14,29 @@ import { useEffect } from "react"
 
 const route = getRouteApi("/_sidebar")
 
+export const useReviewCheckMutateForAssignment = () => {
+    const searchParams = route.useSearch()
+    const { classroom_id, student_id } = searchParams
+    const { mutate } = useSimpleMutation({
+        method: "post",
+        url: "/review/check/assignment",
+        queryKey: ["reviewCheckAssignment", classroom_id, student_id],
+        params: searchParams,
+        update: ({ previous }) => previous,
+        additionalOnSetteled: (client) =>
+            client.invalidateQueries({ queryKey: ["progressSession", classroom_id, student_id] }),
+    })
+    return { mutate }
+}
+
 type ReviewCheckMutateForAssignment = ReturnType<typeof useReviewCheckMutateForAssignment>["mutate"]
 export const filterReallyChangedForAssignment = (queryData: ReviewCheckAssignmentResponseData): IdToChangedInfo => {
     const changedIdToRequestInfo = useReviewCheckStore.getState().idToChangedInfo
     const entryArray = Object.entries(changedIdToRequestInfo)
     const filteredEntryArray = entryArray.filter((entry) => {
         try {
-            const joinedQuestion = findAssignmentQuestion({ queryData, changedEntry: entry })
-            return entry[1].status !== joinedQuestion.review_check_status
+            const assginmentQuestion = findAssignmentQuestion({ queryData, changedEntry: entry })
+            return entry[1].status !== assginmentQuestion.review_check_status
         } catch {
             return true
         }
@@ -29,6 +44,7 @@ export const filterReallyChangedForAssignment = (queryData: ReviewCheckAssignmen
     const isFiltered = entryArray.length !== filteredEntryArray.length
     return isFiltered ? Object.fromEntries(filteredEntryArray) : changedIdToRequestInfo
 }
+
 export const useDetectIdToChanedInfoThenMutateForAssignment = (mutate: ReviewCheckMutateForAssignment) => {
     const idToChangedInfo = useReviewCheckStore((state) => state.idToChangedInfo)
     const setChangedIdToRequestInfo = useReviewCheckStore((state) => state.setIdToChangedInfo)
@@ -57,21 +73,6 @@ export const useDetectIdToChanedInfoThenMutateForAssignment = (mutate: ReviewChe
         }, 500)
         return () => clearTimeout(timeout)
     }, [idToChangedInfo, changedIdToRequestInfoByMultiSelect])
-}
-
-export const useReviewCheckMutateForAssignment = () => {
-    const searchParams = route.useSearch()
-    const { classroom_id, student_id } = searchParams
-    const { mutate } = useSimpleMutation({
-        method: "post",
-        url: "/review/check/assignment",
-        queryKey: ["reviewCheckAssignment", classroom_id, student_id],
-        params: searchParams,
-        update: ({ previous }) => previous,
-        additionalOnSetteled: (client) =>
-            client.invalidateQueries({ queryKey: ["progressSession", classroom_id, student_id] }),
-    })
-    return { mutate }
 }
 
 // NOTE: recent array (다중 선택)에 있는 것을 changed에 저장해두는 역할
