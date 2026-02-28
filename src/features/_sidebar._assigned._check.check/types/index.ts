@@ -14,6 +14,7 @@ import type {
 export type CheckboxStatus = {
     review_check_status: ReviewCheckStatus | null
     review_check_status_visual: ReviewCheckStatus | null
+    review_assignment_created_at: string | null
     session_status: SessionStatus | null
 }
 export type JoinedQuestion = Pick<Question, "id" | "name" | "page" | "order"> &

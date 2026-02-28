@@ -5,9 +5,24 @@ import type {
     JoinedQuestion,
 } from "@/features/_sidebar._assigned._check.check/types"
 import Button from "@/packages/components/Button/Button"
+import { cva } from "class-variance-authority"
 import clsx from "clsx"
 import type { ReactNode } from "react"
 import useCheckbox from "./hooks"
+
+const checkboxVariants = cva("size-12 flex justify-center items-center", {
+    variants: {
+        isCompleted: { true: "", false: "" },
+        status: { CORRECT: "", WRONG: "", null: "" },
+        recency: { very: "", somewhat: "", no: "" },
+    },
+    compoundVariants: [
+        { recency: "very", isCompleted: false, className: "outline-2 outline-border-vivid hover:outline-4" },
+        { recency: "somewhat", isCompleted: false, className: "outline-2 outline-border-muted hover:outline-4" },
+        { isCompleted: true, status: "CORRECT", className: "outline-2 outline-washed-green/30 -outline-offset-2" },
+        { isCompleted: true, status: "WRONG", className: "outline-2 outline-washed-red/30 -outline-offset-2" },
+    ],
+})
 
 // NOTE: veryRecent, somewhatRecent인지 확인하는 용도. 같은지 다른지만 비교하면 됨
 type CheckIsIndexInfoSame = {
@@ -21,6 +36,29 @@ const checkAreIndexesTheSame = ({ fromRecent, fromCheckbox }: CheckIsIndexInfoSa
         fromRecent.subtitleIndex === fromCheckbox.subtitleIndex &&
         fromRecent.checkboxIndex === fromCheckbox.checkboxIndex
     )
+}
+type CheckCheckboxRecencyProps = {
+    checkboxIndexInfo: IndexInfo
+    recentIndexInfoArray: IndexInfo[]
+}
+type CheckboxRecency = "very" | "somewhat" | "no"
+const checkCheckboxRecency = ({
+    checkboxIndexInfo,
+    recentIndexInfoArray,
+}: CheckCheckboxRecencyProps): CheckboxRecency => {
+    const isVeryRecent = checkAreIndexesTheSame({
+        fromRecent: recentIndexInfoArray[recentIndexInfoArray.length - 1],
+        fromCheckbox: checkboxIndexInfo,
+    })
+    if (isVeryRecent) return "very"
+
+    const isSomewhatRecent = checkAreIndexesTheSame({
+        fromRecent: recentIndexInfoArray[recentIndexInfoArray.length - 2],
+        fromCheckbox: checkboxIndexInfo,
+    })
+    if (isSomewhatRecent) return "somewhat"
+
+    return "no"
 }
 
 const statusToColor = {
@@ -46,29 +84,26 @@ type CheckboxForAssignmentProps = {
 export type CheckboxProps = CheckboxCommonProps & (CheckboxForSyllabusProps | CheckboxForAssignmentProps) // NOTE: hooks에서 그대로 받아 사용함
 const Checkbox = (props: CheckboxProps) => {
     const { children, indexInfo, source } = props
-    const recentReviewCheckInfoArray = useReviewCheckStore((state) => state.recentIndexInfoArray)
+    const recentIndexInfoArray = useReviewCheckStore((state) => state.recentIndexInfoArray)
 
     const { handleClick } = useCheckbox(props)
 
-    const isVeryRecent = checkAreIndexesTheSame({
-        fromRecent: recentReviewCheckInfoArray[recentReviewCheckInfoArray.length - 1],
-        fromCheckbox: indexInfo,
+    const recency = checkCheckboxRecency({
+        checkboxIndexInfo: indexInfo,
+        recentIndexInfoArray,
     })
-    const isSomewhatRecent = checkAreIndexesTheSame({
-        fromRecent: recentReviewCheckInfoArray[recentReviewCheckInfoArray.length - 2],
-        fromCheckbox: indexInfo,
-    })
+
+    const isCompleted = Boolean(source.review_assignment_created_at)
+
     return (
         <Button
-            color={statusToColor[source.review_check_status_visual ?? "null"]}
-            status={source.session_status ? "enabled" : "disabled"}
+            color={!isCompleted ? statusToColor[source.review_check_status_visual ?? "null"] : "transparent"}
+            status={source.session_status && !isCompleted ? "enabled" : "disabled"}
             padding="none"
-            border="always"
+            border={isCompleted ? "none" : "always"}
             onClick={handleClick}
             className={clsx(
-                "size-12 flex justify-center items-center",
-                isVeryRecent && "outline-2 outline-border-vivid hover:outline-4",
-                isSomewhatRecent && "outline-2 outline-border-muted hover:outline-4"
+                checkboxVariants({ isCompleted, status: source.review_check_status_visual ?? "null", recency: recency })
             )}
         >
             {children}
