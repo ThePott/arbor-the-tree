@@ -1,1 +1,1 @@
-export type AssignmentCandidateMetaInfo = { bookTitle: string; questionCount: number }
+export type AssignmentCandidateMetaInfo = { bookId: string; bookTitle: string; questionCount: number }

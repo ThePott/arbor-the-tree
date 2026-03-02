@@ -46,6 +46,7 @@ const ReviewAssignmentCreatePage = () => {
         method: "post",
         url: "/review/assignment/create",
         queryKey: ["reviewAssignmentCreate", classroom_id, student_id],
+        params: { classroom_id, student_id },
         update: ({ previous }) => previous,
     })
 
@@ -61,14 +62,15 @@ const ReviewAssignmentCreatePage = () => {
 
     const handleClick = () => {
         if (!student_id) throw ClientError.Unexpected("학생을 선택해주세요")
-        const body = {
-            student_id,
-            classroom_id,
-            // NOTE: 지금으로선 토글로 문제집 선택하는 기능은 없다
-            // TODO: 문제집 선택하면 거기에 맞춰 필터되게 하기
-            bookWithExtendedReviewChecksArray: queryData ?? loaderData,
-        }
-        mutate({ body, additionalData: undefined })
+        // NOTE: 지금으로선 토글로 문제집 선택하는 기능은 없다
+        const data = queryData ?? loaderData // NOTE: 이건 메모이즈가 안 된 거라 table에서는 사용하면 안 됨
+        const book_ids = data.map((candidate) => candidate.bookId)
+        mutate({
+            body: {
+                book_ids,
+            },
+            additionalData: undefined,
+        })
     }
 
     if (!student?.users.name) {
