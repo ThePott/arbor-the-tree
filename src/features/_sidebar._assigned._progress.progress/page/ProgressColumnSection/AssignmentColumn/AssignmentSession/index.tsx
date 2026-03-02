@@ -12,12 +12,12 @@ import StatusCompletenessBox from "../../ColumnWithBoxes/StatusCompletenessBox"
 const route = getRouteApi("/_sidebar")
 
 type AssignmentSessionDropdownProps = { assignmentWithMetaInfo: ReviewAssignmentWithMetaInfo }
-const AssignmentSessionDropdown = ({ assignmentWithMetaInfo }: AssignmentSessionDropdownProps) => {
+const AssignmentSessionDropdown = ({ assignmentWithMetaInfo: { id, status } }: AssignmentSessionDropdownProps) => {
     const { classroom_id, student_id } = route.useSearch()
     const { mutate } = useSimpleMutation({
         queryKey: ["reviewAssignment", classroom_id, student_id],
         method: "patch",
-        url: `/review/assignment/${assignmentWithMetaInfo.id}`,
+        url: `/review/assignment/${id}`,
         update: ({
             previous,
             additionalData,
@@ -26,13 +26,14 @@ const AssignmentSessionDropdown = ({ assignmentWithMetaInfo }: AssignmentSession
             additionalData: SessionStatus | null
         }) => {
             const newData = previous.map((elAssginmentWithMetaInfo) =>
-                elAssginmentWithMetaInfo.id === assignmentWithMetaInfo.id
+                elAssginmentWithMetaInfo.id === id
                     ? { ...elAssginmentWithMetaInfo, status: additionalData }
                     : elAssginmentWithMetaInfo
             )
             return newData
         },
     })
+
     return (
         <Dropdown>
             <Dropdown.Trigger>
@@ -41,29 +42,35 @@ const AssignmentSessionDropdown = ({ assignmentWithMetaInfo }: AssignmentSession
                 </Button>
             </Dropdown.Trigger>
             <Dropdown.Menu>
-                <Dropdown.MenuItem
-                    onClick={() =>
-                        mutate({
-                            body: { status: "HOMEWORK" },
-                            additionalData: "HOMEWORK",
-                        })
-                    }
-                >
-                    숙제
-                </Dropdown.MenuItem>
-                <Dropdown.MenuItem
-                    onClick={() =>
-                        mutate({
-                            body: { status: "TODAY" },
-                            additionalData: "TODAY",
-                        })
-                    }
-                >
-                    할당
-                </Dropdown.MenuItem>
-                <Dropdown.MenuItem onClick={() => mutate({ body: { status: null }, additionalData: null })}>
-                    해제
-                </Dropdown.MenuItem>
+                {status !== "HOMEWORK" && (
+                    <Dropdown.MenuItem
+                        onClick={() =>
+                            mutate({
+                                body: { status: "HOMEWORK" },
+                                additionalData: "HOMEWORK",
+                            })
+                        }
+                    >
+                        숙제
+                    </Dropdown.MenuItem>
+                )}
+                {status !== "TODAY" && (
+                    <Dropdown.MenuItem
+                        onClick={() =>
+                            mutate({
+                                body: { status: "TODAY" },
+                                additionalData: "TODAY",
+                            })
+                        }
+                    >
+                        할당
+                    </Dropdown.MenuItem>
+                )}
+                {status !== null && (
+                    <Dropdown.MenuItem onClick={() => mutate({ body: { status: null }, additionalData: null })}>
+                        해제
+                    </Dropdown.MenuItem>
+                )}
             </Dropdown.Menu>
         </Dropdown>
     )
