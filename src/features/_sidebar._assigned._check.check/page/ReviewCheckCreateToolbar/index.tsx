@@ -2,11 +2,11 @@ import Button from "@/packages/components/Button/Button"
 import { Hstack } from "@/packages/components/layouts"
 import TabBar, { type Tab } from "@/packages/components/TabBar/TabBar"
 import Toggle from "@/packages/components/Toggle"
-import type { ReviewCheckStatus } from "@/shared/interfaces"
+import type { AttemptStatus } from "@/shared/interfaces"
 import useReviewCheckStore from "../../store"
 
 type TabValue = "correct" | "wrong" | "dismiss"
-const tabValueToStatus: Record<TabValue, ReviewCheckStatus | null> = {
+const tabValueToStatus: Record<TabValue, AttemptStatus | null> = {
     correct: "CORRECT",
     wrong: "WRONG",
     dismiss: null,

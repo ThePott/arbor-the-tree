@@ -8,7 +8,7 @@ import {
     useConvertRecentToChangedForSyllabus,
     useDetectIdToChanedInfoThenMutateForSyllabus,
     useReviewCheckMutateForSyllabus,
-} from "./syllabus"
+} from "./session"
 
 const useReviewCheck = () => {
     const { assignmentWithBooksArray, extendedBook } = useReviewCheckQuery()

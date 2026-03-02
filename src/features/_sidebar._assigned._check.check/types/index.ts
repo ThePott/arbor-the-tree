@@ -1,9 +1,9 @@
 import type {
+    AttemptStatus,
     Book,
+    OLD_ReviewAssginmentQuestion,
+    OLD_ReviewAssignment,
     Question,
-    ReviewAssginmentQuestion,
-    ReviewAssignment,
-    ReviewCheckStatus,
     SessionStatus,
     Step,
     Topic,
@@ -12,8 +12,8 @@ import type {
 // NOTE: types for response.data
 //// NOTE: types for response.data for syllabus review check
 export type CheckboxStatus = {
-    review_check_status: ReviewCheckStatus | null
-    review_check_status_visual: ReviewCheckStatus | null
+    attempt_status: AttemptStatus | null
+    review_check_status_visual: AttemptStatus | null
     review_assignment_created_at: string | null
     session_status: SessionStatus | null
 }
@@ -24,12 +24,12 @@ export type ExtendedTopic = Topic & { steps: ExtendedStep[] }
 export type ExtendedBook = Pick<Book, "title"> & { topics: ExtendedTopic[] }
 
 //// NOTE: types for response.data for assignment review check
-export type ExtendedReviewAssignmentQuestion = Omit<ReviewAssginmentQuestion, "status"> & CheckboxStatus // NOTE: this is inside of response.data
+export type ExtendedReviewAssignmentQuestion = Omit<OLD_ReviewAssginmentQuestion, "status"> & CheckboxStatus // NOTE: this is inside of response.data
 export type BookInAssignment = {
     bookTitle: string
     reviewAssignmentQuestions: ExtendedReviewAssignmentQuestion[]
 }
-export type AssignmentWithBooks = ReviewAssignment & {
+export type AssignmentWithBooks = OLD_ReviewAssignment & {
     books: BookInAssignment[]
     session_status: SessionStatus | null
     question_count: number
@@ -44,14 +44,14 @@ export type IndexInfo = {
 }
 export type ReviewCheckChangedInfo =
     | {
-          forWhat: "syllabus"
-          status: ReviewCheckStatus | null
+          forWhat: "session"
+          status: AttemptStatus | null
           indexInfo: IndexInfo // NOTE: optimistic update을 할 때 query data에서 target question을 찾는 데에 사용됨 -- `findJoinedQuestion`
           session_id: string | null // NOTE: session_id if syllabus, assignment_id otherwise, null if not assigned
       }
     | {
           forWhat: "assignment"
-          status: ReviewCheckStatus | null
+          status: AttemptStatus | null
           indexInfo: IndexInfo // NOTE: optimistic update을 할 때 query data에서 target question을 찾는 데에 사용됨 -- `findJoinedQuestion`
       }
 export type IdToChangedInfo = Record<string, ReviewCheckChangedInfo>

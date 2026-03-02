@@ -1,10 +1,10 @@
-import type { ReviewCheckStatus } from "@/shared/interfaces"
+import type { AttemptStatus } from "@/shared/interfaces"
 import { create } from "zustand"
 import type { IdToChangedInfo, IndexInfo } from "../types"
 
 type ReviewCheckStoreState = {
-    status: ReviewCheckStatus | null
-    setStatus: (status: ReviewCheckStatus | null) => void
+    status: AttemptStatus | null
+    setStatus: (status: AttemptStatus | null) => void
 
     isMultiSelecting: boolean
     setIsMultiSelecting: (isMultiSelecting: boolean) => void
