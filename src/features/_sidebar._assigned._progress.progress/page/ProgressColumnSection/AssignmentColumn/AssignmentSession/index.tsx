@@ -1,4 +1,4 @@
-import type { ReviewAssignmentMetaInfo } from "@/features/_sidebar._assigned._assignment.assignment/type"
+import type { ReviewAssignmentWithMetaInfo } from "@/features/_sidebar._assigned._assignment.assignment/type"
 import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
@@ -11,33 +11,24 @@ import StatusCompletenessBox from "../../ColumnWithBoxes/StatusCompletenessBox"
 
 const route = getRouteApi("/_sidebar")
 
-type AssignmentSessionDropdownProps = { assignmentMetaInfo: ReviewAssignmentMetaInfo }
-const AssignmentSessionDropdown = ({ assignmentMetaInfo }: AssignmentSessionDropdownProps) => {
+type AssignmentSessionDropdownProps = { assignmentWithMetaInfo: ReviewAssignmentWithMetaInfo }
+const AssignmentSessionDropdown = ({ assignmentWithMetaInfo }: AssignmentSessionDropdownProps) => {
     const { classroom_id, student_id } = route.useSearch()
-    const { mutate: postMutate } = useSimpleMutation({
+    const { mutate } = useSimpleMutation({
         queryKey: ["reviewAssignment", classroom_id, student_id],
-        method: "post",
-        url: `/review/assignment/${assignmentMetaInfo.id}/assigned`,
+        method: "patch",
+        url: `/review/assignment/${assignmentWithMetaInfo.id}`,
         update: ({
             previous,
             additionalData,
         }: {
             previous: ReviewAssignmentResponseData
-            additionalData: SessionStatus
+            additionalData: SessionStatus | null
         }) => {
-            const newData = previous.map((elMetaInfo) =>
-                elMetaInfo.id === assignmentMetaInfo.id ? { ...elMetaInfo, status: additionalData } : elMetaInfo
-            )
-            return newData
-        },
-    })
-    const { mutate: deleteMutate } = useSimpleMutation({
-        queryKey: ["reviewAssignment", classroom_id, student_id],
-        method: "delete",
-        url: `/review/assignment/${assignmentMetaInfo.id}/assigned`,
-        update: ({ previous }: { previous: ReviewAssignmentResponseData }) => {
-            const newData = previous.map((elMetaInfo) =>
-                elMetaInfo.id === assignmentMetaInfo.id ? { ...elMetaInfo, status: null } : elMetaInfo
+            const newData = previous.map((elAssginmentWithMetaInfo) =>
+                elAssginmentWithMetaInfo.id === assignmentWithMetaInfo.id
+                    ? { ...elAssginmentWithMetaInfo, status: additionalData }
+                    : elAssginmentWithMetaInfo
             )
             return newData
         },
@@ -52,8 +43,8 @@ const AssignmentSessionDropdown = ({ assignmentMetaInfo }: AssignmentSessionDrop
             <Dropdown.Menu>
                 <Dropdown.MenuItem
                     onClick={() =>
-                        postMutate({
-                            body: { assignment_id: assignmentMetaInfo.id, status: "HOMEWORK" },
+                        mutate({
+                            body: { status: "HOMEWORK" },
                             additionalData: "HOMEWORK",
                         })
                     }
@@ -62,15 +53,15 @@ const AssignmentSessionDropdown = ({ assignmentMetaInfo }: AssignmentSessionDrop
                 </Dropdown.MenuItem>
                 <Dropdown.MenuItem
                     onClick={() =>
-                        postMutate({
-                            body: { assignment_id: assignmentMetaInfo.id, status: "TODAY" },
+                        mutate({
+                            body: { status: "TODAY" },
                             additionalData: "TODAY",
                         })
                     }
                 >
                     할당
                 </Dropdown.MenuItem>
-                <Dropdown.MenuItem onClick={() => deleteMutate({ body: undefined, additionalData: undefined })}>
+                <Dropdown.MenuItem onClick={() => mutate({ body: { status: null }, additionalData: null })}>
                     해제
                 </Dropdown.MenuItem>
             </Dropdown.Menu>
@@ -78,14 +69,14 @@ const AssignmentSessionDropdown = ({ assignmentMetaInfo }: AssignmentSessionDrop
     )
 }
 
-type AssignmentSessionProps = { assignmentMetaInfo: ReviewAssignmentMetaInfo }
-const AssignmentSession = ({ assignmentMetaInfo }: AssignmentSessionProps) => {
-    const { created_at, assigned_at, completed_at, questionCount } = assignmentMetaInfo
+type AssignmentSessionProps = { assignmentWithMetaInfo: ReviewAssignmentWithMetaInfo }
+const AssignmentSession = ({ assignmentWithMetaInfo }: AssignmentSessionProps) => {
+    const { created_at, assigned_at, completed_at, questionCount } = assignmentWithMetaInfo
 
     return (
         <StatusCompletenessBox
             isCompleted={Boolean(completed_at)}
-            status={assignmentMetaInfo.status ?? "default"}
+            status={assignmentWithMetaInfo.status ?? "default"}
             isOld={assigned_at ? checkIsBeforeToday(assigned_at) : false}
             onClick={() => {}}
         >
@@ -94,7 +85,7 @@ const AssignmentSession = ({ assignmentMetaInfo }: AssignmentSessionProps) => {
                 {assigned_at && !isSameDay(created_at, assigned_at) && (
                     <StatusCompletenessBox.Label role="conditional">{`${makeFromNow(assigned_at)} 할당`}</StatusCompletenessBox.Label>
                 )}
-                {assignmentMetaInfo.bookTitleArray.map((bookTitle) => (
+                {assignmentWithMetaInfo.bookTitleArray.map((bookTitle) => (
                     <StatusCompletenessBox.Label key={bookTitle} role="conditional">
                         {`- ${bookTitle}`}
                     </StatusCompletenessBox.Label>
@@ -103,7 +94,7 @@ const AssignmentSession = ({ assignmentMetaInfo }: AssignmentSessionProps) => {
                     <StatusCompletenessBox.Label role="sub">{`${makeFromNow(completed_at)} 완료`}</StatusCompletenessBox.Label>
                 )}
             </StatusCompletenessBox.LabelGroup>
-            <AssignmentSessionDropdown assignmentMetaInfo={assignmentMetaInfo} />
+            <AssignmentSessionDropdown assignmentWithMetaInfo={assignmentWithMetaInfo} />
         </StatusCompletenessBox>
     )
 }

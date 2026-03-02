@@ -169,7 +169,7 @@ export type ReviewAssignment = {
     student_id: string
     classroom_id: string | null
     book_ids: string[]
-    status: SessionStatus
+    status: SessionStatus | null
     created_at: string
     assigned_at: string | null
     completed_at: string | null

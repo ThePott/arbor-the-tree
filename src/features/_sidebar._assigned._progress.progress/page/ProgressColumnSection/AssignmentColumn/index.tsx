@@ -8,8 +8,11 @@ const AssignmentColumn = ({ assignmentData }: AssignmentColumnProps) => {
         <ColumnWithBoxes>
             <ColumnWithBoxes.Title>오답 과제</ColumnWithBoxes.Title>
             <ColumnWithBoxes.Content>
-                {assignmentData.map((assignmentMetaInfo) => (
-                    <AssignmentSession key={assignmentMetaInfo.id} assignmentMetaInfo={assignmentMetaInfo} />
+                {assignmentData.map((assignmentWithMetaInfo) => (
+                    <AssignmentSession
+                        key={assignmentWithMetaInfo.id}
+                        assignmentWithMetaInfo={assignmentWithMetaInfo}
+                    />
                 ))}
             </ColumnWithBoxes.Content>
         </ColumnWithBoxes>
