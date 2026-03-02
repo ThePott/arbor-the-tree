@@ -1,6 +1,6 @@
 import { instance } from "@/packages/api/axiosInstances"
 import type { QueryClient } from "@tanstack/react-query"
-import type { BookWithExtendedReviewChecks } from "../types"
+import type { AssignmentCandidateMetaInfo } from "../types"
 
 type MakeReviewAssignmentCreateQueryOptionsProps = {
     classroom_id: string | undefined
@@ -14,7 +14,7 @@ export const makeReviewAssignmentCreateQueryOptions = ({
         queryKey: ["reviewAssignmentCreate", classroom_id, student_id],
         queryFn: async () => {
             const response = await instance.get("/review/assignment/create", { params: { classroom_id, student_id } })
-            return response.data as BookWithExtendedReviewChecks[]
+            return response.data as AssignmentCandidateMetaInfo[]
         },
     }
 }
@@ -29,11 +29,11 @@ const reviewAssignmentCreateLoaderFn = async ({
     classroom_id,
     student_id,
 }: ReviewAssignmentCreateLoaderFnProps) => {
-    const bookWithExtendedReviewChecksArray = student_id
+    const assignmentCandidateMetaInfoArray = student_id
         ? await queryClient.ensureQueryData(makeReviewAssignmentCreateQueryOptions({ classroom_id, student_id }))
         : []
-    return { bookWithExtendedReviewChecksArray }
+    return { assignmentCandidateMetaInfoArray }
 }
 
-export type ReviewAssignmentCreateResponseData = BookWithExtendedReviewChecks[]
+export type ReviewAssignmentCreateResponseData = AssignmentCandidateMetaInfo[]
 export default reviewAssignmentCreateLoaderFn

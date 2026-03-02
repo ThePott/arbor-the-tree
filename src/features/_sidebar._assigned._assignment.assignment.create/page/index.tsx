@@ -13,22 +13,22 @@ import { useMemo } from "react"
 import { makeReviewAssignmentCreateQueryOptions, type ReviewAssignmentCreateResponseData } from "../loader"
 
 type Row = {
-    book_title: string
-    review_check_count: number
+    bookTitle: string
+    questionCount: number
 }
 const columnHelper = createColumnHelper<Row>()
 const columns = [
     columnHelper.display({ header: "포함", cell: () => <Toggle onChange={() => {}} /> }),
-    columnHelper.accessor("book_title", { header: "문제집", cell: ({ getValue }) => getValue() }),
-    columnHelper.accessor("review_check_count", { header: "문항 수", cell: ({ getValue }) => getValue() }),
+    columnHelper.accessor("bookTitle", { header: "문제집", cell: ({ getValue }) => getValue() }),
+    columnHelper.accessor("questionCount", { header: "문항 수", cell: ({ getValue }) => getValue() }),
 ]
 const convertDataToRowArray = (data: ReviewAssignmentCreateResponseData | undefined): Row[] => {
     if (!data) return []
 
-    const rowArray = data.map((book) => {
+    const rowArray = data.map((assignmentCandidateMetaInfo) => {
         const row: Row = {
-            book_title: book.title,
-            review_check_count: book.extendedReviewChecks.length,
+            bookTitle: assignmentCandidateMetaInfo.bookTitle,
+            questionCount: assignmentCandidateMetaInfo.questionCount,
         }
         return row
     })
@@ -38,7 +38,7 @@ const convertDataToRowArray = (data: ReviewAssignmentCreateResponseData | undefi
 const route = getRouteApi("/_sidebar")
 const ReviewAssignmentCreatePage = () => {
     const { classroom_id, student_id } = route.useSearch()
-    const { bookWithExtendedReviewChecksArray: loaderData } = useLoaderData({
+    const { assignmentCandidateMetaInfoArray: loaderData } = useLoaderData({
         from: "/_sidebar/_assigned/_assignment/assignment/create/",
     })
     const { data: queryData } = useQuery(makeReviewAssignmentCreateQueryOptions({ classroom_id, student_id }))
