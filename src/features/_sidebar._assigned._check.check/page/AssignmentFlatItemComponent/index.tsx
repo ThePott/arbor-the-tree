@@ -1,5 +1,5 @@
 import { ClientError } from "@/shared/error/clientError"
-import type { AssignmentQuestionForCheckbox } from "../../types"
+import type { WrappedQuestionForCheckbox } from "../../types"
 import Checkbox from "../flatItemComponents/Checkbox"
 import CheckboxGrid from "../flatItemComponents/CheckboxGrid"
 import SubtitleHeader from "../flatItemComponents/SubtitleHeader"
@@ -8,7 +8,7 @@ import TitleHeader from "../flatItemComponents/TitleHeader"
 export type AssignmentFlatItem =
     | { forWhat: "title"; title: string }
     | { forWhat: "subtitle"; title: string }
-    | { forWhat: "assignmentQuestions"; assignmentQuestionForCheckboxArray: AssignmentQuestionForCheckbox[] }
+    | { forWhat: "questions"; questions: WrappedQuestionForCheckbox[] }
 type AssignmentFlatItemComponentProps = { flatItem: AssignmentFlatItem }
 const AssignmentFlatItemComponent = ({ flatItem }: AssignmentFlatItemComponentProps) => {
     const forWhat = flatItem.forWhat
@@ -17,18 +17,16 @@ const AssignmentFlatItemComponent = ({ flatItem }: AssignmentFlatItemComponentPr
             return <TitleHeader title={flatItem.title} />
         case "subtitle":
             return <SubtitleHeader title={flatItem.title} />
-        case "assignmentQuestions":
+        case "questions":
             return (
                 <CheckboxGrid>
-                    {flatItem.assignmentQuestionForCheckboxArray.map((assignmentQuestionForCheckbox) => (
+                    {flatItem.questions.map((wrappedQuestionForCheckbox, index) => (
                         <Checkbox
-                            key={assignmentQuestionForCheckbox.assignmentQuestion.id}
-                            forWhat="assignment"
-                            source={assignmentQuestionForCheckbox.assignmentQuestion}
-                            indexInfo={assignmentQuestionForCheckbox.indexInfo}
-                            assignment_id={assignmentQuestionForCheckbox.assignment_id}
+                            key={wrappedQuestionForCheckbox.question.id}
+                            source={wrappedQuestionForCheckbox.question}
+                            indexInfo={wrappedQuestionForCheckbox.indexInfo}
                         >
-                            {assignmentQuestionForCheckbox.assignmentQuestion.order}
+                            {index + 1}
                         </Checkbox>
                     ))}
                 </CheckboxGrid>

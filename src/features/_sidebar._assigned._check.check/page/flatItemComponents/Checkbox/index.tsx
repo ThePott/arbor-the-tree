@@ -1,9 +1,5 @@
 import useReviewCheckStore from "@/features/_sidebar._assigned._check.check/store"
-import type {
-    ExtendedReviewAssignmentQuestion,
-    IndexInfo,
-    QuestionWithAttemptInfo,
-} from "@/features/_sidebar._assigned._check.check/types"
+import type { IndexInfo, QuestionWithAttemptInfo } from "@/features/_sidebar._assigned._check.check/types"
 import Button from "@/packages/components/Button/Button"
 import { cva } from "class-variance-authority"
 import clsx from "clsx"
@@ -78,18 +74,10 @@ const statusToColor = {
 type CheckboxCommonProps = {
     children: ReactNode
     indexInfo: IndexInfo
-}
-type CheckboxForSessionProps = {
-    forWhat: "syllabus"
     source: QuestionWithAttemptInfo
 }
-type CheckboxForAssignmentProps = {
-    forWhat: "assignment"
-    source: ExtendedReviewAssignmentQuestion
-    assignment_id: string
-}
 
-export type CheckboxProps = CheckboxCommonProps & (CheckboxForSessionProps | CheckboxForAssignmentProps) // NOTE: hooks에서 그대로 받아 사용함
+export type CheckboxProps = CheckboxCommonProps
 const Checkbox = (props: CheckboxProps) => {
     const { children, indexInfo, source } = props
     const recentIndexInfoArray = useReviewCheckStore((state) => state.recentIndexInfoArray)

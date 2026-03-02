@@ -1,29 +1,35 @@
 import type { ReviewCheckAssignmentResponseData } from "../loader"
 import type { AssignmentFlatItem } from "../page/AssignmentFlatItemComponent"
+import type { WrappedQuestionForCheckbox } from "../types"
 
 export const makeReviewCheckAssignmentFlatItemArray = (
     queryData: ReviewCheckAssignmentResponseData | undefined
 ): AssignmentFlatItem[] => {
     if (!queryData) return []
     const flatItemArray = queryData.flatMap((assignment, titleIndex) => {
-        const bookTitleArray = assignment.books.map((book) => book.bookTitle)
+        const bookTitleArray = assignment.books.map(({ title }) => title)
+        const questions = assignment.books.flatMap(({ questions }) => questions)
         const titleHeader: AssignmentFlatItem = {
             forWhat: "title",
-            title: `${assignment.created_at.slice(0, 10)} __${bookTitleArray.join(", ")} (${assignment.question_count}문제)`,
+            title: `${assignment.created_at.slice(0, 10)} __${bookTitleArray.join(", ")} (${questions.length}문제)`,
         }
         const subtitleHeaderGroupArray = assignment.books.flatMap((book, subtitleIndex) => {
-            const subtitleHeader: AssignmentFlatItem = { forWhat: "subtitle", title: book.bookTitle }
-            const assignmentQuestions: AssignmentFlatItem = {
-                forWhat: "assignmentQuestions",
-                assignmentQuestionForCheckboxArray: book.reviewAssignmentQuestions.map(
-                    (assignmentQuestion, checkboxIndex) => ({
-                        assignmentQuestion,
-                        indexInfo: { titleIndex, subtitleIndex, checkboxIndex },
-                        assignment_id: assignment.id,
-                    })
-                ),
+            const subtitleHeader: AssignmentFlatItem = { forWhat: "subtitle", title: book.title }
+            const wrappedQuestionArray: WrappedQuestionForCheckbox[] = book.questions.map(
+                (question, checkboxIndex) => ({
+                    question,
+                    indexInfo: {
+                        titleIndex,
+                        subtitleIndex,
+                        checkboxIndex,
+                    },
+                })
+            )
+            const questions: AssignmentFlatItem = {
+                forWhat: "questions",
+                questions: wrappedQuestionArray,
             }
-            return [subtitleHeader, assignmentQuestions]
+            return [subtitleHeader, questions]
         })
         return [titleHeader, ...subtitleHeaderGroupArray]
     })

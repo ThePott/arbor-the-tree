@@ -12,22 +12,22 @@ const route = getRouteApi("/_sidebar")
 export const useReviewCheckQuery = () => {
     const searchParams = route.useSearch()
     const { classroom_id, student_id, syllabus_id, is_assignment } = searchParams
-    const { extendedBook: extendedBookLoaderData, assignmentWithBooksArray: assignmentWithBooksArrayLoaderData } =
+    const { bookForSession: bookForSessionLoaderData, bookForAssignmentArray: bookForAssignmentArrayLoaderData } =
         useLoaderData({
             from: "/_sidebar/_assigned/_check/check/",
         })
 
-    const { data: extendedBookQueryData } = useQuery({
+    const { data: bookForSessionQueryData } = useQuery({
         ...makeReviewCheckQueryOptions({ classroom_id, student_id, syllabus_id }),
         enabled: Boolean(student_id && !is_assignment),
     })
-    const { data: assignmentWithBooksArrayQueryData } = useQuery({
+    const { data: bookForAssignmentArrayQueryData } = useQuery({
         ...makeReviewCheckAssignmentQueryOptions({ classroom_id, student_id }),
         enabled: Boolean(student_id && is_assignment),
     })
-    const extendedBook = extendedBookQueryData ?? extendedBookLoaderData
-    const assignmentWithBooksArray = assignmentWithBooksArrayQueryData ?? assignmentWithBooksArrayLoaderData
-    return { extendedBook, assignmentWithBooksArray }
+    const bookForSession = bookForSessionQueryData ?? bookForSessionLoaderData
+    const bookForAssignmentArray = bookForAssignmentArrayQueryData ?? bookForAssignmentArrayLoaderData
+    return { bookForSession, bookForAssignmentArray }
 }
 
 export const useResetChangedWhenSearchParamsChanged = () => {

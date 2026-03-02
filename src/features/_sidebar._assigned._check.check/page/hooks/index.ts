@@ -11,22 +11,22 @@ import {
 } from "./session"
 
 const useReviewCheck = () => {
-    const { assignmentWithBooksArray, extendedBook } = useReviewCheckQuery()
+    const { bookForAssignmentArray, bookForSession } = useReviewCheckQuery()
 
     // NOTE: for syllabus
     const { mutate: mutateForSyllabus } = useReviewCheckMutateForSyllabus()
     useDetectIdToChanedInfoThenMutateForSyllabus(mutateForSyllabus)
-    useConvertRecentToChangedForSyllabus(extendedBook)
+    useConvertRecentToChangedForSyllabus(bookForSession)
 
     // NOTE: for assignment
     const { mutate: mutateForAssignment } = useReviewCheckMutateForAssignment()
     useDetectIdToChanedInfoThenMutateForAssignment(mutateForAssignment)
-    useConvertRecentToChangedForAssignment(assignmentWithBooksArray)
+    useConvertRecentToChangedForAssignment(bookForAssignmentArray)
 
     // NOTE: MUTE BE CALLED AT LAST << 진짜 그런가? 어차피 useEffect이니까 상관 없을 것 같기도 한데
     useResetChangedWhenSearchParamsChanged()
 
-    return { extendedBook, assignmentWithBooksArray }
+    return { bookForSession, bookForAssignmentArray }
 }
 
 export default useReviewCheck

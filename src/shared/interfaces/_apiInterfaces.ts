@@ -163,3 +163,14 @@ export type QuestionAttempt = {
     parent_attempt_id: string | null
     created_at: string
 }
+
+export type ReviewAssignment = {
+    id: string
+    student_id: string
+    classroom_id: string | null
+    book_ids: string[]
+    status: SessionStatus
+    created_at: string
+    assigned_at: string | null
+    completed_at: string | null
+}

@@ -10,7 +10,7 @@ import ReviewCheckCreateToolbar from "./ReviewCheckCreateToolbar"
 import ReviewCheckFlatItemComponent from "./ReviewCheckFlatItemComponent"
 
 const ReviewCheckPage = () => {
-    const { extendedBook, assignmentWithBooksArray } = useReviewCheck()
+    const { bookForSession: extendedBook, bookForAssignmentArray: assignmentWithBooksArray } = useReviewCheck()
     const bookFlatItemArray = makeReviewCheckFlatItemArray(extendedBook)
     const assignmentFlatItemArray = makeReviewCheckAssignmentFlatItemArray(assignmentWithBooksArray)
     const isForBook = Boolean(extendedBook)

@@ -1,7 +1,7 @@
 import { instance } from "@/packages/api/axiosInstances"
 import { ClientError } from "@/shared/error/clientError"
 import { type QueryClient } from "@tanstack/react-query"
-import type { AssignmentWithBooks, ExtendedBook } from "../types"
+import type { AssignmentForReviewCheck, BookForSession } from "../types"
 
 type MakeReviewCheckQueryOptionsProps = {
     classroom_id: string | undefined
@@ -17,10 +17,10 @@ export const makeReviewCheckQueryOptions = ({
     queryFn: async () => {
         // NOTE: 다른 학생으로 넘어가면 이걸 지워야 함 mutation.onSuccess 이 아니라 query에서 하는 게 맞기는 한데
         const response = await instance.get("/review/check", { params: { classroom_id, student_id, syllabus_id } })
-        return response.data as ExtendedBook
+        return response.data as BookForSession
     },
 })
-export type ReviewCheckResponseData = ExtendedBook
+export type ReviewCheckResponseData = BookForSession
 
 type MakeReviewCheckAssignmentQueryOptionsProps = {
     classroom_id: string | undefined
@@ -35,10 +35,10 @@ export const makeReviewCheckAssignmentQueryOptions = ({
         const response = await instance.get("/review/check/assignment", {
             params: { classroom_id, student_id },
         })
-        return response.data as AssignmentWithBooks[]
+        return response.data as AssignmentForReviewCheck[]
     },
 })
-export type ReviewCheckAssignmentResponseData = AssignmentWithBooks[]
+export type ReviewCheckAssignmentResponseData = AssignmentForReviewCheck[]
 
 // NOTE: 여기서 해야 하는 것
 // NOTE: 그 학생, 반의 오답과제에 맞는 문제들, 오답 체크 현황 가져오기
@@ -61,18 +61,18 @@ const reviewCheckLoaderFn = async ({
     if (!syllabus_id && !is_assignment) throw ClientError.Unexpected("문제집 혹은 오답과제를 선택해주세요")
     // NOTE: 그냥 문제집의 오답체크를 가져온다
 
-    const extendedBookPromise = is_assignment
+    const bookForSessionPromise = is_assignment
         ? Promise.resolve(undefined)
         : queryClient.ensureQueryData(makeReviewCheckQueryOptions({ classroom_id, student_id, syllabus_id }))
-    const assignmentWithBooksArrayPromise = is_assignment
+    const bookForAssignmentArrayPromise = is_assignment
         ? queryClient.ensureQueryData(makeReviewCheckAssignmentQueryOptions({ classroom_id, student_id }))
         : Promise.resolve([])
 
-    const [extendedBook, assignmentWithBooksArray] = await Promise.all([
-        extendedBookPromise,
-        assignmentWithBooksArrayPromise,
+    const [bookForSession, bookForAssignmentArray] = await Promise.all([
+        bookForSessionPromise,
+        bookForAssignmentArrayPromise,
     ])
-    return { extendedBook, assignmentWithBooksArray }
+    return { bookForSession, bookForAssignmentArray }
 }
 
 export default reviewCheckLoaderFn

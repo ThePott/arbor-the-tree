@@ -1,4 +1,4 @@
-import type { ReviewAssignmentMetaInfo } from "@/features/_sidebar._assigned._assignment.assignment/type"
+import type { ReviewAssignmentWithMetaInfo } from "@/features/_sidebar._assigned._assignment.assignment/type"
 import { instance } from "@/packages/api/axiosInstances"
 
 type MakeReviewAssignmentQueryOptionsProps = {
@@ -13,8 +13,8 @@ export const makeReviewAssignmentQueryOptions = ({
         queryKey: ["reviewAssignment", classroom_id, student_id],
         queryFn: async () => {
             const response = await instance.get("/review/assignment", { params: { classroom_id, student_id } })
-            return response.data as ReviewAssignmentMetaInfo[]
+            return response.data as ReviewAssignmentWithMetaInfo[]
         },
     }
 }
-export type ReviewAssignmentResponseData = ReviewAssignmentMetaInfo[]
+export type ReviewAssignmentResponseData = ReviewAssignmentWithMetaInfo[]
