@@ -1,6 +1,6 @@
 import { ClientError } from "@/shared/error/clientError"
 import type { ReviewCheckAssignmentResponseData, ReviewCheckResponseData } from "../loader"
-import type { IndexInfo, JoinedQuestion, ReviewCheckChangedInfo } from "../types"
+import type { IndexInfo, QuestionWithAttemptInfo, ReviewCheckChangedInfo } from "../types"
 
 type FindJoinedQuestionProps<T extends ReviewCheckResponseData> = {
     queryData: T | undefined
@@ -11,7 +11,7 @@ export const findJoinedQuestion = <T extends ReviewCheckResponseData>({
     queryData,
     changedEntry,
     orderInfo,
-}: FindJoinedQuestionProps<T>): JoinedQuestion => {
+}: FindJoinedQuestionProps<T>): QuestionWithAttemptInfo => {
     const question_id = changedEntry?.[0]
     const titleIndex = changedEntry?.[1].indexInfo.titleIndex ?? orderInfo?.titleIndex
     const subtitleIndex = changedEntry?.[1].indexInfo.subtitleIndex ?? orderInfo?.subtitleIndex

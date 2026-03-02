@@ -2,7 +2,7 @@ import useReviewCheckStore from "@/features/_sidebar._assigned._check.check/stor
 import type {
     ExtendedReviewAssignmentQuestion,
     IndexInfo,
-    JoinedQuestion,
+    QuestionWithAttemptInfo,
 } from "@/features/_sidebar._assigned._check.check/types"
 import Button from "@/packages/components/Button/Button"
 import { cva } from "class-variance-authority"
@@ -79,9 +79,9 @@ type CheckboxCommonProps = {
     children: ReactNode
     indexInfo: IndexInfo
 }
-type CheckboxForSyllabusProps = {
+type CheckboxForSessionProps = {
     forWhat: "syllabus"
-    source: JoinedQuestion
+    source: QuestionWithAttemptInfo
 }
 type CheckboxForAssignmentProps = {
     forWhat: "assignment"
@@ -89,7 +89,7 @@ type CheckboxForAssignmentProps = {
     assignment_id: string
 }
 
-export type CheckboxProps = CheckboxCommonProps & (CheckboxForSyllabusProps | CheckboxForAssignmentProps) // NOTE: hooks에서 그대로 받아 사용함
+export type CheckboxProps = CheckboxCommonProps & (CheckboxForSessionProps | CheckboxForAssignmentProps) // NOTE: hooks에서 그대로 받아 사용함
 const Checkbox = (props: CheckboxProps) => {
     const { children, indexInfo, source } = props
     const recentIndexInfoArray = useReviewCheckStore((state) => state.recentIndexInfoArray)
@@ -101,17 +101,17 @@ const Checkbox = (props: CheckboxProps) => {
         recentIndexInfoArray,
     })
 
-    const isCompleted = Boolean(source.review_assignment_created_at)
+    const isCompleted = Boolean(source.isReviewed)
 
     return (
         <Button
-            color={!isCompleted ? statusToColor[source.review_check_status_visual ?? "null"] : "transparent"}
+            color={!isCompleted ? statusToColor[source.attempt_status_visual ?? "null"] : "transparent"}
             status={source.session_status && !isCompleted ? "enabled" : "disabled"}
             padding="none"
             border={isCompleted ? "none" : "always"}
             onClick={handleClick}
             className={clsx(
-                checkboxVariants({ isCompleted, status: source.review_check_status_visual ?? "null", recency: recency })
+                checkboxVariants({ isCompleted, status: source.attempt_status_visual ?? "null", recency: recency })
             )}
         >
             {children}

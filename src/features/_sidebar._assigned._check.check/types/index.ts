@@ -11,20 +11,21 @@ import type {
 
 // NOTE: types for response.data
 //// NOTE: types for response.data for syllabus review check
-export type CheckboxStatus = {
+export type WithAttemptInfo = {
+    attempt_id: string | null
     attempt_status: AttemptStatus | null
-    review_check_status_visual: AttemptStatus | null
-    review_assignment_created_at: string | null
-    session_status: SessionStatus | null
+    attempt_status_visual: AttemptStatus | null
+    isReviewed: boolean
+    session_id: string | null // NOTE: idToChangedInfo에 들어 있어야 한다
+    session_status: SessionStatus | null // NOTE: session이 할당된 것만 오답체크할 수 있다
 }
-export type JoinedQuestion = Pick<Question, "id" | "name" | "page" | "order"> &
-    CheckboxStatus & { session_id: string | null }
-export type ExtendedStep = Step & { questions: JoinedQuestion[] }
+export type QuestionWithAttemptInfo = Question & WithAttemptInfo
+export type ExtendedStep = Step & { questions: QuestionWithAttemptInfo[] }
 export type ExtendedTopic = Topic & { steps: ExtendedStep[] }
 export type ExtendedBook = Pick<Book, "title"> & { topics: ExtendedTopic[] }
 
 //// NOTE: types for response.data for assignment review check
-export type ExtendedReviewAssignmentQuestion = Omit<OLD_ReviewAssginmentQuestion, "status"> & CheckboxStatus // NOTE: this is inside of response.data
+export type ExtendedReviewAssignmentQuestion = Omit<OLD_ReviewAssginmentQuestion, "status"> & WithAttemptInfo // NOTE: this is inside of response.data
 export type BookInAssignment = {
     bookTitle: string
     reviewAssignmentQuestions: ExtendedReviewAssignmentQuestion[]
@@ -59,13 +60,13 @@ export type IdToChangedInfo = Record<string, ReviewCheckChangedInfo>
 // NOTE: types for checkbox grid and checkbox
 // NOTE: parent_id를 joinedQuestion은 포함하고 있고, assignmentQuesion은 포함하고 있지 않다
 //// NOTE: types for checkbox grid and checkbox - syllabus
+export type WrappedQuestionForCheckbox = {
+    indexInfo: IndexInfo
+    question: QuestionWithAttemptInfo // NOTE: parent id(session_id) 포함되어 있음
+}
 export type PagenatedQuestionsForCheckboxGrid = {
     page: number
-    questions: JoinedQuestionForCheckbox[]
-}
-export type JoinedQuestionForCheckbox = {
-    indexInfo: IndexInfo
-    question: JoinedQuestion // NOTE: parent id(session_id) 포함되어 있음
+    questions: WrappedQuestionForCheckbox[]
 }
 //// NOTE: types for checkbox grid and checkbox - assignment
 export type AssignmentQuestionForCheckbox = {
