@@ -37,7 +37,7 @@ export const filterReallyChangedForSyllabus = (queryData: ReviewCheckResponseDat
     const filteredEntryArray = entryArray.filter((entry) => {
         try {
             const joinedQuestion = findJoinedQuestion({ queryData, changedEntry: entry })
-            return entry[1].status !== joinedQuestion.review_check_status
+            return entry[1].status !== joinedQuestion.attempt_status // NOTE: 원본과 비교
         } catch {
             return true
         }
@@ -94,11 +94,11 @@ export const useConvertRecentToChangedForSyllabus = (data: ReviewCheckResponseDa
         if (recentIndexInfoArray.length === 1) {
             const recentIndexInfo = recentIndexInfoArray[0]
             const targetQuestion = findJoinedQuestion({ queryData: data, orderInfo: recentIndexInfo })
-            if (targetQuestion.review_check_status === status) return
+            if (targetQuestion.attempt_status === status) return
 
             newIdToChangedInfo[targetQuestion.id] = {
                 status,
-                forWhat: "syllabus",
+                forWhat: "session",
                 indexInfo: recentIndexInfo,
                 session_id: targetQuestion.session_id,
             }
@@ -121,7 +121,7 @@ export const useConvertRecentToChangedForSyllabus = (data: ReviewCheckResponseDa
                     if (!isMultiSelected) return
 
                     newIdToChangedInfo[question.id] = {
-                        forWhat: "syllabus",
+                        forWhat: "session",
                         status,
                         session_id: question.session_id,
                         indexInfo: {
