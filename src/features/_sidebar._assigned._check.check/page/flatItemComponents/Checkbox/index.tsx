@@ -8,20 +8,20 @@ import useCheckbox from "./hooks"
 
 const checkboxVariants = cva("flex justify-center items-center", {
     variants: {
-        isCompleted: { true: "size-8", false: "size-12" },
+        isReviewed: { true: "size-8", false: "size-12" },
         status: { CORRECT: "", WRONG: "", null: "" },
         recency: { very: "", somewhat: "", no: "" },
     },
     compoundVariants: [
-        { recency: "very", isCompleted: false, className: "outline-2 outline-border-vivid hover:outline-4" },
-        { recency: "somewhat", isCompleted: false, className: "outline-2 outline-border-muted hover:outline-4" },
+        { recency: "very", isReviewed: false, className: "outline-2 outline-border-vivid hover:outline-4" },
+        { recency: "somewhat", isReviewed: false, className: "outline-2 outline-border-muted hover:outline-4" },
         {
-            isCompleted: true,
+            isReviewed: true,
             status: "CORRECT",
             className: "outline-2 outline-washed-green/30 -outline-offset-2 bg-bg-2",
         },
         {
-            isCompleted: true,
+            isReviewed: true,
             status: "WRONG",
             className: "outline-2 outline-washed-red/30 -outline-offset-2 bg-bg-2",
         },
@@ -89,17 +89,18 @@ const Checkbox = (props: CheckboxProps) => {
         recentIndexInfoArray,
     })
 
-    const isCompleted = Boolean(source.isReviewed)
+    const { isReviewed, session_status, assignment_status, attempt_status_visual } = source
+    const isEnabled = (session_status || assignment_status) && !isReviewed
 
     return (
         <Button
-            color={!isCompleted ? statusToColor[source.attempt_status_visual ?? "null"] : "transparent"}
-            status={source.session_status && !isCompleted ? "enabled" : "disabled"}
+            color={!isReviewed ? statusToColor[attempt_status_visual ?? "null"] : "transparent"}
+            status={isEnabled ? "enabled" : "disabled"}
             padding="none"
-            border={isCompleted ? "none" : "always"}
+            border={isReviewed ? "none" : "always"}
             onClick={handleClick}
             className={clsx(
-                checkboxVariants({ isCompleted, status: source.attempt_status_visual ?? "null", recency: recency })
+                checkboxVariants({ isReviewed, status: attempt_status_visual ?? "null", recency: recency })
             )}
         >
             {children}
