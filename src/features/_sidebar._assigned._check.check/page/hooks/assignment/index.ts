@@ -7,6 +7,7 @@ import {
     revertReviewCheckAssignmentQueryDataAfterMultiSelect,
     updateReviewCheckAssignmentQueryData,
 } from "@/features/_sidebar._assigned._check.check/utils/optimistically-update-for-assignment"
+import { ClientError } from "@/shared/error/clientError"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import { useQueryClient } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
@@ -36,7 +37,7 @@ export const filterReallyChangedForAssignment = (queryData: ReviewCheckAssignmen
     const filteredEntryArray = entryArray.filter((entry) => {
         try {
             const assginmentQuestion = findAssignmentQuestion({ queryData, changedEntry: entry })
-            return entry[1].status !== assginmentQuestion.review_check_status
+            return entry[1].status !== assginmentQuestion.attempt_status // NOTE: 원본으로
         } catch {
             return true
         }
@@ -90,10 +91,14 @@ export const useConvertRecentToChangedForAssignment = (data: ReviewCheckAssignme
         const newIdToChangedInfo: IdToChangedInfo = {}
         if (recentIndexInfoArray.length === 1) {
             const recentIndexInfo = recentIndexInfoArray[0]
-            const targetQuestion = findAssignmentQuestion({ queryData: data, orderInfo: recentIndexInfo })
-            if (targetQuestion.review_check_status === status) return
+            const { attempt_status, attempt_id } = findAssignmentQuestion({
+                queryData: data,
+                orderInfo: recentIndexInfo,
+            })
+            if (attempt_status === status) return // NOTE: 원본 사용
+            if (!attempt_id) throw ClientError.Unexpected("오답 체크 중 오류가 발생했어요")
 
-            newIdToChangedInfo[targetQuestion.id] = {
+            newIdToChangedInfo[attempt_id] = {
                 status,
                 forWhat: "assignment",
                 indexInfo: recentIndexInfo,
@@ -108,7 +113,7 @@ export const useConvertRecentToChangedForAssignment = (data: ReviewCheckAssignme
 
         data?.forEach((assignment, titleIndex) => {
             assignment.books.forEach((book, subtitleIndex) => {
-                book.reviewAssignmentQuestions.forEach((assignmentQuestion, checkboxIndex) => {
+                book.questions.forEach((questionWithAttemptInfo, checkboxIndex) => {
                     const isMultiSelected = checkIsMultiSelected({
                         titleIndex,
                         subtitleIndex,
@@ -116,7 +121,9 @@ export const useConvertRecentToChangedForAssignment = (data: ReviewCheckAssignme
                     })
                     if (!isMultiSelected) return
 
-                    newIdToChangedInfo[assignmentQuestion.id] = {
+                    const attempt_id = questionWithAttemptInfo.attempt_id
+                    if (!attempt_id) throw ClientError.Unexpected("오답 체크 중 오류가 발생했어요")
+                    newIdToChangedInfo[attempt_id] = {
                         forWhat: "assignment",
                         status,
                         indexInfo: {
