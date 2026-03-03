@@ -20,7 +20,7 @@ export const makeUpdatedReviewCheckAssignmentQueryData = ({
         entryArray.forEach((entry) => {
             const targetQuestion = findAssignmentQuestion({ queryData: draft, changedEntry: entry })
             const [_, { status }] = entry
-            targetQuestion.review_check_status_visual = status
+            targetQuestion.attempt_status_visual = status
         })
     })
     return newData
@@ -63,7 +63,7 @@ const makeRevertedReviewChangedreviewChecks = ({
     const oldEntryArray = Object.entries(oldChangedIdToRequestInfoByMultiSelect)
     oldEntryArray.forEach((entry) => {
         const targetQuestion = findAssignmentQuestion({ queryData, changedEntry: entry })
-        entry[1].status = targetQuestion.review_check_status
+        entry[1].status = targetQuestion.attempt_status // NOTE: 원래 status 사용해야 함
     })
 
     const revertedChangedByMultiSelect = Object.fromEntries(oldEntryArray)

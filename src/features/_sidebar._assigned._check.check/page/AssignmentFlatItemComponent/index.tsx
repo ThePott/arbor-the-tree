@@ -22,6 +22,7 @@ const AssignmentFlatItemComponent = ({ flatItem }: AssignmentFlatItemComponentPr
                 <CheckboxGrid>
                     {flatItem.questions.map((wrappedQuestionForCheckbox, index) => (
                         <Checkbox
+                            forWhat="assignment"
                             key={wrappedQuestionForCheckbox.question.id}
                             source={wrappedQuestionForCheckbox.question}
                             indexInfo={wrappedQuestionForCheckbox.indexInfo}

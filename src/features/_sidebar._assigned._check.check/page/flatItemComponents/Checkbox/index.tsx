@@ -72,6 +72,7 @@ const statusToColor = {
 } as const
 
 type CheckboxCommonProps = {
+    forWhat: "session" | "assignment" // NOTE: checkbox에서 다르게 반응하기 위해 필요함
     children: ReactNode
     indexInfo: IndexInfo
     source: QuestionWithAttemptInfo

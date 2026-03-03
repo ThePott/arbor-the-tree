@@ -63,7 +63,7 @@ export const findAssignmentQuestion = <T extends ReviewCheckAssignmentResponseDa
     if (!targetAssignment) throw ClientError.Unexpected("오답 체크를 실패했어요")
     const targetBook = targetAssignment.books[subtitleIndex]
     if (!targetBook) throw ClientError.Unexpected("오답 체크를 실패했어요")
-    const targetAssignmentQuestion = targetBook.reviewAssignmentQuestions.find((elQuestion, index) => {
+    const targetAssignmentQuestion = targetBook.questions.find((elQuestion, index) => {
         if (review_assignment_question_id) return elQuestion.id === review_assignment_question_id
         return index === checkboxIndex
     })

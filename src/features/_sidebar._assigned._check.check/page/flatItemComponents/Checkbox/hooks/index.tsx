@@ -27,7 +27,8 @@ const useCheckboxEventHandler = (props: CheckboxProps) => {
         const copiedIdToChangedInfo = { ...idToChangedInfo }
 
         // NOTE: 원래 상태랑 똑같으면 삭제
-        if (source.review_check_status === status) {
+        // NOTE: visual이 아니라 원래 상태와 비교
+        if (source.attempt_status === status) {
             delete copiedIdToChangedInfo[source.id]
             updateReviewCheckQueryData({
                 idToChangedInfo: copiedIdToChangedInfo,
@@ -39,7 +40,7 @@ const useCheckboxEventHandler = (props: CheckboxProps) => {
 
         // NOTE: 원래 상태랑 다르면 추가 혹은 수정
         copiedIdToChangedInfo[source.id] =
-            forWhat === "syllabus"
+            forWhat === "session"
                 ? {
                       forWhat,
                       status,
@@ -53,7 +54,7 @@ const useCheckboxEventHandler = (props: CheckboxProps) => {
                   }
 
         switch (forWhat) {
-            case "syllabus": {
+            case "session": {
                 updateReviewCheckQueryData({
                     idToChangedInfo: copiedIdToChangedInfo,
                     searchParams,
