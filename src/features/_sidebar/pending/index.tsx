@@ -1,5 +1,5 @@
-const SidebarSectionPending = () => {
+const SidebarPending = () => {
     return <div>need to add sidebar skeleton</div>
 }
 
-export default SidebarSectionPending
+export default SidebarPending

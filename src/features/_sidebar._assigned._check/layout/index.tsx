@@ -1,0 +1,21 @@
+import SyllabusSidebar from "@/features/_sidebar._assigned/components/SyllabusSidebar"
+import { FlexOneContainer } from "@/packages/components/layouts"
+import { Outlet } from "@tanstack/react-router"
+
+const ReviewCheckLayout = () => {
+    return (
+        <>
+            <SyllabusSidebar>
+                <SyllabusSidebar.ButtonGroup>
+                    <SyllabusSidebar.ButtonMany />
+                </SyllabusSidebar.ButtonGroup>
+            </SyllabusSidebar>
+
+            <FlexOneContainer isYScrollable className="border-l border-l-border-dim">
+                <Outlet />
+            </FlexOneContainer>
+        </>
+    )
+}
+
+export default ReviewCheckLayout

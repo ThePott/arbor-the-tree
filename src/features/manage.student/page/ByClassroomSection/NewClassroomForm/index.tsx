@@ -1,4 +1,3 @@
-import type { ManageStudentLoaderResponseData } from "@/features/manage.student/loader"
 import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import Input from "@/packages/components/Input/Input"
@@ -6,6 +5,7 @@ import Labeled from "@/packages/components/Labeled/Labeled"
 import { Hstack } from "@/packages/components/layouts"
 import { debugCache, debugForm, debugMutation, debugRender } from "@/shared/config/debug/"
 import type { Classroom } from "@/shared/interfaces"
+import type { ManageStudentResponseData } from "@/shared/queryOptions/manageStudentQueryOptions"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useLoaderData } from "@tanstack/react-router"
@@ -41,14 +41,14 @@ const NewClassroomForm = () => {
         onMutate: async ({ classroom_name }, context) => {
             debugMutation("NewClassroomForm:onMutate - creating classroom: %s", classroom_name)
             await context.client.cancelQueries()
-            const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
+            const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentResponseData
 
             const newClassroom: Classroom = {
                 id: crypto.randomUUID(),
                 hagwon_id: previous.classroomArray[0]?.hagwon_id ?? "",
                 name: classroom_name,
             }
-            const newOne: ManageStudentLoaderResponseData = {
+            const newOne: ManageStudentResponseData = {
                 ...previous,
                 classroomArray: [...previous.classroomArray, newClassroom],
             }

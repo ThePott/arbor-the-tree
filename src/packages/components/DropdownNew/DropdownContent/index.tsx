@@ -21,6 +21,7 @@ const DropdownContent = ({ children }: DropdownContentProps) => {
             {createPortal(
                 <div
                     style={floatingReturns?.floatingStyles}
+                    data-dropdown
                     ref={(node) => {
                         contentRef.current = node
                         floatingReturns?.refs.setFloating(node)

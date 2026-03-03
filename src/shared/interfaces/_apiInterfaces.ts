@@ -150,27 +150,27 @@ export type Topic = {
 
 export type SessionStatus = "HOMEWORK" | "TODAY"
 
-export type ReviewCheckStatus = "CORRECT" | "WRONG"
+export type AttemptStatus = "CORRECT" | "WRONG"
 
-export type ReviewCheck = {
+export type QuestionAttempt = {
     id: string
-    session_id: string
     student_id: string
     question_id: string
-    status: ReviewCheckStatus
+    classroom_id: string | null
+    session_id: string | null
+    review_assignment_id: string | null
+    status: AttemptStatus
+    parent_attempt_id: string | null
+    created_at: string
 }
 
 export type ReviewAssignment = {
     id: string
     student_id: string
-    assigned_at: string
-    completed_at: string | null
-}
-
-export type ReviewAssginmentQuestion = {
-    id: string
-    review_assignment_id: string
-    review_check_id: string
-    status: ReviewCheckStatus | null
+    classroom_id: string | null
+    book_ids: string[]
+    status: SessionStatus | null
+    created_at: string
+    assigned_at: string | null
     completed_at: string | null
 }

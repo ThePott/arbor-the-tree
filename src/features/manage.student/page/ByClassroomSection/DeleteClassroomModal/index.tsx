@@ -1,8 +1,8 @@
-import type { ManageStudentLoaderResponseData } from "@/features/manage.student/loader"
 import useManageStudentStore from "@/features/manage.student/store"
 import { instance } from "@/packages/api/axiosInstances"
 import Modal from "@/packages/Modal"
 import { debugCache, debugMutation, debugRender } from "@/shared/config/debug/"
+import type { ManageStudentResponseData } from "@/shared/queryOptions/manageStudentQueryOptions"
 import { makeUlLul } from "@/shared/utils/stringManipulation"
 import { useMutation } from "@tanstack/react-query"
 
@@ -18,9 +18,9 @@ const DeleteClassroomModal = () => {
         onMutate: async (classroom_id, context) => {
             debugMutation("DeleteClassroomModal:onMutate - deleting classroom_id: %s", classroom_id)
             await context.client.cancelQueries({ queryKey: ["manageStudent"] })
-            const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
+            const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentResponseData
 
-            const newData: ManageStudentLoaderResponseData = {
+            const newData: ManageStudentResponseData = {
                 ...previous,
                 classroomArray: previous.classroomArray.filter((classroom) => classroom.id !== classroom_id),
             }

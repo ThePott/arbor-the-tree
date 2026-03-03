@@ -1,10 +1,10 @@
-import { ManageStudentLoaderQueryOptions } from "@/features/manage.student/loader"
 import type { ExtendedStudent } from "@/features/manage.student/types"
 import { Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import TanstackTable from "@/packages/components/TanstackTable"
 import Title from "@/packages/components/Title/Title"
 import { debugRender } from "@/shared/config/debug/"
+import { manageStudentLoaderQueryOptions } from "@/shared/queryOptions/manageStudentQueryOptions"
 import { useQuery } from "@tanstack/react-query"
 import { useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
@@ -43,7 +43,7 @@ const columns = MANAGE_STUDENT_COLUMN_KEY_ARRAY.map((key) =>
 const IsolatedStudentTable = () => {
     debugRender("IsolatedStudentTable")
     const loaderData = useLoaderData({ from: "/manage/student" })
-    const { data: queryData } = useQuery(ManageStudentLoaderQueryOptions)
+    const { data: queryData } = useQuery(manageStudentLoaderQueryOptions)
     const classroomStudentArray = queryData?.classroomStudentArray ?? loaderData.classroomStudentArray
     const studentArray = queryData?.studentArray ?? loaderData.studentArray
 

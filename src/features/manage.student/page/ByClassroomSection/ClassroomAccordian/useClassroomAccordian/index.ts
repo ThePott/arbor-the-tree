@@ -1,8 +1,11 @@
-import { ManageStudentLoaderQueryOptions, type ManageStudentLoaderResponseData } from "@/features/manage.student/loader"
 import useManageStudentStore from "@/features/manage.student/store"
 import { instance } from "@/packages/api/axiosInstances"
 import { debugCache, debugForm, debugMutation } from "@/shared/config/debug/"
 import type { Classroom, ClassroomStudent, ValueLabel } from "@/shared/interfaces"
+import {
+    manageStudentLoaderQueryOptions,
+    type ManageStudentResponseData,
+} from "@/shared/queryOptions/manageStudentQueryOptions"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useLoaderData } from "@tanstack/react-router"
@@ -16,7 +19,7 @@ type PostBody = {
 
 const useClassrromAccordianForm = (classroom: Classroom) => {
     const loaderData = useLoaderData({ from: "/manage/student" })
-    const { data: queryData } = useQuery(ManageStudentLoaderQueryOptions)
+    const { data: queryData } = useQuery(manageStudentLoaderQueryOptions)
     const studentArray = queryData?.studentArray ?? loaderData.studentArray
     const classroomStudentArray = queryData?.classroomStudentArray ?? loaderData.classroomStudentArray
 
@@ -58,7 +61,7 @@ const useClassroomAccordianMutation = () => {
         onMutate: async ({ student_id, classroom_id }, context) => {
             debugMutation("ClassroomAccordian:onMutate - adding student:%s to classroom:%s", student_id, classroom_id)
             await context.client.cancelQueries({ queryKey: ["manageStudent"] })
-            const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentLoaderResponseData
+            const previous = context.client.getQueryData(["manageStudent"]) as ManageStudentResponseData
 
             const targetStudent = previous.studentArray.find((student) => student.id === student_id)
             if (!targetStudent) return { previous }
