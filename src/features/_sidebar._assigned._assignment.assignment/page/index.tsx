@@ -14,7 +14,7 @@ import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import { BookOpen } from "lucide-react"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 
 type TabStatus = "uncompleted" | "all"
 const tabArray: Tab<TabStatus>[] = [
@@ -55,28 +55,45 @@ const columns = [
         ),
     }),
 ]
-const convertDataToRowArray = (data: ReviewAssignmentResponseData | undefined): Row[] => {
+type ConvertDataToRowArrayProps = {
+    data: ReviewAssignmentResponseData | undefined
+    tabStatus: TabStatus
+}
+const convertDataToRowArray = ({ data, tabStatus }: ConvertDataToRowArrayProps): Row[] => {
     if (!data) return []
-    const rowArray: Row[] = data.map((assignmentMetaInfo) => ({
-        assignmentId: assignmentMetaInfo.id,
-        created_at: assignmentMetaInfo.created_at,
-        completed_at: assignmentMetaInfo.completed_at,
-        bookTitleArray: assignmentMetaInfo.bookTitleArray,
-        questionCount: assignmentMetaInfo.questionCount,
-    }))
+    const rowArray: Row[] = data
+        .map((assignmentMetaInfo) => ({
+            assignmentId: assignmentMetaInfo.id,
+            created_at: assignmentMetaInfo.created_at,
+            completed_at: assignmentMetaInfo.completed_at,
+            bookTitleArray: assignmentMetaInfo.bookTitleArray,
+            questionCount: assignmentMetaInfo.questionCount,
+        }))
+        .filter(({ completed_at }) => {
+            switch (tabStatus) {
+                case "uncompleted":
+                    return !completed_at
+                case "all":
+                    return true
+            }
+        })
     return rowArray
 }
 
 const route = getRouteApi("/_sidebar")
 const ReviewAssignmentPage = () => {
     const { classroom_id, student_id } = route.useSearch()
+    const [selectedTab, setSelectedTab] = useState<Tab<TabStatus>>(tabArray[0])
 
     const { assignmentMetaInfoArray: loaderData } = useLoaderData({
         from: "/_sidebar/_assigned/_assignment/assignment/",
     })
     const { data: queryData } = useQuery(makeReviewAssignmentQueryOptions({ classroom_id, student_id }))
 
-    const rowArray: Row[] = useMemo(() => convertDataToRowArray(queryData ?? loaderData), [queryData, loaderData])
+    const rowArray: Row[] = useMemo(
+        () => convertDataToRowArray({ data: queryData ?? loaderData, tabStatus: selectedTab.value }),
+        [queryData, loaderData, selectedTab]
+    )
 
     // NOTE: MUST MEMOIZE when convert data to rowArray
     // eslint-disable-next-line react-hooks/incompatible-library
@@ -86,7 +103,7 @@ const ReviewAssignmentPage = () => {
             <RoundBox color="bg0" radius="lg" isShadowed padding="xl">
                 <Vstack gap="lg">
                     <Title as="h1">오답 과제 목록</Title>
-                    <TabBar onSelect={() => {}} tabArray={tabArray} variant="underline" />
+                    <TabBar onSelect={(tab) => setSelectedTab(tab)} tabArray={tabArray} variant="underline" />
                     <TanstackTable table={table} />
                 </Vstack>
             </RoundBox>
