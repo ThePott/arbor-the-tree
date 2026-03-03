@@ -26,10 +26,13 @@ const useCheckboxEventHandler = (props: CheckboxProps) => {
 
         const copiedIdToChangedInfo = { ...idToChangedInfo }
 
+        const id = forWhat === "session" ? source.id : forWhat === "assignment" ? source.attempt_id : null
+        if (!id) throw ClientError.Unexpected("오답 체크를 실패했어요")
+
         // NOTE: 원래 상태랑 똑같으면 삭제
         // NOTE: visual이 아니라 원래 상태와 비교
         if (source.attempt_status === status) {
-            delete copiedIdToChangedInfo[source.id]
+            delete copiedIdToChangedInfo[id]
             updateReviewCheckQueryData({
                 idToChangedInfo: copiedIdToChangedInfo,
                 searchParams,
@@ -39,7 +42,7 @@ const useCheckboxEventHandler = (props: CheckboxProps) => {
         }
 
         // NOTE: 원래 상태랑 다르면 추가 혹은 수정
-        copiedIdToChangedInfo[source.id] =
+        copiedIdToChangedInfo[id] =
             forWhat === "session"
                 ? {
                       forWhat,

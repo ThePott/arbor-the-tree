@@ -46,7 +46,7 @@ export const findAssignmentQuestion = <T extends ReviewCheckAssignmentResponseDa
     changedEntry,
     orderInfo,
 }: FindAssignmentQuestionProps<T>) => {
-    const review_assignment_question_id = changedEntry?.[0]
+    const attempt_id = changedEntry?.[0]
     const titleIndex = changedEntry?.[1].indexInfo.titleIndex ?? orderInfo?.titleIndex
     const subtitleIndex = changedEntry?.[1].indexInfo.subtitleIndex ?? orderInfo?.subtitleIndex
     const checkboxIndex = orderInfo?.checkboxIndex
@@ -55,18 +55,17 @@ export const findAssignmentQuestion = <T extends ReviewCheckAssignmentResponseDa
     // NOTE: order 없이 찾을 때 ---- mutate 할 때 addtional data 가지고 optimistic update. 이 땐 order info 넣지 않음
     // NOTE: order로 찾을 때 ---- detect recent to changed 할 때, 한 개만 다중 선택한 걸 changed 로 만들 땐 order info 만으로 찾아냄
     // NOTE: index === 0 은 정상이지만 falsy함. guard 할 때 주의
-    if (!review_assignment_question_id && checkboxIndex === undefined)
-        throw ClientError.Unexpected("오답 체크를 실패했어요")
+    if (!attempt_id && checkboxIndex === undefined) throw ClientError.Unexpected("오답 체크를 실패했어요")
     if (titleIndex === undefined || subtitleIndex === undefined) throw ClientError.Unexpected("오답 체크를 실패했어요")
 
     const targetAssignment = queryData?.[titleIndex]
     if (!targetAssignment) throw ClientError.Unexpected("오답 체크를 실패했어요")
     const targetBook = targetAssignment.books[subtitleIndex]
     if (!targetBook) throw ClientError.Unexpected("오답 체크를 실패했어요")
-    const targetAssignmentQuestion = targetBook.questions.find((elQuestion, index) => {
-        if (review_assignment_question_id) return elQuestion.id === review_assignment_question_id
+    const targetQuestionWithAttemptInfo = targetBook.questions.find((elQuestionWithAttemptInfo, index) => {
+        if (attempt_id) return elQuestionWithAttemptInfo.attempt_id === attempt_id
         return index === checkboxIndex
     })
-    if (!targetAssignmentQuestion) throw ClientError.Unexpected("오답 체크를 실패했어요")
-    return targetAssignmentQuestion
+    if (!targetQuestionWithAttemptInfo) throw ClientError.Unexpected("오답 체크를 실패했어요")
+    return targetQuestionWithAttemptInfo
 }

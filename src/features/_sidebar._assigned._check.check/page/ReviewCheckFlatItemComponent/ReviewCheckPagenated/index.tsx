@@ -11,7 +11,7 @@ const ReviewCheckPagenated = ({ pagenatedQuestions }: ReviewCheckPagenatedProps)
             <p className="size-12 flex justify-center items-center text-fg-muted">{`p.${page}`}</p>
             <CheckboxGrid>
                 {questions.map(({ question, indexInfo }) => (
-                    <Checkbox key={question.id} forWhat="syllabus" source={question} indexInfo={indexInfo}>
+                    <Checkbox key={question.id} forWhat="session" source={question} indexInfo={indexInfo}>
                         {question.name}
                     </Checkbox>
                 ))}
