@@ -3,7 +3,7 @@ import Labeled from "@/packages/components/Labeled/Labeled"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import useGlobalStore from "@/shared/store/globalStore"
-import { useNavigate } from "@tanstack/react-router"
+import { useMatch, useNavigate } from "@tanstack/react-router"
 import { X } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import { useLayoutEffect } from "react"
@@ -13,6 +13,9 @@ const Sidebar = () => {
     const setIsSidebarOn = useGlobalStore((state) => state.setIsSidebarOn)
     const setIsBodyScrollable = useGlobalStore((state) => state.setIsBodyScrollable)
 
+    const match = useMatch({ from: "/_sidebar", shouldThrow: false })
+    const fullSearch = match?.search
+    const studentSearch = { student_id: fullSearch?.student_id, classroom_id: fullSearch?.classroom_id }
     const navigate = useNavigate()
 
     useLayoutEffect(() => {
@@ -110,7 +113,7 @@ const Sidebar = () => {
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
-                                                    navigate({ to: "/progress" })
+                                                    navigate({ to: "/progress", search: fullSearch })
                                                 }}
                                             >
                                                 진도표
@@ -129,7 +132,7 @@ const Sidebar = () => {
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
-                                                    navigate({ to: "/assignment" })
+                                                    navigate({ to: "/assignment", search: studentSearch })
                                                 }}
                                             >
                                                 오답 과제 목록
@@ -140,7 +143,7 @@ const Sidebar = () => {
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
-                                                    navigate({ to: "/assignment/create" })
+                                                    navigate({ to: "/assignment/create", search: studentSearch })
                                                 }}
                                             >
                                                 오답 과제 생성
@@ -151,7 +154,7 @@ const Sidebar = () => {
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
-                                                    navigate({ to: "/check" })
+                                                    navigate({ to: "/check", search: fullSearch })
                                                 }}
                                             >
                                                 오답 체크
