@@ -14,7 +14,7 @@ const Header = () => {
 
     return (
         <div className="text-my-sm border-b-border-dim border-b">
-            <Hstack className="p-my-md items-center justify-between">
+            <Hstack className="p-my-md items-center">
                 <Button onClick={() => setIsSidebarOn(true)}>
                     <PanelLeft />
                 </Button>
