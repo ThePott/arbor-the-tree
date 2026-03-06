@@ -17,6 +17,8 @@ import { profileSchema, type ProfileSchema } from "./_profileSchema"
 import SchoolAutoComplete from "./_SchoolAutoComplete"
 import useProfileMutation from "./_useProfileMutation"
 import useProfileQuery from "./_useProfileQuery"
+import ProfileModalFail from "./ProfileModalFail"
+import ProfileModalSuccess from "./ProfileModalSuccess"
 
 type ProfileContainerProps = {
     isBig: boolean
@@ -66,124 +68,128 @@ const ProfilePage = () => {
     const defaultRoleInText: string | undefined = defaultRole ? roleToText[defaultRole] : undefined
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <ProfileContainer isBig={isBig}>
-                <Vstack gap="lg">
-                    <Labeled isRequired isInDanger={Boolean(errors.name)}>
-                        <Labeled.Header>이름</Labeled.Header>
-                        <Labeled.Input {...register("name")} defaultValue={me.name} disabled={isPending} />
-                        <Labeled.Footer>{errors.name?.message}</Labeled.Footer>
-                    </Labeled>
-                    <Labeled isRequired isInDanger={Boolean(errors.phone_number)}>
-                        <Labeled.Header>핸드폰 번호</Labeled.Header>
-                        <Labeled.Input
-                            {...register("phone_number")}
-                            defaultValue={me.phone_number}
-                            disabled={isPending}
-                        />
-                        <Labeled.Footer>{errors.phone_number?.message}</Labeled.Footer>
-                    </Labeled>
-                    <Labeled isRequired isInDanger={Boolean(errors.role)}>
-                        <Labeled.Header>권한</Labeled.Header>
-                        <Controller
-                            control={control}
-                            name="role"
-                            render={({ field: { onChange } }) => (
-                                <Select
-                                    disabled={isPending}
-                                    onOptionSelect={(value) => {
-                                        setRole(value as Role)
-                                        onChange(value)
-                                    }}
-                                    isInDanger={Boolean(errors.role)}
-                                    defaultLabel={defaultRoleInText}
-                                >
-                                    <Select.Trigger>권한을 선택해주세요</Select.Trigger>
-                                    <Select.Content>
-                                        <Select.Option value="STUDENT">학생</Select.Option>
-                                        <Select.Option value="PARENT" isDisabled>
-                                            학부모
-                                        </Select.Option>
-                                        <Select.Option value="HELPER" isDisabled>
-                                            실장
-                                        </Select.Option>
-                                        <Select.Option value="PRINCIPAL">원장</Select.Option>
-                                    </Select.Content>
-                                </Select>
-                            )}
-                        />
-                        <Labeled.Footer>{errors.role?.message}</Labeled.Footer>
-                    </Labeled>
-
-                    {role && (
-                        <Labeled isRequired isInDanger={Boolean(errors.hagwon)}>
-                            <Labeled.Header>학원</Labeled.Header>
+        <>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <ProfileContainer isBig={isBig}>
+                    <Vstack gap="lg">
+                        <Labeled isRequired isInDanger={Boolean(errors.name)}>
+                            <Labeled.Header>이름</Labeled.Header>
+                            <Labeled.Input {...register("name")} defaultValue={me.name} disabled={isPending} />
+                            <Labeled.Footer>{errors.name?.message}</Labeled.Footer>
+                        </Labeled>
+                        <Labeled isRequired isInDanger={Boolean(errors.phone_number)}>
+                            <Labeled.Header>핸드폰 번호</Labeled.Header>
+                            <Labeled.Input
+                                {...register("phone_number")}
+                                defaultValue={me.phone_number}
+                                disabled={isPending}
+                            />
+                            <Labeled.Footer>{errors.phone_number?.message}</Labeled.Footer>
+                        </Labeled>
+                        <Labeled isRequired isInDanger={Boolean(errors.role)}>
+                            <Labeled.Header>권한</Labeled.Header>
                             <Controller
                                 control={control}
-                                name="hagwon"
-                                render={({ field: { onChange }, fieldState: { error } }) => (
-                                    <HagwonAutoComplete
+                                name="role"
+                                render={({ field: { onChange } }) => (
+                                    <Select
                                         disabled={isPending}
-                                        isForPrincipal={role === "PRINCIPAL"}
-                                        onValueChange={onChange}
-                                        onErrorChange={(innerError) => {
-                                            if (innerError && error) return
-                                            if (!innerError && !error) return
-
-                                            if (innerError) {
-                                                setError("hagwon", innerError)
-                                                return
-                                            }
-                                            clearErrors("hagwon")
+                                        onOptionSelect={(value) => {
+                                            setRole(value as Role)
+                                            onChange(value)
                                         }}
-                                        error={error}
-                                        defaultValue={resume?.hagwon_name}
-                                    />
+                                        isInDanger={Boolean(errors.role)}
+                                        defaultLabel={defaultRoleInText}
+                                    >
+                                        <Select.Trigger>권한을 선택해주세요</Select.Trigger>
+                                        <Select.Content>
+                                            <Select.Option value="STUDENT">학생</Select.Option>
+                                            <Select.Option value="PARENT" isDisabled>
+                                                학부모
+                                            </Select.Option>
+                                            <Select.Option value="HELPER" isDisabled>
+                                                실장
+                                            </Select.Option>
+                                            <Select.Option value="PRINCIPAL">원장</Select.Option>
+                                        </Select.Content>
+                                    </Select>
                                 )}
                             />
-                            <Labeled.Footer>{errors.hagwon?.message}</Labeled.Footer>
+                            <Labeled.Footer>{errors.role?.message}</Labeled.Footer>
                         </Labeled>
-                    )}
 
-                    <ExpandableDiv>
-                        <Activity mode={role === "STUDENT" ? "visible" : "hidden"}>
-                            <Labeled isRequired isInDanger={Boolean(errors.school)}>
-                                <Labeled.Header>학교</Labeled.Header>
+                        {role && (
+                            <Labeled isRequired isInDanger={Boolean(errors.hagwon)}>
+                                <Labeled.Header>학원</Labeled.Header>
                                 <Controller
                                     control={control}
-                                    name="school"
+                                    name="hagwon"
                                     render={({ field: { onChange }, fieldState: { error } }) => (
-                                        <SchoolAutoComplete
+                                        <HagwonAutoComplete
                                             disabled={isPending}
+                                            isForPrincipal={role === "PRINCIPAL"}
                                             onValueChange={onChange}
                                             onErrorChange={(innerError) => {
                                                 if (innerError && error) return
                                                 if (!innerError && !error) return
 
-                                                if (!innerError) {
-                                                    clearErrors("school")
+                                                if (innerError) {
+                                                    setError("hagwon", innerError)
                                                     return
                                                 }
-
-                                                // NOTE: 나중에는 학교 API를 받아와서 할 거니까 이대로 하는 게 맞다
-                                                setError("school", innerError)
+                                                clearErrors("hagwon")
                                             }}
                                             error={error}
-                                            defaultValue={resume?.school_name}
+                                            defaultValue={resume?.hagwon_name}
                                         />
                                     )}
                                 />
-                                <Labeled.Footer>{errors.school?.message}</Labeled.Footer>
+                                <Labeled.Footer>{errors.hagwon?.message}</Labeled.Footer>
                             </Labeled>
-                        </Activity>
-                    </ExpandableDiv>
+                        )}
 
-                    <Button color="bg1" isShadowed status={isPending ? "pending" : "enabled"}>
-                        저장
-                    </Button>
-                </Vstack>
-            </ProfileContainer>
-        </form>
+                        <ExpandableDiv>
+                            <Activity mode={role === "STUDENT" ? "visible" : "hidden"}>
+                                <Labeled isRequired isInDanger={Boolean(errors.school)}>
+                                    <Labeled.Header>학교</Labeled.Header>
+                                    <Controller
+                                        control={control}
+                                        name="school"
+                                        render={({ field: { onChange }, fieldState: { error } }) => (
+                                            <SchoolAutoComplete
+                                                disabled={isPending}
+                                                onValueChange={onChange}
+                                                onErrorChange={(innerError) => {
+                                                    if (innerError && error) return
+                                                    if (!innerError && !error) return
+
+                                                    if (!innerError) {
+                                                        clearErrors("school")
+                                                        return
+                                                    }
+
+                                                    // NOTE: 나중에는 학교 API를 받아와서 할 거니까 이대로 하는 게 맞다
+                                                    setError("school", innerError)
+                                                }}
+                                                error={error}
+                                                defaultValue={resume?.school_name}
+                                            />
+                                        )}
+                                    />
+                                    <Labeled.Footer>{errors.school?.message}</Labeled.Footer>
+                                </Labeled>
+                            </Activity>
+                        </ExpandableDiv>
+
+                        <Button color="bg1" isShadowed status={isPending ? "pending" : "enabled"}>
+                            저장
+                        </Button>
+                    </Vstack>
+                </ProfileContainer>
+            </form>
+            <ProfileModalSuccess role={role} />
+            <ProfileModalFail />
+        </>
     )
 }
 
