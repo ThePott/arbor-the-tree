@@ -48,7 +48,6 @@ const ProfilePage = () => {
         register,
         handleSubmit,
         setError,
-        clearErrors,
         control,
         formState: { errors },
     } = useForm({ resolver: zodResolver(profileSchema) })
