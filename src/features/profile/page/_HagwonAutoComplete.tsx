@@ -1,9 +1,7 @@
 import { headlessInstance } from "@/packages/api/axiosInstances"
 import AutoComplete from "@/packages/components/AutoComplete/AutoComplete"
-import { debugRender } from "@/shared/config/debug/"
 import type { Hagwon } from "@/shared/interfaces"
 import type { FieldError } from "react-hook-form"
-import type { ManualError } from "./_mypageInterfaces"
 
 const getHagwonMany = async (name: string) => {
     const response = await headlessInstance.get(`/hagwon?name=${name}`)
@@ -13,8 +11,7 @@ const getHagwonMany = async (name: string) => {
 }
 
 interface HagwonAutoCompleteProps {
-    onValueChange: (value: string) => void
-    onErrorChange: (error: ManualError | null) => void
+    onValueChange: (value: string, isError: boolean) => void
     error: FieldError | undefined
     isForPrincipal?: boolean
     defaultValue?: string
@@ -23,35 +20,15 @@ interface HagwonAutoCompleteProps {
 
 const HagwonAutoComplete = ({
     onValueChange,
-    onErrorChange,
     error,
     isForPrincipal,
     defaultValue,
     disabled,
 }: HagwonAutoCompleteProps) => {
-    debugRender("HagwonAutoComplete")
-    const handleErrorChange = (isError: boolean) => {
-        if (!isError) {
-            onErrorChange(null)
-            return
-        }
-
-        // TODO: zod error message는 없다고 사용하자
-        const message: string = isForPrincipal ? "새 학원을 등록해주세요" : "목록 중의 학원을 선택해주세요"
-
-        onErrorChange({
-            type: "manual",
-            message,
-        })
-    }
-
     return (
         <AutoComplete
             disabled={disabled}
             outerIsRed={Boolean(error)}
-            onErrorChange={(isError) => {
-                handleErrorChange(isError)
-            }}
             queryKey={["hagwon"]}
             onValueChange={onValueChange}
             getOptionArray={getHagwonMany}

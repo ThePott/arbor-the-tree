@@ -128,16 +128,10 @@ const ProfilePage = () => {
                                         <HagwonAutoComplete
                                             disabled={isPending}
                                             isForPrincipal={role === "PRINCIPAL"}
-                                            onValueChange={onChange}
-                                            onErrorChange={(innerError) => {
-                                                if (innerError && error) return
-                                                if (!innerError && !error) return
-
-                                                if (innerError) {
-                                                    setError("hagwon", innerError)
-                                                    return
-                                                }
-                                                clearErrors("hagwon")
+                                            onValueChange={(value, isError) => {
+                                                onChange(value)
+                                                if (!isError) return
+                                                setError("hagwon", { message: error?.message, type: error?.type })
                                             }}
                                             error={error}
                                             defaultValue={resume?.hagwon_name}
@@ -158,18 +152,10 @@ const ProfilePage = () => {
                                         render={({ field: { onChange }, fieldState: { error } }) => (
                                             <SchoolAutoComplete
                                                 disabled={isPending}
-                                                onValueChange={onChange}
-                                                onErrorChange={(innerError) => {
-                                                    if (innerError && error) return
-                                                    if (!innerError && !error) return
-
-                                                    if (!innerError) {
-                                                        clearErrors("school")
-                                                        return
-                                                    }
-
-                                                    // NOTE: 나중에는 학교 API를 받아와서 할 거니까 이대로 하는 게 맞다
-                                                    setError("school", innerError)
+                                                onValueChange={(value, isError) => {
+                                                    onChange(value)
+                                                    if (!isError) return
+                                                    setError("school", { message: error?.message, type: error?.type })
                                                 }}
                                                 error={error}
                                                 defaultValue={resume?.school_name}
