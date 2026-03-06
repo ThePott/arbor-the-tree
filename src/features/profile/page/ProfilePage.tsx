@@ -71,12 +71,16 @@ const ProfilePage = () => {
                 <Vstack gap="lg">
                     <Labeled isRequired isInDanger={Boolean(errors.name)}>
                         <Labeled.Header>이름</Labeled.Header>
-                        <Labeled.Input {...register("name")} defaultValue={me.name} />
+                        <Labeled.Input {...register("name")} defaultValue={me.name} disabled={isPending} />
                         <Labeled.Footer>{errors.name?.message}</Labeled.Footer>
                     </Labeled>
                     <Labeled isRequired isInDanger={Boolean(errors.phone_number)}>
                         <Labeled.Header>핸드폰 번호</Labeled.Header>
-                        <Labeled.Input {...register("phone_number")} defaultValue={me.phone_number} />
+                        <Labeled.Input
+                            {...register("phone_number")}
+                            defaultValue={me.phone_number}
+                            disabled={isPending}
+                        />
                         <Labeled.Footer>{errors.phone_number?.message}</Labeled.Footer>
                     </Labeled>
                     <Labeled isRequired isInDanger={Boolean(errors.role)}>
@@ -86,6 +90,7 @@ const ProfilePage = () => {
                             name="role"
                             render={({ field: { onChange } }) => (
                                 <Select
+                                    disabled={isPending}
                                     onOptionSelect={(value) => {
                                         setRole(value as Role)
                                         onChange(value)
@@ -118,6 +123,7 @@ const ProfilePage = () => {
                                 name="hagwon"
                                 render={({ field: { onChange }, fieldState: { error } }) => (
                                     <HagwonAutoComplete
+                                        disabled={isPending}
                                         isForPrincipal={role === "PRINCIPAL"}
                                         onValueChange={onChange}
                                         onErrorChange={(innerError) => {
@@ -148,6 +154,7 @@ const ProfilePage = () => {
                                     name="school"
                                     render={({ field: { onChange }, fieldState: { error } }) => (
                                         <SchoolAutoComplete
+                                            disabled={isPending}
                                             onValueChange={onChange}
                                             onErrorChange={(innerError) => {
                                                 if (innerError && error) return
@@ -174,9 +181,6 @@ const ProfilePage = () => {
                     <Button color="bg1" isShadowed status={isPending ? "pending" : "enabled"}>
                         저장
                     </Button>
-                    {/* <Button type="button" color="red"> */}
-                    {/*     회원 탈퇴 */}
-                    {/* </Button> */}
                 </Vstack>
             </ProfileContainer>
         </form>

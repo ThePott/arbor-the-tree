@@ -17,9 +17,16 @@ interface SchoolAutoCompleteProps {
     onErrorChange: (error: ManualError | null) => void
     error: FieldError | undefined
     defaultValue?: string
+    disabled?: boolean
 }
 
-const SchoolAutoComplete = ({ onValueChange, onErrorChange, error, defaultValue }: SchoolAutoCompleteProps) => {
+const SchoolAutoComplete = ({
+    onValueChange,
+    onErrorChange,
+    error,
+    defaultValue,
+    disabled,
+}: SchoolAutoCompleteProps) => {
     debugRender("SchoolAutoComplete")
     const handleErrorChange = (isError: boolean) => {
         if (!isError) {
@@ -33,6 +40,7 @@ const SchoolAutoComplete = ({ onValueChange, onErrorChange, error, defaultValue 
 
     return (
         <AutoComplete
+            disabled={disabled}
             outerIsRed={Boolean(error)}
             queryKey={["school"]}
             onValueChange={onValueChange}

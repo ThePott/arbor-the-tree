@@ -11,6 +11,7 @@ interface SelectContextProps {
     triggerRef: React.RefObject<HTMLButtonElement | null>
     isInDanger?: boolean
     defaultLabel?: string
+    disabled?: boolean
 }
 
 export const SelectContext = createContext<SelectContextProps | null>(null)

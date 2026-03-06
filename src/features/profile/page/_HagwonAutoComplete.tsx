@@ -18,6 +18,7 @@ interface HagwonAutoCompleteProps {
     error: FieldError | undefined
     isForPrincipal?: boolean
     defaultValue?: string
+    disabled?: boolean
 }
 
 const HagwonAutoComplete = ({
@@ -26,6 +27,7 @@ const HagwonAutoComplete = ({
     error,
     isForPrincipal,
     defaultValue,
+    disabled,
 }: HagwonAutoCompleteProps) => {
     debugRender("HagwonAutoComplete")
     const handleErrorChange = (isError: boolean) => {
@@ -45,6 +47,7 @@ const HagwonAutoComplete = ({
 
     return (
         <AutoComplete
+            disabled={disabled}
             outerIsRed={Boolean(error)}
             onErrorChange={(isError) => {
                 handleErrorChange(isError)

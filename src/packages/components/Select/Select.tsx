@@ -12,6 +12,7 @@ interface WithSelectProps {
     value?: string | number
     label?: string
     defaultLabel?: string
+    disabled?: boolean
 }
 
 /**
@@ -23,6 +24,7 @@ const Select = ({
     value,
     label,
     defaultLabel,
+    disabled,
     ...props
 }: Omit<DivProps, "classNamee"> & WithSelectProps) => {
     const { children, ...rest } = props
@@ -45,6 +47,7 @@ const Select = ({
                 setSelectedLabel,
                 triggerRef,
                 isInDanger,
+                disabled,
             }}
         >
             <div {...rest} className="relative">
