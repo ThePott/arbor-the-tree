@@ -3,10 +3,12 @@ import { useCallback, useEffect, useRef, type ReactNode } from "react"
 import ExpandableDiv from "../ExpandableDiv/ExpendableDiv"
 import { Vstack } from "../layouts"
 import RoundBox from "../RoundBox"
-import useSelectContext from "./_useSelectContext"
+import { useSelectStore } from "./_selectStore"
 
 const SelectContent = ({ children }: { children: ReactNode }) => {
-    const { isOpened, setIsOpened, triggerRef } = useSelectContext()
+    const isOpened = useSelectStore((state) => state.isOpened)
+    const setIsOpened = useSelectStore((state) => state.setIsOpened)
+    const triggerRef = useSelectStore((state) => state.triggerRef)
 
     const contentRef = useRef<HTMLDivElement>(null)
 

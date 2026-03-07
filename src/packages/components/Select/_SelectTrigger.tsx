@@ -1,18 +1,23 @@
 import { useEffect } from "react"
 import Button from "../Button/Button"
-import useSelectContext from "./_useSelectContext"
+import { useSelectStore } from "./_selectStore"
 
 interface SelectTriggerProps {
     children: string
 }
 
 const SelectTrigger = ({ children }: SelectTriggerProps) => {
-    const { setIsOpened, selectedLabel, triggerRef, isInDanger, defaultOption, disabled, onOptionSelect } =
-        useSelectContext()
+    const toggleIsOpened = useSelectStore((state) => state.toggleIsOpened)
+    const selectedLabel = useSelectStore((state) => state.selectedLabel)
+    const triggerRef = useSelectStore((state) => state.triggerRef)
+    const isInDanger = useSelectStore((state) => state.isInDanger)
+    const defaultOption = useSelectStore((state) => state.defaultOption)
+    const disabled = useSelectStore((state) => state.disabled)
+    const onOptionSelect = useSelectStore((state) => state.onOptionSelect)
 
     const handleClick = () => {
         if (disabled) return
-        setIsOpened((prev) => !prev)
+        toggleIsOpened()
     }
 
     const label = selectedLabel ?? defaultOption?.label ?? children

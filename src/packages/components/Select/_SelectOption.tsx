@@ -1,5 +1,5 @@
 import Button from "../Button/Button"
-import useSelectContext from "./_useSelectContext"
+import { useSelectStore } from "./_selectStore"
 
 interface SelectOptionProps {
     value: string | number
@@ -8,18 +8,16 @@ interface SelectOptionProps {
 }
 
 const SelectOption = ({ value, isDisabled = false, children }: SelectOptionProps) => {
-    const {
-        onOptionSelect: onSelect,
-        setIsOpened,
-        setSelectedValue,
-        setSelectedLabel: setSelectedChildren,
-    } = useSelectContext()
+    const onOptionSelect = useSelectStore((state) => state.onOptionSelect)
+    const setIsOpened = useSelectStore((state) => state.setIsOpened)
+    const setSelectedValue = useSelectStore((state) => state.setSelectedValue)
+    const setSelectedLabel = useSelectStore((state) => state.setSelectedLabel)
 
     const handleClick = () => {
         setIsOpened(false)
         setSelectedValue(value)
-        setSelectedChildren(children)
-        onSelect(value ?? children)
+        setSelectedLabel(children)
+        onOptionSelect(value ?? children)
     }
 
     return (
