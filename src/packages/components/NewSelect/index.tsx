@@ -1,12 +1,12 @@
 import { useRef, type RefObject } from "react"
 import { SelectStoreProvider } from "./store"
 
-export type SelectOption<T extends string | number> = {
+export type NewSelectOption<T extends string | number> = {
     value: T
     label: string
 }
 type NewSelectProps<T extends string | number> = {
-    optionArray: SelectOption<T>[]
+    optionArray: NewSelectOption<T>[]
     onOptionSelect: (value: string | number) => void
     isInDanger?: boolean
     defaultValue?: T

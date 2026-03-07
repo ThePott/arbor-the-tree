@@ -61,7 +61,7 @@ const ProfilePage = () => {
     }
 
     const defaultRole: Role | undefined = resume?.role ?? me?.role
-    const defaultRoleInText: string | undefined = defaultRole ? roleToText[defaultRole] : undefined
+    const defaultOption = defaultRole ? { value: defaultRole, label: roleToText[defaultRole] } : undefined
 
     return (
         <>
@@ -95,7 +95,7 @@ const ProfilePage = () => {
                                             onChange(value)
                                         }}
                                         isInDanger={Boolean(errors.role)}
-                                        defaultLabel={defaultRoleInText}
+                                        defaultOption={defaultOption}
                                     >
                                         <Select.Trigger>권한을 선택해주세요</Select.Trigger>
                                         <Select.Content>

@@ -10,7 +10,7 @@ interface SelectContextProps {
     setSelectedValue: React.Dispatch<React.SetStateAction<string | number | null>>
     triggerRef: React.RefObject<HTMLButtonElement | null>
     isInDanger?: boolean
-    defaultLabel?: string
+    defaultOption?: { label: string; value: number | string }
     disabled?: boolean
 }
 

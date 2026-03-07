@@ -3,18 +3,18 @@ import type { RefObject } from "react"
 import type { StateCreator } from "zustand"
 import type { NewSelectPassedProps } from ".."
 
-type NewSelectDefaultProps = {
+type NewSelectDefaultProps<T extends string | number> = {
     isOpened: boolean
     setIsOpened: (isOpened: boolean) => void
-    selectedLabel: string | null
-    setSelectedLabel: (selectedLabel: string | null) => void
+    selectedValue: T | null
+    setSelectedValue: (selectedValue: T | null) => void
 }
 const createSelectStore = <T extends string | number>(
-    defaultInitializer: StateCreator<NewSelectDefaultProps, [], [], NewSelectDefaultProps>
+    defaultInitializer: StateCreator<NewSelectDefaultProps<T>, [], [], NewSelectDefaultProps<T>>
 ) => {
     const { LocalStoreProvider: SelectStoreProvider, useLocalStore: useSelectStore } = createLocalStore<
         NewSelectPassedProps<T> & { triggerRef: RefObject<HTMLButtonElement | null> },
-        NewSelectDefaultProps
+        NewSelectDefaultProps<T>
     >(defaultInitializer)
 
     return { SelectStoreProvider, useSelectStore }
@@ -23,8 +23,8 @@ const createSelectStore = <T extends string | number>(
 const { SelectStoreProvider, useSelectStore } = createSelectStore((set) => ({
     isOpened: false,
     setIsOpened: (isOpened) => set({ isOpened }),
-    selectedLabel: null,
-    setSelectedLabel: (selectedLabel) => set({ selectedLabel }),
+    selectedValue: null,
+    setSelectedValue: (selectedLabel) => set({ selectedValue: selectedLabel }),
 }))
 
 export { SelectStoreProvider, useSelectStore }
