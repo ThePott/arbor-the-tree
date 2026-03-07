@@ -176,6 +176,7 @@ const ProfilePage = () => {
                                             onChange={onChange}
                                             optionArray={hagwonOptionArray ?? []}
                                             defaultValue={defaultHagwon}
+                                            disabled={isPending}
                                         />
                                     )}
                                 />
@@ -197,6 +198,7 @@ const ProfilePage = () => {
                                                 optionArray={schoolOptionArray ?? []}
                                                 placeholder=""
                                                 defaultValue={defaultSchool}
+                                                disabled={isPending}
                                             />
                                         )}
                                     />

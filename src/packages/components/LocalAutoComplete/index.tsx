@@ -17,6 +17,7 @@ const LocalAutoCompleteWrapper = () => {
     const setFloatingReturns = useLocalAutoCompleteStore((state) => state.setFloatingReturns)
     const defaultValue = useLocalAutoCompleteStore((state) => state.defaultValue)
     const onChange = useLocalAutoCompleteStore((state) => state.onChange)
+    const disabled = useLocalAutoCompleteStore((state) => state.disabled)
 
     const floatingReturns = useFloating({
         middleware: [flip(), shift(), offset(4)],
@@ -63,6 +64,7 @@ const LocalAutoCompleteWrapper = () => {
                 onKeyDown={handleKeyDown}
                 placeholder={placeholder}
                 defaultValue={defaultValue}
+                disabled={disabled}
             />
             <LocalAutoCompleteContent />
         </div>
@@ -75,6 +77,7 @@ export type LocalAutoCompleteProps = {
     isRed: boolean
     onChange: (inputValue: string) => void
     defaultValue?: string
+    disabled?: boolean
 }
 const LocalAutoComplete = (props: LocalAutoCompleteProps) => {
     return (
