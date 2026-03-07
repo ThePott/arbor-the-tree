@@ -3,7 +3,7 @@ import type { ValueLabel } from "@/shared/interfaces"
 import useGlobalStore from "@/shared/store/globalStore"
 import clsx from "clsx"
 import { getRegExp } from "korean-regexp"
-import { useEffect } from "react"
+import { useEffect, type ReactNode } from "react"
 import { createPortal } from "react-dom"
 import Button from "../../Button/Button"
 import { Vstack } from "../../layouts"
@@ -27,6 +27,15 @@ const LocalAutoCompleteOption = ({ option }: LocalAutoCompleteOptionProps) => {
     )
 }
 
+type PortalProps = {
+    isEnabled: boolean
+    children: ReactNode
+}
+const Portal = ({ isEnabled, children }: PortalProps) => {
+    if (!isEnabled) return children
+    return createPortal(children, document.body)
+}
+
 const LocalAutoCompleteContent = () => {
     const setIsBodyScrollable = useGlobalStore((state) => state.setIsBodyScrollable)
     const inputRef = useLocalAutoCompleteStore((state) => state.inputRef)
@@ -35,6 +44,7 @@ const LocalAutoCompleteContent = () => {
     const isContentOn = useLocalAutoCompleteStore((state) => state.isContentOn)
     const setIsContentOn = useLocalAutoCompleteStore((state) => state.setIsContentOn)
     const floatingReturns = useLocalAutoCompleteStore((state) => state.floatingReturns)
+    const isWidthMatching = useLocalAutoCompleteStore((state) => state.isWidthMatching)
 
     const { contentRef } = useDetectOutsideClick({
         triggerRef: inputRef,
@@ -55,22 +65,24 @@ const LocalAutoCompleteContent = () => {
 
     if (!isVisible) return null
 
-    return createPortal(
-        <RoundBox
-            ref={refCallback}
-            style={floatingReturns?.floatingStyles}
-            color="bg3"
-            padding="md"
-            className={clsx("max-h-[200px] overflow-y-scroll")}
-            isBordered
-        >
-            <Vstack gap="none">
-                {filteredOptionArray.map((option) => (
-                    <LocalAutoCompleteOption key={option.value} option={option} />
-                ))}
-            </Vstack>
-        </RoundBox>,
-        document.body
+    return (
+        <Portal isEnabled={!isWidthMatching}>
+            <RoundBox
+                ref={refCallback}
+                style={floatingReturns?.floatingStyles}
+                color="bg3"
+                padding="md"
+                className={clsx("max-h-[200px] overflow-y-scroll", isWidthMatching && "w-full")}
+                isBordered
+            >
+                <Vstack gap="none">
+                    {filteredOptionArray.map((option) => (
+                        <LocalAutoCompleteOption key={option.value} option={option} />
+                    ))}
+                </Vstack>
+            </RoundBox>
+            , document.body
+        </Portal>
     )
 }
 

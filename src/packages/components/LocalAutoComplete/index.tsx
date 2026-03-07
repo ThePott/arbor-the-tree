@@ -78,6 +78,7 @@ export type LocalAutoCompleteProps = {
     onChange: (inputValue: string) => void
     defaultValue?: string
     disabled?: boolean
+    isWidthMatching?: boolean
 }
 const LocalAutoComplete = (props: LocalAutoCompleteProps) => {
     return (

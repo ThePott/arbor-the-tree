@@ -177,6 +177,7 @@ const ProfilePage = () => {
                                             optionArray={hagwonOptionArray ?? []}
                                             defaultValue={defaultHagwon}
                                             disabled={isPending}
+                                            isWidthMatching
                                         />
                                     )}
                                 />
@@ -199,6 +200,7 @@ const ProfilePage = () => {
                                                 placeholder=""
                                                 defaultValue={defaultSchool}
                                                 disabled={isPending}
+                                                isWidthMatching
                                             />
                                         )}
                                     />
