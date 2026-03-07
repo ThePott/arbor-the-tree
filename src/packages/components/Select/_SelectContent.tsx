@@ -1,6 +1,4 @@
-import clsx from "clsx"
 import { useCallback, useEffect, useRef, type ReactNode } from "react"
-import ExpandableDiv from "../ExpandableDiv/ExpendableDiv"
 import { Vstack } from "../layouts"
 import RoundBox from "../RoundBox"
 import { useSelectStore } from "./_selectStore"
@@ -9,8 +7,14 @@ const SelectContent = ({ children }: { children: ReactNode }) => {
     const isOpened = useSelectStore((state) => state.isOpened)
     const setIsOpened = useSelectStore((state) => state.setIsOpened)
     const triggerRef = useSelectStore((state) => state.triggerRef)
+    const floatingReturns = useSelectStore((state) => state.floatingReturns)
 
     const contentRef = useRef<HTMLDivElement>(null)
+
+    const refCallback = (node: HTMLDivElement | null) => {
+        contentRef.current = node
+        floatingReturns?.refs.setFloating(node)
+    }
 
     const handleClick = useCallback(
         (event: MouseEvent) => {
@@ -38,17 +42,20 @@ const SelectContent = ({ children }: { children: ReactNode }) => {
         return () => window.removeEventListener("click", handleClick)
     }, [isOpened])
 
+    if (!isOpened) return null
+
     return (
-        <ExpandableDiv
-            isInBound
-            className={clsx("mt-my-sm absolute top-full z-10 w-full", !isOpened && "pointer-events-none")}
+        <RoundBox
+            ref={refCallback}
+            style={floatingReturns?.floatingStyles}
+            padding="md"
+            color="bg3"
+            isBordered
+            isShadowed
+            className="z-10 w-full"
         >
-            {isOpened && (
-                <RoundBox ref={contentRef} padding="md" color="bg3" isBordered isShadowed>
-                    <Vstack gap="sm">{children}</Vstack>
-                </RoundBox>
-            )}
-        </ExpandableDiv>
+            <Vstack gap="sm">{children}</Vstack>
+        </RoundBox>
     )
 }
 
