@@ -14,6 +14,12 @@ const SelectTrigger = ({ children }: SelectTriggerProps) => {
     const defaultOption = useSelectStore((state) => state.defaultOption)
     const disabled = useSelectStore((state) => state.disabled)
     const onOptionSelect = useSelectStore((state) => state.onOptionSelect)
+    const floatingReturns = useSelectStore((state) => state.floatingReturns)
+
+    const refCallback = (node: HTMLButtonElement | null) => {
+        triggerRef.current = node
+        floatingReturns?.refs.setReference(node)
+    }
 
     const handleClick = () => {
         if (disabled) return
@@ -31,7 +37,7 @@ const SelectTrigger = ({ children }: SelectTriggerProps) => {
 
     return (
         <Button
-            ref={triggerRef}
+            ref={refCallback}
             disabled={disabled}
             type="button"
             onClick={handleClick}
