@@ -102,7 +102,7 @@ const ProfilePage = () => {
         control,
         formState: { errors },
     } = useForm({ resolver: zodResolver(profileSchema) })
-    const role = useWatch({ name: "role", control })
+    const role = useWatch({ name: "role", control }) as Role | null
     const onSubmit = (data: ProfileSchema) => {
         mutate(data)
     }
@@ -175,6 +175,7 @@ const ProfilePage = () => {
                                             isRed={Boolean(error)}
                                             onChange={onChange}
                                             optionArray={hagwonOptionArray ?? []}
+                                            defaultValue={defaultHagwon}
                                         />
                                     )}
                                 />
@@ -195,6 +196,7 @@ const ProfilePage = () => {
                                                 onChange={onChange}
                                                 optionArray={schoolOptionArray ?? []}
                                                 placeholder=""
+                                                defaultValue={defaultSchool}
                                             />
                                         )}
                                     />

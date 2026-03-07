@@ -1,9 +1,10 @@
+import type { ValueLabel } from "@/shared/interfaces"
 import { flip, offset, shift, useFloating } from "@floating-ui/react"
 import { getRegExp } from "korean-regexp"
 import { useEffect } from "react"
 import Input from "../Input/Input"
 import LocalAutoCompleteContent from "./LocalAutoCompleteContent"
-import { LocalAutoCompleteStoreProvider, type LocalAutoCompleteExternalValues } from "./LocalAutoCompleteStoreProvider"
+import { LocalAutoCompleteStoreProvider } from "./LocalAutoCompleteStoreProvider"
 import useLocalAutoCompleteStore from "./useLocalAutoCompleteStore"
 
 const LocalAutoCompleteWrapper = () => {
@@ -14,6 +15,8 @@ const LocalAutoCompleteWrapper = () => {
     const placeholder = useLocalAutoCompleteStore((state) => state.placeholder)
     const optionArray = useLocalAutoCompleteStore((state) => state.optionArray)
     const setFloatingReturns = useLocalAutoCompleteStore((state) => state.setFloatingReturns)
+    const defaultValue = useLocalAutoCompleteStore((state) => state.defaultValue)
+    const onChange = useLocalAutoCompleteStore((state) => state.onChange)
 
     const floatingReturns = useFloating({
         middleware: [flip(), shift(), offset(4)],
@@ -23,6 +26,11 @@ const LocalAutoCompleteWrapper = () => {
     useEffect(() => {
         setFloatingReturns(floatingReturns)
     }, [floatingReturns])
+    useEffect(() => {
+        if (!defaultValue) return
+        if (inputValue) return
+        onChange(defaultValue)
+    }, [defaultValue])
 
     const refCallback = (node: HTMLInputElement | null) => {
         inputRef.current = node
@@ -50,20 +58,27 @@ const LocalAutoCompleteWrapper = () => {
         <div className="relative grow">
             <Input
                 ref={refCallback}
-                value={inputValue}
                 onChange={handleChange}
                 onFocus={() => setIsContentOn(true)}
                 onKeyDown={handleKeyDown}
                 placeholder={placeholder}
+                defaultValue={defaultValue}
             />
             <LocalAutoCompleteContent />
         </div>
     )
 }
 
-const LocalAutoComplete = (externalValues: LocalAutoCompleteExternalValues) => {
+export type LocalAutoCompleteProps = {
+    placeholder: string
+    optionArray: ValueLabel[]
+    isRed: boolean
+    onChange: (inputValue: string) => void
+    defaultValue?: string
+}
+const LocalAutoComplete = (props: LocalAutoCompleteProps) => {
     return (
-        <LocalAutoCompleteStoreProvider {...externalValues} key={JSON.stringify(externalValues)}>
+        <LocalAutoCompleteStoreProvider {...props} key={JSON.stringify(props)}>
             <LocalAutoCompleteWrapper />
         </LocalAutoCompleteStoreProvider>
     )
