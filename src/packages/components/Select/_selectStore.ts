@@ -1,4 +1,5 @@
 import createLocalStore from "@/packages/store/createLocalStore"
+import type { useFloating } from "@floating-ui/react"
 import type { RefObject } from "react"
 import type { WithSelectProps } from "./Select"
 
@@ -14,6 +15,8 @@ interface SelectDefaultProps {
     setSelectedValue: (value: string | number | null) => void
     selectedLabel: string | null
     setSelectedLabel: (label: string | null) => void
+    floatingReturns: ReturnType<typeof useFloating> | null
+    setFloatingReturns: (floatingReturns: ReturnType<typeof useFloating>) => void
 }
 
 const { LocalStoreProvider: SelectProvider, useLocalStore: useSelectStore } = createLocalStore<
@@ -27,6 +30,8 @@ const { LocalStoreProvider: SelectProvider, useLocalStore: useSelectStore } = cr
     setSelectedValue: (selectedValue) => set({ selectedValue }),
     selectedLabel: null,
     setSelectedLabel: (selectedLabel) => set({ selectedLabel }),
+    floatingReturns: null,
+    setFloatingReturns: (floatingReturns) => set({ floatingReturns }),
 }))
 
 export { SelectProvider, useSelectStore }

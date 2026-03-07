@@ -1,8 +1,9 @@
 import type { DivProps } from "@/shared/interfaces"
-import { useRef } from "react"
+import { flip, offset, shift, useFloating } from "@floating-ui/react"
+import { useEffect, useRef } from "react"
 import SelectContent from "./_SelectContent"
 import SelectOption from "./_SelectOption"
-import { SelectProvider, type SelectPassedProps } from "./_selectStore"
+import { SelectProvider, useSelectStore, type SelectPassedProps } from "./_selectStore"
 import SelectTrigger from "./_SelectTrigger"
 
 // NOTE: onSelect는 이미 있는 이름이라 쓰면 안 됨
@@ -13,6 +14,25 @@ export type WithSelectProps = {
     disabled?: boolean
 }
 
+const WrappedSelect = (props: Omit<DivProps, "className">) => {
+    const { children, ...rest } = props
+
+    const setFloatinReturns = useSelectStore((state) => state.setFloatingReturns)
+
+    const floatingReturns = useFloating({
+        middleware: [flip(), shift(), offset(4)],
+        placement: "bottom-start",
+    })
+    useEffect(() => {
+        setFloatinReturns(floatingReturns)
+    }, [floatingReturns])
+
+    return (
+        <div {...rest} className="relative">
+            {children}
+        </div>
+    )
+}
 const Select = ({
     onOptionSelect,
     isInDanger,
@@ -33,9 +53,7 @@ const Select = ({
 
     return (
         <SelectProvider passedProps={passedProps}>
-            <div {...rest} className="relative">
-                {children}
-            </div>
+            <WrappedSelect {...rest}>{children}</WrappedSelect>
         </SelectProvider>
     )
 }
