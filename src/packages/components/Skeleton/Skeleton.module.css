@@ -1,0 +1,22 @@
+.skeleton {
+    --skeleton-vivid: rgba(from var(--color-fg-vivid) r g b / 0.05);
+    --skeleton-muted: rgba(from var(--color-fg-vivid) r g b / 0.03);
+
+    background: linear-gradient(90deg, var(--skeleton-muted) 10%, var(--skeleton-vivid) 50%, var(--skeleton-muted) 90%);
+    background-size: 200% 100%;
+    animation: loading 3s infinite;
+
+    max-width: var(--width);
+    width: 100%;
+    height: var(--height);
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}

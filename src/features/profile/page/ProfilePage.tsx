@@ -110,7 +110,6 @@ const ProfilePage = () => {
     if (!me) return
 
     const defaultRole: Role | undefined = me.resume?.role ?? me?.role
-    // TODO: default 받도록 해야
     const defaultHagwon: string | undefined = me.resume?.hagwon_name ?? me.additional_info.hagwon_name ?? undefined
     const defaultSchool: string | undefined = me.resume?.school_name ?? me.additional_info.school_name ?? undefined
     const defaultOption = defaultRole ? { value: defaultRole, label: roleToText[defaultRole] } : undefined

@@ -1,14 +1,45 @@
 import ExpandableDiv from "@/packages/components/ExpandableDiv/ExpendableDiv"
-import { debugRender } from "@/shared/config/debug/"
+import { Container, Vstack } from "@/packages/components/layouts"
+import RoundBox from "@/packages/components/RoundBox"
+import Skeleton from "@/packages/components/Skeleton"
+import useMediaQuery from "@/shared/utils/use-media-query"
 
-const ProfilePending = () => {
-    debugRender("ProfilePending")
-    // TODO: 여기 꾸미기
+const ProfilePendingSmall = () => {
+    return (
+        <RoundBox padding="xl">
+            <Vstack gap="lg">
+                <Vstack gap="sm">
+                    <Skeleton radius="md" heightInPixel={16} />
+                    <Skeleton radius="md" heightInPixel={40} />
+                </Vstack>
+                <Vstack gap="sm">
+                    <Skeleton radius="md" heightInPixel={16} />
+                    <Skeleton radius="md" heightInPixel={40} />
+                </Vstack>
+                <Vstack gap="sm">
+                    <Skeleton radius="md" heightInPixel={16} />
+                    <Skeleton radius="md" heightInPixel={40} />
+                </Vstack>
+                <div />
+                <Skeleton radius="md" heightInPixel={40} />
+            </Vstack>
+        </RoundBox>
+    )
+}
+const ProfilePendingBig = () => {
     return (
         <ExpandableDiv>
-            <div>프로파일 스켈레톤을 만들어야 합니다</div>
+            <Container width="md" isPadded>
+                <Skeleton radius="lg" heightInPixel={418} isShadowed />
+            </Container>
         </ExpandableDiv>
     )
+}
+
+const ProfilePending = () => {
+    const { isBig } = useMediaQuery()
+    if (isBig) return <ProfilePendingBig />
+    return <ProfilePendingSmall />
 }
 
 export default ProfilePending
