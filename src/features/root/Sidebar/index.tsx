@@ -13,7 +13,6 @@ const Sidebar = () => {
     const isSidebarOn = useGlobalStore((state) => state.isSidebarOn)
     const setIsSidebarOn = useGlobalStore((state) => state.setIsSidebarOn)
     const setIsBodyScrollable = useGlobalStore((state) => state.setIsBodyScrollable)
-    const me = useGlobalStore((state) => state.me)
 
     const match = useMatch({ from: "/_sidebar", shouldThrow: false })
     const fullSearch = match?.search
