@@ -16,7 +16,6 @@ const LocalAutoCompleteWrapper = () => {
     const optionArray = useLocalAutoCompleteStore((state) => state.optionArray)
     const setFloatingReturns = useLocalAutoCompleteStore((state) => state.setFloatingReturns)
     const defaultValue = useLocalAutoCompleteStore((state) => state.defaultValue)
-    const onChange = useLocalAutoCompleteStore((state) => state.onChange)
     const disabled = useLocalAutoCompleteStore((state) => state.disabled)
 
     const floatingReturns = useFloating({
@@ -30,7 +29,7 @@ const LocalAutoCompleteWrapper = () => {
     useEffect(() => {
         if (!defaultValue) return
         if (inputValue) return
-        onChange(defaultValue)
+        setInputValue(defaultValue)
     }, [defaultValue])
 
     const refCallback = (node: HTMLInputElement | null) => {
@@ -59,11 +58,11 @@ const LocalAutoCompleteWrapper = () => {
         <div className="relative grow">
             <Input
                 ref={refCallback}
+                value={inputValue}
                 onChange={handleChange}
                 onFocus={() => setIsContentOn(true)}
                 onKeyDown={handleKeyDown}
                 placeholder={placeholder}
-                defaultValue={defaultValue}
                 disabled={disabled}
             />
             <LocalAutoCompleteContent />
