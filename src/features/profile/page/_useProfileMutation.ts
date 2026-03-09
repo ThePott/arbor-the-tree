@@ -13,8 +13,9 @@ const useProfileMutation = <TSchema>() => {
             setMutationError(error as AxiosError<ApiError>)
             setModalKey("fail")
         },
-        onSuccess: () => {
+        onSuccess: (_data, _variables, _onMutationResult, context) => {
             setModalKey("success")
+            context.client.invalidateQueries({ queryKey: ["me"] })
         },
     })
 
