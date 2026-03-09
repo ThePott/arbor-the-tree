@@ -1,11 +1,9 @@
 import { ClientError } from "../error/clientError"
 import type { Role } from "../interfaces"
+import useGlobalStore from "../store/globalStore"
 
-type CheckIsAllowedProps = {
-    minimumRole: Role
-    currentRole: Role | null
-}
-export const checkIsAllowed = ({ minimumRole, currentRole }: CheckIsAllowedProps): boolean => {
+export const checkIsAllowed = (minimumRole: Role): boolean => {
+    const currentRole = useGlobalStore.getState().me?.role
     if (!currentRole) return false
 
     const baseRoleArray: Role[] = ["MAINTAINER", "PRINCIPAL", "HELPER", "STUDENT", "PARENT"]

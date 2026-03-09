@@ -53,7 +53,7 @@ const Sidebar = () => {
                                     </Button>
                                 </Hstack>
 
-                                {checkIsAllowed({ minimumRole: "PRINCIPAL", currentRole: me?.role ?? null }) && (
+                                {checkIsAllowed("PRINCIPAL") && (
                                     <Labeled>
                                         <Labeled.Header>인원 관리</Labeled.Header>
                                         <RoundBox isBordered padding="md">
@@ -85,7 +85,7 @@ const Sidebar = () => {
                                     </Labeled>
                                 )}
 
-                                {checkIsAllowed({ minimumRole: "HELPER", currentRole: me?.role ?? null }) && (
+                                {checkIsAllowed("HELPER") && (
                                     <Labeled>
                                         <Labeled.Header>수업 관리</Labeled.Header>
                                         <RoundBox isBordered padding="md">

@@ -1,6 +1,7 @@
 import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown"
 import type { Book } from "@/shared/interfaces"
+import { checkIsAllowed } from "@/shared/utils/check-is-allowed"
 import { createColumnHelper } from "@tanstack/react-table"
 import { Ellipsis, Trash } from "lucide-react"
 import useBookListStore from "../_bookListStore"
@@ -12,6 +13,8 @@ const bookColumns = [
     columnHelper.display({
         id: "delete",
         cell: ({ row: { original } }) => {
+            const isAllowed = checkIsAllowed("PRINCIPAL")
+            if (!isAllowed) return null
             return (
                 <Button
                     onClick={() => {
