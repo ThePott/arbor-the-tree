@@ -64,7 +64,7 @@ const Sidebar = () => {
                                                     navigate({ to: "/manage/resume" })
                                                 }}
                                             >
-                                                지원 현황
+                                                권한 요청 현황
                                             </Button>
                                             <Button
                                                 color="transparent"
@@ -94,7 +94,7 @@ const Sidebar = () => {
                                                     navigate({ to: "/book" })
                                                 }}
                                             >
-                                                문제집 목록
+                                                문제집 등록 / 삭제
                                             </Button>
                                             <Button
                                                 color="transparent"
@@ -105,7 +105,7 @@ const Sidebar = () => {
                                                     navigate({ to: "/manage/student" })
                                                 }}
                                             >
-                                                학생 관리
+                                                반 / 학생 관리
                                             </Button>
                                             <Button
                                                 color="transparent"
@@ -132,10 +132,10 @@ const Sidebar = () => {
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
-                                                    navigate({ to: "/assignment", search: studentSearch })
+                                                    navigate({ to: "/check", search: fullSearch })
                                                 }}
                                             >
-                                                오답 과제 목록
+                                                오답 체크
                                             </Button>
                                             <Button
                                                 color="bg2"
@@ -154,10 +154,10 @@ const Sidebar = () => {
                                                 isOnLeft
                                                 onClick={() => {
                                                     setIsSidebarOn(false)
-                                                    navigate({ to: "/check", search: fullSearch })
+                                                    navigate({ to: "/assignment", search: studentSearch })
                                                 }}
                                             >
-                                                오답 체크
+                                                오답 과제 목록
                                             </Button>
                                         </Vstack>
                                     </RoundBox>
