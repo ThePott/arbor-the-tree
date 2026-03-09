@@ -152,9 +152,7 @@ const ProfilePage = () => {
                                                 <Select.Option value="PARENT" isDisabled>
                                                     학부모
                                                 </Select.Option>
-                                                <Select.Option value="HELPER" isDisabled>
-                                                    실장
-                                                </Select.Option>
+                                                <Select.Option value="HELPER">실장</Select.Option>
                                                 <Select.Option value="PRINCIPAL">원장</Select.Option>
                                             </Select.Content>
                                         </Select>
