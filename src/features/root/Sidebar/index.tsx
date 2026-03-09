@@ -3,6 +3,7 @@ import Labeled from "@/packages/components/Labeled/Labeled"
 import { Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import useGlobalStore from "@/shared/store/globalStore"
+import { checkIsAllowed } from "@/shared/utils/check-is-allowed"
 import { useMatch, useNavigate } from "@tanstack/react-router"
 import { X } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
@@ -12,6 +13,7 @@ const Sidebar = () => {
     const isSidebarOn = useGlobalStore((state) => state.isSidebarOn)
     const setIsSidebarOn = useGlobalStore((state) => state.setIsSidebarOn)
     const setIsBodyScrollable = useGlobalStore((state) => state.setIsBodyScrollable)
+    const me = useGlobalStore((state) => state.me)
 
     const match = useMatch({ from: "/_sidebar", shouldThrow: false })
     const fullSearch = match?.search
@@ -51,62 +53,74 @@ const Sidebar = () => {
                                     </Button>
                                 </Hstack>
 
-                                <Labeled>
-                                    <Labeled.Header>인원 관리</Labeled.Header>
-                                    <RoundBox isBordered padding="md">
-                                        <Vstack gap="xs">
-                                            <Button
-                                                color="transparent"
-                                                border="onHover"
-                                                isOnLeft
-                                                onClick={() => {
-                                                    setIsSidebarOn(false)
-                                                    navigate({ to: "/manage/resume" })
-                                                }}
-                                            >
-                                                권한 요청 현황
-                                            </Button>
-                                            <Button
-                                                color="transparent"
-                                                border="onHover"
-                                                isOnLeft
-                                                onClick={() => {
-                                                    setIsSidebarOn(false)
-                                                    navigate({ to: "/manage/delete" })
-                                                }}
-                                            >
-                                                권한 삭제
-                                            </Button>
-                                        </Vstack>
-                                    </RoundBox>
-                                </Labeled>
+                                {checkIsAllowed({ minimumRole: "PRINCIPAL", currentRole: me?.role ?? null }) && (
+                                    <Labeled>
+                                        <Labeled.Header>인원 관리</Labeled.Header>
+                                        <RoundBox isBordered padding="md">
+                                            <Vstack gap="xs">
+                                                <Button
+                                                    color="transparent"
+                                                    border="onHover"
+                                                    isOnLeft
+                                                    onClick={() => {
+                                                        setIsSidebarOn(false)
+                                                        navigate({ to: "/manage/resume" })
+                                                    }}
+                                                >
+                                                    권한 요청 현황
+                                                </Button>
+                                                <Button
+                                                    color="transparent"
+                                                    border="onHover"
+                                                    isOnLeft
+                                                    onClick={() => {
+                                                        setIsSidebarOn(false)
+                                                        navigate({ to: "/manage/delete" })
+                                                    }}
+                                                >
+                                                    권한 삭제
+                                                </Button>
+                                            </Vstack>
+                                        </RoundBox>
+                                    </Labeled>
+                                )}
+
+                                {checkIsAllowed({ minimumRole: "HELPER", currentRole: me?.role ?? null }) && (
+                                    <Labeled>
+                                        <Labeled.Header>수업 관리</Labeled.Header>
+                                        <RoundBox isBordered padding="md">
+                                            <Vstack gap="xs">
+                                                <Button
+                                                    color="transparent"
+                                                    border="onHover"
+                                                    isOnLeft
+                                                    onClick={() => {
+                                                        setIsSidebarOn(false)
+                                                        navigate({ to: "/book" })
+                                                    }}
+                                                >
+                                                    문제집 등록 / 삭제
+                                                </Button>
+                                                <Button
+                                                    color="transparent"
+                                                    border="onHover"
+                                                    isOnLeft
+                                                    onClick={() => {
+                                                        setIsSidebarOn(false)
+                                                        navigate({ to: "/manage/student" })
+                                                    }}
+                                                >
+                                                    반 / 학생 관리
+                                                </Button>
+                                            </Vstack>
+                                        </RoundBox>
+                                    </Labeled>
+                                )}
 
                                 <Labeled>
-                                    <Labeled.Header>수업 관리</Labeled.Header>
+                                    <Labeled.Header>진도 / 오답 관리</Labeled.Header>
                                     <RoundBox isBordered padding="md">
                                         <Vstack gap="xs">
-                                            <Button
-                                                color="transparent"
-                                                border="onHover"
-                                                isOnLeft
-                                                onClick={() => {
-                                                    setIsSidebarOn(false)
-                                                    navigate({ to: "/book" })
-                                                }}
-                                            >
-                                                문제집 등록 / 삭제
-                                            </Button>
-                                            <Button
-                                                color="transparent"
-                                                border="onHover"
-                                                isOnLeft
-                                                onClick={() => {
-                                                    setIsSidebarOn(false)
-                                                    navigate({ to: "/manage/student" })
-                                                }}
-                                            >
-                                                반 / 학생 관리
-                                            </Button>
                                             <Button
                                                 color="transparent"
                                                 border="onHover"
@@ -118,14 +132,6 @@ const Sidebar = () => {
                                             >
                                                 진도표
                                             </Button>
-                                        </Vstack>
-                                    </RoundBox>
-                                </Labeled>
-
-                                <Labeled>
-                                    <Labeled.Header>오답 과제</Labeled.Header>
-                                    <RoundBox isBordered padding="md">
-                                        <Vstack gap="xs">
                                             <Button
                                                 color="bg2"
                                                 border="onHover"
