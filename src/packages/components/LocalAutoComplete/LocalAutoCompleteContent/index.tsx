@@ -81,7 +81,6 @@ const LocalAutoCompleteContent = () => {
                     ))}
                 </Vstack>
             </RoundBox>
-            , document.body
         </Portal>
     )
 }

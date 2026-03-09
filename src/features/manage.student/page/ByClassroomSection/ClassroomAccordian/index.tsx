@@ -38,6 +38,7 @@ const ClassroomAccordian = ({ classroom }: ClassroomAccordianProps) => {
                                     optionArray={optionArray}
                                     placeholder="학생 이름, 학교, 학년"
                                     onChange={onChange}
+                                    isWidthMatching
                                 />
                             )}
                         />

@@ -1,7 +1,7 @@
-import { Container, Vstack } from "@/packages/components/layouts"
+import { Container, FlexOneContainer, Vstack } from "@/packages/components/layouts"
 import TabBar, { type Tab } from "@/packages/components/TabBar/TabBar"
 import Title from "@/packages/components/Title/Title"
-import { debugRender } from "@/shared/config/debug/"
+import useGlobalStore from "@/shared/store/globalStore"
 import { getRouteApi, useNavigate } from "@tanstack/react-router"
 import type { ManageStudentSearch } from "../types"
 import ByClassroomSection from "./ByClassroomSection"
@@ -14,27 +14,29 @@ const MANAGE_STUDENT_TAB_ARRAY: Tab<ManageStudentSearch>[] = [
 
 const routeApi = getRouteApi("/manage/student")
 const ManageStudentPage = () => {
-    debugRender("ManageStudentPage")
+    const isBodyScrollable = useGlobalStore((state) => state.isBodyScrollable)
     const navigate = useNavigate({ from: "/manage/student" })
 
     const { by } = routeApi.useSearch()
 
     return (
-        <Container width="xl" isPadded>
-            <Vstack gap="lg">
-                <Title as="h1">학생 관리</Title>
-                <TabBar
-                    variant="underline"
-                    tabArray={MANAGE_STUDENT_TAB_ARRAY}
-                    onSelect={(tab) => {
-                        navigate({ search: { by: tab.value } })
-                    }}
-                />
+        <FlexOneContainer isYScrollable={isBodyScrollable} className="h-full [scrollbar-gutter:stable]">
+            <Container width="xl" isPadded>
+                <Vstack gap="lg">
+                    <Title as="h1">학생 관리</Title>
+                    <TabBar
+                        variant="underline"
+                        tabArray={MANAGE_STUDENT_TAB_ARRAY}
+                        onSelect={(tab) => {
+                            navigate({ search: { by: tab.value } })
+                        }}
+                    />
 
-                {by !== "student" && <ByClassroomSection />}
-                {by === "student" && <ByStudentSection />}
-            </Vstack>
-        </Container>
+                    {by !== "student" && <ByClassroomSection />}
+                    {by === "student" && <ByStudentSection />}
+                </Vstack>
+            </Container>
+        </FlexOneContainer>
     )
 }
 
