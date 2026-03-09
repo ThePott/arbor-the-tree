@@ -26,7 +26,7 @@ const BookListDeleteModal = () => {
                 </Modal.Button>
                 <Modal.Button
                     role="destruct"
-                    onClick={() => deleteMutation.mutate({ id: selectedBook?.id ?? "-1" })}
+                    onClick={() => deleteMutation.mutate({ body: undefined, additionalData: undefined })}
                     isPending={deleteMutation.isPending}
                 >
                     삭제
