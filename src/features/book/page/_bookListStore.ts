@@ -10,12 +10,6 @@ const useBookListStore = create<BookListStoreState>()((set) => ({
         set({ selectedTab })
     },
 
-    bookArray: [],
-    setBookArray: (bookArray) => {
-        debugStore("BookListStore:setBookArray %o", bookArray)
-        set({ bookArray })
-    },
-
     isPending: true,
     setIsPending: (isPending) => {
         debugStore("BookListStore:setIsPending %o", isPending)

@@ -1,5 +1,4 @@
 import { Hstack, Vstack } from "@/packages/components/layouts"
-import { debugRender } from "@/shared/config/debug/"
 import BWMetaInfoSection from "./BWMetaInfoSection/BWMetaInfoSection"
 import BWModalMany from "./BWModalMany"
 import BWTable from "./BWTable/BWTable"
@@ -7,7 +6,6 @@ import BWTopicStepSection from "./BWTopicStepSection/BWTopicStepSection"
 import useBookWrite from "./useBookWrite/useBookWrite"
 
 const BookWritePage = () => {
-    debugRender("BookWritePage")
     const { wrappedHandleSubmit } = useBookWrite()
 
     return (

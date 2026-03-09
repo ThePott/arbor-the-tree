@@ -1,14 +1,17 @@
 import Button from "@/packages/components/Button/Button"
 import { Container, FlexOneContainer, Hstack, Vstack } from "@/packages/components/layouts"
 import useGlobalStore from "@/shared/store/globalStore"
-import { useNavigate } from "@tanstack/react-router"
+import { useQuery } from "@tanstack/react-query"
+import { useLoaderData, useNavigate } from "@tanstack/react-router"
+import { bookQueryOptions } from "../loader/bookListLoaderFn"
 import BookListDeleteModal from "./_BookListDeleteModal"
-import useBookListStore from "./_bookListStore"
 import BookListTable from "./BookListTable/BookListTable"
 
 const BookListPage = () => {
+    const { bookArray: loaderData } = useLoaderData({ from: "/book/" })
+    const { data: queryData } = useQuery(bookQueryOptions)
+
     const isBodyScrollable = useGlobalStore((state) => state.isBodyScrollable)
-    const bookArray = useBookListStore((state) => state.bookArray)
 
     const navigate = useNavigate()
 
@@ -23,7 +26,7 @@ const BookListPage = () => {
                                 문제집 추가
                             </Button>
                         </Hstack>
-                        <BookListTable bookArray={bookArray} />
+                        <BookListTable bookArray={queryData ?? loaderData} />
                     </Vstack>
                 </Container>
             </FlexOneContainer>
