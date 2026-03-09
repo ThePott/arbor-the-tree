@@ -9,6 +9,7 @@ export const bookQueryOptions = {
         return response.data as Book[]
     },
 }
+export type BookResponseData = Book[]
 
 type BookListLoaderFnProps = { queryClient: QueryClient }
 const bookListLoaderFn = async ({ queryClient }: BookListLoaderFnProps) => {
