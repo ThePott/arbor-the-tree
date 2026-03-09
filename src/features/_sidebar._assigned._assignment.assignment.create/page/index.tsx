@@ -48,6 +48,7 @@ const ReviewAssignmentCreatePage = () => {
         queryKey: ["reviewAssignmentCreate", classroom_id, student_id],
         params: { classroom_id, student_id },
         update: ({ previous }) => previous,
+        additionalOnSetteled: (client) => client.invalidateQueries({ queryKey: ["reviewAssignment"] }),
     })
 
     const rowArray = useMemo(() => convertDataToRowArray(queryData ?? loaderData), [queryData, loaderData])

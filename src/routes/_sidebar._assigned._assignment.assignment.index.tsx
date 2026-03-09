@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_sidebar/_assigned/_assignment/assignment
     component: ReviewAssignmentPage,
     loaderDeps: ({ search: { classroom_id, student_id } }) => ({ classroom_id, student_id }),
     beforeLoad: () => {
-        if (checkIsAllowed("PARENT")) {
+        if (!checkIsAllowed("PARENT")) {
             throw ClientError.Unauthorized("이 페이지에 접근할 권한이 없습니다", {
                 to: "/",
                 label: "홈으로 이동",
