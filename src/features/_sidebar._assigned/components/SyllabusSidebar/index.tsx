@@ -95,7 +95,7 @@ const SyllabusSidebar = ({ children }: SyllabusSidebarProps) => {
 
     if (!student_id && !classroom_id) return null
     return (
-        <Vstack className="w-[300px] p-my-md pl-1.5 overflow-y-scroll">
+        <Vstack className="w-[240px] py-my-lg overflow-y-auto pl-my-md">
             <Title as="h3">{title}</Title>
 
             {children}

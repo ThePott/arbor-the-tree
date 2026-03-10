@@ -76,7 +76,7 @@ const ClassroomAccordian = ({ classroomWithStudent }: ClassroomAccordianProps) =
             padding="md"
             isBordered
             onClick={handleClick}
-            className="my-transition hover:outline-2 cursor-pointer"
+            className="my-transition hover:outline-2 hover:-outline-offset-2 cursor-pointer"
         >
             <Vstack gap="none">
                 <Hstack gap="xs" className="items-start">

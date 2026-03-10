@@ -64,7 +64,7 @@ const ClassroomSidebar = () => {
     const titleText = pathnameToTitleText[pathname]
 
     return (
-        <Vstack className="overflow-y-auto p-my-md pr-1.5 w-[200px]" gap="sm">
+        <Vstack className="overflow-y-auto p-my-lg pr-0 w-[200px]" gap="sm">
             <Title as="h1" isMuted>
                 {titleText}
             </Title>
