@@ -1,4 +1,4 @@
-import type { Me, Resume } from "../interfaces"
+import type { Me } from "@/features/profile/type/indes"
 
 export interface GlobalStoreState {
     accessToken: string | null
@@ -8,9 +8,6 @@ export interface GlobalStoreState {
     me: Me | null
     setMe: (me: Me | null) => void
     logout: () => void
-
-    resume: Resume | null
-    setResume: (resume: Resume | null) => void
 
     isPendingLogin: boolean
     setIsPendingLogin: (isPendingLogin: boolean) => void

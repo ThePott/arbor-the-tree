@@ -4,13 +4,14 @@ import AutoCompleteInput from "./_AutoCompleteInput"
 
 interface WithAutoCompleteProps {
     outerIsRed: boolean
+    disabled?: boolean
 }
 
-const AutoComplete = ({ outerIsRed, ...initialValues }: AutoCompleteInitialValue & WithAutoCompleteProps) => {
+const AutoComplete = ({ outerIsRed, disabled, ...initialValues }: AutoCompleteInitialValue & WithAutoCompleteProps) => {
     return (
         <AutoCompleteStoreProvider {...initialValues}>
             <div className="relative">
-                <AutoCompleteInput outerIsRed={outerIsRed} />
+                <AutoCompleteInput outerIsRed={outerIsRed} disabled={disabled} />
                 <AutoCompleteContent />
             </div>
         </AutoCompleteStoreProvider>

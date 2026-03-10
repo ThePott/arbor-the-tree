@@ -12,6 +12,7 @@ const roundBoxVariants = cva("", {
             false: "",
         },
         radius: {
+            none: "rounded-none",
             sm: "rounded-my-sm",
             md: "rounded-my-md",
             lg: "rounded-my-lg",
@@ -41,7 +42,7 @@ const roundBoxVariants = cva("", {
 })
 
 interface RoundBoxProps {
-    radius?: SmToLg
+    radius?: SmToLg | None
     padding?: XsToXl | None
     color?: Color
     isBordered?: boolean

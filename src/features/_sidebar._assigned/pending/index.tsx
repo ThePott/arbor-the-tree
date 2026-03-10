@@ -1,5 +1,7 @@
-const AssignedPending = () => {
-    return <div>this is assigned pending</div>
+import { Outlet } from "@tanstack/react-router"
+
+const SidebarAssignedPending = () => {
+    return <Outlet />
 }
 
-export default AssignedPending
+export default SidebarAssignedPending

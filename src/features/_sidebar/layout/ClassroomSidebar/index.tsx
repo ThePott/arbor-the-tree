@@ -1,8 +1,9 @@
 import type { ExtendedStudent } from "@/features/manage.student/types"
 import { Vstack } from "@/packages/components/layouts"
+import Title from "@/packages/components/Title/Title"
 import { ClientError } from "@/shared/error/clientError"
 import type { Classroom, ClassroomStudent } from "@/shared/interfaces"
-import { useLoaderData } from "@tanstack/react-router"
+import { useLoaderData, useLocation } from "@tanstack/react-router"
 import ClassroomAccordian from "./ClassroomAccordian"
 
 type GroupByClassroomProps = {
@@ -48,12 +49,27 @@ const groupByClassroom = ({
     return { isolatedStudentArray, classroomWithStudentArray }
 }
 
+const pathnameToTitleText: Record<string, string> = {
+    "/progress": "진도표",
+    "/check": "오답 체크",
+    "/assignment": "오답 과제 목록",
+    "/assignment/create": "오답 과제 생성",
+}
+
 const ClassroomSidebar = () => {
-    const { extendedStudentArray } = useLoaderData({ from: "/_sidebar" })
-    const { classroomWithStudentArray, isolatedStudentArray } = groupByClassroom(extendedStudentArray)
+    const loaderData = useLoaderData({ from: "/_sidebar" })
+    const { classroomWithStudentArray, isolatedStudentArray } = loaderData
+        ? groupByClassroom(loaderData.extendedStudentArray)
+        : { classroomWithStudentArray: [], isolatedStudentArray: [] }
+
+    const { pathname } = useLocation()
+    const titleText = pathnameToTitleText[pathname]
 
     return (
-        <Vstack className="overflow-y-auto p-my-md pr-1.5 w-[200px]" gap="sm">
+        <Vstack className="overflow-y-auto p-my-lg pr-0 w-[200px]" gap="sm">
+            <Title as="h1" isMuted>
+                {titleText}
+            </Title>
             {classroomWithStudentArray.map((classroomWithStudent) => (
                 <ClassroomAccordian
                     key={classroomWithStudent.classroomId}

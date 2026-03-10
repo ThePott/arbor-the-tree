@@ -30,7 +30,7 @@ const makeConfig = ({ role, isPending }: MakeConfigProps): ModalButtonConfig => 
             }
         case "confirm":
             return {
-                color: "bg0",
+                color: "bg1",
                 border: "none",
                 status: isPending ? "pending" : "enabled",
             }

@@ -1,5 +1,5 @@
+import OutletContainer from "@/features/_sidebar._assigned/components/OutletContainer"
 import SyllabusSidebar from "@/features/_sidebar._assigned/components/SyllabusSidebar"
-import { FlexOneContainer } from "@/packages/components/layouts"
 import { Outlet } from "@tanstack/react-router"
 
 const ReviewCheckLayout = () => {
@@ -11,9 +11,9 @@ const ReviewCheckLayout = () => {
                 </SyllabusSidebar.ButtonGroup>
             </SyllabusSidebar>
 
-            <FlexOneContainer isYScrollable className="border-l border-l-border-dim">
+            <OutletContainer forWhat="rest">
                 <Outlet />
-            </FlexOneContainer>
+            </OutletContainer>
         </>
     )
 }

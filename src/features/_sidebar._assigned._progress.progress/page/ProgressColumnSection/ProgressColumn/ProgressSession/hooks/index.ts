@@ -68,6 +68,7 @@ const useStatusMutation = (session_id?: string) => {
         additionalOnSetteled: (client) => {
             // NOTE: 세부 문제집 있으면 전체일 때도 업데이트
             client.invalidateQueries({ queryKey: ["progressSession", classroom_id, student_id] })
+            client.invalidateQueries({ queryKey: ["reviewCheck", classroom_id, student_id, syllabus_id] })
             // NOTE: 상태는 개별 학생, 반 상단에서만 가능하다. 반 상단 mutate -> 반 세부 학생도 업데이트
             if (classroom_id) {
                 client.invalidateQueries({ queryKey: ["progressSession", classroom_id] })

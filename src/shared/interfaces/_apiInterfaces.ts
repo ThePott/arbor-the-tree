@@ -20,17 +20,6 @@ export type AppUser = {
     email?: string
 }
 
-export type Me = {
-    id: number
-    name: string
-    kakao_id?: number
-    email?: string
-    phone_number?: string
-    role?: Role
-    school_name?: string
-    hagwon_name?: string
-}
-
 export type School = {
     id: string
     name: string

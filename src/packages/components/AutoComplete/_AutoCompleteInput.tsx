@@ -6,7 +6,11 @@ import { useAutoCompleteQuery, useAutoCompleteStore } from "./_autoCompleteHooks
 import useAutoCompleteEffect from "./autoCompleteHooks/useAutoCompleteEffect"
 import useAutoCompleteEventHandler from "./autoCompleteHooks/useAutoCompleteEventHandlers"
 
-const AutoCompleteInput = ({ outerIsRed }: { outerIsRed: boolean }) => {
+type AutoCompleteInputProps = {
+    outerIsRed: boolean
+    disabled?: boolean
+}
+const AutoCompleteInput = ({ outerIsRed, disabled }: AutoCompleteInputProps) => {
     const setIsContentOn = useAutoCompleteStore((state) => state.setIsContentOn)
     const inputValue = useAutoCompleteStore((state) => state.inputValue)
     const setInputValue = useAutoCompleteStore((state) => state.setInputValue)
@@ -32,6 +36,7 @@ const AutoCompleteInput = ({ outerIsRed }: { outerIsRed: boolean }) => {
 
     return (
         <Input
+            disabled={disabled}
             ref={inputRef}
             onFocus={() => setIsContentOn(true)}
             onBlur={handleBlur}

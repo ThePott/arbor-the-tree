@@ -1,7 +1,7 @@
 import { headlessInstance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import Input from "@/packages/components/Input/Input"
-import { Container, Vstack } from "@/packages/components/layouts"
+import { Container, FlexOneContainer, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
 import { debugRender } from "@/shared/config/debug/"
@@ -56,39 +56,41 @@ const LoginPage = () => {
     }
 
     return (
-        <Container isPadded>
-            <RoundBox isShadowed radius="lg" padding="xl" color="bg0">
-                <Vstack gap="lg">
-                    <form onSubmit={handleCreateSubmit}>
-                        <RoundBox isShadowed padding="lg" color="bg1">
-                            <Vstack gap="xs">
-                                <Title as="h2" isMuted>
-                                    create new account
-                                </Title>
-                                <Input name="userName" placeholder="userName" />
-                                <Input name="email" placeholder="email" />
-                                <Input name="password" placeholder="password" />
-                                <Button isShadowed color="green">
-                                    Create new account
-                                </Button>
-                            </Vstack>
-                        </RoundBox>
-                    </form>
-                    <form onSubmit={handleLoginSubmit}>
-                        <RoundBox isShadowed padding="lg" color="bg1">
-                            <Vstack gap="xs">
-                                <Title as="h2" isMuted>
-                                    login with email
-                                </Title>
-                                <Input name="email" placeholder="email" />
-                                <Input name="password" placeholder="password" />
-                                <Button isShadowed>Login with email</Button>
-                            </Vstack>
-                        </RoundBox>
-                    </form>
-                </Vstack>
-            </RoundBox>
-        </Container>
+        <FlexOneContainer isYScrollable className="h-full [scrollbar-gutter:stable]">
+            <Container isPadded>
+                <RoundBox isShadowed radius="lg" padding="xl" color="bg0">
+                    <Vstack gap="lg">
+                        <form onSubmit={handleCreateSubmit}>
+                            <RoundBox isShadowed padding="lg" color="bg1">
+                                <Vstack gap="xs">
+                                    <Title as="h2" isMuted>
+                                        create new account
+                                    </Title>
+                                    <Input name="userName" placeholder="userName" />
+                                    <Input name="email" placeholder="email" />
+                                    <Input name="password" placeholder="password" />
+                                    <Button isShadowed color="green">
+                                        Create new account
+                                    </Button>
+                                </Vstack>
+                            </RoundBox>
+                        </form>
+                        <form onSubmit={handleLoginSubmit}>
+                            <RoundBox isShadowed padding="lg" color="bg1">
+                                <Vstack gap="xs">
+                                    <Title as="h2" isMuted>
+                                        login with email
+                                    </Title>
+                                    <Input name="email" placeholder="email" />
+                                    <Input name="password" placeholder="password" />
+                                    <Button isShadowed>Login with email</Button>
+                                </Vstack>
+                            </RoundBox>
+                        </form>
+                    </Vstack>
+                </RoundBox>
+            </Container>
+        </FlexOneContainer>
     )
 }
 

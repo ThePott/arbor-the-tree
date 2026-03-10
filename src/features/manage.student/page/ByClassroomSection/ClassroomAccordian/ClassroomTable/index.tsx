@@ -1,10 +1,11 @@
 import type { ExtendedStudent } from "@/features/manage.student/types"
-import { Vstack } from "@/packages/components/layouts"
+import { Hstack, Vstack } from "@/packages/components/layouts"
 import TanstackTable from "@/packages/components/TanstackTable"
 import { debugRender } from "@/shared/config/debug/"
 import { ClientError } from "@/shared/error/clientError"
 import type { Classroom, ClassroomStudent } from "@/shared/interfaces"
 import { manageStudentLoaderQueryOptions } from "@/shared/queryOptions/manageStudentQueryOptions"
+import { checkIsAllowed } from "@/shared/utils/check-is-allowed"
 import { useQuery } from "@tanstack/react-query"
 import { useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
@@ -89,7 +90,15 @@ const columns = [
             row: {
                 original: { classroom_student_id },
             },
-        }) => <ExcludeButton classroom_student_id={classroom_student_id} />,
+        }) => {
+            const isAllowed = checkIsAllowed("PRINCIPAL")
+            if (!isAllowed) return null
+            return (
+                <Hstack className="justify-center">
+                    <ExcludeButton classroom_student_id={classroom_student_id} />
+                </Hstack>
+            )
+        },
     }),
 ]
 type ClassroomTableProps = {

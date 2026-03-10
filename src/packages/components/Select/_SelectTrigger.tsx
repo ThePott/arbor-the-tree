@@ -1,22 +1,44 @@
+import { useEffect } from "react"
 import Button from "../Button/Button"
-import useSelectContext from "./_useSelectContext"
+import { useSelectStore } from "./_selectStore"
 
 interface SelectTriggerProps {
     children: string
 }
 
 const SelectTrigger = ({ children }: SelectTriggerProps) => {
-    const { setIsOpened, selectedLabel, triggerRef, isInDanger, defaultLabel } = useSelectContext()
+    const toggleIsOpened = useSelectStore((state) => state.toggleIsOpened)
+    const selectedLabel = useSelectStore((state) => state.selectedLabel)
+    const triggerRef = useSelectStore((state) => state.triggerRef)
+    const isInDanger = useSelectStore((state) => state.isInDanger)
+    const defaultOption = useSelectStore((state) => state.defaultOption)
+    const disabled = useSelectStore((state) => state.disabled)
+    const onOptionSelect = useSelectStore((state) => state.onOptionSelect)
+    const floatingReturns = useSelectStore((state) => state.floatingReturns)
 
-    const handleClick = () => {
-        setIsOpened((prev) => !prev)
+    const refCallback = (node: HTMLButtonElement | null) => {
+        triggerRef.current = node
+        floatingReturns?.refs.setReference(node)
     }
 
-    const label = selectedLabel ?? defaultLabel ?? children
+    const handleClick = () => {
+        if (disabled) return
+        toggleIsOpened()
+    }
+
+    const label = selectedLabel ?? defaultOption?.label ?? children
+
+    useEffect(() => {
+        if (!defaultOption) return
+        if (selectedLabel) return
+
+        onOptionSelect(defaultOption.value)
+    }, [defaultOption])
 
     return (
         <Button
-            ref={triggerRef}
+            ref={refCallback}
+            disabled={disabled}
             type="button"
             onClick={handleClick}
             color={isInDanger ? "red" : "transparent"}

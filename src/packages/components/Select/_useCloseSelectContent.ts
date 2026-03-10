@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react"
-import useSelectContext from "./_useSelectContext"
+import { useSelectStore } from "./_selectStore"
 
 const useCloseSelectContent = () => {
-    const { isOpened, setIsOpened } = useSelectContext()
+    const isOpened = useSelectStore((state) => state.isOpened)
+    const setIsOpened = useSelectStore((state) => state.setIsOpened)
 
     const contentRef = useRef<HTMLDivElement>(null)
 

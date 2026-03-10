@@ -58,6 +58,7 @@ const ClassroomAccordian = ({ classroomWithStudent }: ClassroomAccordianProps) =
     const { classroom_id, student_id } = route.useSearch()
 
     const isSelected = classroom_id && classroom_id === classroomWithStudent.classroomId && !student_id
+    const isChildrenSelected = classroom_id && classroom_id === classroomWithStudent.classroomId && student_id
 
     const handleClick = () => {
         if (!classroomWithStudent.classroomId) return
@@ -69,14 +70,13 @@ const ClassroomAccordian = ({ classroomWithStudent }: ClassroomAccordianProps) =
     }
     const [isOpened, setIsOpened] = useState(false)
 
-    // NOTE: color="black"은 스타일 설정이 안 되어 있어서 투명한 색으로 나온다
     return (
         <RoundBox
-            color={isSelected ? "bg2" : undefined}
+            color={isSelected ? "bg2" : isChildrenSelected ? "bg0" : undefined}
             padding="md"
             isBordered
             onClick={handleClick}
-            className="my-transition hover:outline-2 cursor-pointer"
+            className="my-transition hover:outline-2 hover:-outline-offset-2 cursor-pointer"
         >
             <Vstack gap="none">
                 <Hstack gap="xs" className="items-start">

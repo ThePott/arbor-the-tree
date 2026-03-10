@@ -1,5 +1,5 @@
 import Button from "@/packages/components/Button/Button"
-import { Container } from "@/packages/components/layouts"
+import { Container, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import Title from "@/packages/components/Title/Title"
 import { useNavigate } from "@tanstack/react-router"
@@ -12,15 +12,24 @@ const ClientErrorComponent = ({ error }: ClientErrorComponenetProps) => {
     const navigate = useNavigate()
 
     return (
-        <Container isPadded>
+        <Container isPadded width="md">
             <RoundBox padding="xl" radius="lg" isShadowed color="bg0">
-                <Title as="h1" isMuted>
-                    Cient Error
-                </Title>
-                <Title as="h2">{error.message}</Title>
-                {error.redirect && (
-                    <Button onClick={() => navigate({ to: error.redirect?.to })}>{error.redirect.label}</Button>
-                )}
+                <Vstack gap="lg">
+                    <Title as="h1" isMuted>
+                        Cient Error
+                    </Title>
+                    <Title as="h2">{error.message}</Title>
+                    {error.redirect && (
+                        <Button
+                            border="none"
+                            color="bg1"
+                            isShadowed
+                            onClick={() => navigate({ to: error.redirect?.to })}
+                        >
+                            {error.redirect.label}
+                        </Button>
+                    )}
+                </Vstack>
             </RoundBox>
         </Container>
     )

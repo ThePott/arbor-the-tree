@@ -6,9 +6,6 @@ export interface BookListStoreState {
     selectedTab: Tab<BookActivity>
     setSelectedTab: (selectedTab: Tab<BookActivity>) => void
 
-    bookArray: Book[]
-    setBookArray: (bookArray: Book[]) => void
-
     isPending: boolean
     setIsPending: (isPending: boolean) => void
 

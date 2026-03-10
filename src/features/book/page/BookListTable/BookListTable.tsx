@@ -1,11 +1,9 @@
-import { debugRender } from "@/shared/config/debug/"
 import type { Book } from "@/shared/interfaces"
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import clsx from "clsx"
 import bookColumns from "./_BookListTableColumns"
 
 const BookListTable = ({ bookArray }: { bookArray: Book[] }) => {
-    debugRender("BookListTable")
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({
         columns: bookColumns,

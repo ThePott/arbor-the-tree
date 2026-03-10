@@ -29,12 +29,6 @@ const useGlobalStore = create<GlobalStoreState>()(
                 setMe(null)
             },
 
-            resume: null,
-            setResume: (resume) => {
-                debugStore("GlobalStore:setResume %o", resume)
-                set({ resume })
-            },
-
             isPendingLogin: false,
             setIsPendingLogin: (isPendingLogin) => {
                 debugStore("GlobalStore:setIsPendingLogin %o", isPendingLogin)

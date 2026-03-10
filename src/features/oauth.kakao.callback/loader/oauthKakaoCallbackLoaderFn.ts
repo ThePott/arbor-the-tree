@@ -1,5 +1,5 @@
+import type { Me } from "@/features/profile/type/indes"
 import { headlessInstance } from "@/packages/api/axiosInstances"
-import type { Me } from "@/shared/interfaces"
 import useGlobalStore from "@/shared/store/globalStore"
 import { redirect } from "@tanstack/react-router"
 

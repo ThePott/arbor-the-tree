@@ -1,56 +1,60 @@
 import type { DivProps } from "@/shared/interfaces"
-import { useRef, useState } from "react"
+import { flip, offset, shift, useFloating } from "@floating-ui/react"
+import { useEffect, useRef } from "react"
 import SelectContent from "./_SelectContent"
 import SelectOption from "./_SelectOption"
+import { SelectProvider, useSelectStore, type SelectPassedProps } from "./_selectStore"
 import SelectTrigger from "./_SelectTrigger"
-import { SelectContext } from "./_useSelectContext"
 
 // NOTE: onSelect는 이미 있는 이름이라 쓰면 안 됨
-interface WithSelectProps {
+export type WithSelectProps = {
     onOptionSelect: (value: string | number) => void
     isInDanger?: boolean
-    value?: string | number
-    label?: string
-    defaultLabel?: string
+    defaultOption?: { label: string; value: string | number }
+    disabled?: boolean
 }
 
-/**
- * NOTE: MUST USE `value`, `label`, and as key
- * */
+const WrappedSelect = (props: Omit<DivProps, "className">) => {
+    const { children, ...rest } = props
+
+    const setFloatinReturns = useSelectStore((state) => state.setFloatingReturns)
+
+    const floatingReturns = useFloating({
+        middleware: [flip(), shift(), offset(4)],
+        placement: "bottom-start",
+    })
+    useEffect(() => {
+        setFloatinReturns(floatingReturns)
+    }, [floatingReturns])
+
+    return (
+        <div {...rest} className="relative">
+            {children}
+        </div>
+    )
+}
 const Select = ({
     onOptionSelect,
     isInDanger,
-    value,
-    label,
-    defaultLabel,
+    defaultOption,
+    disabled,
     ...props
 }: Omit<DivProps, "classNamee"> & WithSelectProps) => {
     const { children, ...rest } = props
-
-    const [isOpened, setIsOpened] = useState<boolean>(false)
-    const [selectedValue, setSelectedValue] = useState<string | number | null>(value ?? null)
-    const [selectedLabel, setSelectedLabel] = useState<string | null>(label ?? null)
     const triggerRef = useRef<HTMLButtonElement>(null)
 
+    const passedProps: SelectPassedProps = {
+        onOptionSelect,
+        isInDanger,
+        defaultOption,
+        disabled,
+        triggerRef,
+    }
+
     return (
-        <SelectContext
-            value={{
-                onOptionSelect,
-                isOpened,
-                setIsOpened,
-                selectedValue,
-                setSelectedValue,
-                selectedLabel,
-                defaultLabel,
-                setSelectedLabel,
-                triggerRef,
-                isInDanger,
-            }}
-        >
-            <div {...rest} className="relative">
-                {children}
-            </div>
-        </SelectContext>
+        <SelectProvider passedProps={passedProps}>
+            <WrappedSelect {...rest}>{children}</WrappedSelect>
+        </SelectProvider>
     )
 }
 

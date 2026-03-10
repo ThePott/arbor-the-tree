@@ -31,6 +31,7 @@ type Row = {
 }
 const columnHelper = createColumnHelper<Row>()
 const columns = [
+    columnHelper.accessor("assignmentId", { header: "id", cell: ({ getValue }) => getValue() }),
     columnHelper.accessor("created_at", { header: "제작일", cell: ({ getValue }) => makeFromNow(getValue()) }),
     columnHelper.accessor("bookTitleArray", { header: "문제집", cell: ({ getValue }) => getValue().join(", ") }),
     columnHelper.accessor("questionCount", { header: "문항 수", cell: ({ getValue }) => getValue() }),

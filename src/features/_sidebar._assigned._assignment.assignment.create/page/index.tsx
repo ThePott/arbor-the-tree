@@ -48,16 +48,16 @@ const ReviewAssignmentCreatePage = () => {
         queryKey: ["reviewAssignmentCreate", classroom_id, student_id],
         params: { classroom_id, student_id },
         update: ({ previous }) => previous,
+        additionalOnSetteled: (client) => client.invalidateQueries({ queryKey: ["reviewAssignment"] }),
     })
 
     const rowArray = useMemo(() => convertDataToRowArray(queryData ?? loaderData), [queryData, loaderData])
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ columns, data: rowArray, getCoreRowModel: getCoreRowModel() })
 
-    const {
-        extendedStudentArray: { studentArray },
-    } = useLoaderData({ from: "/_sidebar" })
-    const student = studentArray.find((el) => el.id === student_id)
+    const sidebarLoaderData = useLoaderData({ from: "/_sidebar" })
+    const studentArray = sidebarLoaderData?.extendedStudentArray?.studentArray
+    const student = studentArray?.find((el) => el.id === student_id)
     const title = `${student?.users.name} / 오답 과제 제작`
 
     const handleClick = () => {

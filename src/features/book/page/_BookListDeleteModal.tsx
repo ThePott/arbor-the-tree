@@ -1,10 +1,8 @@
 import Modal from "@/packages/Modal"
-import { debugRender } from "@/shared/config/debug/"
 import useBookListStore from "./_bookListStore"
 import useBookListMutation from "./_useBookListMutation"
 
 const BookListDeleteModal = () => {
-    debugRender("BookListDeleteModal")
     const modalKey = useBookListStore((state) => state.modalKey)
     const selectedBook = useBookListStore((state) => state.selectedBook)
     const setModalKey = useBookListStore((state) => state.setModalKey)
@@ -28,7 +26,7 @@ const BookListDeleteModal = () => {
                 </Modal.Button>
                 <Modal.Button
                     role="destruct"
-                    onClick={() => deleteMutation.mutate({ id: selectedBook?.id ?? "-1" })}
+                    onClick={() => deleteMutation.mutate({ body: undefined, additionalData: undefined })}
                     isPending={deleteMutation.isPending}
                 >
                     삭제

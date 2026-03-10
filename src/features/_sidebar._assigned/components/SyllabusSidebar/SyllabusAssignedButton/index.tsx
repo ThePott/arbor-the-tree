@@ -1,12 +1,13 @@
 import useProgressStore from "@/features/_sidebar._assigned._progress.progress/store"
 import type { AssignedJoinedSyllabus } from "@/features/_sidebar._assigned._progress.progress/types"
+import { checkIsAllowed } from "@/shared/utils/check-is-allowed"
 import { getRouteApi, useLocation, useNavigate } from "@tanstack/react-router"
 import SidebarButton from "../SidebarButton"
 
 const route = getRouteApi("/_sidebar")
 
 export type SyllabusAssignedButtonProps = {
-    assignedJoinedSyllabus: AssignedJoinedSyllabus | null
+    assignedJoinedSyllabus: AssignedJoinedSyllabus
     isDeletable?: boolean
 }
 // TODO: 이거 이용해서 삭제 버튼을 넣었을텐데 없어졌다
@@ -30,6 +31,8 @@ const SyllabusAssignedButton = ({ assignedJoinedSyllabus, isDeletable }: Syllabu
     }
 
     const isSelected = searchParams.syllabus_id === assignedJoinedSyllabus?.syllabus.id
+    const isAllowed = checkIsAllowed("PRINCIPAL")
+    const isXVisible = isDeletable && Boolean(classroom_id) !== Boolean(student_id) && isAllowed
 
     return (
         <SidebarButton isSelected={isSelected} onClick={handleBodyClick}>
@@ -37,9 +40,7 @@ const SyllabusAssignedButton = ({ assignedJoinedSyllabus, isDeletable }: Syllabu
                 <p>{assignedJoinedSyllabus ? assignedJoinedSyllabus.syllabus.book.title : "전체"}</p>
                 <p className="text-fg-dim text-my-xs">{assignedJoinedSyllabus?.syllabus.created_at.slice(0, 10)}</p>
             </SidebarButton.TextSection>
-            {isDeletable && assignedJoinedSyllabus && Boolean(classroom_id) !== Boolean(student_id) && (
-                <SidebarButton.XButton onClick={handleDeleteClick} />
-            )}
+            {isXVisible && <SidebarButton.XButton onClick={handleDeleteClick} />}
         </SidebarButton>
     )
 }

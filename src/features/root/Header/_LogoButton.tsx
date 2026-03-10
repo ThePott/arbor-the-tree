@@ -9,7 +9,7 @@ const Logo = () => {
     }
 
     return (
-        <button className="text-my-lg cursor-pointer tracking-[18px]" onClick={handleClick}>
+        <button className="text-my-lg cursor-pointer tracking-[18px] mr-auto" onClick={handleClick}>
             ARBOR
         </button>
     )
