@@ -4,7 +4,7 @@ import Dropdown from "@/packages/components/Dropdown"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import type { SessionStatus } from "@/shared/interfaces"
 import type { ReviewAssignmentResponseData } from "@/shared/queryOptions/reviewAssignmentQueryOptions"
-import { checkIsBeforeToday, isSameDay, makeFromNow } from "@/shared/utils/dateManipulations"
+import { checkIsBeforeToday, makeFromNow } from "@/shared/utils/dateManipulations"
 import { getRouteApi } from "@tanstack/react-router"
 import { Ellipsis } from "lucide-react"
 import StatusCompletenessBox from "../../ColumnWithBoxes/StatusCompletenessBox"
@@ -78,8 +78,12 @@ const AssignmentSessionDropdown = ({ assignmentWithMetaInfo: { id, status } }: A
 
 type AssignmentSessionProps = { assignmentWithMetaInfo: ReviewAssignmentWithMetaInfo }
 const AssignmentSession = ({ assignmentWithMetaInfo }: AssignmentSessionProps) => {
-    const { created_at, assigned_at, completed_at, questionCount } = assignmentWithMetaInfo
+    const { created_at, assigned_at, completed_at, questionCount, id } = assignmentWithMetaInfo
 
+    const completedText = completed_at ? ` / ${makeFromNow(completed_at)} 완료` : null
+    const assignedText = assigned_at ? ` / ${makeFromNow(assigned_at)} 할당` : null
+    const questionCountText = `${questionCount} 문제`
+    const subText = `${questionCountText}${completedText ?? assignedText ?? ""}`
     return (
         <StatusCompletenessBox
             isCompleted={Boolean(completed_at)}
@@ -88,18 +92,13 @@ const AssignmentSession = ({ assignmentWithMetaInfo }: AssignmentSessionProps) =
             onClick={() => {}}
         >
             <StatusCompletenessBox.LabelGroup>
-                <StatusCompletenessBox.Label role="main">{`${makeFromNow(created_at)} 제작 __${questionCount} 문제`}</StatusCompletenessBox.Label>
-                {assigned_at && !isSameDay(created_at, assigned_at) && (
-                    <StatusCompletenessBox.Label role="conditional">{`${makeFromNow(assigned_at)} 할당`}</StatusCompletenessBox.Label>
-                )}
+                <StatusCompletenessBox.Label role="main">{`${created_at.slice(0, 10)} / id: ${id}`}</StatusCompletenessBox.Label>
                 {assignmentWithMetaInfo.bookTitleArray.map((bookTitle) => (
                     <StatusCompletenessBox.Label key={bookTitle} role="conditional">
                         {`- ${bookTitle}`}
                     </StatusCompletenessBox.Label>
                 ))}
-                {completed_at && (
-                    <StatusCompletenessBox.Label role="sub">{`${makeFromNow(completed_at)} 완료`}</StatusCompletenessBox.Label>
-                )}
+                <StatusCompletenessBox.Label role="sub">{subText}</StatusCompletenessBox.Label>
             </StatusCompletenessBox.LabelGroup>
             <AssignmentSessionDropdown assignmentWithMetaInfo={assignmentWithMetaInfo} />
         </StatusCompletenessBox>
