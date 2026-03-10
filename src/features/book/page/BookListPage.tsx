@@ -1,5 +1,6 @@
 import Button from "@/packages/components/Button/Button"
 import { Container, FlexOneContainer, Hstack, Vstack } from "@/packages/components/layouts"
+import Title from "@/packages/components/Title/Title"
 import useGlobalStore from "@/shared/store/globalStore"
 import { useQuery } from "@tanstack/react-query"
 import { useLoaderData, useNavigate } from "@tanstack/react-router"
@@ -19,11 +20,11 @@ const BookListPage = () => {
         <>
             <FlexOneContainer isYScrollable={isBodyScrollable} className="h-full [scrollbar-gutter:stable]">
                 <Container width="lg" isPadded>
-                    <Vstack gap="xl">
-                        <Hstack className="justify-between">
-                            <h1 className="text-my-xl font-semibold">문제집 관리</h1>
+                    <Vstack gap="lg">
+                        <Hstack className="justify-between items-end">
+                            <Title as="h1">문제집 등록 / 삭제</Title>
                             <Button color="green" onClick={() => navigate({ to: "/book/write" })}>
-                                문제집 추가
+                                문제집 등록
                             </Button>
                         </Hstack>
                         <BookListTable bookArray={queryData ?? loaderData} />

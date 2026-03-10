@@ -11,7 +11,7 @@ const ManageDeletePage = () => {
             <Container width="xl" isPadded>
                 <RoundBox radius="lg" isShadowed color="bg2" padding="xl">
                     <Vstack gap="lg">
-                        <Title as="h1">권한 관리</Title>
+                        <Title as="h1">권한 삭제</Title>
                         <ManageDeleteTable />
                     </Vstack>
                 </RoundBox>

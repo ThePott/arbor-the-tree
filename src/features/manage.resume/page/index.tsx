@@ -9,7 +9,7 @@ const ManageResumePage = () => {
             <Container width="xl" isPadded>
                 <RoundBox color="bg2" padding="xl" radius="lg" isShadowed>
                     <Vstack gap="lg">
-                        <Title as="h1">지원 현황</Title>
+                        <Title as="h1">권한 요청 현황</Title>
                         <ManageResumeTable />
                     </Vstack>
                 </RoundBox>
