@@ -141,6 +141,7 @@ const StatusCompletenessBox = ({
     const isBgBright = !isCompleted && (isHomework || isNewToday)
 
     const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        if (disabled) return
         const target = event.target as HTMLElement
         if (target.closest("[data-dropdown]")) return
         onClick?.(event)

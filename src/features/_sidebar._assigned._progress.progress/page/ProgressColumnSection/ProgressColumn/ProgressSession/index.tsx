@@ -1,7 +1,6 @@
 import type { ConciseSession } from "@/features/_sidebar._assigned._progress.progress/types"
 import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown"
-import { debugRender } from "@/shared/config/debug/"
 import { checkIsBeforeToday, makeFromNow } from "@/shared/utils/dateManipulations"
 import { getRouteApi } from "@tanstack/react-router"
 import { Ellipsis } from "lucide-react"
@@ -93,12 +92,7 @@ export type ProgressSessionProps = {
     startingTopicTitle: string
 }
 const ProgressSession = (props: ProgressSessionProps) => {
-    debugRender(
-        "ProgressSession %s status=%s completed_at=%s",
-        props.conciseSession.id,
-        props.conciseSession.status,
-        props.conciseSession.completed_at
-    )
+    const { classroom_id, student_id } = route.useSearch()
     const { conciseSession, startingTopicTitle, syllabus_id } = props
     const { status, assigned_at } = conciseSession
 
@@ -110,6 +104,7 @@ const ProgressSession = (props: ProgressSessionProps) => {
 
     return (
         <StatusCompletenessBox
+            disabled={Boolean(classroom_id) === Boolean(student_id)}
             isCompleted={isCompleted}
             isOld={assigned_at ? checkIsBeforeToday(assigned_at) : false}
             status={status ?? "default"}
@@ -127,13 +122,15 @@ const ProgressSession = (props: ProgressSessionProps) => {
                 )}
                 <StatusCompletenessBox.Label role="sub">{dateInfoText}</StatusCompletenessBox.Label>
             </StatusCompletenessBox.LabelGroup>
-            <ProgressSessionDropdown
-                startingTopicTitle={startingTopicTitle}
-                syllabus_id={syllabus_id}
-                conciseSession={conciseSession}
-                mutatePostStatus={mutatePostStatus}
-                mutateDeleteStatus={mutateDeleteStatus}
-            />
+            {Boolean(classroom_id) !== Boolean(student_id) && (
+                <ProgressSessionDropdown
+                    startingTopicTitle={startingTopicTitle}
+                    syllabus_id={syllabus_id}
+                    conciseSession={conciseSession}
+                    mutatePostStatus={mutatePostStatus}
+                    mutateDeleteStatus={mutateDeleteStatus}
+                />
+            )}
         </StatusCompletenessBox>
     )
 }
