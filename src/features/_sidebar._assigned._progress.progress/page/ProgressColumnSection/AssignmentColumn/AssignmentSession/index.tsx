@@ -32,6 +32,9 @@ const AssignmentSessionDropdown = ({ assignmentWithMetaInfo: { id, status } }: A
             )
             return newData
         },
+        additionalOnSetteled: (client) => {
+            client.invalidateQueries({ queryKey: ["reviewCheckAssignment", classroom_id, student_id] })
+        },
     })
 
     return (
