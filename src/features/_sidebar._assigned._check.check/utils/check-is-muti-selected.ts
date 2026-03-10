@@ -1,11 +1,11 @@
 import useReviewCheckStore from "../store"
 import type { IndexInfo } from "../types"
 
-type checkIsBigger = {
+type CheckGeqProps = {
     big: IndexInfo
     small: IndexInfo
 }
-const checkGEQ = ({ big, small }: checkIsBigger): boolean => {
+const checkGeq = ({ big, small }: CheckGeqProps): boolean => {
     if (big.titleIndex > small.titleIndex) return true
     if (big.titleIndex < small.titleIndex) return false
 
@@ -13,16 +13,6 @@ const checkGEQ = ({ big, small }: checkIsBigger): boolean => {
     if (big.subtitleIndex < small.subtitleIndex) return false
 
     if (big.checkboxIndex >= small.checkboxIndex) return true
-    return false
-}
-const checkLEQ = ({ big, small }: checkIsBigger): boolean => {
-    if (big.titleIndex < small.titleIndex) return true
-    if (big.titleIndex > small.titleIndex) return false
-
-    if (big.subtitleIndex < small.subtitleIndex) return true
-    if (big.subtitleIndex > small.subtitleIndex) return false
-
-    if (big.checkboxIndex <= small.checkboxIndex) return true
     return false
 }
 
@@ -52,8 +42,8 @@ export const checkIsMultiSelected = (indexInfo: IndexInfo): boolean => {
 
     const first = sortedRecentReviewCheckInfoArray[0]
     const second = sortedRecentReviewCheckInfoArray[1]
-    const isGeqThanFirst = checkGEQ({ small: first, big: indexInfo })
-    const isLeqThanSecond = checkGEQ({ small: indexInfo, big: second })
+    const isGeqThanFirst = checkGeq({ small: first, big: indexInfo })
+    const isLeqThanSecond = checkGeq({ small: indexInfo, big: second })
 
     return isGeqThanFirst && isLeqThanSecond
 }
