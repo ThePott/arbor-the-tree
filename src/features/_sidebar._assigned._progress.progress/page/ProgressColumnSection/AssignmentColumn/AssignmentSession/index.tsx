@@ -86,6 +86,7 @@ const AssignmentSession = ({ assignmentWithMetaInfo }: AssignmentSessionProps) =
     const subText = `${questionCountText}${completedText ?? assignedText ?? ""}`
     return (
         <StatusCompletenessBox
+            disabled={Boolean(completed_at)}
             isCompleted={Boolean(completed_at)}
             status={assignmentWithMetaInfo.status ?? "default"}
             isOld={assigned_at ? checkIsBeforeToday(assigned_at) : false}
@@ -100,7 +101,7 @@ const AssignmentSession = ({ assignmentWithMetaInfo }: AssignmentSessionProps) =
                 ))}
                 <StatusCompletenessBox.Label role="sub">{subText}</StatusCompletenessBox.Label>
             </StatusCompletenessBox.LabelGroup>
-            <AssignmentSessionDropdown assignmentWithMetaInfo={assignmentWithMetaInfo} />
+            {!completed_at && <AssignmentSessionDropdown assignmentWithMetaInfo={assignmentWithMetaInfo} />}
         </StatusCompletenessBox>
     )
 }
