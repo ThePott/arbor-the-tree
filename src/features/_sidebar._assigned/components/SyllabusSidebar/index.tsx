@@ -13,10 +13,9 @@ const commonSidebarRoute = getRouteApi("/_sidebar")
 
 const SyllabusSidebarAllButton = () => {
     const { student_id, classroom_id } = commonSidebarRoute.useSearch()
-    const { assignedJoinedSyllabusArray: loaderDataSyllabus, assignmentMetaInfoArray: loaderDataAssignment } =
-        useLoaderData({
-            from: "/_sidebar/_assigned",
-        })
+    const loaderData = useLoaderData({
+        from: "/_sidebar/_assigned",
+    })
 
     const { data: queryDataSyllabus } = useQuery({
         ...makeProgressSyllabusAssignedQueryOptions({ classroom_id, student_id }),
@@ -27,10 +26,9 @@ const SyllabusSidebarAllButton = () => {
         enabled: Boolean(student_id),
     })
 
-    const dataSyllabus = queryDataSyllabus ?? loaderDataSyllabus
-    const dataAssignment = queryDataAssignment ?? loaderDataAssignment
-
-    if (dataAssignment.length === 0 && dataSyllabus.length === 0) return null
+    const dataSyllabus = queryDataSyllabus ?? loaderData?.assignedJoinedSyllabusArray ?? []
+    const dataAssignment = queryDataAssignment ?? loaderData?.assignmentMetaInfoArray ?? []
+    if (dataSyllabus.length === 0 && dataAssignment.length === 0) return null
 
     return <AllButton />
 }
@@ -40,8 +38,7 @@ type SyllabusSidebarButtonManyProps = {
 }
 const SyllabusSidebarButtonMany = ({ isDeletable }: SyllabusSidebarButtonManyProps) => {
     const { student_id, classroom_id } = commonSidebarRoute.useSearch()
-    const { assignedJoinedSyllabusArray: loaderDataSyllabus, assignmentMetaInfoArray: loaderDataAssignment } =
-        useLoaderData({ from: "/_sidebar/_assigned" })
+    const loaderData = useLoaderData({ from: "/_sidebar/_assigned" })
 
     const { data: queryDataSyllabus } = useQuery({
         ...makeProgressSyllabusAssignedQueryOptions({ classroom_id, student_id }),
@@ -52,8 +49,8 @@ const SyllabusSidebarButtonMany = ({ isDeletable }: SyllabusSidebarButtonManyPro
         enabled: Boolean(student_id),
     })
 
-    const dataSyllabus = queryDataSyllabus ?? loaderDataSyllabus
-    const dataAssignment = queryDataAssignment ?? loaderDataAssignment
+    const dataSyllabus = queryDataSyllabus ?? loaderData?.assignedJoinedSyllabusArray ?? []
+    const dataAssignment = queryDataAssignment ?? loaderData?.assignmentMetaInfoArray ?? []
 
     if (!student_id && !classroom_id) return null
 
@@ -85,12 +82,14 @@ type SyllabusSidebarProps = {
 }
 const SyllabusSidebar = ({ children }: SyllabusSidebarProps) => {
     const { student_id, classroom_id } = commonSidebarRoute.useSearch()
-    const {
-        extendedStudentArray: { studentArray, classroomArray },
-    } = useLoaderData({ from: "/_sidebar" })
+    const loaderData = useLoaderData({ from: "/_sidebar" })
 
-    const classroom = classroomArray.find((el) => el.id === classroom_id)
-    const student = studentArray.find((el) => el.id === student_id)
+    const classroom = loaderData
+        ? loaderData.extendedStudentArray.classroomArray.find((el) => el.id === classroom_id)
+        : undefined
+    const student = loaderData
+        ? loaderData.extendedStudentArray.studentArray.find((el) => el.id === student_id)
+        : undefined
     const title = [classroom?.name, student?.users.name].filter((value) => value).join(" / ")
 
     if (!student_id && !classroom_id) return null

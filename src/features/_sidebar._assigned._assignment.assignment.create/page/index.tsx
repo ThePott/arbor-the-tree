@@ -55,10 +55,9 @@ const ReviewAssignmentCreatePage = () => {
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({ columns, data: rowArray, getCoreRowModel: getCoreRowModel() })
 
-    const {
-        extendedStudentArray: { studentArray },
-    } = useLoaderData({ from: "/_sidebar" })
-    const student = studentArray.find((el) => el.id === student_id)
+    const sidebarLoaderData = useLoaderData({ from: "/_sidebar" })
+    const studentArray = sidebarLoaderData?.extendedStudentArray?.studentArray
+    const student = studentArray?.find((el) => el.id === student_id)
     const title = `${student?.users.name} / 오답 과제 제작`
 
     const handleClick = () => {

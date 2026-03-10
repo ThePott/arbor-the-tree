@@ -57,8 +57,10 @@ const pathnameToTitleText: Record<string, string> = {
 }
 
 const ClassroomSidebar = () => {
-    const { extendedStudentArray } = useLoaderData({ from: "/_sidebar" })
-    const { classroomWithStudentArray, isolatedStudentArray } = groupByClassroom(extendedStudentArray)
+    const loaderData = useLoaderData({ from: "/_sidebar" })
+    const { classroomWithStudentArray, isolatedStudentArray } = loaderData
+        ? groupByClassroom(loaderData.extendedStudentArray)
+        : { classroomWithStudentArray: [], isolatedStudentArray: [] }
 
     const { pathname } = useLocation()
     const titleText = pathnameToTitleText[pathname]

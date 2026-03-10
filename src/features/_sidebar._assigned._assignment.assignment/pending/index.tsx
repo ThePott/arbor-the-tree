@@ -6,7 +6,7 @@ const ReviewAssignmentPending = () => {
     return (
         <Container isPadded>
             <RoundBox radius="lg" isShadowed>
-                <Skeleton heightInPixel={352} />
+                <Skeleton heightInPixel={300} />
             </RoundBox>
         </Container>
     )
