@@ -1,4 +1,6 @@
 import type { AssignedJoinedSyllabus } from "@/features/_sidebar._assigned._progress.progress/types"
+import type { ExtendedSyllabus } from "@/features/_sidebar/types"
+import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import Labeled from "@/packages/components/Labeled/Labeled"
 import { Hstack } from "@/packages/components/layouts"
@@ -6,8 +8,8 @@ import LocalAutoComplete from "@/packages/components/LocalAutoComplete"
 import { ClientError } from "@/shared/error/clientError"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useQueryClient } from "@tanstack/react-query"
-import { getRouteApi, useLoaderData } from "@tanstack/react-router"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { getRouteApi } from "@tanstack/react-router"
 import { Plus } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
 import z from "zod/v3"
@@ -20,11 +22,18 @@ type PostBody = {
 
 const route = getRouteApi("/_sidebar")
 const SyllabusForm = () => {
-    const loaderData = useLoaderData({ from: "/_sidebar/_assigned/_progress" })
-    const extendedSyllabusArray = loaderData?.extendedSyllabusArray ?? []
-    const queryClient = useQueryClient()
     const searchParams = route.useSearch()
     const { student_id, classroom_id } = searchParams
+    const { data: queryData } = useQuery({
+        queryKey: ["progressSyllabus"],
+        queryFn: async () => {
+            const response = await instance.get("/progress/syllabus")
+            return response.data as ExtendedSyllabus[]
+        },
+    })
+    const extendedSyllabusArray = queryData ?? []
+
+    const queryClient = useQueryClient()
     const data = queryClient.getQueryData(["progressSyllabusAssigned", student_id, classroom_id]) as
         | AssignedJoinedSyllabus[]
         | null
