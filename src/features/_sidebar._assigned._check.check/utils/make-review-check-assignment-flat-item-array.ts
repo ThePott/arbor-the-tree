@@ -7,11 +7,9 @@ export const makeReviewCheckAssignmentFlatItemArray = (
 ): AssignmentFlatItem[] => {
     if (!queryData) return []
     const flatItemArray = queryData.flatMap((assignment, titleIndex) => {
-        const bookTitleArray = assignment.books.map(({ title }) => title)
-        const questions = assignment.books.flatMap(({ questions }) => questions)
         const titleHeader: AssignmentFlatItem = {
             forWhat: "title",
-            title: `${assignment.created_at.slice(0, 10)} __${bookTitleArray.join(", ")} (${questions.length}문제)`,
+            title: `${assignment.created_at.slice(0, 10)} / id: ${assignment.id}`,
         }
         const subtitleHeaderGroupArray = assignment.books.flatMap((book, subtitleIndex) => {
             const subtitleHeader: AssignmentFlatItem = { forWhat: "subtitle", title: book.title }
