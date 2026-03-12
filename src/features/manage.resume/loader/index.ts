@@ -1,14 +1,11 @@
 import { instance } from "@/packages/api/axiosInstances"
-import useGlobalStore from "@/shared/store/globalStore"
 import type { QueryClient } from "@tanstack/react-query"
 import type { ExtendedResume } from "../types"
 
 export const manageResumeQueryOptions = {
     queryKey: ["resume"],
     queryFn: async () => {
-        const me = useGlobalStore.getState().me
-        // Note: Authorization is checked in beforeLoad, me is guaranteed to exist here
-        const response = await instance.get(`/auth/resume/user/${me!.id}`)
+        const response = await instance.get(`/auth/resume`)
         const extendedResumeArray = response.data as ExtendedResume[]
         return extendedResumeArray
     },
