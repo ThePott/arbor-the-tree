@@ -72,7 +72,7 @@ const LocalAutoCompleteContent = () => {
                 style={floatingReturns?.floatingStyles}
                 color="bg3"
                 padding="md"
-                className={clsx("max-h-[200px] overflow-y-auto", isWidthMatching && "w-full")}
+                className={clsx("max-h-[200px] overflow-y-auto z-100", isWidthMatching && "w-full")}
                 isBordered
             >
                 <Vstack gap="none">
