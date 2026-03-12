@@ -1,10 +1,10 @@
 import Modal from "@/packages/Modal"
-import useBookWriteStore from "../bookWriteStore/bookWriteStore"
+import useAssignmentCreateStore from "../../store"
 
-const BWErrorModal = () => {
-    const setModalKey = useBookWriteStore((state) => state.setModalKey)
-    const modalKey = useBookWriteStore((state) => state.modalKey)
-    const mutationError = useBookWriteStore((state) => state.mutationError)
+const AssignmentCreateModalError = () => {
+    const setModalKey = useAssignmentCreateStore((state) => state.setModalKey)
+    const modalKey = useAssignmentCreateStore((state) => state.modalKey)
+    const mutationError = useAssignmentCreateStore((state) => state.mutationError)
 
     return (
         <Modal isOn={modalKey === "error"} onBackdropClick={() => setModalKey(null)}>
@@ -19,4 +19,4 @@ const BWErrorModal = () => {
     )
 }
 
-export default BWErrorModal
+export default AssignmentCreateModalError

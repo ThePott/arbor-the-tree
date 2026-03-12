@@ -52,7 +52,7 @@ const Sidebar = () => {
                                     </Button>
                                 </Hstack>
 
-                                {checkIsAllowed("PRINCIPAL") && (
+                                {checkIsAllowed("HELPER") && (
                                     <Labeled>
                                         <Labeled.Header>인원 관리</Labeled.Header>
                                         <RoundBox isBordered padding="md">
@@ -68,17 +68,19 @@ const Sidebar = () => {
                                                 >
                                                     권한 요청 현황
                                                 </Button>
-                                                <Button
-                                                    color="transparent"
-                                                    border="onHover"
-                                                    isOnLeft
-                                                    onClick={() => {
-                                                        setIsSidebarOn(false)
-                                                        navigate({ to: "/manage/delete" })
-                                                    }}
-                                                >
-                                                    권한 삭제
-                                                </Button>
+                                                {checkIsAllowed("PRINCIPAL") && (
+                                                    <Button
+                                                        color="transparent"
+                                                        border="onHover"
+                                                        isOnLeft
+                                                        onClick={() => {
+                                                            setIsSidebarOn(false)
+                                                            navigate({ to: "/manage/delete" })
+                                                        }}
+                                                    >
+                                                        권한 삭제
+                                                    </Button>
+                                                )}
                                             </Vstack>
                                         </RoundBox>
                                     </Labeled>
