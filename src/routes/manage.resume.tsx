@@ -9,7 +9,7 @@ export const Route = createFileRoute("/manage/resume")({
     component: ManageResumePage,
     pendingComponent: ManageResumePending,
     beforeLoad: () => {
-        if (!checkIsAllowed("PRINCIPAL")) {
+        if (!checkIsAllowed("HELPER")) {
             throw ClientError.Unauthorized("이 페이지에 접근할 권한이 없습니다", {
                 to: "/",
                 label: "홈으로 이동",
