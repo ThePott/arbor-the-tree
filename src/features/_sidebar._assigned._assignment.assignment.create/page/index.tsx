@@ -5,9 +5,11 @@ import RoundBox from "@/packages/components/RoundBox"
 import TanstackTable from "@/packages/components/TanstackTable"
 import Title from "@/packages/components/Title/Title"
 import { ClientError } from "@/shared/error/clientError"
+import type { ApiError } from "@/shared/interfaces"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
+import type { AxiosError } from "axios"
 import { useMemo } from "react"
 import { makeReviewAssignmentCreateQueryOptions, type ReviewAssignmentCreateResponseData } from "../loader"
 import useAssignmentCreateStore from "../store"
@@ -40,6 +42,7 @@ const convertDataToRowArray = (data: ReviewAssignmentCreateResponseData | undefi
 const route = getRouteApi("/_sidebar")
 const ReviewAssignmentCreatePage = () => {
     const setModalKey = useAssignmentCreateStore((state) => state.setModalKey)
+    const setMutationError = useAssignmentCreateStore((state) => state.setMutationError)
     const { classroom_id, student_id } = route.useSearch()
     const { assignmentCandidateMetaInfoArray: loaderData } = useLoaderData({
         from: "/_sidebar/_assigned/_assignment/assignment/create/",
@@ -48,8 +51,14 @@ const ReviewAssignmentCreatePage = () => {
     const { mutate, isPending } = useMutation({
         mutationFn: ({ body }: { body: { book_ids: string[] } }) =>
             instance.post("/review/assignment/create", body, { params: { classroom_id, student_id } }),
-        onSuccess: () => setModalKey("success"),
-        onError: () => setModalKey("error"),
+        onSuccess: () => {
+            setModalKey("success")
+            setMutationError(null)
+        },
+        onError: (error) => {
+            setModalKey("error")
+            setMutationError(error as AxiosError<ApiError>)
+        },
         onSettled: (_data, _error, _variables, _onMutateResult, context) => {
             context.client.invalidateQueries({ queryKey: ["reviewAssignment"] })
             context.client.invalidateQueries({ queryKey: ["reviewAssignmentCreate"] })
