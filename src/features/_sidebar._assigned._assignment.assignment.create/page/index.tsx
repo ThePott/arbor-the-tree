@@ -1,16 +1,18 @@
+import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import { Container, Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
 import TanstackTable from "@/packages/components/TanstackTable"
 import Title from "@/packages/components/Title/Title"
-import Toggle from "@/packages/components/Toggle"
 import { ClientError } from "@/shared/error/clientError"
-import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { getRouteApi, useLoaderData } from "@tanstack/react-router"
 import { createColumnHelper, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import { useMemo } from "react"
 import { makeReviewAssignmentCreateQueryOptions, type ReviewAssignmentCreateResponseData } from "../loader"
+import useAssignmentCreateStore from "../store"
+import AssignmentCreateModalError from "./AssignmentCreateModalError"
+import AssignmentCreateModalSuccess from "./AssignmentCreateModalSuccess"
 
 type Row = {
     bookTitle: string
@@ -18,7 +20,7 @@ type Row = {
 }
 const columnHelper = createColumnHelper<Row>()
 const columns = [
-    columnHelper.display({ header: "포함", cell: () => <Toggle onChange={() => {}} /> }),
+    // columnHelper.display({ header: "포함", cell: () => <Toggle onChange={() => {}} /> }),
     columnHelper.accessor("bookTitle", { header: "문제집", cell: ({ getValue }) => getValue() }),
     columnHelper.accessor("questionCount", { header: "문항 수", cell: ({ getValue }) => getValue() }),
 ]
@@ -37,18 +39,21 @@ const convertDataToRowArray = (data: ReviewAssignmentCreateResponseData | undefi
 
 const route = getRouteApi("/_sidebar")
 const ReviewAssignmentCreatePage = () => {
+    const setModalKey = useAssignmentCreateStore((state) => state.setModalKey)
     const { classroom_id, student_id } = route.useSearch()
     const { assignmentCandidateMetaInfoArray: loaderData } = useLoaderData({
         from: "/_sidebar/_assigned/_assignment/assignment/create/",
     })
     const { data: queryData } = useQuery(makeReviewAssignmentCreateQueryOptions({ classroom_id, student_id }))
-    const { mutate } = useSimpleMutation({
-        method: "post",
-        url: "/review/assignment/create",
-        queryKey: ["reviewAssignmentCreate", classroom_id, student_id],
-        params: { classroom_id, student_id },
-        update: ({ previous }) => previous,
-        additionalOnSetteled: (client) => client.invalidateQueries({ queryKey: ["reviewAssignment"] }),
+    const { mutate, isPending } = useMutation({
+        mutationFn: ({ body }: { body: { book_ids: string[] } }) =>
+            instance.post("/review/assignment/create", body, { params: { classroom_id, student_id } }),
+        onSuccess: () => setModalKey("success"),
+        onError: () => setModalKey("error"),
+        onSettled: (_data, _error, _variables, _onMutateResult, context) => {
+            context.client.invalidateQueries({ queryKey: ["reviewAssignment"] })
+            context.client.invalidateQueries({ queryKey: ["reviewAssignmentCreate"] })
+        },
     })
 
     const rowArray = useMemo(() => convertDataToRowArray(queryData ?? loaderData), [queryData, loaderData])
@@ -69,7 +74,6 @@ const ReviewAssignmentCreatePage = () => {
             body: {
                 book_ids,
             },
-            additionalData: undefined,
         })
     }
 
@@ -79,30 +83,36 @@ const ReviewAssignmentCreatePage = () => {
     }
 
     return (
-        <Container isPadded>
-            <RoundBox padding="xl" radius="lg" isShadowed color="bg0">
-                <Vstack>
-                    <Title as="h1">{title}</Title>
+        <>
+            <Container isPadded>
+                <RoundBox padding="xl" radius="lg" isShadowed color="bg0">
+                    <Vstack>
+                        <Title as="h1">{title}</Title>
 
-                    {rowArray.length > 0 && (
-                        <>
-                            <TanstackTable table={table} />
+                        {rowArray.length > 0 && (
+                            <>
+                                <TanstackTable table={table} />
 
-                            <Hstack>
-                                <Button padding="wide" border="always" color="transparent">
-                                    미리 보기
-                                </Button>
-                                <Button padding="wide" color="green" onClick={handleClick}>
-                                    제작
-                                </Button>
-                            </Hstack>
-                        </>
-                    )}
-                    {/* TODO: 여기 제대로 만들어야 */}
-                    {rowArray.length === 0 && <p>오답 과제로 만들 게 없어요</p>}
-                </Vstack>
-            </RoundBox>
-        </Container>
+                                <Hstack className="justify-end">
+                                    <Button
+                                        color="green"
+                                        onClick={handleClick}
+                                        status={isPending ? "pending" : "enabled"}
+                                    >
+                                        제작
+                                    </Button>
+                                </Hstack>
+                            </>
+                        )}
+                        {/* TODO: 여기 제대로 만들어야 */}
+                        {rowArray.length === 0 && <p>오답 과제로 만들 게 없어요</p>}
+                    </Vstack>
+                </RoundBox>
+            </Container>
+
+            <AssignmentCreateModalSuccess />
+            <AssignmentCreateModalError />
+        </>
     )
 }
 

@@ -24,8 +24,10 @@ export const useReviewCheckMutateForAssignment = () => {
         queryKey: ["reviewCheckAssignment", classroom_id, student_id],
         params: searchParams,
         update: ({ previous }) => previous,
-        additionalOnSetteled: (client) =>
-            client.invalidateQueries({ queryKey: ["progressSession", classroom_id, student_id] }),
+        additionalOnSetteled: (client) => {
+            client.invalidateQueries({ queryKey: ["progressSession", classroom_id, student_id] })
+            client.invalidateQueries({ queryKey: ["reviewAssignmentCreate", classroom_id, student_id] })
+        },
     })
     return { mutate }
 }
