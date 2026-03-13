@@ -2,35 +2,12 @@ import type { ConciseSession } from "@/features/_sidebar._assigned._progress.pro
 import Dropdown from "@/packages/components/Dropdown"
 import { checkIsBeforeToday, makeFromNow } from "@/shared/utils/dateManipulations"
 import { getRouteApi } from "@tanstack/react-router"
-import { cva } from "class-variance-authority"
 import StatusCompletenessBox from "../../ColumnWithBoxes/StatusCompletenessBox"
 import StatusCompletenessBoxDropdown from "../../ColumnWithBoxes/StatusCompletenessBox/StatusCompletenessBoxDropdown"
 import useProgressSession, { type MutateSessionStatus } from "./hooks"
 
 const route = getRouteApi("/_sidebar")
 
-const dropdownTriggerVariants = cva("border border-transparent hover:border-fg-dim", {
-    variants: {
-        status: {
-            HOMEWORK: "",
-            TODAY: "",
-            default: "",
-        },
-        isCompleted: {
-            true: "",
-            false: "",
-        },
-    },
-    // TODO: assigned_at 받고나면 갱신
-    compoundVariants: [
-        // NOTE: 상태 있을 때의 공통 속성: 글씨 관련
-        {
-            status: ["HOMEWORK", "TODAY"],
-            isCompleted: false,
-            className: "hover:border-fg-inverted-dim",
-        },
-    ],
-})
 type ProgressSessionDropdownProps = ProgressSessionProps & {
     mutatePostStatus: MutateSessionStatus
     mutateDeleteStatus: MutateSessionStatus
