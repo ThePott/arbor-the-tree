@@ -1,18 +1,19 @@
 import type { ReviewAssignmentWithMetaInfo } from "@/features/_sidebar._assigned._assignment.assignment/type"
-import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown"
 import useSimpleMutation from "@/shared/hooks/useSimpleMutation"
 import type { SessionStatus } from "@/shared/interfaces"
 import type { ReviewAssignmentResponseData } from "@/shared/queryOptions/reviewAssignmentQueryOptions"
 import { checkIsBeforeToday, makeFromNow } from "@/shared/utils/dateManipulations"
 import { getRouteApi } from "@tanstack/react-router"
-import { Ellipsis } from "lucide-react"
 import StatusCompletenessBox from "../../ColumnWithBoxes/StatusCompletenessBox"
+import StatusCompletenessBoxDropdown from "../../ColumnWithBoxes/StatusCompletenessBox/StatusCompletenessBoxDropdown"
 
 const route = getRouteApi("/_sidebar")
 
 type AssignmentSessionDropdownProps = { assignmentWithMetaInfo: ReviewAssignmentWithMetaInfo }
-const AssignmentSessionDropdown = ({ assignmentWithMetaInfo: { id, status } }: AssignmentSessionDropdownProps) => {
+const AssignmentSessionDropdown = ({
+    assignmentWithMetaInfo: { id, status, completed_at },
+}: AssignmentSessionDropdownProps) => {
     const { classroom_id, student_id } = route.useSearch()
     const { mutate } = useSimpleMutation({
         queryKey: ["reviewAssignment", classroom_id, student_id],
@@ -38,44 +39,37 @@ const AssignmentSessionDropdown = ({ assignmentWithMetaInfo: { id, status } }: A
     })
 
     return (
-        <Dropdown>
-            <Dropdown.Trigger>
-                <Button color="transparent" border="onHover" padding="tight">
-                    <Ellipsis size={16} />
-                </Button>
-            </Dropdown.Trigger>
-            <Dropdown.Menu>
-                {status !== "HOMEWORK" && (
-                    <Dropdown.MenuItem
-                        onClick={() =>
-                            mutate({
-                                body: { status: "HOMEWORK" },
-                                additionalData: "HOMEWORK",
-                            })
-                        }
-                    >
-                        숙제
-                    </Dropdown.MenuItem>
-                )}
-                {status !== "TODAY" && (
-                    <Dropdown.MenuItem
-                        onClick={() =>
-                            mutate({
-                                body: { status: "TODAY" },
-                                additionalData: "TODAY",
-                            })
-                        }
-                    >
-                        할당
-                    </Dropdown.MenuItem>
-                )}
-                {status !== null && (
-                    <Dropdown.MenuItem onClick={() => mutate({ body: { status: null }, additionalData: null })}>
-                        해제
-                    </Dropdown.MenuItem>
-                )}
-            </Dropdown.Menu>
-        </Dropdown>
+        <StatusCompletenessBoxDropdown isCompleted={Boolean(completed_at)} status={status}>
+            {status !== "HOMEWORK" && (
+                <Dropdown.MenuItem
+                    onClick={() =>
+                        mutate({
+                            body: { status: "HOMEWORK" },
+                            additionalData: "HOMEWORK",
+                        })
+                    }
+                >
+                    숙제
+                </Dropdown.MenuItem>
+            )}
+            {status !== "TODAY" && (
+                <Dropdown.MenuItem
+                    onClick={() =>
+                        mutate({
+                            body: { status: "TODAY" },
+                            additionalData: "TODAY",
+                        })
+                    }
+                >
+                    할당
+                </Dropdown.MenuItem>
+            )}
+            {status !== null && (
+                <Dropdown.MenuItem onClick={() => mutate({ body: { status: null }, additionalData: null })}>
+                    해제
+                </Dropdown.MenuItem>
+            )}
+        </StatusCompletenessBoxDropdown>
     )
 }
 

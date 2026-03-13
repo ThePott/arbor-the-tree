@@ -7,7 +7,28 @@ import { checkIsAllowed } from "@/shared/utils/check-is-allowed"
 import { useMatch, useNavigate } from "@tanstack/react-router"
 import { X } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
-import { useLayoutEffect } from "react"
+import { useLayoutEffect, type ReactNode } from "react"
+
+type SidebarButtonProps = {
+    onClick: () => void
+    children: ReactNode
+}
+const SidebarButton = ({ onClick, children }: SidebarButtonProps) => {
+    const setIsSidebarOn = useGlobalStore((state) => state.setIsSidebarOn)
+    return (
+        <Button
+            color="transparent"
+            border="onHover"
+            isOnLeft
+            onClick={() => {
+                setIsSidebarOn(false)
+                onClick()
+            }}
+        >
+            {children}
+        </Button>
+    )
+}
 
 const Sidebar = () => {
     const isSidebarOn = useGlobalStore((state) => state.isSidebarOn)
@@ -57,29 +78,13 @@ const Sidebar = () => {
                                         <Labeled.Header>인원 관리</Labeled.Header>
                                         <RoundBox isBordered padding="md">
                                             <Vstack gap="xs">
-                                                <Button
-                                                    color="transparent"
-                                                    border="onHover"
-                                                    isOnLeft
-                                                    onClick={() => {
-                                                        setIsSidebarOn(false)
-                                                        navigate({ to: "/manage/resume" })
-                                                    }}
-                                                >
+                                                <SidebarButton onClick={() => navigate({ to: "/manage/resume" })}>
                                                     권한 요청 현황
-                                                </Button>
+                                                </SidebarButton>
                                                 {checkIsAllowed("PRINCIPAL") && (
-                                                    <Button
-                                                        color="transparent"
-                                                        border="onHover"
-                                                        isOnLeft
-                                                        onClick={() => {
-                                                            setIsSidebarOn(false)
-                                                            navigate({ to: "/manage/delete" })
-                                                        }}
-                                                    >
+                                                    <SidebarButton onClick={() => navigate({ to: "/manage/delete" })}>
                                                         권한 삭제
-                                                    </Button>
+                                                    </SidebarButton>
                                                 )}
                                             </Vstack>
                                         </RoundBox>
@@ -91,28 +96,12 @@ const Sidebar = () => {
                                         <Labeled.Header>수업 관리</Labeled.Header>
                                         <RoundBox isBordered padding="md">
                                             <Vstack gap="xs">
-                                                <Button
-                                                    color="transparent"
-                                                    border="onHover"
-                                                    isOnLeft
-                                                    onClick={() => {
-                                                        setIsSidebarOn(false)
-                                                        navigate({ to: "/book" })
-                                                    }}
-                                                >
+                                                <SidebarButton onClick={() => navigate({ to: "/book" })}>
                                                     문제집 등록 / 삭제
-                                                </Button>
-                                                <Button
-                                                    color="transparent"
-                                                    border="onHover"
-                                                    isOnLeft
-                                                    onClick={() => {
-                                                        setIsSidebarOn(false)
-                                                        navigate({ to: "/manage/student" })
-                                                    }}
-                                                >
+                                                </SidebarButton>
+                                                <SidebarButton onClick={() => navigate({ to: "/manage/student" })}>
                                                     반 / 학생 관리
-                                                </Button>
+                                                </SidebarButton>
                                             </Vstack>
                                         </RoundBox>
                                     </Labeled>
@@ -122,50 +111,28 @@ const Sidebar = () => {
                                     <Labeled.Header>진도 / 오답 관리</Labeled.Header>
                                     <RoundBox isBordered padding="md">
                                         <Vstack gap="xs">
-                                            <Button
-                                                color="transparent"
-                                                border="onHover"
-                                                isOnLeft
-                                                onClick={() => {
-                                                    setIsSidebarOn(false)
-                                                    navigate({ to: "/progress", search: fullSearch })
-                                                }}
+                                            <SidebarButton
+                                                onClick={() => navigate({ to: "/progress", search: fullSearch })}
                                             >
                                                 진도표
-                                            </Button>
-                                            <Button
-                                                color="bg2"
-                                                border="onHover"
-                                                isOnLeft
-                                                onClick={() => {
-                                                    setIsSidebarOn(false)
-                                                    navigate({ to: "/check", search: fullSearch })
-                                                }}
+                                            </SidebarButton>
+                                            <SidebarButton
+                                                onClick={() => navigate({ to: "/check", search: fullSearch })}
                                             >
                                                 오답 체크
-                                            </Button>
-                                            <Button
-                                                color="bg2"
-                                                border="onHover"
-                                                isOnLeft
-                                                onClick={() => {
-                                                    setIsSidebarOn(false)
+                                            </SidebarButton>
+                                            <SidebarButton
+                                                onClick={() =>
                                                     navigate({ to: "/assignment/create", search: studentSearch })
-                                                }}
+                                                }
                                             >
                                                 오답 과제 생성
-                                            </Button>
-                                            <Button
-                                                color="bg2"
-                                                border="onHover"
-                                                isOnLeft
-                                                onClick={() => {
-                                                    setIsSidebarOn(false)
-                                                    navigate({ to: "/assignment", search: studentSearch })
-                                                }}
+                                            </SidebarButton>
+                                            <SidebarButton
+                                                onClick={() => navigate({ to: "/assignment", search: studentSearch })}
                                             >
                                                 오답 과제 목록
-                                            </Button>
+                                            </SidebarButton>
                                         </Vstack>
                                     </RoundBox>
                                 </Labeled>

@@ -142,6 +142,7 @@ const useEventHandlers = ({
     const { debouncedBoolValue, realTimeValue, toggle } = useDebouncingToggle({
         value: Boolean(conciseSession.completed_at),
     })
+    const { classroom_id } = route.useSearch()
 
     useEffect(() => {
         if (debouncedBoolValue === Boolean(conciseSession.completed_at)) return
@@ -171,8 +172,8 @@ const useEventHandlers = ({
     }, [debouncedBoolValue])
 
     const handleClickToComplete = async () => {
-        // NOTE: 상태 없는 건 끝낼 수 없음
-        if (!conciseSession.status) return
+        if (!classroom_id) return // NOTE: 반 진도일 때만 클릭해서 완료하는 게 가능함
+        if (!conciseSession.status) return // NOTE: 상태 없는 건 끝낼 수 없음
 
         toggle()
     }
