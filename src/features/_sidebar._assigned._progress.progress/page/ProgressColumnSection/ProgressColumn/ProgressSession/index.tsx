@@ -1,12 +1,10 @@
 import type { ConciseSession } from "@/features/_sidebar._assigned._progress.progress/types"
-import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown"
 import { checkIsBeforeToday, makeFromNow } from "@/shared/utils/dateManipulations"
 import { getRouteApi } from "@tanstack/react-router"
 import { cva } from "class-variance-authority"
-import clsx from "clsx"
-import { Ellipsis } from "lucide-react"
 import StatusCompletenessBox from "../../ColumnWithBoxes/StatusCompletenessBox"
+import StatusCompletenessBoxDropdown from "../../ColumnWithBoxes/StatusCompletenessBox/StatusCompletenessBoxDropdown"
 import useProgressSession, { type MutateSessionStatus } from "./hooks"
 
 const route = getRouteApi("/_sidebar")
@@ -89,31 +87,18 @@ const ProgressSessionDropdown = ({
     }
 
     return (
-        <Dropdown>
-            <Dropdown.Trigger>
-                <Button
-                    color="transparent"
-                    padding="tight"
-                    className={clsx(
-                        dropdownTriggerVariants({
-                            isCompleted: Boolean(conciseSession.completed_at),
-                            status: conciseSession.status ?? "default",
-                        })
-                    )}
-                >
-                    <Ellipsis size={16} />
-                </Button>
-            </Dropdown.Trigger>
-            <Dropdown.Menu>
-                {conciseSession.status !== "HOMEWORK" && (
-                    <Dropdown.MenuItem onClick={handleHomeworkClick}>숙제</Dropdown.MenuItem>
-                )}
-                {conciseSession.status !== "TODAY" && (
-                    <Dropdown.MenuItem onClick={handleTodayClick}>오늘</Dropdown.MenuItem>
-                )}
-                {conciseSession.status && <Dropdown.MenuItem onClick={handleDismissClick}>해제</Dropdown.MenuItem>}
-            </Dropdown.Menu>
-        </Dropdown>
+        <StatusCompletenessBoxDropdown
+            isCompleted={Boolean(conciseSession.completed_at)}
+            status={conciseSession.status}
+        >
+            {conciseSession.status !== "HOMEWORK" && (
+                <Dropdown.MenuItem onClick={handleHomeworkClick}>숙제</Dropdown.MenuItem>
+            )}
+            {conciseSession.status !== "TODAY" && (
+                <Dropdown.MenuItem onClick={handleTodayClick}>오늘</Dropdown.MenuItem>
+            )}
+            {conciseSession.status && <Dropdown.MenuItem onClick={handleDismissClick}>해제</Dropdown.MenuItem>}
+        </StatusCompletenessBoxDropdown>
     )
 }
 
