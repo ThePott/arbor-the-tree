@@ -3,12 +3,36 @@ import Button from "@/packages/components/Button/Button"
 import Dropdown from "@/packages/components/Dropdown"
 import { checkIsBeforeToday, makeFromNow } from "@/shared/utils/dateManipulations"
 import { getRouteApi } from "@tanstack/react-router"
+import { cva } from "class-variance-authority"
+import clsx from "clsx"
 import { Ellipsis } from "lucide-react"
 import StatusCompletenessBox from "../../ColumnWithBoxes/StatusCompletenessBox"
 import useProgressSession, { type MutateSessionStatus } from "./hooks"
 
 const route = getRouteApi("/_sidebar")
 
+const dropdownTriggerVariants = cva("border border-transparent hover:border-fg-dim", {
+    variants: {
+        status: {
+            HOMEWORK: "",
+            TODAY: "",
+            default: "",
+        },
+        isCompleted: {
+            true: "",
+            false: "",
+        },
+    },
+    // TODO: assigned_at 받고나면 갱신
+    compoundVariants: [
+        // NOTE: 상태 있을 때의 공통 속성: 글씨 관련
+        {
+            status: ["HOMEWORK", "TODAY"],
+            isCompleted: false,
+            className: "hover:border-fg-inverted-dim",
+        },
+    ],
+})
 type ProgressSessionDropdownProps = ProgressSessionProps & {
     mutatePostStatus: MutateSessionStatus
     mutateDeleteStatus: MutateSessionStatus
@@ -67,7 +91,16 @@ const ProgressSessionDropdown = ({
     return (
         <Dropdown>
             <Dropdown.Trigger>
-                <Button color="transparent" border="onHover">
+                <Button
+                    color="transparent"
+                    padding="tight"
+                    className={clsx(
+                        dropdownTriggerVariants({
+                            isCompleted: Boolean(conciseSession.completed_at),
+                            status: conciseSession.status ?? "default",
+                        })
+                    )}
+                >
                     <Ellipsis size={16} />
                 </Button>
             </Dropdown.Trigger>
@@ -78,9 +111,7 @@ const ProgressSessionDropdown = ({
                 {conciseSession.status !== "TODAY" && (
                     <Dropdown.MenuItem onClick={handleTodayClick}>오늘</Dropdown.MenuItem>
                 )}
-                {!conciseSession.completed_at && (
-                    <Dropdown.MenuItem onClick={handleDismissClick}>해제</Dropdown.MenuItem>
-                )}
+                {conciseSession.status && <Dropdown.MenuItem onClick={handleDismissClick}>해제</Dropdown.MenuItem>}
             </Dropdown.Menu>
         </Dropdown>
     )
@@ -122,7 +153,7 @@ const ProgressSession = (props: ProgressSessionProps) => {
                 )}
                 <StatusCompletenessBox.Label role="sub">{dateInfoText}</StatusCompletenessBox.Label>
             </StatusCompletenessBox.LabelGroup>
-            {Boolean(classroom_id) !== Boolean(student_id) && (
+            {Boolean(classroom_id) !== Boolean(student_id) && !conciseSession.completed_at && (
                 <ProgressSessionDropdown
                     startingTopicTitle={startingTopicTitle}
                     syllabus_id={syllabus_id}
