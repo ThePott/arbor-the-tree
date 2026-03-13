@@ -61,7 +61,7 @@ const AssignmentSessionDropdown = ({
                         })
                     }
                 >
-                    할당
+                    오늘
                 </Dropdown.MenuItem>
             )}
             {status !== null && (
