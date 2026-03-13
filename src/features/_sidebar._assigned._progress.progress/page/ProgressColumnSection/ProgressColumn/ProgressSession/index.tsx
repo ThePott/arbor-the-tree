@@ -104,7 +104,7 @@ const ProgressSession = (props: ProgressSessionProps) => {
 
     return (
         <StatusCompletenessBox
-            disabled={Boolean(classroom_id) === Boolean(student_id)}
+            disabled={!classroom_id}
             isCompleted={isCompleted}
             isOld={assigned_at ? checkIsBeforeToday(assigned_at) : false}
             status={status ?? "default"}

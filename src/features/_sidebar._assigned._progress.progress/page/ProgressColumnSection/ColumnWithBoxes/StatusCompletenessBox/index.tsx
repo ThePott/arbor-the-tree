@@ -92,7 +92,7 @@ const statusCompletenessBoxVariants = cva("w-full outline -outline-offset-1 my-t
             status: "TODAY",
             isCompleted: false,
             isOld: false,
-            className: "bg-washed-blue outline-washed-blue hover:outline-fg-vivid",
+            className: "bg-washed-green outline-washed-green hover:outline-fg-vivid",
         },
 
         // NOTE: 부여만 되고 안 끝남, 오래 됨
@@ -106,16 +106,16 @@ const statusCompletenessBoxVariants = cva("w-full outline -outline-offset-1 my-t
             status: "TODAY",
             isCompleted: false,
             isOld: true,
-            className: "bg-dark-blue hover:outline-fg-vivid outline-dark-blue",
+            className: "bg-dark-green hover:outline-fg-vivid outline-dark-green",
         },
 
         // NOTE: 부여되고 끝남, 새 것
         { status: "HOMEWORK", isCompleted: true, isOld: false, className: "outline-washed-yellow" },
-        { status: "TODAY", isCompleted: true, isOld: false, className: "outline-washed-blue" },
+        { status: "TODAY", isCompleted: true, isOld: false, className: "outline-washed-green" },
 
         // NOTE: 부여되고 끝남, 오래된 것
         { status: "HOMEWORK", isCompleted: true, isOld: true, className: "outline-washed-red-neg-1" },
-        { status: "TODAY", isCompleted: true, isOld: true, className: "outline-washed-blue-neg-1" },
+        { status: "TODAY", isCompleted: true, isOld: true, className: "outline-washed-green-neg-1" },
 
         // NOTE: 부여 안 했는데 끝남
         // NOTE: 이게 보여서는 안 된다.
