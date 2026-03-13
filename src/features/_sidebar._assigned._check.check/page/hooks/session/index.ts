@@ -113,6 +113,8 @@ export const useConvertRecentToChangedForSyllabus = (data: ReviewCheckResponseDa
         data?.topics.forEach((topic, titleIndex) =>
             topic.steps.forEach((step, subtitleIndex) =>
                 step.questions.forEach((question, checkboxIndex) => {
+                    if (!question.session_status) return
+
                     const isMultiSelected = checkIsMultiSelected({
                         titleIndex,
                         subtitleIndex,

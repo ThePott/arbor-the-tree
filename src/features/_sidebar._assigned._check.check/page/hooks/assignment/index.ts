@@ -116,6 +116,8 @@ export const useConvertRecentToChangedForAssignment = (data: ReviewCheckAssignme
         data?.forEach((assignment, titleIndex) => {
             assignment.books.forEach((book, subtitleIndex) => {
                 book.questions.forEach((questionWithAttemptInfo, checkboxIndex) => {
+                    if (!questionWithAttemptInfo.assignment_status) return
+
                     const isMultiSelected = checkIsMultiSelected({
                         titleIndex,
                         subtitleIndex,
