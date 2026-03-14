@@ -2,18 +2,17 @@ import { headlessInstance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import ExpandableDiv from "@/packages/components/ExpandableDiv/ExpendableDiv"
 import Labeled from "@/packages/components/Labeled/Labeled"
-import { Container, FlexOneContainer, Vstack } from "@/packages/components/layouts"
+import { FlexOneContainer, Vstack } from "@/packages/components/layouts"
 import LocalAutoComplete from "@/packages/components/LocalAutoComplete"
-import RoundBox from "@/packages/components/RoundBox"
 import Select from "@/packages/components/Select/Select"
+import ResponsiveContainer from "@/shared/components/ResponsiveContainer"
 import type { Hagwon, Role, School, ValueLabel } from "@/shared/interfaces"
 import useGlobalStore from "@/shared/store/globalStore"
 import { roleToText } from "@/shared/utils/apiTypeToLabel"
-import useMediaQuery from "@/shared/utils/use-media-query"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useQuery } from "@tanstack/react-query"
 import { useLoaderData } from "@tanstack/react-router"
-import { Activity, type ReactNode } from "react"
+import { Activity } from "react"
 import { Controller, useForm, useWatch } from "react-hook-form"
 import z from "zod/v3"
 import { authMeQueryOptions } from "../loader/profileLoaderFn"
@@ -21,29 +20,12 @@ import useProfileMutation from "./_useProfileMutation"
 import ProfileModalFail from "./ProfileModalFail"
 import ProfileModalSuccess from "./ProfileModalSuccess"
 
-type ProfileContainerProps = {
-    isBig: boolean
-    children: ReactNode
-}
-const ProfileContainer = ({ isBig, children }: ProfileContainerProps) => {
-    if (!isBig) return <RoundBox padding="xl">{children}</RoundBox>
-
-    return (
-        <Container width="md" isPadded>
-            <RoundBox isShadowed padding="xl" color="bg0" radius="lg">
-                {children}
-            </RoundBox>
-        </Container>
-    )
-}
 const ProfilePage = () => {
     const storedData = useGlobalStore((state) => state.me)
     const { me: loaderData } = useLoaderData({ from: "/profile" })
     const { data: queryData } = useQuery(authMeQueryOptions)
 
     const me = queryData ?? loaderData ?? storedData
-
-    const { isBig } = useMediaQuery()
 
     const { data: hagwonOptionArray } = useQuery({
         queryKey: ["hagwon"],
@@ -118,7 +100,7 @@ const ProfilePage = () => {
         <>
             <FlexOneContainer isYScrollable className="h-full [scrollbar-gutter:stable]">
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <ProfileContainer isBig={isBig}>
+                    <ResponsiveContainer width="md">
                         <Vstack gap="lg">
                             <Labeled isRequired isInDanger={Boolean(errors.name)}>
                                 <Labeled.Header>이름</Labeled.Header>
@@ -211,7 +193,7 @@ const ProfilePage = () => {
                                 저장
                             </Button>
                         </Vstack>
-                    </ProfileContainer>
+                    </ResponsiveContainer>
                 </form>
             </FlexOneContainer>
             <ProfileModalSuccess role={role} />

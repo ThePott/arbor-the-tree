@@ -1,21 +1,17 @@
-import { Container, FlexOneContainer, Vstack } from "@/packages/components/layouts"
-import RoundBox from "@/packages/components/RoundBox"
+import { FlexOneContainer, Vstack } from "@/packages/components/layouts"
 import Title from "@/packages/components/Title/Title"
-import { debugRender } from "@/shared/config/debug/"
+import ResponsiveContainer from "@/shared/components/ResponsiveContainer"
 import ManageDeleteTable from "./ManageDeleteTable"
 
 const ManageDeletePage = () => {
-    debugRender("ManageDeletePage")
     return (
         <FlexOneContainer isYScrollable className="h-full [scrollbar-gutter:stable]">
-            <Container width="xl" isPadded>
-                <RoundBox radius="lg" isShadowed color="bg2" padding="xl">
-                    <Vstack gap="lg">
-                        <Title as="h1">권한 삭제</Title>
-                        <ManageDeleteTable />
-                    </Vstack>
-                </RoundBox>
-            </Container>
+            <ResponsiveContainer width="lg">
+                <Vstack gap="lg">
+                    <Title as="h1">권한 삭제</Title>
+                    <ManageDeleteTable />
+                </Vstack>
+            </ResponsiveContainer>
         </FlexOneContainer>
     )
 }
