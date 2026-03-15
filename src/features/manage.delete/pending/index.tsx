@@ -9,7 +9,7 @@ const ManageDeletePendingSmall = () => {
         <RoundBox padding="xl">
             <Vstack gap="lg">
                 <Skeleton radius="md" heightInPixel={21} widthInPixel={120} />
-                <Skeleton radius="lg" heightInPixel={154} />
+                <Skeleton radius="md" heightInPixel={154} />
             </Vstack>
         </RoundBox>
     )
@@ -18,7 +18,7 @@ const ManageDeletePendingBig = () => {
     return (
         <ExpandableDiv>
             <Container width="lg" isPadded>
-                <Skeleton radius="lg" heightInPixel={298} isShadowed />
+                <Skeleton radius="md" heightInPixel={298} isShadowed />
             </Container>
         </ExpandableDiv>
     )

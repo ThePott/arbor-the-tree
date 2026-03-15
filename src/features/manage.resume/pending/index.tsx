@@ -1,9 +1,34 @@
-import { debugRender } from "@/shared/config/debug/"
+import ExpandableDiv from "@/packages/components/ExpandableDiv/ExpendableDiv"
+import { Container, Vstack } from "@/packages/components/layouts"
+import RoundBox from "@/packages/components/RoundBox"
+import Skeleton from "@/packages/components/Skeleton"
+import useMediaQuery from "@/shared/utils/use-media-query"
+
+const ManageResumePendingSmall = () => {
+    return (
+        <RoundBox padding="xl">
+            <Vstack gap="lg">
+                <Skeleton radius="md" heightInPixel={21} widthInPixel={120} />
+                <Skeleton radius="md" heightInPixel={154} />
+            </Vstack>
+        </RoundBox>
+    )
+}
+const ManageResumePendingBig = () => {
+    return (
+        <ExpandableDiv>
+            <Container width="lg" isPadded>
+                <Skeleton radius="md" heightInPixel={298} isShadowed />
+            </Container>
+        </ExpandableDiv>
+    )
+}
 
 const ManageResumePending = () => {
-    debugRender("ManageResumePending")
-    // TODO: 여기 채워야 함
-    return <div>this is manage aresume pending page</div>
+    const { isBig } = useMediaQuery()
+
+    if (isBig) return <ManageResumePendingBig />
+    return <ManageResumePendingSmall />
 }
 
 export default ManageResumePending
