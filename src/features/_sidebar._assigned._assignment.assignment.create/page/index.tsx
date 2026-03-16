@@ -60,8 +60,8 @@ const ReviewAssignmentCreatePage = () => {
             setMutationError(error as AxiosError<ApiError>)
         },
         onSettled: (_data, _error, _variables, _onMutateResult, context) => {
-            context.client.invalidateQueries({ queryKey: ["reviewAssignment"] })
-            context.client.invalidateQueries({ queryKey: ["reviewAssignmentCreate"] })
+            context.client.invalidateQueries({ queryKey: ["reviewAssignment", classroom_id, student_id] })
+            context.client.invalidateQueries({ queryKey: ["reviewAssignmentCreate", classroom_id, student_id] })
         },
     })
 
