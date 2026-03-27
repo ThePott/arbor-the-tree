@@ -1,4 +1,3 @@
-import { instance } from "@/packages/api/axiosInstances"
 import Button from "@/packages/components/Button/Button"
 import { Container, Hstack, Vstack } from "@/packages/components/layouts"
 import RoundBox from "@/packages/components/RoundBox"
@@ -16,76 +15,18 @@ import {
 } from "chart.js"
 import { useState } from "react"
 import { Bar } from "react-chartjs-2"
+import { PAGE_LABEL_ARRAY } from "./utils/constants"
+import { convertToChartData } from "./utils/convert-to-chart-data"
+import { generatePdf } from "./utils/generate-pdf"
+import type { TimeRecord } from "./utils/types"
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ChartTitle, Tooltip, Legend)
 
-const PAGE_COUNT_IN_BOOK = 8
-
 const tabArray: ValueLabel[] = [
-    { value: "reactPdfDefault", label: "react-pdf/renderer" },
-    { value: "reactPdfWithWebWorker", label: "react-pdf/renderer with web worker" },
-    { value: "typst", label: "typst" },
+    { value: "reactPdfDefault", label: "(A) `react-pdf/renderer`" },
+    { value: "reactPdfWithWebWorker", label: "(B) `react-pdf/renderer` with web worker" },
+    { value: "typst", label: "(C) compile typst to pdf" },
 ]
-
-const getTypstPdf = async (multiplier: number): Promise<{ count: number; time: number }> => {
-    const start = performance.now()
-
-    const response = await instance.get(`/test/pdf`, {
-        responseType: "blob",
-        params: { multiplier },
-    })
-    const blob = response.data
-    const url = URL.createObjectURL(blob)
-    window.open(url)
-
-    const end = performance.now()
-    const time = end - start
-    return { count: multiplier * PAGE_COUNT_IN_BOOK, time }
-}
-
-type TimeRecord = {
-    byWhat: string
-    count: number
-    time: number
-}
-type GeneratePdfProps = {
-    multiplier: number
-    byWhat: string
-    callback: ({ byWhat, count, time }: TimeRecord) => void
-}
-const generatePdf = async ({ multiplier, byWhat, callback }: GeneratePdfProps): Promise<void> => {
-    switch (byWhat) {
-        case "reactPdfDefault":
-            return
-        case "reactPdfWithWebWorker":
-            return
-        case "typst": {
-            const { count, time } = await getTypstPdf(multiplier)
-            callback({ count, time, byWhat: "typst" })
-            return
-        }
-        default:
-            throw new Error("not supported")
-    }
-}
-
-const labels = ["8쪽", "80쪽", "800쪽", "8000쪽"]
-
-const data = {
-    labels,
-    datasets: [
-        {
-            label: "Dataset 1",
-            data: labels.map(() => 100),
-            backgroundColor: "rgba(255, 99, 132, 0.5)",
-        },
-        {
-            label: "Dataset 2",
-            data: labels.map(() => 123),
-            backgroundColor: "rgba(53, 162, 235, 0.5)",
-        },
-    ],
-}
 
 const options = {
     responsive: true,
@@ -102,10 +43,12 @@ const options = {
 
 const TestPdfPage = () => {
     const [selectedTab, setSelectedTab] = useState<ValueLabel>(tabArray[0])
-    const [_, setTimeRecordArray] = useState<TimeRecord[]>([])
+    const [timeRecordArray, setTimeRecordArray] = useState<TimeRecord[]>([])
     const appendTimeRecord = (timeRecord: TimeRecord) => {
         setTimeRecordArray((prev) => [...prev, timeRecord])
     }
+    const data = convertToChartData(timeRecordArray)
+    console.log({ data })
 
     return (
         <Container width="xl" isPadded>
@@ -122,7 +65,7 @@ const TestPdfPage = () => {
                                 generatePdf({ multiplier: 1, byWhat: selectedTab.value, callback: appendTimeRecord })
                             }
                         >
-                            8쪽
+                            {PAGE_LABEL_ARRAY[0]}
                         </Button>
                         <Button
                             color="bg1"
@@ -132,7 +75,7 @@ const TestPdfPage = () => {
                                 generatePdf({ multiplier: 10, byWhat: selectedTab.value, callback: appendTimeRecord })
                             }
                         >
-                            80쪽
+                            {PAGE_LABEL_ARRAY[1]}
                         </Button>
                         <Button
                             color="bg1"
@@ -142,7 +85,7 @@ const TestPdfPage = () => {
                                 generatePdf({ multiplier: 100, byWhat: selectedTab.value, callback: appendTimeRecord })
                             }
                         >
-                            800쪽
+                            {PAGE_LABEL_ARRAY[2]}
                         </Button>
                         <Button
                             color="bg1"
@@ -152,7 +95,7 @@ const TestPdfPage = () => {
                                 generatePdf({ multiplier: 1000, byWhat: selectedTab.value, callback: appendTimeRecord })
                             }
                         >
-                            8000쪽
+                            {PAGE_LABEL_ARRAY[3]}
                         </Button>
                     </Hstack>
                     <Bar options={options} data={data} />
