@@ -43,16 +43,27 @@ const getTypstPdf = async (multiplier: number): Promise<{ count: number; time: n
     return { count: multiplier * PAGE_COUNT_IN_BOOK, time }
 }
 
+type TimeRecord = {
+    byWhat: string
+    count: number
+    time: number
+}
 type GeneratePdfProps = {
     multiplier: number
     byWhat: string
+    callback: ({ byWhat, count, time }: TimeRecord) => void
 }
-const generatePdf = async ({ multiplier, byWhat }: GeneratePdfProps): Promise<{ count: number; time: number }> => {
+const generatePdf = async ({ multiplier, byWhat, callback }: GeneratePdfProps): Promise<void> => {
     switch (byWhat) {
         case "reactPdfDefault":
+            return
         case "reactPdfWithWebWorker":
-        case "typst":
-            return getTypstPdf(multiplier)
+            return
+        case "typst": {
+            const { count, time } = await getTypstPdf(multiplier)
+            callback({ count, time, byWhat: "typst" })
+            return
+        }
         default:
             throw new Error("not supported")
     }
@@ -91,6 +102,10 @@ const options = {
 
 const TestPdfPage = () => {
     const [selectedTab, setSelectedTab] = useState<ValueLabel>(tabArray[0])
+    const [_, setTimeRecordArray] = useState<TimeRecord[]>([])
+    const appendTimeRecord = (timeRecord: TimeRecord) => {
+        setTimeRecordArray((prev) => [...prev, timeRecord])
+    }
 
     return (
         <Container width="xl" isPadded>
@@ -103,7 +118,9 @@ const TestPdfPage = () => {
                             color="bg1"
                             border="onHover"
                             padding="wide"
-                            onClick={() => generatePdf({ multiplier: 1, byWhat: selectedTab.value })}
+                            onClick={() =>
+                                generatePdf({ multiplier: 1, byWhat: selectedTab.value, callback: appendTimeRecord })
+                            }
                         >
                             8쪽
                         </Button>
@@ -111,7 +128,9 @@ const TestPdfPage = () => {
                             color="bg1"
                             border="onHover"
                             padding="wide"
-                            onClick={() => generatePdf({ multiplier: 10, byWhat: selectedTab.value })}
+                            onClick={() =>
+                                generatePdf({ multiplier: 10, byWhat: selectedTab.value, callback: appendTimeRecord })
+                            }
                         >
                             80쪽
                         </Button>
@@ -119,7 +138,9 @@ const TestPdfPage = () => {
                             color="bg1"
                             border="onHover"
                             padding="wide"
-                            onClick={() => generatePdf({ multiplier: 100, byWhat: selectedTab.value })}
+                            onClick={() =>
+                                generatePdf({ multiplier: 100, byWhat: selectedTab.value, callback: appendTimeRecord })
+                            }
                         >
                             800쪽
                         </Button>
@@ -127,7 +148,9 @@ const TestPdfPage = () => {
                             color="bg1"
                             border="onHover"
                             padding="wide"
-                            onClick={() => generatePdf({ multiplier: 1000, byWhat: selectedTab.value })}
+                            onClick={() =>
+                                generatePdf({ multiplier: 1000, byWhat: selectedTab.value, callback: appendTimeRecord })
+                            }
                         >
                             8000쪽
                         </Button>
