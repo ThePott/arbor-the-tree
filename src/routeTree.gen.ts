@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as SidebarRouteImport } from './routes/_sidebar'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BookIndexRouteImport } from './routes/book.index'
+import { Route as TestPdfRouteImport } from './routes/test.pdf'
 import { Route as TestFloatingRouteImport } from './routes/test.floating'
 import { Route as ManageStudentRouteImport } from './routes/manage.student'
 import { Route as ManageResumeRouteImport } from './routes/manage.resume'
@@ -51,6 +52,11 @@ const IndexRoute = IndexRouteImport.update({
 const BookIndexRoute = BookIndexRouteImport.update({
   id: '/book/',
   path: '/book/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TestPdfRoute = TestPdfRouteImport.update({
+  id: '/test/pdf',
+  path: '/test/pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TestFloatingRoute = TestFloatingRouteImport.update({
@@ -134,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/manage/resume': typeof ManageResumeRoute
   '/manage/student': typeof ManageStudentRoute
   '/test/floating': typeof TestFloatingRoute
+  '/test/pdf': typeof TestPdfRoute
   '/book/': typeof BookIndexRoute
   '/oauth/kakao/callback': typeof OauthKakaoCallbackRoute
   '/assignment/': typeof SidebarAssignedAssignmentAssignmentIndexRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/manage/resume': typeof ManageResumeRoute
   '/manage/student': typeof ManageStudentRoute
   '/test/floating': typeof TestFloatingRoute
+  '/test/pdf': typeof TestPdfRoute
   '/book': typeof BookIndexRoute
   '/oauth/kakao/callback': typeof OauthKakaoCallbackRoute
   '/assignment': typeof SidebarAssignedAssignmentAssignmentIndexRoute
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/manage/resume': typeof ManageResumeRoute
   '/manage/student': typeof ManageStudentRoute
   '/test/floating': typeof TestFloatingRoute
+  '/test/pdf': typeof TestPdfRoute
   '/book/': typeof BookIndexRoute
   '/_sidebar/_assigned/_assignment': typeof SidebarAssignedAssignmentRouteWithChildren
   '/_sidebar/_assigned/_check': typeof SidebarAssignedCheckRouteWithChildren
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/manage/resume'
     | '/manage/student'
     | '/test/floating'
+    | '/test/pdf'
     | '/book/'
     | '/oauth/kakao/callback'
     | '/assignment/'
@@ -206,6 +216,7 @@ export interface FileRouteTypes {
     | '/manage/resume'
     | '/manage/student'
     | '/test/floating'
+    | '/test/pdf'
     | '/book'
     | '/oauth/kakao/callback'
     | '/assignment'
@@ -224,6 +235,7 @@ export interface FileRouteTypes {
     | '/manage/resume'
     | '/manage/student'
     | '/test/floating'
+    | '/test/pdf'
     | '/book/'
     | '/_sidebar/_assigned/_assignment'
     | '/_sidebar/_assigned/_check'
@@ -245,6 +257,7 @@ export interface RootRouteChildren {
   ManageResumeRoute: typeof ManageResumeRoute
   ManageStudentRoute: typeof ManageStudentRoute
   TestFloatingRoute: typeof TestFloatingRoute
+  TestPdfRoute: typeof TestPdfRoute
   BookIndexRoute: typeof BookIndexRoute
   OauthKakaoCallbackRoute: typeof OauthKakaoCallbackRoute
 }
@@ -284,6 +297,13 @@ declare module '@tanstack/react-router' {
       path: '/book'
       fullPath: '/book/'
       preLoaderRoute: typeof BookIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/test/pdf': {
+      id: '/test/pdf'
+      path: '/test/pdf'
+      fullPath: '/test/pdf'
+      preLoaderRoute: typeof TestPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/test/floating': {
@@ -468,6 +488,7 @@ const rootRouteChildren: RootRouteChildren = {
   ManageResumeRoute: ManageResumeRoute,
   ManageStudentRoute: ManageStudentRoute,
   TestFloatingRoute: TestFloatingRoute,
+  TestPdfRoute: TestPdfRoute,
   BookIndexRoute: BookIndexRoute,
   OauthKakaoCallbackRoute: OauthKakaoCallbackRoute,
 }
