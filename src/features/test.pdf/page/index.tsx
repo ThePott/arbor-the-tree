@@ -36,7 +36,7 @@ const options = {
         y: {
             ticks: {
                 // Include a unit in the ticks
-                callback: (value: number) => `${value} ms`,
+                callback: (value: number | string) => `${value} ms`,
             },
         },
     },
