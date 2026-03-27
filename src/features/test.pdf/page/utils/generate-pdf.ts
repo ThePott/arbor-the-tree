@@ -1,4 +1,6 @@
 import { instance } from "@/packages/api/axiosInstances"
+import { pdf } from "@react-pdf/renderer"
+import MyDocument from "../react-pdf"
 import { PAGE_COUNT_IN_BOOK } from "./constants"
 import type { TimeRecord } from "./types"
 
@@ -25,8 +27,17 @@ type GeneratePdfProps = {
 }
 export const generatePdf = async ({ multiplier, byWhat, callback }: GeneratePdfProps): Promise<void> => {
     switch (byWhat) {
-        case "reactPdfDefault":
+        case "reactPdfDefault": {
+            const start = performance.now()
+            const count = PAGE_COUNT_IN_BOOK * multiplier
+            const blob = await pdf(MyDocument({ count })).toBlob()
+            const url = URL.createObjectURL(blob)
+            window.open(url)
+            const end = performance.now()
+            const time = end - start
+            callback({ count, time, byWhat: "reactPdfDefault" })
             return
+        }
         case "reactPdfWithWebWorker":
             return
         case "typst": {
