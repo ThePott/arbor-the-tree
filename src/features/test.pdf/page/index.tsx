@@ -5,7 +5,19 @@ import RoundBox from "@/packages/components/RoundBox"
 import TabBar from "@/packages/components/TabBar/TabBar"
 import Title from "@/packages/components/Title/Title"
 import type { ValueLabel } from "@/shared/interfaces"
+import {
+    BarElement,
+    CategoryScale,
+    Chart as ChartJS,
+    Title as ChartTitle,
+    Legend,
+    LinearScale,
+    Tooltip,
+} from "chart.js"
 import { useState } from "react"
+import { Bar } from "react-chartjs-2"
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, ChartTitle, Tooltip, Legend)
 
 const PAGE_COUNT_IN_BOOK = 8
 
@@ -44,6 +56,37 @@ const generatePdf = async ({ multiplier, byWhat }: GeneratePdfProps): Promise<{ 
         default:
             throw new Error("not supported")
     }
+}
+
+const labels = ["8쪽", "80쪽", "800쪽", "8000쪽"]
+
+const data = {
+    labels,
+    datasets: [
+        {
+            label: "Dataset 1",
+            data: labels.map(() => 100),
+            backgroundColor: "rgba(255, 99, 132, 0.5)",
+        },
+        {
+            label: "Dataset 2",
+            data: labels.map(() => 123),
+            backgroundColor: "rgba(53, 162, 235, 0.5)",
+        },
+    ],
+}
+
+const options = {
+    responsive: true,
+    plugins: {
+        legend: {
+            position: "top" as const,
+        },
+        title: {
+            display: true,
+            text: "Chart.js Bar Chart",
+        },
+    },
 }
 
 const TestPdfPage = () => {
@@ -89,6 +132,7 @@ const TestPdfPage = () => {
                             8000매
                         </Button>
                     </Hstack>
+                    <Bar options={options} data={data} />
                 </Vstack>
             </RoundBox>
         </Container>
