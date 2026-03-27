@@ -28,7 +28,6 @@ const getTypstPdf = async (multiplier: number): Promise<{ count: number; time: n
 
     const end = performance.now()
     const time = end - start
-    console.log({ time })
     return { count: multiplier * PAGE_COUNT_IN_BOOK, time }
 }
 
