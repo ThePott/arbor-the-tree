@@ -15,18 +15,12 @@ import {
 } from "chart.js"
 import { useState } from "react"
 import { Bar } from "react-chartjs-2"
-import { PAGE_LABEL_ARRAY } from "./utils/constants"
+import { PAGE_LABEL_ARRAY, TAB_ARRAY } from "./utils/constants"
 import { convertToChartData } from "./utils/convert-to-chart-data"
 import { generatePdf } from "./utils/generate-pdf"
 import type { TimeRecord } from "./utils/types"
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ChartTitle, Tooltip, Legend)
-
-const tabArray: ValueLabel[] = [
-    { value: "reactPdfDefault", label: "(A) `react-pdf/renderer`" },
-    { value: "reactPdfWithWebWorker", label: "(B) `react-pdf/renderer` with web worker" },
-    { value: "typst", label: "(C) compile typst to pdf" },
-]
 
 const options = {
     responsive: true,
@@ -35,14 +29,21 @@ const options = {
             position: "top" as const,
         },
         title: {
-            display: true,
-            text: "Chart.js Bar Chart",
+            display: false,
+        },
+    },
+    scales: {
+        y: {
+            ticks: {
+                // Include a unit in the ticks
+                callback: (value: number) => `${value} ms`,
+            },
         },
     },
 }
 
 const TestPdfPage = () => {
-    const [selectedTab, setSelectedTab] = useState<ValueLabel>(tabArray[0])
+    const [selectedTab, setSelectedTab] = useState<ValueLabel>(TAB_ARRAY[0])
     const [timeRecordArray, setTimeRecordArray] = useState<TimeRecord[]>([])
     const appendTimeRecord = (timeRecord: TimeRecord) => {
         setTimeRecordArray((prev) => [...prev, timeRecord])
@@ -54,7 +55,7 @@ const TestPdfPage = () => {
             <RoundBox padding="xl" color="bg0" radius="lg" isShadowed>
                 <Vstack gap="lg">
                     <Title as="h1">PDF 생성 속도 비교</Title>
-                    <TabBar variant="underline" tabArray={tabArray} onSelect={(tab) => setSelectedTab(tab)} />
+                    <TabBar variant="underline" tabArray={TAB_ARRAY} onSelect={(tab) => setSelectedTab(tab)} />
                     <Hstack>
                         <Button
                             color="bg1"
@@ -97,6 +98,7 @@ const TestPdfPage = () => {
                             {PAGE_LABEL_ARRAY[3]}
                         </Button>
                     </Hstack>
+
                     <Bar options={options} data={data} />
                 </Vstack>
             </RoundBox>
