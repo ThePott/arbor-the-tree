@@ -105,7 +105,7 @@ const TestPdfPage = () => {
                             padding="wide"
                             onClick={() => generatePdf({ multiplier: 1, byWhat: selectedTab.value })}
                         >
-                            8매
+                            8쪽
                         </Button>
                         <Button
                             color="bg1"
@@ -113,7 +113,7 @@ const TestPdfPage = () => {
                             padding="wide"
                             onClick={() => generatePdf({ multiplier: 10, byWhat: selectedTab.value })}
                         >
-                            80매
+                            80쪽
                         </Button>
                         <Button
                             color="bg1"
@@ -121,7 +121,7 @@ const TestPdfPage = () => {
                             padding="wide"
                             onClick={() => generatePdf({ multiplier: 100, byWhat: selectedTab.value })}
                         >
-                            800매
+                            800쪽
                         </Button>
                         <Button
                             color="bg1"
@@ -129,7 +129,7 @@ const TestPdfPage = () => {
                             padding="wide"
                             onClick={() => generatePdf({ multiplier: 1000, byWhat: selectedTab.value })}
                         >
-                            8000매
+                            8000쪽
                         </Button>
                     </Hstack>
                     <Bar options={options} data={data} />
