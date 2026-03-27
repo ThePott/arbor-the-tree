@@ -48,7 +48,6 @@ const TestPdfPage = () => {
         setTimeRecordArray((prev) => [...prev, timeRecord])
     }
     const data = convertToChartData(timeRecordArray)
-    console.log({ data })
 
     return (
         <Container width="xl" isPadded>
