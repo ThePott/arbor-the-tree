@@ -40,11 +40,6 @@ export const convertToChartData = (timeRecordArray: TimeRecord[]) => {
             {
                 label: BY_WHAT_LABEL_ARRAY[1],
                 data: dataGrouped[BY_WHAT_ARRAY[1]],
-                backgroundColor: "#dabc7f",
-            },
-            {
-                label: BY_WHAT_LABEL_ARRAY[2],
-                data: dataGrouped[BY_WHAT_ARRAY[2]],
                 backgroundColor: "oklch(0.7732 0.0906 125.78)",
             },
         ],
