@@ -2,22 +2,23 @@ import { instance } from "@/packages/api/axiosInstances"
 import { pdf } from "@react-pdf/renderer"
 import MyDocument from "../react-pdf"
 import { PAGE_COUNT_IN_BOOK } from "./constants"
-import type { TimeRecord } from "./types"
+import type { PdfInfo, TimeRecord } from "./types"
 
-const getTypstPdf = async (multiplier: number): Promise<{ count: number; time: number }> => {
-    const start = performance.now()
-
-    const response = await instance.get(`/test/pdf`, {
+const getTypstPdf = async (multiplier: number): Promise<void> => {
+    const response = await instance.get(`/test/pdf/typst`, {
         responseType: "blob",
         params: { multiplier },
     })
     const blob = response.data
     const url = URL.createObjectURL(blob)
     window.open(url)
+}
 
-    const end = performance.now()
-    const time = end - start
-    return { count: multiplier * PAGE_COUNT_IN_BOOK, time }
+const getPdfInfo = async (multiplier: number) => {
+    const response = await instance.get(`/test/pdf/client`, {
+        params: { multiplier },
+    })
+    return response.data as PdfInfo
 }
 
 type GeneratePdfProps = {
@@ -30,7 +31,8 @@ export const generatePdf = async ({ multiplier, byWhat, callback }: GeneratePdfP
         case "reactPdfDefault": {
             const start = performance.now()
             const count = PAGE_COUNT_IN_BOOK * multiplier
-            const blob = await pdf(MyDocument({ count })).toBlob()
+            const pdfInfo = await getPdfInfo(multiplier)
+            const blob = await pdf(MyDocument({ pdfInfo })).toBlob()
             const url = URL.createObjectURL(blob)
             window.open(url)
             const end = performance.now()
@@ -41,7 +43,11 @@ export const generatePdf = async ({ multiplier, byWhat, callback }: GeneratePdfP
         case "reactPdfWithWebWorker":
             return
         case "typst": {
-            const { count, time } = await getTypstPdf(multiplier)
+            const start = performance.now()
+            const count = PAGE_COUNT_IN_BOOK * multiplier
+            await getTypstPdf(multiplier)
+            const end = performance.now()
+            const time = end - start
             callback({ count, time, byWhat: "typst" })
             return
         }
