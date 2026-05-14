@@ -9,7 +9,7 @@ import type { ApiError } from "@/shared/interfaces"
 import useGlobalStore from "@/shared/store/globalStore"
 import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
-import type { AxiosError } from "axios"
+import { AxiosResponse, type AxiosError } from "axios"
 import useTestLoginStore from "../store"
 import TestLoginErrorModal from "./TestLoginErrorModal"
 import TestLoginSuccessModal from "./TestLoginSuccessModal"
@@ -45,15 +45,16 @@ const TestLoginPage = () => {
         },
     })
     const { mutate: mutateLogin, isPending: isPendingLogin } = useMutation<
-        { me: Me; access_token: string },
+        AxiosResponse<{ me: Me; access_token: string }>,
         AxiosError<ApiError>,
         TestLoginProps
     >({
         mutationFn: (body) => headlessInstance.post("/auth/email/login", body),
-        onSuccess: ({ me, access_token }, _variables, _onMutateResult, _context) => {
-            navigate({ to: "/" })
+        onSuccess: (data, _variables, _onMutateResult, _context) => {
+            const { me, access_token } = data.data
             setMe(me)
             setAccessToken(access_token)
+            navigate({ to: "/" })
         },
         onError: (error, _variables, _onMutateResult, _context) => {
             setError(error)
