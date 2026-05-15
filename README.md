@@ -1,24 +1,5 @@
 # Arbor The Tree — 입시 학원 진도 관리 시스템
 
-## 강사의 기억과 수기록을 넘어선 시스템적 관리
-
-- [배포 페이지](https://arbor-the-tree-production.up.railway.app)
-- [백엔드 레포지토리](https://github.com/ThePott/api-of-arbor-the-tree)
-- [PDF 생성 성능 비교 페이지](https://arbor-the-tree-production.up.railway.app/test/pdf)
-- [테스트 계정 로그인 페이지](https://arbor-the-tree-production.up.railway.app/test/login)
-
-### 테스트 계정
-
-| 계정 | ID               | Password     |
-| ---- | ---------------- | ------------ |
-| 원장 | test12@test.test | test1234!@#$ |
-| 실장 | test13@test.test | test1234!@#$ |
-| 학생 | test14@test.test | test1234!@#$ |
-
-### 본 프로젝트 중 마주한 문제들과 그 해결 과정에 대해 알고 싶다면
-
-- [포트폴리오](https://github.com/ThePott/git-blog/blob/main/src/job/general/portfolio/portfolio_v3/index.pdf)
-
 [![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)](https://axios-http.com/)
 [![clsx](https://img.shields.io/badge/clsx-000000?style=for-the-badge)](https://github.com/lukeed/clsx)
 [![CVA](https://img.shields.io/badge/class--variance--authority-000000?style=for-the-badge)](https://cva.style/)
@@ -42,6 +23,25 @@
 [![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev/)
 [![Zod](https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white)](https://zod.dev/)
 [![Zustand](https://img.shields.io/badge/Zustand-2D3748?style=for-the-badge)](https://github.com/pmndrs/zustand)
+
+## 강사의 기억과 수기록을 넘어선 시스템적 관리
+
+- [배포 페이지](https://arbor-the-tree-production.up.railway.app)
+- [백엔드 레포지토리](https://github.com/ThePott/api-of-arbor-the-tree)
+- [PDF 생성 성능 비교 페이지](https://arbor-the-tree-production.up.railway.app/test/pdf)
+- [테스트 계정 로그인 페이지](https://arbor-the-tree-production.up.railway.app/test/login)
+
+### 테스트 계정
+
+| 계정 | ID               | Password     |
+| ---- | ---------------- | ------------ |
+| 원장 | test12@test.test | test1234!@#$ |
+| 실장 | test13@test.test | test1234!@#$ |
+| 학생 | test14@test.test | test1234!@#$ |
+
+### 본 프로젝트 중 마주한 문제들과 그 해결 과정에 대해 알고 싶다면
+
+- [포트폴리오](https://github.com/ThePott/git-blog/blob/main/src/job/general/portfolio/portfolio_v3/index.pdf)
 
 ---
 
